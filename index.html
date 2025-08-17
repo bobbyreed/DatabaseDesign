@@ -6,7 +6,7 @@
     <title>Database Design - CSCI 5603</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     
-    <!-- Courier Prime for analog feel -->
+    <!-- Import Courier Prime for analog feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -132,17 +132,6 @@
             border-color: var(--ocu-green);
         }
         
-        .lecture-card.locked {
-            opacity: 0.6;
-            background: repeating-linear-gradient(
-                45deg,
-                var(--bg-secondary),
-                var(--bg-secondary) 10px,
-                rgba(0, 102, 155, 0.05) 10px,
-                rgba(0, 102, 155, 0.05) 20px
-            );
-        }
-        
         .lecture-number {
             background: var(--ocu-true-blue);
             color: white;
@@ -211,11 +200,6 @@
         .status-coming {
             background: var(--ocu-yellow);
             color: var(--ocu-black);
-        }
-        
-        .status-locked {
-            background: var(--ocu-dark-blue);
-            color: white;
         }
         
         /* Theme Toggle */
@@ -328,6 +312,96 @@
             font-size: 1.1em;
         }
         
+        /* Authentication Styles */
+        .auth-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 102, 155, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .auth-form {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .auth-form input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: 'Courier Prime', 'IBM Plex Mono', monospace;
+        }
+        
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--ocu-cyan);
+        }
+        
+        .auth-form button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: var(--ocu-true-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Courier Prime', 'IBM Plex Mono', monospace;
+        }
+        
+        .auth-form button:hover {
+            background: var(--ocu-dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        #user-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            font-family: 'Courier Prime', 'IBM Plex Mono', monospace;
+        }
+        
+        #user-info button {
+            background: var(--ocu-true-blue);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        #user-info button:hover {
+            background: var(--ocu-dark-blue);
+        }
+        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -359,11 +433,22 @@
         <span class="theme-toggle-label">Dark</span>
     </div>
     
+    <!--Auth-->
+    <div id="auth-section" class="auth-container">
+        <div class="auth-form">
+            <input type="text" id="student-id" placeholder="Student ID" />
+            <input type="password" id="class-pin" placeholder="Class PIN" />
+            <button onclick="handleLogin()">Login</button>
+        </div>
+    </div>
+
+    <div id="user-info" style="display: none;"></div>
+
     <div class="container">
         <header>
             <h1>Database Design</h1>
             <p class="subtitle">CSCI 5603 - Graduate Course</p>
-            <p class="meta-info">Fall 2025 | 8-Week Intensive</p>
+            <p class="meta-info">Spring 2025 | 8-Week Intensive</p>
         </header>
         
         <div class="info-section">
@@ -392,6 +477,7 @@
             <p>© 2025 Database Design Course</p>
         </footer>
     </div>
+
     <script>
         // Lecture data for 8-week course (2 lectures per week)
         const lectures = [
@@ -427,6 +513,8 @@
             { number: 15, week: 8, title: 'Performance & Optimization', description: 'Query optimization, execution plans, indexing strategies, and performance monitoring.', status: 'coming' },
             { number: 16, week: 8, title: 'Final Project Presentations', description: 'Present your database design projects and peer review sessions.', status: 'coming' }
         ];
+
+        // Authentication function (connects to auth.js)
         async function handleLogin() {
             const studentId = document.getElementById('student-id').value;
             const pin = document.getElementById('class-pin').value;
@@ -494,9 +582,13 @@
             localStorage.setItem('dbTheme', theme);
         });
 
-        // Initialize
-        renderLectures();
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLectures();
+        });
     </script>
-    <script src="./js/auth.js"></script>
+    
+    <!-- Load Authentication System - THIS IS CRITICAL! -->
+    <script src="js/auth.js"></script>
 </body>
 </html>
