@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Design - CSCI 5603</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* OCU Brand Colors - Keeping consistent */
+            --ocu-black: #000000;
+            --ocu-true-blue: #00669b;
+            --ocu-white: #ffffff;
+            --ocu-dark-blue: #043d5d;
+            --ocu-cyan: #009edb;
+            --ocu-light-blue: #9ddcf9;
+            --ocu-green: #70bf54;
+            --ocu-light-green: #afd46c;
+            --ocu-yellow: #ffc222;
+            
+            /* Light mode colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #000000;
+            --text-secondary: #043d5d;
+            --link-color: #00669b;
+            --link-hover: #043d5d;
+            --border-color: #009edb;
+            --shadow-color: rgba(0, 102, 155, 0.1);
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #9ddcf9;
+            --link-color: #009edb;
+            --link-hover: #9ddcf9;
+            --border-color: #009edb;
+            --shadow-color: rgba(0, 158, 219, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace;
+            background: linear-gradient(135deg, #00669b 0%, #009edb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .container {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow-color);
+            padding: 40px;
+            max-width: 1400px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 3px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            color: var(--ocu-true-blue);
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        .meta-info {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        
+        .lectures-container {
+            position: relative;
+            overflow: hidden;
+            margin: 40px 0;
+        }
+        
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .lecture-card {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 250px;
+        }
+        
+        .lecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border-color: var(--ocu-green);
+        }
+        
+        .lecture-card.locked {
+            opacity: 0.6;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--bg-secondary),
+                var(--bg-secondary) 10px,
+                rgba(0, 102, 155, 0.05) 10px,
+                rgba(0, 102, 155, 0.05) 20px
+            );
+        }
+        
+        .lecture-number {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-weight: 600;
+        }
+        
+        .lecture-date {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .lecture-card h3 {
+            color: var(--text-primary);
+            margin: 15px 0;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        
+        .lecture-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1em;
+        }
+        
+        .lecture-card a {
+            display: inline-block;
+            margin-top: auto;
+            padding: 10px 20px;
+            background: var(--ocu-true-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            font-weight: 600;
+        }
+        
+        .lecture-card a:hover {
+            background: var(--ocu-dark-blue);
+            transform: translateX(5px);
+        }
+        
+        .status-badge {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .status-ready {
+            background: var(--ocu-green);
+            color: white;
+        }
+        
+        .status-coming {
+            background: var(--ocu-yellow);
+            color: var(--ocu-black);
+        }
+        
+        .status-locked {
+            background: var(--ocu-dark-blue);
+            color: white;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--bg-primary);
+            padding: 10px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .theme-toggle-label {
+            color: var(--text-primary);
+            font-size: 0.9em;
+            user-select: none;
+            font-weight: 500;
+        }
+        
+        .theme-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--ocu-light-blue);
+            transition: .4s;
+            border-radius: 30px;
+        }
+        
+        .theme-slider:before {
+            position: absolute;
+            content: "☀️";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        input:checked + .theme-slider {
+            background-color: var(--ocu-dark-blue);
+        }
+        
+        input:checked + .theme-slider:before {
+            transform: translateX(30px);
+            content: "🌙";
+        }
+        
+        .info-section {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid var(--border-color);
+        }
+        
+        .info-section h2 {
+            color: var(--ocu-true-blue);
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        
+        .info-section p {
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .info-section ul {
+            margin-left: 30px;
+            line-height: 1.8;
+        }
+        
+        .info-section li {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .subtitle {
+                font-size: 1.2em;
+            }
+            
+            .lectures-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <span class="theme-toggle-label">Light</span>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-checkbox">
+            <span class="theme-slider"></span>
+        </label>
+        <span class="theme-toggle-label">Dark</span>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Database Design</h1>
+            <p class="subtitle">CSCI 3503 - Graduate Course</p>
+            <p class="meta-info">Fall 2025 | 8-Week Intensive</p>
+        </header>
+        
+        <div class="info-section">
+            <h2>📊 Course Overview</h2>
+            <p class="subtitle">Master the art and science of database design in this intensive 8-week course.</p>
+            <p>From conceptual modeling to implementation, you'll learn to design efficient, scalable database systems that power modern applications.</p>
+            
+            <h3 style="margin-top: 20px;">What You'll Learn:</h3>
+            <ul>
+                <li>🗄️ Relational database theory and design principles</li>
+                <li>📐 Entity-Relationship modeling and normalization</li>
+                <li>💻 SQL programming from basics to advanced queries</li>
+                <li>🔒 Database security and transaction management</li>
+                <li>🚀 NoSQL databases and modern data architectures</li>
+                <li>⚡ Performance optimization and indexing strategies</li>
+            </ul>
+        </div>
+        
+        <div class="lectures-container">
+            <div class="lectures-grid" id="lectures-container">
+                <!-- Lectures will be dynamically generated here -->
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 Database Design Course</p>
+        </footer>
+    </div>
+
+    <script>
+        // Lecture data for 8-week course (2 lectures per week)
+        const lectures = [
+            // Week 1
+            { number: 1, week: 1, title: 'Introduction to Databases', description: 'Database fundamentals, DBMS architecture, and the role of databases in modern applications.', status: 'ready' },
+            { number: 2, week: 1, title: 'Relational Model', description: 'Relations, attributes, tuples, domains, and the mathematical foundation of relational databases.', status: 'ready' },
+            
+            // Week 2
+            { number: 3, week: 2, title: 'Entity-Relationship Modeling', description: 'Conceptual design using ER diagrams, entities, relationships, and cardinality constraints.', status: 'ready' },
+            { number: 4, week: 2, title: 'Enhanced ER & UML', description: 'Advanced modeling concepts: weak entities, inheritance, aggregation, and UML for databases.', status: 'ready' },
+            
+            // Week 3
+            { number: 5, week: 3, title: 'Normalization Theory', description: 'Functional dependencies, normal forms (1NF, 2NF, 3NF), and the normalization process.', status: 'ready' },
+            { number: 6, week: 3, title: 'Advanced Normalization', description: 'BCNF, 4NF, 5NF, denormalization strategies, and practical design trade-offs.', status: 'ready' },
+            
+            // Week 4
+            { number: 7, week: 4, title: 'Physical Database Design', description: 'Storage structures, indexing, B-trees, hashing, and physical optimization techniques.', status: 'ready' },
+            { number: 8, week: 4, title: 'Constraints & Integrity', description: 'Keys, referential integrity, check constraints, assertions, and triggers.', status: 'coming' },
+            
+            // Week 5
+            { number: 9, week: 5, title: 'SQL Fundamentals', description: 'DDL, DML, basic queries, filtering, sorting, and aggregate functions.', status: 'coming' },
+            { number: 10, week: 5, title: 'Advanced SQL', description: 'Complex joins, subqueries, views, CTEs, and window functions.', status: 'coming' },
+            
+            // Week 6
+            { number: 11, week: 6, title: 'Stored Procedures & Functions', description: 'Procedural SQL, stored procedures, user-defined functions, and cursors.', status: 'coming' },
+            { number: 12, week: 6, title: 'Transactions & Concurrency', description: 'ACID properties, isolation levels, locking, deadlocks, and recovery mechanisms.', status: 'coming' },
+            
+            // Week 7
+            { number: 13, week: 7, title: 'NoSQL Databases', description: 'Document stores, key-value stores, graph databases, and CAP theorem.', status: 'coming' },
+            { number: 14, week: 7, title: 'Database Security', description: 'Access control, encryption, SQL injection prevention, and audit trails.', status: 'coming' },
+            
+            // Week 8
+            { number: 15, week: 8, title: 'Performance & Optimization', description: 'Query optimization, execution plans, indexing strategies, and performance monitoring.', status: 'coming' },
+            { number: 16, week: 8, title: 'Final Project Presentations', description: 'Present your database design projects and peer review sessions.', status: 'coming' }
+        ];
+
+        // Render lectures
+        function renderLectures() {
+            const container = document.getElementById('lectures-container');
+            container.innerHTML = '';
+            
+            lectures.forEach(lecture => {
+                const card = document.createElement('div');
+                card.className = 'lecture-card';
+                
+                let statusBadge = '';
+                if (lecture.status === 'ready') {
+                    statusBadge = '<span class="status-badge status-ready">Available</span>';
+                } else {
+                    statusBadge = '<span class="status-badge status-coming">Coming Soon</span>';
+                }
+                
+                card.innerHTML = `
+                    <span class="lecture-number">Lecture ${lecture.number}</span>
+                    <span class="lecture-date">Week ${lecture.week}</span>
+                    <h3>${lecture.title}</h3>
+                    <p>${lecture.description}</p>
+                    ${lecture.status === 'ready' ? 
+                        `<a href="pages/lecture${lecture.number}.html">View Lecture</a>` : 
+                        '<a href="#" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>'}
+                    ${statusBadge}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Theme toggle functionality
+        const themeCheckbox = document.getElementById('theme-checkbox');
+        const currentTheme = localStorage.getItem('dbTheme') || 'light';
+        
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeCheckbox.checked = true;
+        }
+        
+        themeCheckbox.addEventListener('change', (e) => {
+            const theme = e.target.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('dbTheme', theme);
+        });
+
+        // Initialize
+        renderLectures();
+    </script>
+</body>
+</html>

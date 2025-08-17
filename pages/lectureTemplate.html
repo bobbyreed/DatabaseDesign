@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Title - CSCI 3503</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles (if needed) -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Optional timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture Template
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Lecture Main Title</h1>
+            <h2>Subtitle <span class="emoji">🗄️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week X, Lecture Y</p>
+            <p style="margin-top: auto; font-style: italic;">Building the data foundations of tomorrow!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Understand database concept one</li>
+                <li>🎯 Master database technique two</li>
+                <li>🎯 Apply database principle three</li>
+                <li>🎯 Design database solution four</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Database Concept Example -->
+        <div class="slide">
+            <h1>Entity-Relationship Example</h1>
+            <p>Understanding relationships between entities in our database.</p>
+
+            <!-- ER Diagram Example -->
+            <div class="erd-diagram">
+                <pre>
+┌─────────────┐         ┌─────────────┐
+│   STUDENT   │         │    COURSE   │
+├─────────────┤         ├─────────────┤
+│ student_id  │◄───────►│ course_id   │
+│ name        │  M : N  │ title       │
+│ email       │         │ credits     │
+└─────────────┘         └─────────────┘
+                </pre>
+            </div>
+
+            <!-- Tip Box -->
+            <div class="tip-box">
+                <strong>Design Tip:</strong> Always identify cardinality constraints in your relationships.
+            </div>
+        </div>
+
+        <!-- Slide 4: SQL Example -->
+        <div class="slide">
+            <h1>SQL Query Example</h1>
+            <p>Creating and querying database tables:</p>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create a students table</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> students (<br>
+                &nbsp;&nbsp;student_id <span class="sql-keyword">INT PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;email <span class="sql-keyword">VARCHAR</span>(255) <span class="sql-keyword">UNIQUE</span>,<br>
+                &nbsp;&nbsp;enrollment_date <span class="sql-keyword">DATE DEFAULT CURRENT_DATE</span><br>
+                );
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Query with JOIN</span><br>
+                <span class="sql-keyword">SELECT</span> s.name, c.title<br>
+                <span class="sql-keyword">FROM</span> students s<br>
+                <span class="sql-keyword">INNER JOIN</span> enrollments e <span class="sql-keyword">ON</span> s.student_id = e.student_id<br>
+                <span class="sql-keyword">INNER JOIN</span> courses c <span class="sql-keyword">ON</span> e.course_id = c.course_id<br>
+                <span class="sql-keyword">WHERE</span> c.credits >= 3;
+            </div>
+        </div>
+
+        <!-- Slide 5: Table Schema -->
+        <div class="slide">
+            <h1>Database Schema Design</h1>
+            <p>Example table structure for our student database:</p>
+
+            <table class="table-schema">
+                <thead>
+                    <tr>
+                        <th>Column Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>student_id</td>
+                        <td>INT</td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>VARCHAR(100)</td>
+                        <td>NOT NULL</td>
+                        <td>Student full name</td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td>VARCHAR(255)</td>
+                        <td>UNIQUE, NOT NULL</td>
+                        <td>Student email address</td>
+                    </tr>
+                    <tr>
+                        <td>gpa</td>
+                        <td>DECIMAL(3,2)</td>
+                        <td>CHECK (gpa >= 0.0 AND gpa <= 4.0)</td>
+                        <td>Grade point average</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 6: Practice Activity -->
+        <div class="slide">
+            <h1>Design Challenge <span class="emoji">💻</span></h1>
+            <div class="activity-box">
+                <h3>15-Minute Exercise</h3>
+                <p>Design a database schema for a library management system:</p>
+                <ol>
+                    <li>Identify the main entities (books, members, loans)</li>
+                    <li>Define relationships and cardinalities</li>
+                    <li>List primary and foreign keys</li>
+                    <li>Consider necessary constraints</li>
+                </ol>
+            </div>
+            <!-- Timer button with data attribute -->
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 7: Normalization Example -->
+        <div class="slide">
+            <h1>Normalization in Practice</h1>
+            <div class="comparison-table">
+                <div class="comparison-card bad">
+                    <h3>❌ Denormalized</h3>
+                    <div class="code-example">
+                        Order_ID | Customer_Name | Items<br>
+                        1001 | John Doe | Book, Pen, Paper<br>
+                        1002 | Jane Smith | Laptop, Mouse
+                    </div>
+                    <p>Problems: Repeating groups, update anomalies</p>
+                </div>
+                <div class="comparison-card good">
+                    <h3>✅ Normalized</h3>
+                    <div class="code-example">
+                        Orders: Order_ID | Customer_ID<br>
+                        Order_Items: Order_ID | Item_ID | Quantity<br>
+                        Items: Item_ID | Item_Name | Price
+                    </div>
+                    <p>Benefits: No redundancy, easier updates</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Slide: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul>
+                <li>✅ Design normalized database schemas</li>
+                <li>✅ Write complex SQL queries</li>
+                <li>✅ Identify and resolve design anomalies</li>
+                <li>✅ Apply database best practices</li>
+            </ul>
+            <div class="demo-box">
+                <p><strong>Next Lecture:</strong> Advanced topics preview</p>
+                <p><strong>Assignment:</strong> Complete the database design exercise</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript (if needed) -->
+    <script>
+        // Database-specific interactions can go here
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+        });
+    </script>
+</body>
+</html>
