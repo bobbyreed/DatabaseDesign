@@ -1,367 +1,154 @@
 exports.handler = async (event, context) => {
-    console.log('Function invoked with method:', event.httpMethod);
-    console.log('Environment has token?', !!process.env.GITHUB_TOKEN);
-    
-    // CORS headers for local development
+    // CORS headers
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'POST, OPTIONS'
     };
-    
-    // Handle preflight requests
-    if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 200, headers, body: '' };
-    }
-    
-    // Only allow POST requests
-    if (event.httpMethod !== 'POST') {
-        return { 
-            statusCode: 405, 
-            headers,
-            body: JSON.stringify({ error: 'Method Not Allowed' })
-        };
-    }
-    
-    // Get the GitHub token from environment variable
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    
-    if (!GITHUB_TOKEN) {
-        console.error('GITHUB_TOKEN not configured in Netlify environment variables');
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({ error: 'Server configuration error - no token' })
-        };
-    }
-    
-    const API_BASE = 'https://api.github.com/gists';
-    
-    try {
-        // Parse the request
-        const data = JSON.parse(event.body);
-        console.log('Action requested:', data.action);
-        console.log('Student ID:', data.studentId);
-        
-        const { action, studentId, gistId, updateData, masterGistId } = data;
-        
-        let response;
-        let result;
-        
-        switch(action) {
-            case 'updateStudent':
-                // Update existing student gist
-                console.log(`Updating student ${studentId} gist ${gistId}`);
-                
-                response = await fetch(`${API_BASE}/${gistId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        files: {
-                            'student-data.json': {
-                                content: JSON.stringify(updateData, null, 2)
-                            }
-                        }
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('GitHub API error:', response.status, errorText);
-                    throw new Error(`GitHub API error: ${response.status} - ${errorText}`);
-                }
-                
-                result = await response.json();
-                console.log('Update successful');
-                break;
-                
-            case 'createGist':
-                // Create new student gist
-                console.log(`Creating new gist for student ${studentId}`);
-                
-                response = await fetch(API_BASE, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        description: `CSCI 3403 - Student Data - ${studentId}`,
-                        public: false,
-                        files: {
-                            'student-data.json': {
-                                content: JSON.stringify(updateData, null, 2)
-                            }
-                        }
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('GitHub API error:', response.status, errorText);
-                    throw new Error(`GitHub API error: ${response.status} - ${errorText}`);
-                }
-                
-                result = await response.json();
-                console.log('Gist created successfully');
-                break;
-                
-            case 'updateMaster':
-                // First, fetch current master config
-                console.log(`Updating master config with student ${studentId}`);
-                
-                const masterResponse = await fetch(`${API_BASE}/${masterGistId}`, {
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (!masterResponse.ok) {
-                    const errorText = await masterResponse.text();
-                    console.error('Failed to fetch master:', masterResponse.status, errorText);
-                    throw new Error(`Failed to fetch master config: ${masterResponse.status}`);
-                }
-                
-                const masterGist = await masterResponse.json();
-                const config = JSON.parse(masterGist.files['csci3403-config.json'].content);
-                
-                // Add new student
-                if (!config.students) {
-                    config.students = {};
-                }
-                config.students[studentId] = gistId;
-                config.lastUpdated = new Date().toISOString();
-                
-                // Update master gist
-                response = await fetch(`${API_BASE}/${masterGistId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        files: {
-                            'csci3403-config.json': {
-                                content: JSON.stringify(config, null, 2)
-                            }
-                        }
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Failed to update master:', response.status, errorText);
-                    throw new Error(`Failed to update master config: ${response.status}`);
-                }
-                
-                result = await response.json();
-                console.log('Master config updated');
-                break;
-                
-            default:
-                throw new Error(`Unknown action: ${action}`);
-        }
-        
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify(result)
-        };
-        
-    } catch (error) {
-        console.error('Function error:', error.message);
-        console.error('Full error:', error);
-        
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({ 
-                error: error.message,
-                details: 'Check function logs for more information'
-            })
-        };
-    }
-};
 
-exports.handler = async (event, context) => {
-    // CORS headers for local development
-    const headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-    };
-    
-    // Handle preflight requests
+    // Handle preflight
     if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 200, headers, body: '' };
-    }
-    
-    // Only allow POST requests
-    if (event.httpMethod !== 'POST') {
-        return { 
-            statusCode: 405, 
-            headers,
-            body: JSON.stringify({ error: 'Method Not Allowed' })
-        };
-    }
-    
-    // Get the GitHub token from environment variable (set in Netlify dashboard)
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-    
-    if (!GITHUB_TOKEN) {
-        console.error('GITHUB_TOKEN not configured in Netlify environment variables');
         return {
-            statusCode: 500,
+            statusCode: 200,
             headers,
-            body: JSON.stringify({ error: 'Server configuration error' })
+            body: ''
         };
     }
-    
-    const API_BASE = 'https://api.github.com/gists';
-    
+
+    // Only allow POST
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            headers,
+            body: JSON.stringify({ error: 'Method not allowed' })
+        };
+    }
+
     try {
-        // Parse the request
-        const data = JSON.parse(event.body);
-        const { action, studentId, gistId, updateData, masterGistId } = data;
+        const { action, studentId, updateData, gistId, masterGistId } = JSON.parse(event.body);
         
-        let response;
-        let result;
+        // Get GitHub token from environment variable
+        const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+        if (!GITHUB_TOKEN) {
+            throw new Error('GitHub token not configured');
+        }
+
+        const API_BASE = 'https://api.github.com/gists';
         
-        switch(action) {
-            case 'updateStudent':
-                // Update existing student gist
-                console.log(`Updating student ${studentId} gist ${gistId}`);
-                
-                response = await fetch(`${API_BASE}/${gistId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        files: {
-                            'student-data.json': {
-                                content: JSON.stringify(updateData, null, 2)
-                            }
-                        }
-                    })
-                });
-                
-                if (!response.ok) {
-                    const error = await response.text();
-                    throw new Error(`GitHub API error: ${response.status} - ${error}`);
-                }
-                
-                result = await response.json();
-                break;
-                
+        // Common headers for GitHub API
+        const githubHeaders = {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+        };
+
+        switch (action) {
             case 'createGist':
-                // Create new student gist
-                console.log(`Creating new gist for student ${studentId}`);
-                
-                response = await fetch(API_BASE, {
+                // Create a new gist for the student
+                const createResponse = await fetch(API_BASE, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
+                    headers: githubHeaders,
                     body: JSON.stringify({
-                        description: `CSCI 3403 - Student Data - ${studentId}`,
+                        description: `CSCI 5603 - Student ${studentId} Progress`,
                         public: false,
                         files: {
-                            'student-data.json': {
+                            [`student_${studentId}.json`]: {
                                 content: JSON.stringify(updateData, null, 2)
                             }
                         }
                     })
                 });
-                
-                if (!response.ok) {
-                    const error = await response.text();
-                    throw new Error(`GitHub API error: ${response.status} - ${error}`);
+
+                if (!createResponse.ok) {
+                    throw new Error(`Failed to create gist: ${createResponse.status}`);
                 }
-                
-                result = await response.json();
-                break;
-                
-            case 'updateMaster':
-                // First, fetch current master config
-                console.log(`Updating master config with student ${studentId}`);
-                
-                const masterResponse = await fetch(`${API_BASE}/${masterGistId}`, {
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
+
+                const newGist = await createResponse.json();
+                return {
+                    statusCode: 200,
+                    headers,
+                    body: JSON.stringify({ id: newGist.id, success: true })
+                };
+
+            case 'updateGist':
+                // Update existing student gist
+                const updateResponse = await fetch(`${API_BASE}/${gistId}`, {
+                    method: 'PATCH',
+                    headers: githubHeaders,
+                    body: JSON.stringify({
+                        files: {
+                            [`student_${studentId}.json`]: {
+                                content: JSON.stringify(updateData, null, 2)
+                            }
+                        }
+                    })
                 });
-                
-                if (!masterResponse.ok) {
-                    throw new Error(`Failed to fetch master config: ${masterResponse.status}`);
+
+                if (!updateResponse.ok) {
+                    throw new Error(`Failed to update gist: ${updateResponse.status}`);
                 }
-                
-                const masterGist = await masterResponse.json();
-                const config = JSON.parse(masterGist.files['csci3403-config.json'].content);
-                
-                // Add new student
+
+                return {
+                    statusCode: 200,
+                    headers,
+                    body: JSON.stringify({ success: true })
+                };
+
+            case 'updateMasterConfig':
+                // First, fetch the current master config
+                const fetchResponse = await fetch(`${API_BASE}/${masterGistId}`, {
+                    headers: githubHeaders
+                });
+
+                if (!fetchResponse.ok) {
+                    throw new Error(`Failed to fetch master config: ${fetchResponse.status}`);
+                }
+
+                const masterGist = await fetchResponse.json();
+                const config = JSON.parse(masterGist.files['csci5603-config.json'].content);
+
+                // Update the config with new student
                 if (!config.students) {
                     config.students = {};
                 }
                 config.students[studentId] = gistId;
-                config.lastUpdated = new Date().toISOString();
-                
-                // Update master gist
-                response = await fetch(`${API_BASE}/${masterGistId}`, {
+
+                // Update the master gist
+                const masterUpdateResponse = await fetch(`${API_BASE}/${masterGistId}`, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
+                    headers: githubHeaders,
                     body: JSON.stringify({
                         files: {
-                            'csci3403-config.json': {
+                            'csci5603-config.json': {
                                 content: JSON.stringify(config, null, 2)
                             }
                         }
                     })
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`Failed to update master config: ${response.status}`);
+
+                if (!masterUpdateResponse.ok) {
+                    throw new Error(`Failed to update master config: ${masterUpdateResponse.status}`);
                 }
-                
-                result = await response.json();
-                break;
-                
+
+                return {
+                    statusCode: 200,
+                    headers,
+                    body: JSON.stringify({ success: true })
+                };
+
             default:
-                throw new Error(`Unknown action: ${action}`);
+                return {
+                    statusCode: 400,
+                    headers,
+                    body: JSON.stringify({ error: 'Invalid action' })
+                };
         }
-        
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify(result)
-        };
-        
     } catch (error) {
         console.error('Function error:', error);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ 
-                error: error.message,
-                action: data?.action,
-                studentId: data?.studentId 
-            })
+            body: JSON.stringify({ error: error.message })
         };
     }
 };

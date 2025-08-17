@@ -392,7 +392,6 @@
             <p>© 2025 Database Design Course</p>
         </footer>
     </div>
-    <script src="./js/auth.js"></script>
     <script>
         // Lecture data for 8-week course (2 lectures per week)
         const lectures = [
@@ -428,6 +427,26 @@
             { number: 15, week: 8, title: 'Performance & Optimization', description: 'Query optimization, execution plans, indexing strategies, and performance monitoring.', status: 'coming' },
             { number: 16, week: 8, title: 'Final Project Presentations', description: 'Present your database design projects and peer review sessions.', status: 'coming' }
         ];
+        async function handleLogin() {
+            const studentId = document.getElementById('student-id').value;
+            const pin = document.getElementById('class-pin').value;
+            
+            if (!studentId || !pin) {
+                alert('Please enter both Student ID and PIN');
+                return;
+            }
+            
+            // Use the auth system
+            if (window.auth) {
+                const success = await auth.authenticate(studentId, pin);
+                if (success) {
+                    console.log('Authentication successful');
+                }
+            } else {
+                console.error('Auth system not loaded');
+                alert('Authentication system not ready. Please refresh the page.');
+            }
+        }
 
         // Render lectures
         function renderLectures() {
@@ -478,5 +497,6 @@
         // Initialize
         renderLectures();
     </script>
+    <script src="./js/auth.js"></script>
 </body>
 </html>
