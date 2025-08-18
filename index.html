@@ -482,15 +482,15 @@
         // Lecture data for 8-week course (2 lectures per week)
         const lectures = [
             // Week 1
-            { number: 1, week: 1, title: 'Course Overview and Introduction', link: './pages/lectures/1CourseOverview.html', description: 'Database fundamentals, DBMS architecture, and the role of databases in modern applications.', status: 'ready' },
-            { number: 2, week: 1, title: 'Relational Model', link: './pages/lectures/2DBDesignIntro.html', description: 'Relations, attributes, tuples, domains, and the mathematical foundation of relational databases.', status: 'ready' },
+            { number: 1, week: 1, title: 'Course Overview and Introduction', link: '1CourseOverview.html', description: 'Database fundamentals, DBMS architecture, and the role of databases in modern applications.', status: 'ready' },
+            { number: 2, week: 1, title: 'Relational Model', link: '2DBDesignIntro.html', description: 'Relations, attributes, tuples, domains, and the mathematical foundation of relational databases.', status: 'ready' },
             
             // Week 2
-            { number: 3, week: 2, title: 'Entity-Relationship Modeling', description: 'Conceptual design using ER diagrams, entities, relationships, and cardinality constraints.', status: 'ready' },
+            { number: 3, week: 2, title: 'Entity-Relationship Modeling', link: '3DBArch.html', description: 'Conceptual design using ER diagrams, entities, relationships, and cardinality constraints.', status: 'ready' },
             { number: 4, week: 2, title: 'Enhanced ER & UML', description: 'Advanced modeling concepts: weak entities, inheritance, aggregation, and UML for databases.', status: 'ready' },
             
             // Week 3
-            { number: 5, week: 3, title: 'Normalization Theory', description: 'Functional dependencies, normal forms (1NF, 2NF, 3NF), and the normalization process.', status: 'ready' },
+            { number: 5, week: 3, title: 'Normalization Theory', link: '4TheRelationalModel.html',description: 'Functional dependencies, normal forms (1NF, 2NF, 3NF), and the normalization process.', status: 'ready' },
             { number: 6, week: 3, title: 'Advanced Normalization', description: 'BCNF, 4NF, 5NF, denormalization strategies, and practical design trade-offs.', status: 'ready' },
             
             // Week 4
@@ -558,7 +558,7 @@
                     <h3>${lecture.title}</h3>
                     <p>${lecture.description}</p>
                     ${lecture.status === 'ready' ? 
-                        `<a href="pages/lectures/${lecture.link}.">View Lecture</a>` : 
+                        `<a href="pages/lectures/${lecture.link}">View Lecture</a>` : 
                         '<a href="#" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>'}
                     ${statusBadge}
                 `;
