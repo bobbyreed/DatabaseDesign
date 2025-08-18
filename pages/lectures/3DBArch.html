@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 03 - Database Architecture - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+
+        .json-example, .xml-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-green);
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        .json-key {
+            color: #9cdcfe;
+        }
+
+        .json-string {
+            color: #ce9178;
+        }
+
+        .json-number {
+            color: #b5cea8;
+        }
+
+        .xml-tag {
+            color: #569cd6;
+        }
+
+        .xml-attr {
+            color: #9cdcfe;
+        }
+
+        .xml-value {
+            color: #ce9178;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Timer display -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture 03 - Database Architecture
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Database Architecture</h1>
+            <h2>Understanding DBMS Structure <span class="emoji">🏗️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 2, Lecture 3</p>
+            <p style="margin-top: auto; font-style: italic;">Building robust database foundations for tomorrow's applications!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Understand limitations of file-based systems</li>
+                <li>🎯 Master the database approach and DBMS architecture</li>
+                <li>🎯 Learn the three-level ANSI-SPARC architecture</li>
+                <li>🎯 Identify roles in database environments</li>
+                <li>🎯 Explore data models and database languages</li>
+                <li>🎯 Apply architectural principles to real-world scenarios</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: File-Based Systems Overview -->
+        <div class="slide">
+            <h1>Traditional File-Based Systems</h1>
+            <p>Collection of application programs that perform services for end users.</p>
+            
+            <div class="demo-box">
+                <h3>Key Characteristics:</h3>
+                <ul>
+                    <li>Each program defines and manages its own data</li>
+                    <li>Data stored in separate files (CSV, XML, JSON)</li>
+                    <li>No centralized control or management</li>
+                    <li>Limited data sharing capabilities</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Historical Context:</strong> Before databases, organizations relied on file-based systems, leading to numerous challenges we'll explore next.
+            </div>
+        </div>
+
+        <!-- Slide 4: File Formats Examples -->
+        <div class="slide">
+            <h1>Common File Formats</h1>
+            <p>File-based systems use various formats for data storage:</p>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <h3>CSV Example</h3>
+                    <div class="code-example">
+                        <pre>student_id,name,email,gpa
+1001,Bobby Reed,breed@okcu.edu,3.85
+1002,Sarah Johnson,sjohnson@okcu.edu,3.92
+1003,Mike Chen,mchen@okcu.edu,3.78</pre>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Characteristics</h3>
+                    <ul>
+                        <li>Simple text format</li>
+                        <li>Comma-separated values</li>
+                        <li>Limited data types</li>
+                        <li>No relationships</li>
+                        <li>No validation rules</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: JSON Example with Bobby Reed -->
+        <div class="slide">
+            <h1>JSON Data Format</h1>
+            <p>JavaScript Object Notation - A more structured approach:</p>
+
+            <div class="json-example">
+                <pre>[
+    {
+        <span class="json-key">"name"</span>: <span class="json-string">"Bobby Reed"</span>,
+        <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+        <span class="json-key">"email"</span>: <span class="json-string">"breed@okcu.edu"</span>,
+        <span class="json-key">"years"</span>: <span class="json-number">4</span>
+    },
+    {
+        <span class="json-key">"name"</span>: <span class="json-string">"Hank Jones"</span>,
+        <span class="json-key">"id"</span>: <span class="json-number">2</span>,
+        <span class="json-key">"email"</span>: <span class="json-string">"hjones@gmail.com"</span>,
+        <span class="json-key">"years"</span>: <span class="json-number">2</span>
+    }
+]</pre>
+            </div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> JSON provides better structure than CSV but still lacks database features like relationships and constraints.
+            </div>
+        </div>
+
+        <!-- Slide 6: XML Example with Bobby Reed -->
+        <div class="slide">
+            <h1>XML Data Format</h1>
+            <p>eXtensible Markup Language - Self-describing data:</p>
+
+            <div class="xml-example">
+                <pre>&lt;?xml version = "1.0"?&gt;
+&lt;<span class="xml-tag">Students</span>&gt;
+    &lt;<span class="xml-tag">Student</span> <span class="xml-attr">Id</span>=<span class="xml-value">"1234"</span>&gt;
+        &lt;<span class="xml-tag">Name</span>&gt;Bobby Reed&lt;/<span class="xml-tag">Name</span>&gt;
+        &lt;<span class="xml-tag">Email</span>&gt;breed@okcu.edu&lt;/<span class="xml-tag">Email</span>&gt;
+        &lt;<span class="xml-tag">Years</span>&gt;4&lt;/<span class="xml-tag">Years</span>&gt;
+    &lt;/<span class="xml-tag">Student</span>&gt;
+    &lt;<span class="xml-tag">Student</span> <span class="xml-attr">Id</span>=<span class="xml-value">"4567"</span>&gt;
+        &lt;<span class="xml-tag">Name</span>&gt;Hank Jones&lt;/<span class="xml-tag">Name</span>&gt;
+        &lt;<span class="xml-tag">Email</span>&gt;hjones@gmail.com&lt;/<span class="xml-tag">Email</span>&gt;
+        &lt;<span class="xml-tag">Years</span>&gt;2&lt;/<span class="xml-tag">Years</span>&gt;
+    &lt;/<span class="xml-tag">Student</span>&gt;
+&lt;/<span class="xml-tag">Students</span>&gt;</pre>
+            </div>
+        </div>
+
+        <!-- Slide 7: File-Based Processing Example -->
+        <div class="slide">
+            <h1>File-Based Processing Scenario</h1>
+            <p>Real estate company with separate departments:</p>
+
+            <div class="demo-box">
+                <h3>Sales Department Files:</h3>
+                <ul>
+                    <li><strong>PropertyForRent:</strong> propertyNo, street, city, postcode, type, rooms, rent, ownerNo</li>
+                    <li><strong>PrivateOwner:</strong> ownerNo, fName, lName, address, telNo</li>
+                    <li><strong>Client:</strong> clientNo, fName, lName, address, telNo, prefType, maxRent</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Contracts Department Files:</h3>
+                <ul>
+                    <li><strong>Lease:</strong> leaseNo, propertyNo, clientNo, rent, paymentMethod, deposit</li>
+                    <li><strong>PropertyForRent:</strong> propertyNo, street, city, postcode, rent</li>
+                    <li><strong>Client:</strong> clientNo, fName, lName, address, telNo</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Problem:</strong> Notice the data duplication between departments!
+            </div>
+        </div>
+
+        <!-- Slide 8: Limitations Part 1 -->
+        <div class="slide">
+            <h1>Limitations of File-Based Approach (Part 1)</h1>
+            
+            <div class="demo-box">
+                <h3>1. Separation and Isolation of Data</h3>
+                <ul>
+                    <li>Each program maintains its own set of data</li>
+                    <li>Users unaware of potentially useful data in other programs</li>
+                    <li>No unified view of organizational data</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>2. Duplication of Data</h3>
+                <ul>
+                    <li>Same data held by different programs</li>
+                    <li>Wasted storage space</li>
+                    <li>Potential for inconsistent values</li>
+                    <li>Different formats for the same item</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Limitations Part 2 -->
+        <div class="slide">
+            <h1>Limitations of File-Based Approach (Part 2)</h1>
+            
+            <div class="demo-box">
+                <h3>3. Data Dependence</h3>
+                <ul>
+                    <li>File structure defined in program code</li>
+                    <li>Changes to file structure require program modifications</li>
+                    <li>Maintenance becomes increasingly difficult</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>4. Incompatible File Formats</h3>
+                <ul>
+                    <li>Programs written in different languages</li>
+                    <li>Cannot easily access each other's files</li>
+                    <li>Data exchange requires conversion programs</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>5. Fixed Queries/Proliferation of Programs</h3>
+                <ul>
+                    <li>Programs written for specific functions</li>
+                    <li>New requirements need new programs</li>
+                    <li>Rapid growth in number of programs</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: The Database Approach -->
+        <div class="slide">
+            <h1>The Database Approach</h1>
+            <p>A revolutionary solution to file-based limitations:</p>
+
+            <div class="demo-box">
+                <h3>Why It Arose:</h3>
+                <ul>
+                    <li>Data definition embedded in applications → need for separation</li>
+                    <li>No control over data access → need for centralized management</li>
+                    <li>Data redundancy and inconsistency → need for integration</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>The Solution:</h3>
+                <p style="font-size: 1.3em; text-align: center; margin: 20px;">
+                    <strong>Database + Database Management System (DBMS)</strong>
+                </p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> Separate data from applications, centralize control, and provide a unified interface.
+            </div>
+        </div>
+
+        <!-- Slide 11: What is a Database? -->
+        <div class="slide">
+            <h1>Database Definition</h1>
+            
+            <div class="demo-box" style="background: var(--bg-accent); padding: 30px; margin: 30px 0;">
+                <h2 style="color: var(--ocu-true-blue);">A database is:</h2>
+                <p style="font-size: 1.3em; line-height: 1.8;">
+                    A <strong>shared collection</strong> of <strong>logically related data</strong> 
+                    (and a description of this data), designed to meet the 
+                    <strong>information needs</strong> of an organization.
+                </p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <h3>Key Components:</h3>
+                    <ul>
+                        <li><strong>Entities:</strong> Objects of interest</li>
+                        <li><strong>Attributes:</strong> Properties of entities</li>
+                        <li><strong>Relationships:</strong> Associations between entities</li>
+                        <li><strong>Metadata:</strong> Data about data</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Characteristics:</h3>
+                    <ul>
+                        <li>Self-describing nature</li>
+                        <li>Program-data independence</li>
+                        <li>Support for multiple views</li>
+                        <li>Concurrent data sharing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: DBMS Definition -->
+        <div class="slide">
+            <h1>Database Management System (DBMS)</h1>
+            
+            <div class="demo-box" style="background: var(--bg-accent); padding: 30px;">
+                <p style="font-size: 1.3em; line-height: 1.8;">
+                    A <strong>software system</strong> that enables users to 
+                    <strong>define, create, maintain, and control access</strong> 
+                    to the database.
+                </p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Database Application Programs:</h3>
+                <p>Computer programs that interact with the database by issuing appropriate requests (SQL statements) to the DBMS.</p>
+            </div>
+
+            <div class="erd-diagram">
+                <pre style="text-align: center;">
+    ┌─────────────────┐
+    │   Application   │
+    │    Programs     │
+    └────────┬────────┘
+             │ SQL Requests
+             ▼
+    ┌─────────────────┐
+    │      DBMS       │
+    └────────┬────────┘
+             │
+             ▼
+    ┌─────────────────┐
+    │    Database     │
+    └─────────────────┘
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 13: Database Languages -->
+        <div class="slide">
+            <h1>Database Languages</h1>
+            
+            <div class="demo-box">
+                <h3>Data Definition Language (DDL)</h3>
+                <ul>
+                    <li>Permits specification of data types and structures</li>
+                    <li>Defines constraints on data</li>
+                    <li>All specifications stored in the database catalog</li>
+                </ul>
+                
+                <div class="sql-example">
+                    <span class="sql-comment">-- DDL Example</span><br>
+                    <span class="sql-keyword">CREATE TABLE</span> Student (<br>
+                    &nbsp;&nbsp;student_id <span class="sql-keyword">INT PRIMARY KEY</span>,<br>
+                    &nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+                    &nbsp;&nbsp;email <span class="sql-keyword">VARCHAR</span>(255) <span class="sql-keyword">UNIQUE</span><br>
+                    );
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Data Manipulation Language (DML)</h3>
+                <ul>
+                    <li>General enquiry facility (query language)</li>
+                    <li>SQL (Structured Query Language)</li>
+                    <li>Insert, update, delete, and retrieve data</li>
+                </ul>
+                
+                <div class="sql-example">
+                    <span class="sql-comment">-- DML Example</span><br>
+                    <span class="sql-keyword">SELECT</span> name, email<br>
+                    <span class="sql-keyword">FROM</span> Student<br>
+                    <span class="sql-keyword">WHERE</span> student_id = 1001;
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Controlled Access Features -->
+        <div class="slide">
+            <h1>Database Controlled Access</h1>
+            <p>DBMS provides comprehensive control mechanisms:</p>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>🔒 Security System</h3>
+                        <ul>
+                            <li>User authentication</li>
+                            <li>Access control lists</li>
+                            <li>Role-based permissions</li>
+                            <li>Encryption support</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-box">
+                        <h3>✓ Integrity System</h3>
+                        <ul>
+                            <li>Data validation rules</li>
+                            <li>Referential integrity</li>
+                            <li>Business rule enforcement</li>
+                            <li>Constraint checking</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>🔄 Concurrency Control</h3>
+                        <ul>
+                            <li>Multiple user access</li>
+                            <li>Transaction management</li>
+                            <li>Lock mechanisms</li>
+                            <li>Deadlock prevention</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-box">
+                        <h3>💾 Recovery Control</h3>
+                        <ul>
+                            <li>Backup mechanisms</li>
+                            <li>Transaction logs</li>
+                            <li>Point-in-time recovery</li>
+                            <li>Disaster recovery</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>📚 User-Accessible Catalog</h3>
+                <p>Metadata repository containing descriptions of data structures, constraints, users, and applications.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Three-Level Architecture -->
+        <div class="slide">
+            <h1>ANSI-SPARC Three-Level Architecture</h1>
+            <p>Standard architecture for database systems:</p>
+
+            <div class="erd-diagram" style="padding: 30px;">
+                <pre style="text-align: center; font-size: 1.1em;">
+    ┌─────────────────────────┐
+    │    External Level       │ ← User Views
+    │  (Individual User Views)│
+    └────────────┬────────────┘
+                 │ External/Conceptual Mapping
+                 ▼
+    ┌─────────────────────────┐
+    │   Conceptual Level      │ ← Logical Structure
+    │  (Community User View)  │
+    └────────────┬────────────┘
+                 │ Conceptual/Internal Mapping
+                 ▼
+    ┌─────────────────────────┐
+    │    Internal Level       │ ← Physical Storage
+    │  (Storage Structure)    │
+    └─────────────────────────┘
+                </pre>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Benefit:</strong> Data independence - changes at one level don't affect other levels.
+            </div>
+        </div>
+
+        <!-- Slide 16: Architecture Levels Explained -->
+        <div class="slide">
+            <h1>Understanding Architecture Levels</h1>
+
+            <div class="demo-box">
+                <h3>1. External Level (View Level)</h3>
+                <ul>
+                    <li>Individual user views of the database</li>
+                    <li>Different views for different user groups</li>
+                    <li>Security through view restrictions</li>
+                    <li>Customized data presentation</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>2. Conceptual Level (Logical Level)</h3>
+                <ul>
+                    <li>Community view of entire database</li>
+                    <li>Describes what data is stored</li>
+                    <li>Relationships between data</li>
+                    <li>Constraints and security rules</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>3. Internal Level (Physical Level)</h3>
+                <ul>
+                    <li>Physical storage structures</li>
+                    <li>File organizations and indexes</li>
+                    <li>Storage allocation</li>
+                    <li>Data compression and encryption</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 17: Database Views -->
+        <div class="slide">
+            <h1>Database Views</h1>
+            <p>Virtual tables based on database queries:</p>
+
+            <div class="demo-box">
+                <h3>Benefits of Views:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>✓ Reduce complexity for users</li>
+                    <li>✓ Provide security through restricted access</li>
+                    <li>✓ Customize data appearance per user needs</li>
+                    <li>✓ Present consistent picture despite schema changes</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Creating a view for students</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> ActiveStudents <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> student_id, name, email<br>
+                <span class="sql-keyword">FROM</span> Students<br>
+                <span class="sql-keyword">WHERE</span> status = <span class="sql-string">'Active'</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> enrollment_date > <span class="sql-string">'2024-01-01'</span>;
+            </div>
+
+            <div class="tip-box">
+                <strong>Design Principle:</strong> Views act as a window into your data, showing only what users need to see.
+            </div>
+        </div>
+
+        <!-- Slide 18: Roles in Database Environment -->
+        <div class="slide">
+            <h1>Roles in the Database Environment</h1>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Data Administrator (DA)</h3>
+                        <ul>
+                            <li>Strategic planning</li>
+                            <li>Policy development</li>
+                            <li>Standards definition</li>
+                            <li>Business liaison</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>Database Administrator (DBA)</h3>
+                        <ul>
+                            <li>Physical implementation</li>
+                            <li>Security enforcement</li>
+                            <li>Performance tuning</li>
+                            <li>Backup and recovery</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>Database Designers</h3>
+                        <ul>
+                            <li><strong>Logical:</strong> Conceptual schema</li>
+                            <li><strong>Physical:</strong> Storage structures</li>
+                            <li>Data modeling</li>
+                            <li>Normalization</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Application Programmers</h3>
+                        <ul>
+                            <li>Develop applications</li>
+                            <li>Write SQL queries</li>
+                            <li>Create user interfaces</li>
+                            <li>Implement business logic</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>End Users</h3>
+                        <ul>
+                            <li><strong>Naive Users:</strong></li>
+                            <li>&nbsp;&nbsp;- Use pre-built applications</li>
+                            <li>&nbsp;&nbsp;- No SQL knowledge needed</li>
+                            <li><strong>Sophisticated Users:</strong></li>
+                            <li>&nbsp;&nbsp;- Write own queries</li>
+                            <li>&nbsp;&nbsp;- Use query tools directly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: History of Database Systems -->
+        <div class="slide">
+            <h1>Evolution of Database Systems</h1>
+
+            <div class="demo-box">
+                <h3>First Generation (1960s-1970s)</h3>
+                <ul>
+                    <li><strong>Hierarchical Model:</strong> Tree-like structure (IBM's IMS)</li>
+                    <li><strong>Network Model:</strong> Graph structure (CODASYL)</li>
+                    <li>Navigational access to data</li>
+                    <li>Complex programming required</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Second Generation (1970s-1990s)</h3>
+                <ul>
+                    <li><strong>Relational Model:</strong> Tables with rows and columns</li>
+                    <li>SQL as standard query language</li>
+                    <li>Data independence achieved</li>
+                    <li>Examples: Oracle, DB2, SQL Server</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Third Generation (1990s-Present)</h3>
+                <ul>
+                    <li><strong>Object-Relational:</strong> Objects + Relations</li>
+                    <li><strong>Object-Oriented:</strong> Pure OO databases</li>
+                    <li><strong>NoSQL:</strong> Document, Key-Value, Graph databases</li>
+                    <li><strong>NewSQL:</strong> Scalable SQL databases</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 20: Practice Activity 1 -->
+        <div class="slide">
+            <h1>Design Challenge <span class="emoji">🏗️</span></h1>
+            <h2>University Registration System</h2>
+            
+            <div class="demo-box">
+                <h3>Scenario:</h3>
+                <p>Design a database architecture for OCU's registration system that handles:</p>
+                <ul>
+                    <li>Student enrollment in courses</li>
+                    <li>Faculty teaching assignments</li>
+                    <li>Room scheduling</li>
+                    <li>Grade management</li>
+                </ul>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <h3>Identify:</h3>
+                    <ul>
+                        <li>Main entities</li>
+                        <li>Key attributes</li>
+                        <li>Relationships</li>
+                        <li>User views needed</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Consider:</h3>
+                    <ul>
+                        <li>Different user roles</li>
+                        <li>Security requirements</li>
+                        <li>Performance needs</li>
+                        <li>Scalability issues</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Discussion:</strong> How would this differ from a file-based approach? (10 minutes)
+            </div>
+        </div>
+
+        <!-- Slide 21: Real-World Example -->
+        <div class="slide">
+            <h1>Case Study: E-Commerce Platform</h1>
+            
+            <div class="erd-diagram">
+                <pre>
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│  CUSTOMER   │         │    ORDER    │         │   PRODUCT   │
+├─────────────┤         ├─────────────┤         ├─────────────┤
+│ customer_id │◄────────│ order_id    │         │ product_id  │
+│ name        │  1:N    │ customer_id │         │ name        │
+│ email       │         │ order_date  │◄────────│ price       │
+│ address     │         │ total       │  N:M    │ stock       │
+└─────────────┘         └─────────────┘         └─────────────┘
+                               │
+                               │ 1:N
+                               ▼
+                        ┌─────────────┐
+                        │ ORDER_ITEM  │
+                        ├─────────────┤
+                        │ order_id    │
+                        │ product_id  │
+                        │ quantity    │
+                        │ price       │
+                        └─────────────┘
+                </pre>
+            </div>
+
+            <div class="demo-box">
+                <h3>Architecture Considerations:</h3>
+                <ul>
+                    <li>High transaction volume</li>
+                    <li>Real-time inventory updates</li>
+                    <li>Multiple payment gateways</li>
+                    <li>Customer data security</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 22: DBMS Components -->
+        <div class="slide">
+            <h1>Major DBMS Components</h1>
+
+            <div class="erd-diagram" style="padding: 20px;">
+                <pre style="text-align: center;">
+                    ┌──────────────────────┐
+                    │   Query Processor    │
+                    ├──────────────────────┤
+                    │ • Parser             │
+                    │ • Optimizer          │
+                    │ • Executor           │
+                    └──────────┬───────────┘
+                              │
+                    ┌──────────▼───────────┐
+                    │  Storage Manager     │
+                    ├──────────────────────┤
+                    │ • Buffer Manager     │
+                    │ • File Manager       │
+                    │ • Index Manager      │
+                    └──────────┬───────────┘
+                              │
+                    ┌──────────▼───────────┐
+                    │  Transaction Manager │
+                    ├──────────────────────┤
+                    │ • Concurrency Control│
+                    │ • Recovery Manager   │
+                    │ • Lock Manager       │
+                    └──────────────────────┘
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 23: Practice Activity 2 -->
+        <div class="slide">
+            <h1>Group Exercise: Architecture Design</h1>
+            
+            <div class="demo-box">
+                <h3>Task: Design Views for Different Users</h3>
+                <p>For a hospital management system, create appropriate views for:</p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h4>👨‍⚕️ Doctors</h4>
+                        <ul>
+                            <li>Patient medical history</li>
+                            <li>Current prescriptions</li>
+                            <li>Lab results</li>
+                            <li>Appointment schedule</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-box">
+                        <h4>👩‍⚕️ Nurses</h4>
+                        <ul>
+                            <li>Patient vitals</li>
+                            <li>Medication schedules</li>
+                            <li>Room assignments</li>
+                            <li>Care instructions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <div class="demo-box">
+                        <h4>💼 Administrators</h4>
+                        <ul>
+                            <li>Billing information</li>
+                            <li>Insurance details</li>
+                            <li>Resource utilization</li>
+                            <li>Staff schedules</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="demo-box">
+                        <h4>🧑 Patients</h4>
+                        <ul>
+                            <li>Appointment history</li>
+                            <li>Test results</li>
+                            <li>Billing statements</li>
+                            <li>Prescription refills</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Consider:</strong> What data should be hidden from each user group? How do we ensure HIPAA compliance?
+            </div>
+        </div>
+
+        <!-- Slide 24: Modern Database Architectures -->
+        <div class="slide">
+            <h1>Modern Database Architectures</h1>
+
+            <div class="demo-box">
+                <h3>Cloud-Based Architectures</h3>
+                <ul>
+                    <li><strong>SaaS:</strong> Software as a Service (Salesforce)</li>
+                    <li><strong>PaaS:</strong> Platform as a Service (Azure SQL)</li>
+                    <li><strong>DBaaS:</strong> Database as a Service (AWS RDS)</li>
+                    <li>Elastic scaling and pay-per-use models</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Distributed Architectures</h3>
+                <ul>
+                    <li><strong>Sharding:</strong> Horizontal partitioning</li>
+                    <li><strong>Replication:</strong> Multiple copies for availability</li>
+                    <li><strong>Federation:</strong> Split databases by function</li>
+                    <li><strong>CAP Theorem:</strong> Consistency, Availability, Partition tolerance</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Microservices Architecture</h3>
+                <ul>
+                    <li>Database per service pattern</li>
+                    <li>Event sourcing and CQRS</li>
+                    <li>Polyglot persistence</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 25: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul style="font-size: 1.2em; line-height: 1.8;">
+                <li>✅ Explain limitations of file-based systems</li>
+                <li>✅ Describe the database approach advantages</li>
+                <li>✅ Understand DBMS architecture components</li>
+                <li>✅ Apply three-level architecture principles</li>
+                <li>✅ Identify roles in database environments</li>
+                <li>✅ Design appropriate views for different users</li>
+                <li>✅ Compare different database architectures</li>
+            </ul>
+            
+            <div class="demo-box" style="margin-top: 30px;">
+                <p><strong>Next Lecture:</strong> Entity-Relationship Modeling</p>
+                <p><strong>Assignment:</strong> Compare file-based vs database approach for a real scenario</p>
+                <p><strong>Reading:</strong> Chapter 2 - Database System Concepts and Architecture</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Database architecture specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+            
+            // Add any architecture-specific animations or interactions here
+            const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
+            
+            // Animate diagrams when they appear
+            const diagrams = currentSlideElement.querySelectorAll('.erd-diagram pre');
+            diagrams.forEach((diagram, index) => {
+                setTimeout(() => {
+                    diagram.style.opacity = '0';
+                    diagram.style.transform = 'translateY(20px)';
+                    diagram.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        diagram.style.opacity = '1';
+                        diagram.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+
+        // Add keyboard navigation hints
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Lecture 03: Database Architecture loaded');
+            console.log('Use arrow keys or buttons to navigate');
+            console.log('Press F for fullscreen mode');
+        });
+    </script>
+</body>
+</html>

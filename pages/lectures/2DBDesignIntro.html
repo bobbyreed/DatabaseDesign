@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Databases - CSCI 3503</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+        
+        .activity-section {
+            background: var(--bg-accent);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px dashed var(--ocu-cyan);
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-secondary) 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+        
+        .file-format-example {
+            background: #2d2d2d;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Timer display -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture 02: Introduction to Databases
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Database Systems: A Practical Approach</h1>
+            <h2>Chapter 1: Introduction to Databases <span class="emoji">🗄️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 1, Lecture 2</p>
+            <p style="margin-top: auto; font-style: italic;">Building the data foundations of tomorrow!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Understand the evolution from file-based to database systems</li>
+                <li>🎯 Identify limitations of file-based approaches</li>
+                <li>🎯 Define what constitutes a database and DBMS</li>
+                <li>🎯 Explore advantages of the database approach</li>
+                <li>🎯 Learn key database terminology and concepts</li>
+                <li>🎯 Understand roles in database environments</li>
+            </ul>
+            <div class="tip-box">
+                <strong>Session Duration:</strong> 1.5-2 hours with interactive discussions
+            </div>
+        </div>
+
+        <!-- Slide 3: File-Based Systems Introduction -->
+        <div class="slide">
+            <h1>File-Based Systems</h1>
+            <p>Before databases, we had file-based systems...</p>
+            
+            <div class="concept-box">
+                <h3>Definition:</h3>
+                <p>Collection of application programs that perform services for end users (e.g., reports). Each program defines and manages its own data.</p>
+            </div>
+            
+            <h3>Common File Formats:</h3>
+            <ul style="font-size: 1.2em;">
+                <li><strong>CSV</strong> - Comma Separated Values</li>
+                <li><strong>XML</strong> - eXtensible Markup Language</li>
+                <li><strong>JSON</strong> - JavaScript Object Notation</li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: File Format Examples -->
+        <div class="slide">
+            <h1>File Format Examples</h1>
+            
+            <h3>CSV Example:</h3>
+            <div class="file-format-example">
+"name", "id", "email", "age"<br>
+"Bobby Reed", 1, "breed@okcu.edu", 45<br>
+"John Doe", 2, "jdoe@okcu.edu", 35<br>
+"Jane Doe", 3, "jdoe2@okcu.edu", 22
+            </div>
+            
+            <h3>JSON Example:</h3>
+            <div class="file-format-example">
+[<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"name": "Bobby Reed",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"id": 1,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"email": "breed@okcu.edu",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"years": 4<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"name": "Hank Jones",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"id": 2,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"email": "hjones@gmail.com",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"years": 2<br>
+&nbsp;&nbsp;}<br>
+]
+            </div>
+        </div>
+
+        <!-- Slide 5: XML Example -->
+        <div class="slide">
+            <h1>XML Format Example</h1>
+            
+            <div class="file-format-example">
+&lt;?xml version = "1.0"?&gt;<br>
+&lt;Students&gt;<br>
+&nbsp;&nbsp;&lt;Student Id="1234"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Name&gt;Bobby Reed&lt;/Name&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Email&gt;breed@okcu.edu&lt;/Email&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Years&gt;4&lt;/Years&gt;<br>
+&nbsp;&nbsp;&lt;/Student&gt;<br>
+&nbsp;&nbsp;&lt;Student Id="4567"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Name&gt;Hank Jones&lt;/Name&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Email&gt;hjones@gmail.com&lt;/Email&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Years&gt;2&lt;/Years&gt;<br>
+&nbsp;&nbsp;&lt;/Student&gt;<br>
+&lt;/Students&gt;
+            </div>
+            
+            <div class="activity-section">
+                <h3>🤔 Discussion Point:</h3>
+                <p>Which format would you choose for different scenarios? Why?</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: File-Based Processing Example -->
+        <div class="slide">
+            <h1>File-Based Processing: Real Example</h1>
+            
+            <h3>Sales Department Files:</h3>
+            <div class="code-example">
+PropertyForRent (propertyNo, street, city, postcode, type, rooms, rent, ownerNo)<br>
+PrivateOwner (ownerNo, fName, lName, address, telNo)<br>
+Client (clientNo, fName, lName, address, telNo, prefType, maxRent)
+            </div>
+            
+            <h3>Contracts Department Files:</h3>
+            <div class="code-example">
+Lease (leaseNo, propertyNo, clientNo, rent, paymentMethod, deposit, paid, rentStart, rentFinish)<br>
+PropertyForRent (propertyNo, street, city, postcode, rent)<br>
+Client (clientNo, fName, lName, address, telNo)
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ Notice:</strong> Data duplication across departments!
+            </div>
+        </div>
+
+        <!-- Slide 7: Limitations Part 1 -->
+        <div class="slide">
+            <h1>Limitations of File-Based Approach (Part 1)</h1>
+            
+            <div class="concept-box">
+                <h2>1. Separation and Isolation of Data</h2>
+                <ul>
+                    <li>Each program maintains its own set of data</li>
+                    <li>Users of one program may be unaware of potentially useful data held by other programs</li>
+                </ul>
+            </div>
+            
+            <div class="concept-box">
+                <h2>2. Duplication of Data</h2>
+                <ul>
+                    <li>Same data is held by different programs</li>
+                    <li>Wasted space and potentially different values and/or different formats for the same item</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Limitations Part 2 -->
+        <div class="slide">
+            <h1>Limitations of File-Based Approach (Part 2)</h1>
+            
+            <div class="concept-box">
+                <h2>3. Data Dependence</h2>
+                <p>File structure is defined in the program code</p>
+            </div>
+            
+            <div class="concept-box">
+                <h2>4. Incompatible File Formats</h2>
+                <p>Programs are written in different languages, and so cannot easily access each other's files</p>
+            </div>
+            
+            <div class="concept-box">
+                <h2>5. Fixed Queries/Proliferation of Application Programs</h2>
+                <ul>
+                    <li>Programs are written to satisfy particular functions</li>
+                    <li>Any new requirement needs a new program</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Interactive Discussion -->
+        <div class="slide">
+            <h1>Group Activity: File System Problems <span class="emoji">💭</span></h1>
+            
+            <div class="activity-section">
+                <h2>Scenario Discussion (10 minutes)</h2>
+                <p>Imagine you're managing student records using separate files for:</p>
+                <ul>
+                    <li>Admissions Office</li>
+                    <li>Registrar's Office</li>
+                    <li>Financial Aid</li>
+                    <li>Housing Department</li>
+                </ul>
+                
+                <h3>Questions to Consider:</h3>
+                <ol>
+                    <li>What happens when a student changes their address?</li>
+                    <li>How do you ensure all departments have current information?</li>
+                    <li>What if different departments use different student ID formats?</li>
+                    <li>How would you generate a report combining data from all departments?</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 10: The Database Approach -->
+        <div class="slide">
+            <h1>The Database Approach</h1>
+            
+            <div class="concept-box">
+                <h2>Why Databases Emerged:</h2>
+                <ul style="font-size: 1.1em; line-height: 1.8;">
+                    <li>Definition of data was embedded in application programs, rather than being stored separately and independently</li>
+                    <li>No control over access and manipulation of data beyond that imposed by application programs</li>
+                </ul>
+            </div>
+            
+            <div class="success-box">
+                <h3>The Result:</h3>
+                <p style="font-size: 1.3em;">The birth of the <strong>Database</strong> and <strong>Database Management System (DBMS)</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 11: What is a Database? -->
+        <div class="slide">
+            <h1>What is a Database?</h1>
+            
+            <div class="concept-box">
+                <h2>Definition:</h2>
+                <p style="font-size: 1.2em;">A <strong>shared collection of logically related data</strong> (and a description of this data), designed to meet the information needs of an organization.</p>
+            </div>
+            
+            <h3>Key Components:</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>System catalog (metadata):</strong> Provides description of data to enable program-data independence</li>
+                <li><strong>Logically related data:</strong> Comprises entities, attributes, and relationships of an organization's information</li>
+            </ul>
+            
+            <div class="tip-box">
+                <strong>Remember:</strong> A database is not just data - it's organized, described, and purposeful!
+            </div>
+        </div>
+
+        <!-- Slide 12: DBMS Definition -->
+        <div class="slide">
+            <h1>Database Management System (DBMS)</h1>
+            
+            <div class="concept-box">
+                <h2>Definition:</h2>
+                <p style="font-size: 1.2em;">A software system that enables users to <strong>define</strong>, <strong>create</strong>, <strong>maintain</strong>, and <strong>control access</strong> to the database.</p>
+            </div>
+            
+            <h3>Database Application Program:</h3>
+            <p>A computer program that interacts with the database by issuing an appropriate request (SQL statement) to the DBMS.</p>
+            
+            <div class="erd-diagram">
+                <pre style="font-size: 1.1em;">
+    User → Application → DBMS → Database
+                ↑                    ↓
+                ←────── Results ─────
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 13: DBMS Architecture Diagram -->
+        <div class="slide">
+            <h1>DBMS Architecture Overview</h1>
+            
+            <div class="erd-diagram">
+                <pre style="font-size: 0.9em;">
+┌─────────────────────────────────────────────────┐
+│              Database System                     │
+│                                                  │
+│  ┌──────────────────┐    ┌──────────────────┐  │
+│  │   Data Entry     │    │      DBMS        │  │     ┌──────────┐
+│  │   and Reports    │───▶│                  │◀────▶│ Database │
+│  └──────────────────┘    │                  │      └──────────┘
+│                          │                  │
+│  ┌──────────────────┐    │                  │      Properties,
+│  │  Application     │───▶│                  │      Owners,
+│  │    Programs      │    │                  │      Clients,
+│  └──────────────────┘    └──────────────────┘      Leases
+│                                                  │
+└─────────────────────────────────────────────────┘
+                </pre>
+            </div>
+            
+            <p style="text-align: center; margin-top: 20px;">Multiple applications share a single, integrated database through the DBMS</p>
+        </div>
+
+        <!-- Slide 14: Database Languages -->
+        <div class="slide">
+            <h1>Database Languages</h1>
+            
+            <div class="concept-box">
+                <h2>Data Definition Language (DDL)</h2>
+                <ul>
+                    <li>Permits specification of data types, structures and any data constraints</li>
+                    <li>All specifications are stored in the database</li>
+                </ul>
+            </div>
+            
+            <div class="concept-box">
+                <h2>Data Manipulation Language (DML)</h2>
+                <ul>
+                    <li>General enquiry facility (query language) of the data</li>
+                    <li>Most common: SQL (Structured Query Language)</li>
+                </ul>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Example DDL: Creating a table</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Students (<br>
+                &nbsp;&nbsp;id <span class="sql-keyword">INT PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(100)<br>
+                );
+            </div>
+        </div>
+
+        <!-- Slide 15: Database Views -->
+        <div class="slide">
+            <h1>Database Views</h1>
+            
+            <div class="concept-box">
+                <h2>What are Views?</h2>
+                <p>Allows each user to have his or her own view of the database. A view is essentially some subset of the database.</p>
+            </div>
+            
+            <h3>Benefits of Views:</h3>
+            <ul style="font-size: 1.2em;">
+                <li>✅ Security - Users only see data they need</li>
+                <li>✅ Simplicity - Complex queries appear simple</li>
+                <li>✅ Customization - Tailored to specific user needs</li>
+                <li>✅ Data Independence - Shield users from schema changes</li>
+            </ul>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Creating a view</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> StudentEmails <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> name, email <span class="sql-keyword">FROM</span> Students;
+            </div>
+        </div>
+
+        <!-- Slide 16: Advantages of DBMS (Part 1) -->
+        <div class="slide">
+            <h1>Advantages of DBMS (Part 1)</h1>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Data Management:</h3>
+                    <ul>
+                        <li>✓ Control of data redundancy</li>
+                        <li>✓ Data consistency</li>
+                        <li>✓ More information from the same amount of data</li>
+                        <li>✓ Sharing of data</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Quality & Security:</h3>
+                    <ul>
+                        <li>✓ Improved data integrity</li>
+                        <li>✓ Improved security</li>
+                        <li>✓ Enforcement of standards</li>
+                        <li>✓ Economy of scale</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Advantages of DBMS (Part 2) -->
+        <div class="slide">
+            <h1>Advantages of DBMS (Part 2)</h1>
+            
+            <div class="concept-box">
+                <ul style="font-size: 1.3em; line-height: 2;">
+                    <li>✓ Balance conflicting requirements</li>
+                    <li>✓ Improved data accessibility and responsiveness</li>
+                    <li>✓ Increased productivity</li>
+                    <li>✓ Improved maintenance through data independence</li>
+                    <li>✓ Increased concurrency</li>
+                    <li>✓ Improved backup and recovery services</li>
+                </ul>
+            </div>
+            
+            <div class="activity-section">
+                <h3>💭 Think About It:</h3>
+                <p>Which of these advantages would be most valuable for a university system? Why?</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Roles in Database Environment -->
+        <div class="slide">
+            <h1>Roles in the Database Environment</h1>
+            
+            <div class="concept-box">
+                <h3>1. Data Administrator (DA)</h3>
+                <p>Responsible for the management of data resources including database planning, development and maintenance of standards, policies and procedures</p>
+            </div>
+            
+            <div class="concept-box">
+                <h3>2. Database Administrator (DBA)</h3>
+                <p>Responsible for the physical realization of the database, including physical database design and implementation, security and integrity control</p>
+            </div>
+            
+            <div class="concept-box">
+                <h3>3. Database Designers</h3>
+                <ul>
+                    <li><strong>Logical:</strong> Identifies the data, relationships, and constraints</li>
+                    <li><strong>Physical:</strong> Decides how the logical database design is physically realized</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 19: More Database Roles -->
+        <div class="slide">
+            <h1>More Database Roles</h1>
+            
+            <div class="concept-box">
+                <h3>4. Application Programmers</h3>
+                <p>Develop application programs that provide the required functionality for the end-users</p>
+            </div>
+            
+            <div class="concept-box">
+                <h3>5. End Users</h3>
+                <ul>
+                    <li><strong>Naive Users:</strong> Unaware of the DBMS, access database through specific applications</li>
+                    <li><strong>Sophisticated Users:</strong> Familiar with the structure of the database and the facilities offered by the DBMS</li>
+                </ul>
+            </div>
+            
+            <div class="activity-section">
+                <h3>🎯 Quick Exercise:</h3>
+                <p>In a university database system, identify who would fill each role.</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Case Study Introduction -->
+        <div class="slide">
+            <h1>Case Study: From Files to Database <span class="emoji">📊</span></h1>
+            
+            <h2>Scenario: University Student System</h2>
+            
+            <div class="comparison-table">
+                <div>
+                    <h3>Before (File-Based):</h3>
+                    <ul>
+                        <li>Registrar: student_records.csv</li>
+                        <li>Financial Aid: aid_recipients.xml</li>
+                        <li>Housing: dorm_assignments.json</li>
+                        <li>Library: borrower_list.txt</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>After (Database):</h3>
+                    <ul>
+                        <li>Single integrated database</li>
+                        <li>Consistent student IDs</li>
+                        <li>Real-time updates</li>
+                        <li>Unified reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Hands-On Activity -->
+        <div class="slide">
+            <h1>Hands-On Activity <span class="emoji">💻</span></h1>
+            
+            <div class="activity-section">
+                <h2>Design Exercise (15 minutes)</h2>
+                <p>Working in pairs, design a simple database structure for a library system:</p>
+                
+                <h3>Requirements:</h3>
+                <ol>
+                    <li>Track books (title, author, ISBN, availability)</li>
+                    <li>Track members (name, ID, contact info)</li>
+                    <li>Track borrowing (who borrowed what and when)</li>
+                </ol>
+                
+                <h3>Deliverables:</h3>
+                <ul>
+                    <li>List the tables you would create</li>
+                    <li>Identify the fields for each table</li>
+                    <li>Explain how tables relate to each other</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 22: Common DBMS Products -->
+        <div class="slide">
+            <h1>Common DBMS Products</h1>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Enterprise Systems:</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li>Oracle Database</li>
+                        <li>Microsoft SQL Server</li>
+                        <li>IBM DB2</li>
+                        <li>SAP HANA</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Open Source/Small Scale:</h3>
+                    <ul style="font-size: 1.1em;">
+                        <li>MySQL</li>
+                        <li>PostgreSQL</li>
+                        <li>SQLite</li>
+                        <li>MariaDB</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Note:</strong> We'll be using MySQL/PostgreSQL for hands-on exercises in this course
+            </div>
+        </div>
+
+        <!-- Slide 23: Real-World Applications -->
+        <div class="slide">
+            <h1>Real-World Database Applications</h1>
+            
+            <div class="concept-box">
+                <h3>Where are databases used?</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>🏦 <strong>Banking:</strong> Account management, transactions, loans</li>
+                    <li>✈️ <strong>Airlines:</strong> Reservations, schedules, passenger records</li>
+                    <li>🏫 <strong>Universities:</strong> Student records, course registration, grades</li>
+                    <li>🛒 <strong>E-commerce:</strong> Product catalogs, orders, customer data</li>
+                    <li>🏥 <strong>Healthcare:</strong> Patient records, appointments, treatments</li>
+                    <li>📱 <strong>Social Media:</strong> User profiles, posts, connections</li>
+                </ul>
+            </div>
+            
+            <div class="activity-section">
+                <h3>Discussion:</h3>
+                <p>What databases do you interact with daily without realizing it?</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: Database Concepts Summary -->
+        <div class="slide">
+            <h1>Key Concepts Review</h1>
+            
+            <table class="table-schema">
+                <tr>
+                    <th>Concept</th>
+                    <th>Definition</th>
+                </tr>
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td>Organized collection of logically related data</td>
+                </tr>
+                <tr>
+                    <td><strong>DBMS</strong></td>
+                    <td>Software system to manage databases</td>
+                </tr>
+                <tr>
+                    <td><strong>DDL</strong></td>
+                    <td>Language for defining database structure</td>
+                </tr>
+                <tr>
+                    <td><strong>DML</strong></td>
+                    <td>Language for manipulating data (queries)</td>
+                </tr>
+                <tr>
+                    <td><strong>View</strong></td>
+                    <td>Virtual table representing subset of data</td>
+                </tr>
+                <tr>
+                    <td><strong>Metadata</strong></td>
+                    <td>Data about data (system catalog)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 25: Practice Questions -->
+        <div class="slide">
+            <h1>Knowledge Check <span class="emoji">✅</span></h1>
+            
+            <div class="activity-section">
+                <h3>Answer these questions:</h3>
+                <ol style="font-size: 1.2em; line-height: 2;">
+                    <li>What is the main difference between a file-based system and a database system?</li>
+                    <li>Name three limitations of file-based approaches</li>
+                    <li>What does DBMS stand for and what is its purpose?</li>
+                    <li>What is the difference between DDL and DML?</li>
+                    <li>Why are views important in database systems?</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Take 5 minutes</strong> to discuss answers with your neighbor
+            </div>
+        </div>
+
+        <!-- Slide 26: Looking Ahead -->
+        <div class="slide">
+            <h1>What's Next?</h1>
+            
+            <div class="concept-box">
+                <h2>In Our Next Lecture:</h2>
+                <h3>The Relational Model</h3>
+                <ul style="font-size: 1.2em;">
+                    <li>Relations, attributes, and tuples</li>
+                    <li>Primary and foreign keys</li>
+                    <li>Relational algebra basics</li>
+                    <li>Mathematical foundations</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h3>Before Next Class:</h3>
+                <ul>
+                    <li>Review today's concepts</li>
+                    <li>Read Chapter 2 in the textbook</li>
+                    <li>Install MySQL or PostgreSQL on your machine</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 27: Assignment Preview -->
+        <div class="slide">
+            <h1>Assignment 1: Database Design Proposal</h1>
+            
+            <div class="concept-box">
+                <h3>Task:</h3>
+                <p>Identify a real-world scenario that currently uses file-based storage and propose a database solution</p>
+                
+                <h3>Requirements:</h3>
+                <ol>
+                    <li>Describe the current file-based system and its limitations</li>
+                    <li>Propose a database solution with at least 3 tables</li>
+                    <li>Explain the advantages of your database approach</li>
+                    <li>Identify potential challenges in migration</li>
+                </ol>
+                
+                <h3>Due Date:</h3>
+                <p>Next week before class</p>
+                
+                <h3>Length:</h3>
+                <p>2-3 pages, double-spaced</p>
+            </div>
+        </div>
+
+        <!-- Final Slide: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>✅ Explain why databases replaced file-based systems</li>
+                <li>✅ Identify limitations of file-based approaches</li>
+                <li>✅ Define databases and DBMS</li>
+                <li>✅ List advantages of database systems</li>
+                <li>✅ Understand basic database terminology</li>
+                <li>✅ Recognize different roles in database environments</li>
+            </ul>
+            
+            <div class="demo-box">
+                <p style="font-size: 1.2em; text-align: center;">
+                    <strong>Remember:</strong> Databases are everywhere - they power the digital world!
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Database-specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+            
+            // Add any slide-specific animations or interactions here
+            const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
+            
+            // Animate elements on certain slides
+            if (currentSlideElement.querySelector('.activity-section')) {
+                currentSlideElement.querySelector('.activity-section').style.animation = 'pulse 2s ease-in-out';
+            }
+        });
+        
+        // Optional: Add timer for activities
+        let activityTimer = null;
+        
+        function startActivityTimer(minutes) {
+            let seconds = minutes * 60;
+            const timerDisplay = document.getElementById('timer-text');
+            
+            if (activityTimer) clearInterval(activityTimer);
+            
+            activityTimer = setInterval(() => {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                const display = `Activity Time: ${mins}:${secs.toString().padStart(2, '0')}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(activityTimer);
+                    alert('Activity time is up!');
+                }
+                seconds--;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

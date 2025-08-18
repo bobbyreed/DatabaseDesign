@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Overview - CSCI 3503</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        .grading-table {
+            margin: 30px 0;
+            font-size: 1.4em;
+        }
+        
+        .grading-table div {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .grading-table div:last-child {
+            border-bottom: 3px solid var(--ocu-true-blue);
+            font-weight: bold;
+        }
+        
+        .policy-table {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .policy-table table {
+            width: 100%;
+            font-size: 1.2em;
+        }
+        
+        .policy-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .policy-table td:first-child {
+            font-weight: bold;
+            width: 50%;
+        }
+        
+        .contact-info {
+            background: var(--bg-accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid var(--ocu-cyan);
+        }
+        
+        .contact-info a {
+            color: var(--ocu-cyan);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning-box {
+            background: var(--warning-bg);
+            border: 2px solid var(--warning-border);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .instructor-info {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+        
+        .instructor-details {
+            flex: 1;
+        }
+        
+        .instructor-details ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .instructor-details li {
+            margin: 15px 0;
+            font-size: 1.3em;
+        }
+        
+        .instructor-details li::before {
+            content: "▸ ";
+            color: var(--ocu-cyan);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Timer display -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture 00 - Course Overview
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Database Design</h1>
+            <h2>Course Overview <span class="emoji">🗄️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Spring 2025 | 8-Week Course</p>
+            <p style="margin-top: auto; font-style: italic;">Building the data foundations of tomorrow!</p>
+        </div>
+
+        <!-- Slide 2: Course Structure -->
+        <div class="slide">
+            <h1>Course Structure</h1>
+            <div class="demo-box">
+                <h3>📹 Delivery Format</h3>
+                <p style="font-size: 1.3em;">Classes will be <strong>prerecorded</strong> and published in D2L on <strong>Monday</strong> each week</p>
+            </div>
+            
+            <div class="grading-table">
+                <div>
+                    <span>📝 Homework</span>
+                    <span>30%</span>
+                </div>
+                <div>
+                    <span>🎯 Quizzes</span>
+                    <span>30%</span>
+                </div>
+                <div>
+                    <span>📊 Final Exam</span>
+                    <span>40%</span>
+                </div>
+                <div>
+                    <span>Total</span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Your Instructor (Combined Personal Info) -->
+        <div class="slide">
+            <h1>Your Instructor</h1>
+            <div class="instructor-info">
+                <div class="instructor-details">
+                    <h2>Bobby Reed</h2>
+                    <ul>
+                        <li><strong>BA English</strong> - University of Central Oklahoma</li>
+                        <li><strong>MA Literature</strong> - University of Central Oklahoma</li>
+                        <li><strong>MLIS</strong></li> - University of Oklahoma <br>
+                            <span style="margin-left: 40px;">Focus: Emerging Technologies/R&D Leadership</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Class Communication -->
+        <div class="slide">
+            <h1>Class Communication</h1>
+            <div class="contact-info">
+                <h3>📚 Course Materials</h3>
+                <p style="font-size: 1.3em;"><a href="https://ocuonline.okcu.edu" target="_blank">https://ocuonline.okcu.edu</a></p>
+                <p>All course materials, lectures, and assignments</p>
+            </div>
+            
+            <div class="contact-info">
+                <h3>🕐 Office Hours</h3>
+                <p style="font-size: 1.3em;">By appointment (via Teams)</p>
+            </div>
+            
+            <div class="contact-info">
+                <h3>📧 Contact Information</h3>
+                <p style="font-size: 1.3em;"><a href="mailto:bobby.reed@okcu.edu">bobby.reed@okcu.edu</a></p>
+                <p>Response time: Within 24 hours on weekdays</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Late Policy -->
+        <div class="slide">
+            <h1>Late Policy</h1>
+            <h2>⏰ Submission Guidelines</h2>
+            
+            <div class="policy-table">
+                <table>
+                    <tr>
+                        <td>On time</td>
+                        <td style="color: var(--ocu-green); font-weight: bold;">100%</td>
+                    </tr>
+                    <tr>
+                        <td>Late (even 1 minute)</td>
+                        <td style="color: var(--ocu-yellow); font-weight: bold;">90%</td>
+                    </tr>
+                    <tr>
+                        <td>More than 1 week</td>
+                        <td style="color: var(--warning-border); font-weight: bold;">50%</td>
+                    </tr>
+                    <tr>
+                        <td>More than 2 weeks</td>
+                        <td style="color: #cc0000; font-weight: bold;">0%</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Important Notes:</strong>
+                <ul>
+                    <li>Additional points may be deducted based on solution correctness</li>
+                    <li>After the 8-week course closes, no assignments will be accepted</li>
+                    <li>Plan ahead and submit early to avoid technical issues!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: Academic Integrity -->
+        <div class="slide">
+            <h1>Academic Integrity</h1>
+            <h2>🎓 Cheating Policy</h2>
+            
+            <div class="warning-box">
+                <h3>⚠️ Zero Tolerance Policy</h3>
+                <p style="font-size: 1.2em;">Cheating will not be tolerated and will be handled according to the university's academic honesty policy, as stated in the 2023-24 web-based graduate catalog.</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Consequences of Cheating:</h3>
+                <ul style="font-size: 1.2em;">
+                    <li>❌ <strong>Zero points</strong> on all relevant exams</li>
+                    <li>❌ <strong>Zero points</strong> on all relevant homework</li>
+                    <li>❌ <strong>Zero points</strong> on all relevant projects</li>
+                    <li>❌ <strong>Zero points</strong> on all relevant quizzes</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Best Practice:</strong> Avoid any activity that might give the appearance of cheating. When in doubt, ask for clarification!
+            </div>
+        </div>
+
+        <!-- Slide 7: Course Topics Overview -->
+        <div class="slide">
+            <h1>What We'll Cover <span class="emoji">📚</span></h1>
+            <h2>8 Weeks of Database Mastery</h2>
+            
+            <div class="two-column">
+                <div class="demo-box">
+                    <h3>Weeks 1-4: Foundations</h3>
+                    <ul>
+                        <li>Database Concepts & Theory</li>
+                        <li>Entity-Relationship Modeling</li>
+                        <li>Relational Database Design</li>
+                        <li>Normalization (1NF, 2NF, 3NF, BCNF)</li>
+                    </ul>
+                </div>
+                
+                <div class="demo-box">
+                    <h3>Weeks 5-8: Advanced Topics</h3>
+                    <ul>
+                        <li>SQL Programming & Optimization</li>
+                        <li>Transactions & Concurrency</li>
+                        <li>NoSQL Databases</li>
+                        <li>Database Security & Performance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Slide: Getting Started -->
+        <div class="slide">
+            <h1>Ready to Begin? <span class="emoji">🚀</span></h1>
+            <h2>Your First Steps:</h2>
+            
+            <div class="activity-box">
+                <h3>Week 1 Checklist</h3>
+                <ol style="font-size: 1.3em; line-height: 2;">
+                    <li>✅ Access course materials on D2L</li>
+                    <li>✅ Review the syllabus thoroughly</li>
+                    <li>✅ Set up your development environment</li>
+                    <li>✅ Complete the introductory survey</li>
+                    <li>✅ Start with Lecture 01: Database Fundamentals</li>
+                </ol>
+            </div>
+            
+            <div class="demo-box">
+                <p style="font-size: 1.3em; text-align: center;">
+                    <strong>Questions?</strong> Don't hesitate to reach out!<br>
+                    <a href="mailto:bobby.reed@okcu.edu" style="color: var(--ocu-cyan);">bobby.reed@okcu.edu</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Course Overview specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+        });
+    </script>
+</body>
+</html>

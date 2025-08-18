@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Relational Model - CSCI 3503</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+
+        .relation-example {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .relation-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .relation-table th {
+            background: var(--ocu-dark-blue);
+            color: white;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .relation-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .key-highlight {
+            background: var(--ocu-yellow) !important;
+            color: var(--ocu-dark-blue);
+            font-weight: bold;
+        }
+
+        .foreign-key-highlight {
+            background: var(--ocu-light-blue) !important;
+            color: var(--ocu-dark-blue);
+        }
+
+        .concept-box {
+            background: var(--bg-accent);
+            border-left: 5px solid var(--ocu-green);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .json-example, .xml-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .json-key { color: #9cdcfe; }
+        .json-string { color: #ce9178; }
+        .json-number { color: #b5cea8; }
+        .xml-tag { color: #569cd6; }
+        .xml-attribute { color: #9cdcfe; }
+        .xml-value { color: #ce9178; }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">The Relational Model
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>The Relational Model</h1>
+            <h2>Foundation of Modern Databases <span class="emoji">🗄️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 1, Lecture 2</p>
+            <p style="margin-top: auto; font-style: italic;">Understanding the mathematical foundation of relational databases!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Understand the fundamental terminology of the relational model</li>
+                <li>🎯 Master the concept of relations, attributes, tuples, and domains</li>
+                <li>🎯 Learn about different types of keys and their importance</li>
+                <li>🎯 Apply integrity constraints to ensure data quality</li>
+                <li>🎯 Explore the mathematical foundation of databases</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: What is the Relational Model? -->
+        <div class="slide">
+            <h1>What is the Relational Model?</h1>
+            <p>Proposed by E.F. Codd in 1970, the relational model revolutionized database management.</p>
+            
+            <div class="concept-box">
+                <h3>Core Principle</h3>
+                <p>All data is represented as mathematical <strong>relations</strong> - essentially tables with rows and columns.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> The relational model provides a mathematical foundation for databases, enabling formal reasoning about data operations and integrity.
+            </div>
+        </div>
+
+        <!-- Slide 4: Basic Terminology Part 1 -->
+        <div class="slide">
+            <h1>Relational Model Terminology (Part 1)</h1>
+            
+            <div class="concept-box">
+                <h3>📊 Relation</h3>
+                <p>A table with columns and rows. Only applies to the logical structure, not physical storage.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>📝 Attribute</h3>
+                <p>A named column of a relation (e.g., StudentID, Name, Email).</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>🎯 Domain</h3>
+                <p>The set of allowable values for one or more attributes (e.g., integers, strings, dates).</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Basic Terminology Part 2 -->
+        <div class="slide">
+            <h1>Relational Model Terminology (Part 2)</h1>
+            
+            <div class="concept-box">
+                <h3>📋 Tuple</h3>
+                <p>A row of a relation representing a single entity instance.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>🔢 Degree</h3>
+                <p>The number of attributes in a relation (number of columns).</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>📈 Cardinality</h3>
+                <p>The number of tuples in a relation (number of rows).</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>🗄️ Relational Database</h3>
+                <p>A collection of normalized relations with distinct relation names.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Alternative Terminology -->
+        <div class="slide">
+            <h1>Alternative Terminology</h1>
+            <p>Different communities use different terms for the same concepts:</p>
+
+            <table class="table-schema">
+                <thead>
+                    <tr>
+                        <th>Formal Terms</th>
+                        <th>Alternative 1</th>
+                        <th>Alternative 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Relation</strong></td>
+                        <td>Table</td>
+                        <td>File</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tuple</strong></td>
+                        <td>Row</td>
+                        <td>Record</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Attribute</strong></td>
+                        <td>Column</td>
+                        <td>Field</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                <strong>Note:</strong> While terminology varies, we'll primarily use the formal terms in this course to maintain precision.
+            </div>
+        </div>
+
+        <!-- Slide 7: Example Relations - Branch -->
+        <div class="slide">
+            <h1>Example: Branch Relation</h1>
+            <p>Let's examine a concrete example of a relation:</p>
+
+            <div class="relation-example">
+                <table class="relation-table">
+                    <thead>
+                        <tr>
+                            <th class="key-highlight">branchNo</th>
+                            <th>street</th>
+                            <th>city</th>
+                            <th>postcode</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="key-highlight">B005</td>
+                            <td>22 Deer Rd</td>
+                            <td>London</td>
+                            <td>SW1 4EH</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">B007</td>
+                            <td>16 Argyll St</td>
+                            <td>Aberdeen</td>
+                            <td>AB2 3SU</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">B003</td>
+                            <td>163 Main St</td>
+                            <td>Glasgow</td>
+                            <td>G11 9QX</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">B004</td>
+                            <td>32 Manse Rd</td>
+                            <td>Bristol</td>
+                            <td>BS99 1NZ</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">B002</td>
+                            <td>56 Clover Dr</td>
+                            <td>London</td>
+                            <td>NW10 6EU</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Degree:</strong> 4 (four attributes) | <strong>Cardinality:</strong> 5 (five tuples)</p>
+        </div>
+
+        <!-- Slide 8: Example Relations - Staff -->
+        <div class="slide">
+            <h1>Example: Staff Relation</h1>
+            <p>A more complex relation with a foreign key reference:</p>
+
+            <div class="relation-example" style="font-size: 0.85em;">
+                <table class="relation-table">
+                    <thead>
+                        <tr>
+                            <th class="key-highlight">staffNo</th>
+                            <th>fName</th>
+                            <th>lName</th>
+                            <th>position</th>
+                            <th>sex</th>
+                            <th>DOB</th>
+                            <th>salary</th>
+                            <th class="foreign-key-highlight">branchNo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="key-highlight">SL21</td>
+                            <td>John</td>
+                            <td>White</td>
+                            <td>Manager</td>
+                            <td>M</td>
+                            <td>1-Oct-45</td>
+                            <td>30000</td>
+                            <td class="foreign-key-highlight">B005</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">SG37</td>
+                            <td>Ann</td>
+                            <td>Beech</td>
+                            <td>Assistant</td>
+                            <td>F</td>
+                            <td>10-Nov-60</td>
+                            <td>12000</td>
+                            <td class="foreign-key-highlight">B003</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">SG14</td>
+                            <td>David</td>
+                            <td>Ford</td>
+                            <td>Supervisor</td>
+                            <td>M</td>
+                            <td>24-Mar-58</td>
+                            <td>18000</td>
+                            <td class="foreign-key-highlight">B003</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">SA9</td>
+                            <td>Mary</td>
+                            <td>Howe</td>
+                            <td>Assistant</td>
+                            <td>F</td>
+                            <td>19-Feb-70</td>
+                            <td>9000</td>
+                            <td class="foreign-key-highlight">B007</td>
+                        </tr>
+                        <tr>
+                            <td class="key-highlight">SG5</td>
+                            <td>Susan</td>
+                            <td>Brand</td>
+                            <td>Manager</td>
+                            <td>F</td>
+                            <td>3-Jun-40</td>
+                            <td>24000</td>
+                            <td class="foreign-key-highlight">B003</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>🔑 <strong>Primary Key:</strong> staffNo | 🔗 <strong>Foreign Key:</strong> branchNo (references Branch relation)</p>
+        </div>
+
+        <!-- Slide 9: Properties of Relations -->
+        <div class="slide">
+            <h1>Properties of Relations</h1>
+            <p>Relations have specific properties that distinguish them from general tables:</p>
+
+            <ul style="font-size: 1.3em; line-height: 1.8;">
+                <li>✅ <strong>Unique relation name</strong> within the database schema</li>
+                <li>✅ <strong>Atomic values</strong> - each cell contains exactly one value</li>
+                <li>✅ <strong>Distinct attribute names</strong> within a relation</li>
+                <li>✅ <strong>Homogeneous columns</strong> - all values in a column from same domain</li>
+                <li>✅ <strong>No duplicate tuples</strong> - each row is unique</li>
+                <li>✅ <strong>Order independence</strong> - order of rows and columns doesn't matter</li>
+            </ul>
+
+            <div class="tip-box">
+                <strong>Important:</strong> These properties ensure mathematical consistency and enable formal query operations.
+            </div>
+        </div>
+
+        <!-- Slide 10: Mathematical Foundation -->
+        <div class="slide">
+            <h1>Mathematical Definition of Relations</h1>
+            <p>Relations are based on the mathematical concept of Cartesian products:</p>
+
+            <div class="code-example">
+                <p><strong>Given sets:</strong></p>
+                <p>D₁ = {2, 4}</p>
+                <p>D₂ = {1, 3, 5}</p>
+                <br>
+                <p><strong>Cartesian Product D₁ × D₂:</strong></p>
+                <p>{(2,1), (2,3), (2,5), (4,1), (4,3), (4,5)}</p>
+                <br>
+                <p><strong>A relation R is a subset of the Cartesian product</strong></p>
+                <p>R ⊆ D₁ × D₂ × ... × Dₙ</p>
+            </div>
+
+            <div class="concept-box">
+                <p>This mathematical foundation allows us to use set theory and predicate logic to reason about database operations.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Activity - Identifying Relations -->
+        <div class="slide">
+            <h1>Activity: Design Your First Relations <span class="emoji">💻</span></h1>
+            <div class="activity-box">
+                <h3>10-Minute Exercise</h3>
+                <p>Design relations for a university course registration system:</p>
+                <ol>
+                    <li>Identify the main entities (Students, Courses, Instructors)</li>
+                    <li>Define attributes for each entity</li>
+                    <li>Determine the primary key for each relation</li>
+                    <li>Identify potential foreign key relationships</li>
+                </ol>
+
+                <div class="tip-box" style="margin-top: 20px;">
+                    <strong>Think about:</strong> What makes each tuple unique? What attributes are required vs. optional?
+                </div>
+            </div>
+            <button data-timer="10">Start 10-Minute Timer</button>
+        </div>
+
+        <!-- Slide 12: Types of Keys Overview -->
+        <div class="slide">
+            <h1>Understanding Relational Keys</h1>
+            <p>Keys are fundamental to maintaining data integrity and establishing relationships:</p>
+
+            <div class="erd-diagram">
+                <pre style="font-size: 1.1em;">
+                    🔑 Types of Keys
+                    
+    Superkey ──────► Any attribute(s) that uniquely identify tuples
+         │
+         ▼
+    Candidate Key ──► Minimal superkey (no redundant attributes)
+         │
+         ├──► Primary Key (chosen candidate key)
+         │
+         └──► Alternate Keys (other candidate keys)
+         
+    Foreign Key ────► References primary key in another relation
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 13: Superkeys and Candidate Keys -->
+        <div class="slide">
+            <h1>Superkeys and Candidate Keys</h1>
+
+            <div class="concept-box">
+                <h3>🔓 Superkey</h3>
+                <p>An attribute or set of attributes that uniquely identifies a tuple within a relation.</p>
+                <p><strong>Example:</strong> {staffNo}, {staffNo, fName}, {staffNo, fName, lName}</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>🔑 Candidate Key</h3>
+                <p>A minimal superkey - no proper subset is also a superkey.</p>
+                <ul>
+                    <li><strong>Uniqueness:</strong> Values uniquely identify each tuple</li>
+                    <li><strong>Irreducibility:</strong> No attribute can be removed while maintaining uniqueness</li>
+                </ul>
+                <p><strong>Example:</strong> {staffNo}, {email} (if email is unique)</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Primary and Foreign Keys -->
+        <div class="slide">
+            <h1>Primary and Foreign Keys</h1>
+
+            <div class="concept-box">
+                <h3>🎯 Primary Key</h3>
+                <p>The candidate key selected to uniquely identify tuples in a relation.</p>
+                <p><strong>Properties:</strong> Cannot be NULL, must be unique, ideally stable (doesn't change)</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>🔗 Foreign Key</h3>
+                <p>An attribute (or set) that matches the primary key of another (or same) relation.</p>
+                <p><strong>Purpose:</strong> Establishes relationships between relations</p>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Example: Foreign Key Constraint</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Staff<br>
+                <span class="sql-keyword">ADD CONSTRAINT</span> fk_branch<br>
+                <span class="sql-keyword">FOREIGN KEY</span> (branchNo) <span class="sql-keyword">REFERENCES</span> Branch(branchNo);
+            </div>
+        </div>
+
+        <!-- Slide 15: Integrity Constraints -->
+        <div class="slide">
+            <h1>Integrity Constraints</h1>
+            <p>Rules that ensure data quality and consistency:</p>
+
+            <div class="concept-box">
+                <h3>1️⃣ Entity Integrity</h3>
+                <p>No attribute of a primary key can be NULL.</p>
+                <p><em>Rationale: Primary keys identify tuples; NULL would mean "unknown identity"</em></p>
+            </div>
+
+            <div class="concept-box">
+                <h3>2️⃣ Referential Integrity</h3>
+                <p>Foreign key values must either:</p>
+                <ul>
+                    <li>Match an existing primary key value in the referenced relation, OR</li>
+                    <li>Be wholly NULL (if the relationship is optional)</li>
+                </ul>
+            </div>
+
+            <div class="concept-box">
+                <h3>3️⃣ Domain Constraints</h3>
+                <p>Values must be from the specified domain (data type, range, format)</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: NULL Values -->
+        <div class="slide">
+            <h1>Understanding NULL Values</h1>
+            
+            <div class="concept-box">
+                <h3>What is NULL?</h3>
+                <p>Represents a value that is:</p>
+                <ul>
+                    <li>Currently unknown (e.g., unknown phone number)</li>
+                    <li>Not applicable (e.g., spouse name for unmarried person)</li>
+                    <li>Not yet available (e.g., exam grade before exam)</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong> NULL is NOT the same as:
+                <ul>
+                    <li>Zero (0) - which is a numeric value</li>
+                    <li>Empty string ("") - which is a string value</li>
+                    <li>Space (" ") - which is a character value</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Handling NULL in queries</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> bonus <span class="sql-keyword">IS NULL</span>;<br>
+                <span class="sql-comment">-- Note: Use IS NULL, not = NULL</span>
+            </div>
+        </div>
+
+        <!-- Slide 17: Practice with Keys -->
+        <div class="slide">
+            <h1>Activity: Identifying Keys <span class="emoji">🔍</span></h1>
+            <div class="activity-box">
+                <h3>15-Minute Exercise</h3>
+                <p>Given the following Student relation, identify:</p>
+                
+                <table class="table-schema" style="font-size: 0.9em;">
+                    <thead>
+                        <tr>
+                            <th>studentID</th>
+                            <th>SSN</th>
+                            <th>email</th>
+                            <th>name</th>
+                            <th>major</th>
+                            <th>advisorID</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <ol>
+                    <li>All possible superkeys</li>
+                    <li>All candidate keys</li>
+                    <li>Choose a primary key and justify your choice</li>
+                    <li>Identify any foreign keys</li>
+                    <li>What integrity constraints should apply?</li>
+                </ol>
+            </div>
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 18: Relations vs. Files -->
+        <div class="slide">
+            <h1>Relations vs. Traditional Files</h1>
+            <p>Why use relations instead of flat files?</p>
+
+            <div class="comparison-table">
+                <div class="comparison-card bad">
+                    <h3>❌ Traditional Files</h3>
+                    <ul>
+                        <li>Physical storage focus</li>
+                        <li>Order-dependent</li>
+                        <li>Allows duplicate records</li>
+                        <li>No built-in integrity</li>
+                        <li>Complex relationships difficult</li>
+                        <li>Limited query capabilities</li>
+                    </ul>
+                </div>
+                <div class="comparison-card good">
+                    <h3>✅ Relations</h3>
+                    <ul>
+                        <li>Logical structure focus</li>
+                        <li>Order-independent</li>
+                        <li>No duplicate tuples</li>
+                        <li>Built-in integrity constraints</li>
+                        <li>Easy relationship modeling</li>
+                        <li>Powerful query languages (SQL)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Data Formats Comparison -->
+        <div class="slide">
+            <h1>Modern Data Formats: JSON & XML</h1>
+            <p>How relational data can be represented in different formats:</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h3>JSON Format</h3>
+                    <div class="json-example">
+[<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"name"</span>: <span class="json-string">"Bobby Reed"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"id"</span>: <span class="json-number">1</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"email"</span>: <span class="json-string">"breed@okcu.edu"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"years"</span>: <span class="json-number">4</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"name"</span>: <span class="json-string">"Hank Jones"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"id"</span>: <span class="json-number">2</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"email"</span>: <span class="json-string">"hjones@gmail.com"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"years"</span>: <span class="json-number">2</span><br>
+&nbsp;&nbsp;}<br>
+]
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>XML Format</h3>
+                    <div class="xml-example">
+<span class="xml-tag">&lt;Students&gt;</span><br>
+&nbsp;&nbsp;<span class="xml-tag">&lt;Student</span> <span class="xml-attribute">Id</span>=<span class="xml-value">"1234"</span><span class="xml-tag">&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="xml-tag">&lt;Name&gt;</span>Bobby Reed<span class="xml-tag">&lt;/Name&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="xml-tag">&lt;Email&gt;</span>breed@okcu.edu<span class="xml-tag">&lt;/Email&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="xml-tag">&lt;Years&gt;</span>4<span class="xml-tag">&lt;/Years&gt;</span><br>
+&nbsp;&nbsp;<span class="xml-tag">&lt;/Student&gt;</span><br>
+&nbsp;&nbsp;<span class="xml-tag">&lt;Student</span> <span class="xml-attribute">Id</span>=<span class="xml-value">"4567"</span><span class="xml-tag">&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="xml-tag">&lt;Name&gt;</span>Hank Jones<span class="xml-tag">&lt;/Name&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="xml-tag">&lt;Email&gt;</span>hjones@gmail.com<span class="xml-tag">&lt;/Email&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="xml-tag">&lt;Years&gt;</span>2<span class="xml-tag">&lt;/Years&gt;</span><br>
+&nbsp;&nbsp;<span class="xml-tag">&lt;/Student&gt;</span><br>
+<span class="xml-tag">&lt;/Students&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Creating Relations in SQL -->
+        <div class="slide">
+            <h1>Creating Relations with SQL</h1>
+            <p>Let's see how to implement our conceptual model in SQL:</p>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create the Branch relation</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Branch (<br>
+                &nbsp;&nbsp;branchNo <span class="sql-keyword">VARCHAR</span>(4) <span class="sql-keyword">PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;street <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;city <span class="sql-keyword">VARCHAR</span>(30) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;postcode <span class="sql-keyword">VARCHAR</span>(10)<br>
+                );<br><br>
+
+                <span class="sql-comment">-- Create the Staff relation with foreign key</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Staff (<br>
+                &nbsp;&nbsp;staffNo <span class="sql-keyword">VARCHAR</span>(5) <span class="sql-keyword">PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;fName <span class="sql-keyword">VARCHAR</span>(20) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;lName <span class="sql-keyword">VARCHAR</span>(20) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;position <span class="sql-keyword">VARCHAR</span>(20),<br>
+                &nbsp;&nbsp;sex <span class="sql-keyword">CHAR</span>(1) <span class="sql-keyword">CHECK</span> (sex <span class="sql-keyword">IN</span> ('M', 'F')),<br>
+                &nbsp;&nbsp;DOB <span class="sql-keyword">DATE</span>,<br>
+                &nbsp;&nbsp;salary <span class="sql-keyword">DECIMAL</span>(8,2) <span class="sql-keyword">CHECK</span> (salary > 0),<br>
+                &nbsp;&nbsp;branchNo <span class="sql-keyword">VARCHAR</span>(4),<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (branchNo) <span class="sql-keyword">REFERENCES</span> Branch(branchNo)<br>
+                );
+            </div>
+        </div>
+
+        <!-- Slide 21: General Constraints -->
+        <div class="slide">
+            <h1>Business Rules as General Constraints</h1>
+            <p>Beyond basic integrity, we often need business-specific rules:</p>
+
+            <div class="concept-box">
+                <h3>Examples of General Constraints</h3>
+                <ul>
+                    <li>📊 "Maximum 20 staff members per branch"</li>
+                    <li>💰 "Manager salary must be > Assistant salary"</li>
+                    <li>📅 "Staff must be at least 18 years old"</li>
+                    <li>🎓 "Students can enroll in maximum 6 courses per semester"</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Implementing a business rule with a trigger</span><br>
+                <span class="sql-keyword">CREATE TRIGGER</span> check_branch_capacity<br>
+                <span class="sql-keyword">BEFORE INSERT ON</span> Staff<br>
+                <span class="sql-keyword">FOR EACH ROW</span><br>
+                <span class="sql-keyword">BEGIN</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">DECLARE</span> staff_count <span class="sql-keyword">INT</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">INTO</span> staff_count<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff <span class="sql-keyword">WHERE</span> branchNo = NEW.branchNo;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">IF</span> staff_count >= 20 <span class="sql-keyword">THEN</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SIGNAL SQLSTATE</span> '45000'<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SET MESSAGE_TEXT</span> = 'Branch capacity exceeded';<br>
+                &nbsp;&nbsp;<span class="sql-keyword">END IF</span>;<br>
+                <span class="sql-keyword">END</span>;
+            </div>
+        </div>
+
+        <!-- Slide 22: Comprehensive Example -->
+        <div class="slide">
+            <h1>Putting It All Together</h1>
+            <p>Design a complete relational schema for a library system:</p>
+
+            <div class="activity-box">
+                <h3>20-Minute Design Challenge</h3>
+                
+                <p><strong>Requirements:</strong></p>
+                <ul>
+                    <li>Track books, members, and loans</li>
+                    <li>Books have ISBN, title, author, publication year</li>
+                    <li>Members have ID, name, email, join date</li>
+                    <li>Loans track who borrowed what and when</li>
+                </ul>
+
+                <p><strong>Tasks:</strong></p>
+                <ol>
+                    <li>Design the relations (tables)</li>
+                    <li>Identify all keys (primary, foreign)</li>
+                    <li>Define integrity constraints</li>
+                    <li>Write the CREATE TABLE statements</li>
+                    <li>Identify 3 business rules as general constraints</li>
+                </ol>
+            </div>
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 23: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common Design Pitfalls to Avoid</h1>
+            
+            <div class="warning-box">
+                <h3>⚠️ Watch Out For:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>🚫 <strong>Multi-valued attributes</strong> - Split into separate relations</li>
+                    <li>🚫 <strong>Composite attributes as keys</strong> - Consider surrogate keys</li>
+                    <li>🚫 <strong>Nullable primary keys</strong> - Violates entity integrity</li>
+                    <li>🚫 <strong>Orphan foreign keys</strong> - Violates referential integrity</li>
+                    <li>🚫 <strong>Order-dependent designs</strong> - Relations are sets, not lists</li>
+                    <li>🚫 <strong>Redundant data</strong> - Leads to update anomalies</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Best Practice:</strong> Always validate your design against the relational model properties!
+            </div>
+        </div>
+
+        <!-- Slide 24: Real-World Application -->
+        <div class="slide">
+            <h1>Real-World Applications</h1>
+            <p>The relational model powers most of today's critical systems:</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="concept-box">
+                    <h3>🏦 Banking Systems</h3>
+                    <p>Accounts, transactions, customers with ACID guarantees</p>
+                </div>
+                <div class="concept-box">
+                    <h3>🏥 Healthcare</h3>
+                    <p>Patient records, appointments, medical history</p>
+                </div>
+                <div class="concept-box">
+                    <h3>🛒 E-commerce</h3>
+                    <p>Products, orders, inventory, customer data</p>
+                </div>
+                <div class="concept-box">
+                    <h3>🎓 Education</h3>
+                    <p>Student records, course registration, grades</p>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Industry Insight:</strong> Despite NoSQL alternatives, relational databases remain the backbone of enterprise data management due to their strong consistency guarantees and mature ecosystem.
+            </div>
+        </div>
+
+        <!-- Slide 25: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>✅ Define and identify relations, attributes, tuples, and domains</li>
+                <li>✅ Distinguish between different types of keys</li>
+                <li>✅ Apply entity and referential integrity constraints</li>
+                <li>✅ Understand the mathematical foundation of databases</li>
+                <li>✅ Convert conceptual designs to relational schemas</li>
+                <li>✅ Recognize and avoid common design pitfalls</li>
+            </ul>
+            
+            <div class="demo-box" style="margin-top: 30px;">
+                <p><strong>Next Lecture:</strong> Entity-Relationship Modeling</p>
+                <p><strong>Assignment:</strong> Complete the relational model exercises in the lab</p>
+                <p><strong>Reading:</strong> Chapter 4 - The Relational Model (Pages 89-132)</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Add any specific interactions for this lecture
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+            
+            // Highlight code examples when shown
+            if (e.detail.currentSlide === 19) { // SQL creation slide
+                const codeBlocks = document.querySelectorAll('.sql-example');
+                codeBlocks.forEach(block => {
+                    block.style.animation = 'slideIn 0.5s ease-in-out';
+                });
+            }
+        });
+
+        // Add keyboard shortcuts info
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '?' && e.shiftKey) {
+                alert('Keyboard Shortcuts:\n\n' +
+                      '← / → : Navigate slides\n' +
+                      'Space: Next slide\n' +
+                      'F: Fullscreen\n' +
+                      'T: Toggle theme\n' +
+                      'H: Home (first slide)\n' +
+                      'E: End (last slide)');
+            }
+        });
+    </script>
+</body>
+</html>
