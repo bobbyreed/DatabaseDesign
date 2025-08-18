@@ -525,7 +525,7 @@
             }
             
             // Use the auth system
-            if (window.auth) {
+            if (auth) {
                 const success = await auth.authenticate(studentId, pin);
                 if (success) {
                     console.log('Authentication successful');

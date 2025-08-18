@@ -414,9 +414,11 @@ class SimpleGistAuth {
 }
 
 // Initialize on page load
+// Initialize on page load
 let auth;
 document.addEventListener('DOMContentLoaded', () => {
     auth = new SimpleGistAuth();
+    window.auth = auth; 
 });
 
 console.log('Auth.js loaded successfully - Database Design CSCI 5603');
