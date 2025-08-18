@@ -6,7 +6,7 @@
     <title>Course Overview - CSCI 3503</title>
     
     <!-- Database Design Presentation Styles with Theme Support -->
-    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="stylesheet" href="/styles/presentation.css">
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     
     <!-- Import Courier Prime for analog feel -->
@@ -114,6 +114,86 @@
             font-weight: bold;
             margin-right: 10px;
         }
+        
+        .code-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 15px 0;
+            font-size: 1.1em;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .code-example .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        code {
+            background: var(--bg-accent);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--ocu-true-blue);
+            font-size: 0.95em;
+        }
+        
+        [data-theme="dark"] code {
+            color: var(--ocu-cyan);
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .activity-box {
+            background: linear-gradient(135deg, var(--bg-accent), var(--bg-secondary));
+            border: 2px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .activity-box h3 {
+            color: var(--ocu-true-blue);
+            margin-bottom: 15px;
+        }
+        
+        [data-theme="dark"] .activity-box h3 {
+            color: var(--ocu-cyan);
+        }
+        
+        .demo-box {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .tip-box {
+            background: var(--success-bg);
+            border: 2px solid var(--success-border);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .tip-box strong {
+            color: var(--success-border);
+        }
     </style>
 </head>
 <body>
@@ -171,10 +251,9 @@
                 <div class="instructor-details">
                     <h2>Bobby Reed</h2>
                     <ul>
-                        <li><strong>BA English</strong> - University of Central Oklahoma</li>
-                        <li><strong>MA Literature</strong> - University of Central Oklahoma</li>
-                        <li><strong>MLIS</strong></li> - University of Oklahoma <br>
-                            <span style="margin-left: 40px;">Focus: Emerging Technologies/R&D Leadership</span></li>
+                        <li><strong>BS Computer Science</strong> - Oklahoma State University</li>
+                        <li><strong>MS Computer Science</strong> - Oklahoma Christian University<br>
+                            <span style="margin-left: 40px;">Focus: Cybersecurity</span></li>
                     </ul>
                 </div>
             </div>
@@ -290,6 +369,199 @@
             </div>
         </div>
 
+        <!-- Slide 8: Environment Setup Overview -->
+        <div class="slide">
+            <h1>Environment Setup <span class="emoji">💻</span></h1>
+            <h2>Choose Your Operating System</h2>
+            
+            <div class="tip-box">
+                <strong>Important:</strong> We'll be setting up a professional database development environment. Follow the instructions for your operating system.
+            </div>
+            
+            <div class="two-column" style="margin-top: 30px;">
+                <div class="demo-box">
+                    <h3>🪟 Windows Users</h3>
+                    <p>We'll use <strong>WSL</strong> (Windows Subsystem for Linux) to create a Linux environment</p>
+                    <ul>
+                        <li>Native Linux performance</li>
+                        <li>Industry-standard setup</li>
+                        <li>Seamless Windows integration</li>
+                    </ul>
+                </div>
+                
+                <div class="demo-box">
+                    <h3>🍎 Mac Users</h3>
+                    <p>macOS provides a <strong>Unix-based</strong> environment out of the box</p>
+                    <ul>
+                        <li>Native terminal access</li>
+                        <li>Homebrew package manager</li>
+                        <li>Direct database installation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Windows Setup - WSL Installation -->
+        <div class="slide">
+            <h1>Windows Setup: WSL <span class="emoji">🪟</span></h1>
+            <h2>Step 1: Install WSL and Linux</h2>
+            
+            <div class="activity-box">
+                <h3>Installation Steps:</h3>
+                <ol style="font-size: 1.2em;">
+                    <li><strong>Enable WSL:</strong> Open PowerShell as Administrator and run:
+                        <div class="code-example">wsl --install</div>
+                    </li>
+                    <li><strong>Restart</strong> your computer when prompted</li>
+                    <li><strong>Install Ubuntu</strong> from the Microsoft Store</li>
+                    <li><strong>Launch Ubuntu</strong> and create your Linux username/password</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Why WSL?</strong>
+                <ul>
+                    <li>✅ Linux-native environment matching production servers</li>
+                    <li>✅ Access to Linux tools and utilities</li>
+                    <li>✅ Near-native performance with WSL 2</li>
+                    <li>✅ Seamless integration with Windows</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Windows Setup - Database Installation -->
+        <div class="slide">
+            <h1>Windows Setup: PostgreSQL <span class="emoji">🐘</span></h1>
+            <h2>Step 2: Install Database Server</h2>
+            
+            <div class="activity-box">
+                <h3>In your WSL Terminal:</h3>
+                <ol style="font-size: 1.2em;">
+                    <li>Update package lists:
+                        <div class="code-example">sudo apt update</div>
+                    </li>
+                    <li>Install PostgreSQL:
+                        <div class="code-example">sudo apt install postgresql postgresql-contrib</div>
+                    </li>
+                    <li>Start the database service:
+                        <div class="code-example">sudo service postgresql start</div>
+                    </li>
+                    <li>Verify installation:
+                        <div class="code-example">sudo -u postgres psql -c "SELECT version();"</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="demo-box">
+                <strong>Alternative Databases:</strong>
+                <ul>
+                    <li><strong>MySQL:</strong> <code>sudo apt install mysql-server</code></li>
+                    <li><strong>MongoDB:</strong> Follow MongoDB's official Ubuntu installation guide</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Mac Setup - Homebrew & Database -->
+        <div class="slide">
+            <h1>Mac Setup: Environment <span class="emoji">🍎</span></h1>
+            <h2>Installing Homebrew & PostgreSQL</h2>
+            
+            <div class="activity-box">
+                <h3>Step 1: Install Homebrew (if needed)</h3>
+                <p>Open Terminal and run:</p>
+                <div class="code-example">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</div>
+            </div>
+            
+            <div class="activity-box">
+                <h3>Step 2: Install PostgreSQL</h3>
+                <ol style="font-size: 1.2em;">
+                    <li>Install PostgreSQL:
+                        <div class="code-example">brew install postgresql@14</div>
+                    </li>
+                    <li>Start PostgreSQL service:
+                        <div class="code-example">brew services start postgresql@14</div>
+                    </li>
+                    <li>Verify installation:
+                        <div class="code-example">psql --version</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="demo-box">
+                <strong>Alternative for Mac:</strong> Download <a href="https://postgresapp.com/" style="color: var(--ocu-cyan);">Postgres.app</a> for a GUI-based installation
+            </div>
+        </div>
+
+        <!-- Slide 12: Development Tools -->
+        <div class="slide">
+            <h1>Development Tools <span class="emoji">🛠️</span></h1>
+            <h2>Essential Software for Database Development</h2>
+            
+            <div class="demo-box">
+                <h3>1. Visual Studio Code</h3>
+                <ul>
+                    <li>Download from <a href="https://code.visualstudio.com/" style="color: var(--ocu-cyan);">code.visualstudio.com</a></li>
+                    <li><strong>Windows:</strong> Install "Remote - WSL" extension</li>
+                    <li><strong>Mac:</strong> Install "PostgreSQL" extension</li>
+                    <li>Enables SQL syntax highlighting and IntelliSense</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>2. Database GUI Clients (Optional but Recommended)</h3>
+                <ul>
+                    <li><strong>DBeaver:</strong> Free, universal database tool</li>
+                    <li><strong>pgAdmin:</strong> PostgreSQL-specific admin tool</li>
+                    <li><strong>TablePlus:</strong> Modern, clean interface (free trial)</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>3. Docker Desktop (Advanced - Optional)</h3>
+                <ul>
+                    <li>Containerized database environments</li>
+                    <li>Consistent setup across all platforms</li>
+                    <li>We'll cover this in Week 5</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 13: Testing Your Setup -->
+        <div class="slide">
+            <h1>Testing Your Setup <span class="emoji">✅</span></h1>
+            <h2>Verify Everything Works</h2>
+            
+            <div class="activity-box">
+                <h3>Quick Test Commands:</h3>
+                <ol style="font-size: 1.2em;">
+                    <li><strong>Access PostgreSQL:</strong>
+                        <div class="code-example">
+                            <span class="comment"># Windows (WSL) / Mac / Linux</span><br>
+                            sudo -u postgres psql
+                        </div>
+                    </li>
+                    <li><strong>Create a test database:</strong>
+                        <div class="code-example">CREATE DATABASE testdb;</div>
+                    </li>
+                    <li><strong>List databases:</strong>
+                        <div class="code-example">\l</div>
+                    </li>
+                    <li><strong>Exit PostgreSQL:</strong>
+                        <div class="code-example">\q</div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Troubleshooting:</strong>
+                <ul>
+                    <li>🔧 <strong>Service not running?</strong> Start with <code>sudo service postgresql start</code> (WSL) or <code>brew services restart postgresql</code> (Mac)</li>
+                    <li>🔧 <strong>Permission denied?</strong> Make sure to use <code>sudo</code> when needed</li>
+                    <li>🔧 <strong>Can't connect?</strong> Check if the service is running with <code>ps aux | grep postgres</code></li>
+                </ul>
+            </div>
+        </div>
+
         <!-- Final Slide: Getting Started -->
         <div class="slide">
             <h1>Ready to Begin? <span class="emoji">🚀</span></h1>
@@ -300,7 +572,9 @@
                 <ol style="font-size: 1.3em; line-height: 2;">
                     <li>✅ Access course materials on D2L</li>
                     <li>✅ Review the syllabus thoroughly</li>
-                    <li>✅ Set up your development environment</li>
+                    <li>✅ Complete environment setup (WSL/PostgreSQL)</li>
+                    <li>✅ Install VS Code and extensions</li>
+                    <li>✅ Test your database connection</li>
                     <li>✅ Complete the introductory survey</li>
                     <li>✅ Start with Lecture 01: Database Fundamentals</li>
                 </ol>
@@ -308,7 +582,7 @@
             
             <div class="demo-box">
                 <p style="font-size: 1.3em; text-align: center;">
-                    <strong>Questions?</strong> Don't hesitate to reach out!<br>
+                    <strong>Need Help?</strong> Don't hesitate to reach out!<br>
                     <a href="mailto:bobby.reed@okcu.edu" style="color: var(--ocu-cyan);">bobby.reed@okcu.edu</a>
                 </p>
             </div>
@@ -318,7 +592,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">14</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
