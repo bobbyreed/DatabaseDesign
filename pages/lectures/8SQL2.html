@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced SQL - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-function {
+            color: #dcdcaa;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .sql-number {
+            color: #b5cea8;
+        }
+        
+        .table-result {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9em;
+        }
+        
+        .table-result th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-result td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-result tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+        
+        .concept-box {
+            background: var(--bg-accent);
+            border: 2px solid var(--ocu-cyan);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        [data-theme="dark"] .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+        }
+        
+        .diagram-box {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        [data-theme="dark"] .diagram-box {
+            background: var(--bg-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Advanced SQL
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Advanced SQL</h1>
+            <h2>Subqueries, JOINs, and Set Operations <span class="emoji">🔧</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 4, Lecture 8</p>
+            <p style="margin-top: auto; font-style: italic;">Mastering complex database queries!</p>
+            <p style="font-size: 0.9em; margin-top: 20px;">Instructor: Bobby Reed</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Master advanced JOIN operations (LEFT, RIGHT, FULL OUTER)</li>
+                <li>🎯 Write and understand nested subqueries</li>
+                <li>🎯 Use EXISTS, NOT EXISTS for powerful filtering</li>
+                <li>🎯 Apply ANY, ALL, and SOME operators effectively</li>
+                <li>🎯 Combine queries with set operations</li>
+                <li>🎯 Optimize complex queries for performance</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Review - Basic JOINs -->
+        <div class="slide">
+            <h1>Quick Review: INNER JOIN</h1>
+            <p>Before diving into advanced JOINs, let's review the basic INNER JOIN:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find all properties and their managing staff</span><br>
+                <span class="sql-keyword">SELECT</span> p.propertyNo, p.street, s.fName, s.lName<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                <span class="sql-keyword">INNER JOIN</span> Staff s <span class="sql-keyword">ON</span> p.staffNo = s.staffNo;
+            </div>
+            
+            <div class="concept-box">
+                <strong>Remember:</strong> INNER JOIN returns only matching rows from both tables.
+                <br>If a property has no staff assigned, or staff manages no properties, they won't appear!
+            </div>
+        </div>
+
+        <!-- Slide 4: LEFT OUTER JOIN -->
+        <div class="slide">
+            <h1>LEFT OUTER JOIN</h1>
+            <p>Includes ALL rows from the LEFT table, even without matches:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- List all branches and their properties (including branches with no properties)</span><br>
+                <span class="sql-keyword">SELECT</span> b.*, p.*<br>
+                <span class="sql-keyword">FROM</span> Branch b<br>
+                <span class="sql-keyword">LEFT JOIN</span> PropertyForRent p<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ON</span> b.city = p.city;
+            </div>
+            
+            <table class="table-result">
+                <tr>
+                    <th>branchNo</th>
+                    <th>bCity</th>
+                    <th>propertyNo</th>
+                    <th>pCity</th>
+                </tr>
+                <tr>
+                    <td>B003</td>
+                    <td>Glasgow</td>
+                    <td>PG4</td>
+                    <td>Glasgow</td>
+                </tr>
+                <tr>
+                    <td>B004</td>
+                    <td>Bristol</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                </tr>
+                <tr>
+                    <td>B002</td>
+                    <td>London</td>
+                    <td>PL94</td>
+                    <td>London</td>
+                </tr>
+            </table>
+            
+            <div class="tip-box">
+                <strong>Key Point:</strong> NULL values appear for the right table when no match exists.
+            </div>
+        </div>
+
+        <!-- Slide 5: RIGHT OUTER JOIN -->
+        <div class="slide">
+            <h1>RIGHT OUTER JOIN</h1>
+            <p>Includes ALL rows from the RIGHT table, even without matches:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- List all properties and their branches (including unassigned properties)</span><br>
+                <span class="sql-keyword">SELECT</span> b.*, p.*<br>
+                <span class="sql-keyword">FROM</span> Branch b<br>
+                <span class="sql-keyword">RIGHT JOIN</span> PropertyForRent p<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ON</span> b.city = p.city;
+            </div>
+            
+            <table class="table-result">
+                <tr>
+                    <th>branchNo</th>
+                    <th>bCity</th>
+                    <th>propertyNo</th>
+                    <th>pCity</th>
+                </tr>
+                <tr>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>PA14</td>
+                    <td>Aberdeen</td>
+                </tr>
+                <tr>
+                    <td>B003</td>
+                    <td>Glasgow</td>
+                    <td>PG4</td>
+                    <td>Glasgow</td>
+                </tr>
+                <tr>
+                    <td>B002</td>
+                    <td>London</td>
+                    <td>PL94</td>
+                    <td>London</td>
+                </tr>
+            </table>
+            
+            <div class="demo-box">
+                <strong>Pro Tip:</strong> RIGHT JOIN can always be rewritten as LEFT JOIN by swapping table order!
+            </div>
+        </div>
+
+        <!-- Slide 6: FULL OUTER JOIN -->
+        <div class="slide">
+            <h1>FULL OUTER JOIN</h1>
+            <p>Combines LEFT and RIGHT JOINs - includes ALL rows from BOTH tables:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- List all branches and properties, showing unmatched from both</span><br>
+                <span class="sql-keyword">SELECT</span> b.branchNo, b.city <span class="sql-keyword">AS</span> branch_city,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.propertyNo, p.city <span class="sql-keyword">AS</span> prop_city<br>
+                <span class="sql-keyword">FROM</span> Branch b<br>
+                <span class="sql-keyword">FULL OUTER JOIN</span> PropertyForRent p<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ON</span> b.city = p.city;
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ Note:</strong> Not all databases support FULL OUTER JOIN (MySQL doesn't).
+                You can simulate it using UNION of LEFT and RIGHT JOINs.
+            </div>
+        </div>
+
+        <!-- Slide 7: Introduction to Subqueries -->
+        <div class="slide">
+            <h1>Introduction to Subqueries</h1>
+            <p>A query within a query - incredibly powerful for complex logic!</p>
+            
+            <div class="concept-box">
+                <h3>Types of Subqueries:</h3>
+                <ul>
+                    <li><strong>Scalar:</strong> Returns a single value</li>
+                    <li><strong>Row:</strong> Returns a single row</li>
+                    <li><strong>Table:</strong> Returns multiple rows and columns</li>
+                    <li><strong>Correlated:</strong> References outer query columns</li>
+                </ul>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Simple scalar subquery</span><br>
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, position<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> branchNo = (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> branchNo<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Branch<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> street = <span class="sql-string">'163 Main St'</span><br>
+                );
+            </div>
+        </div>
+
+        <!-- Slide 8: Subquery with Aggregate -->
+        <div class="slide">
+            <h1>Subqueries with Aggregates</h1>
+            <p>Perfect for comparisons against calculated values:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find staff earning more than average</span><br>
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;salary - (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(salary) <span class="sql-keyword">FROM</span> Staff) <span class="sql-keyword">AS</span> above_avg<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> salary > (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(salary)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
+                );
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ Common Mistake:</strong> You CANNOT write: WHERE salary > AVG(salary)
+                <br>Aggregate functions need GROUP BY or subqueries!
+            </div>
+        </div>
+
+        <!-- Slide 9: IN Operator with Subqueries -->
+        <div class="slide">
+            <h1>Using IN with Subqueries</h1>
+            <p>Check if a value exists in a subquery result set:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Nested subquery: Find properties managed by staff at '163 Main St'</span><br>
+                <span class="sql-keyword">SELECT</span> propertyNo, street, city, rent<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent<br>
+                <span class="sql-keyword">WHERE</span> staffNo <span class="sql-keyword">IN</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> staffNo<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo <span class="sql-keyword">IN</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SELECT</span> branchNo<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FROM</span> Branch<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHERE</span> street = <span class="sql-string">'163 Main St'</span><br>
+                &nbsp;&nbsp;)<br>
+                );
+            </div>
+            
+            <div class="tip-box">
+                <strong>Performance Tip:</strong> IN is great for small result sets. 
+                For large sets, consider EXISTS instead.
+            </div>
+        </div>
+
+        <!-- Slide 10: Activity 1 - JOIN Practice -->
+        <div class="slide">
+            <h1>Activity 1: JOIN Challenge <span class="emoji">💻</span></h1>
+            <div class="activity-box">
+                <h3>15-Minute Exercise</h3>
+                <p>Using our property rental database, write queries to:</p>
+                <ol>
+                    <li>List ALL staff members and the properties they manage (if any)</li>
+                    <li>Show ALL properties and their assigned staff (if any)</li>
+                    <li>Find branches that have NO properties in their city</li>
+                    <li>Identify staff members who manage NO properties</li>
+                </ol>
+                <p style="margin-top: 20px;"><strong>Hint:</strong> Think about which JOIN type preserves unmatched rows!</p>
+            </div>
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 11: ANY and ALL Operators -->
+        <div class="slide">
+            <h1>ANY and ALL Operators</h1>
+            <p>Compare a value against a set of values from a subquery:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find staff earning more than ANY staff at branch B003</span><br>
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> salary > <span class="sql-keyword">ANY</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> salary<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span><br>
+                );
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find staff earning more than ALL staff at branch B003</span><br>
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> salary > <span class="sql-keyword">ALL</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> salary<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span><br>
+                );
+            </div>
+            
+            <div class="concept-box">
+                <strong>Remember:</strong>
+                <ul>
+                    <li>ANY: At least one value satisfies the condition</li>
+                    <li>ALL: Every value must satisfy the condition</li>
+                    <li>SOME: Synonym for ANY</li>
+                    <li>Empty subquery: ALL returns TRUE, ANY returns FALSE</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: EXISTS and NOT EXISTS -->
+        <div class="slide">
+            <h1>EXISTS and NOT EXISTS</h1>
+            <p>Check for the existence of rows - returns TRUE/FALSE only:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find staff who manage at least one property</span><br>
+                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-keyword">WHERE</span> <span class="sql-keyword">EXISTS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p.staffNo = s.staffNo<br>
+                );
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find staff who manage NO properties</span><br>
+                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-keyword">WHERE</span> <span class="sql-keyword">NOT EXISTS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p.staffNo = s.staffNo<br>
+                );
+            </div>
+            
+            <div class="tip-box">
+                <strong>Performance:</strong> EXISTS often faster than IN for large datasets - 
+                it stops searching once it finds the first match!
+            </div>
+        </div>
+
+        <!-- Slide 13: Correlated Subqueries -->
+        <div class="slide">
+            <h1>Correlated Subqueries</h1>
+            <p>Subqueries that reference the outer query - executed for each row:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find properties with rent higher than average for their city</span><br>
+                <span class="sql-keyword">SELECT</span> p1.propertyNo, p1.city, p1.rent<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent p1<br>
+                <span class="sql-keyword">WHERE</span> p1.rent > (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(p2.rent)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p2<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p2.city = p1.city  <span class="sql-comment">-- References outer query!</span><br>
+                );
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ Performance Warning:</strong> Correlated subqueries run once per row 
+                in the outer query. Can be slow on large tables!
+            </div>
+        </div>
+
+        <!-- Slide 14: Set Operations Overview -->
+        <div class="slide">
+            <h1>Set Operations</h1>
+            <p>Combine results from multiple queries:</p>
+            
+            <div class="concept-box">
+                <h3>SQL Set Operations:</h3>
+                <ul>
+                    <li><strong>UNION:</strong> All rows from both queries (removes duplicates)</li>
+                    <li><strong>UNION ALL:</strong> All rows including duplicates</li>
+                    <li><strong>INTERSECT:</strong> Only rows in both queries</li>
+                    <li><strong>EXCEPT/MINUS:</strong> Rows in first but not second query</li>
+                </ul>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Cities with both branches and properties</span><br>
+                <span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> Branch<br>
+                <span class="sql-keyword">INTERSECT</span><br>
+                <span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> PropertyForRent;
+            </div>
+            
+            <div class="tip-box">
+                <strong>Requirement:</strong> Queries must be union-compatible 
+                (same number of columns, compatible data types)
+            </div>
+        </div>
+
+        <!-- Slide 15: Complex Query Example -->
+        <div class="slide">
+            <h1>Putting It All Together</h1>
+            <p>A complex real-world query combining multiple concepts:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Find top-performing staff: manage > 2 properties AND earn above branch average</span><br>
+                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName, s.salary,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(p.propertyNo) <span class="sql-keyword">AS</span> properties_managed<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-keyword">LEFT JOIN</span> PropertyForRent p <span class="sql-keyword">ON</span> s.staffNo = p.staffNo<br>
+                <span class="sql-keyword">WHERE</span> s.salary > (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(s2.salary)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff s2<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> s2.branchNo = s.branchNo<br>
+                )<br>
+                <span class="sql-keyword">GROUP BY</span> s.staffNo, s.fName, s.lName, s.salary<br>
+                <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(p.propertyNo) > <span class="sql-number">2</span><br>
+                <span class="sql-keyword">ORDER BY</span> properties_managed <span class="sql-keyword">DESC</span>, s.salary <span class="sql-keyword">DESC</span>;
+            </div>
+        </div>
+
+        <!-- Slide 16: Activity 2 - Subquery Challenge -->
+        <div class="slide">
+            <h1>Activity 2: Subquery Master <span class="emoji">🧩</span></h1>
+            <div class="activity-box">
+                <h3>20-Minute Challenge</h3>
+                <p>Write queries using subqueries to find:</p>
+                <ol>
+                    <li>Properties with rent higher than the overall average</li>
+                    <li>Staff who earn more than ALL managers</li>
+                    <li>Branches where EVERY staff member earns > $15,000</li>
+                    <li>Cities that have properties but NO branches</li>
+                    <li>The branch with the highest total staff salaries</li>
+                </ol>
+                <p style="margin-top: 20px;"><strong>Bonus:</strong> Rewrite query #4 using both EXISTS and IN approaches!</p>
+            </div>
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 17: Query Optimization Tips -->
+        <div class="slide">
+            <h1>Query Optimization Best Practices</h1>
+            
+            <div class="comparison-table">
+                <div class="comparison-card good">
+                    <h3>✅ DO</h3>
+                    <ul>
+                        <li>Use EXISTS for existence checks</li>
+                        <li>Index foreign key columns</li>
+                        <li>Filter early with WHERE</li>
+                        <li>Use appropriate JOIN types</li>
+                        <li>Consider query execution order</li>
+                    </ul>
+                </div>
+                <div class="comparison-card bad">
+                    <h3>❌ AVOID</h3>
+                    <ul>
+                        <li>SELECT * in production</li>
+                        <li>Unnecessary nested subqueries</li>
+                        <li>Correlated subqueries on large tables</li>
+                        <li>DISTINCT when not needed</li>
+                        <li>Functions in WHERE clauses</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="demo-box">
+                <strong>Pro Tip:</strong> Use EXPLAIN PLAN to understand how your database executes queries!
+            </div>
+        </div>
+
+        <!-- Slide 18: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common Mistakes to Avoid</h1>
+            
+            <div class="warning-box">
+                <h3>🚫 Pitfall #1: NULL Handling</h3>
+                <p>NULLs in subqueries can cause unexpected results:</p>
+                <code>WHERE column NOT IN (subquery)</code>
+                <p>Returns NO rows if subquery contains NULL!</p>
+            </div>
+            
+            <div class="warning-box">
+                <h3>🚫 Pitfall #2: Subquery Returns Multiple Rows</h3>
+                <p>Using = with a multi-row subquery causes an error.</p>
+                <p>Solution: Use IN, ANY, or ALL instead.</p>
+            </div>
+            
+            <div class="warning-box">
+                <h3>🚫 Pitfall #3: Forgetting Table Aliases</h3>
+                <p>In correlated subqueries, always use clear aliases to avoid ambiguity.</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Real-World Application -->
+        <div class="slide">
+            <h1>Real-World Scenario</h1>
+            <p>Let's solve a business problem using advanced SQL:</p>
+            
+            <div class="demo-box">
+                <h3>Business Requirement:</h3>
+                <p>"Find underperforming branches: those with below-average property count 
+                   and total staff salary below $50,000"</p>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">WITH</span> BranchStats <span class="sql-keyword">AS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> b.branchNo,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(<span class="sql-keyword">DISTINCT</span> p.propertyNo) <span class="sql-keyword">AS</span> prop_count,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(s.salary) <span class="sql-keyword">AS</span> total_salary<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Branch b<br>
+                &nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> PropertyForRent p <span class="sql-keyword">ON</span> b.city = p.city<br>
+                &nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> Staff s <span class="sql-keyword">ON</span> b.branchNo = s.branchNo<br>
+                &nbsp;&nbsp;<span class="sql-keyword">GROUP BY</span> b.branchNo<br>
+                )<br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> BranchStats<br>
+                <span class="sql-keyword">WHERE</span> prop_count < (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(prop_count) <span class="sql-keyword">FROM</span> BranchStats)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> total_salary < <span class="sql-number">50000</span>;
+            </div>
+        </div>
+
+        <!-- Slide 20: Activity 3 - Integration -->
+        <div class="slide">
+            <h1>Activity 3: Integration Challenge <span class="emoji">🚀</span></h1>
+            <div class="activity-box">
+                <h3>25-Minute Complex Query Exercise</h3>
+                <p><strong>Scenario:</strong> Management needs a comprehensive report!</p>
+                <p>Create a query that shows:</p>
+                <ul>
+                    <li>All branches with their city</li>
+                    <li>Count of properties in each city</li>
+                    <li>Average property rent for the city</li>
+                    <li>Number of staff at each branch</li>
+                    <li>Whether the branch is "High Performing" (>3 properties AND >2 staff)</li>
+                </ul>
+                <p style="margin-top: 20px;"><strong>Requirements:</strong></p>
+                <ul>
+                    <li>Use at least one OUTER JOIN</li>
+                    <li>Include a correlated subquery</li>
+                    <li>Use CASE statement for performance classification</li>
+                </ul>
+            </div>
+            <button data-timer="25">Start 25-Minute Timer</button>
+        </div>
+
+        <!-- Slide 21: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul>
+                <li>✅ Use LEFT, RIGHT, and FULL OUTER JOINs effectively</li>
+                <li>✅ Write scalar, row, and correlated subqueries</li>
+                <li>✅ Apply EXISTS/NOT EXISTS for efficient filtering</li>
+                <li>✅ Use ANY, ALL, and SOME with subqueries</li>
+                <li>✅ Combine queries with set operations</li>
+                <li>✅ Optimize complex queries for performance</li>
+                <li>✅ Avoid common SQL pitfalls</li>
+            </ul>
+            <div class="demo-box">
+                <p><strong>Next Lecture:</strong> Database Views and Stored Procedures</p>
+                <p><strong>Assignment:</strong> Complete the advanced SQL problem set (due next week)</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">21</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Advanced SQL specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+            
+            // Add any SQL-specific animations or interactions here
+            const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
+            
+            // Animate SQL examples on slide entry
+            const sqlExamples = currentSlideElement.querySelectorAll('.sql-example');
+            sqlExamples.forEach((example, index) => {
+                example.style.animation = `fadeIn 0.5s ease-in-out ${index * 0.2}s forwards`;
+            });
+        });
+        
+        // Add keyboard shortcuts for common SQL keywords
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey) {
+                switch(e.key) {
+                    case 'S':
+                        console.log('SQL Reference: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY');
+                        break;
+                    case 'J':
+                        console.log('JOIN Types: INNER, LEFT, RIGHT, FULL OUTER, CROSS');
+                        break;
+                    case 'F':
+                        console.log('Functions: COUNT, SUM, AVG, MIN, MAX');
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

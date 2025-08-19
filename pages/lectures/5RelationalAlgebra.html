@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relational Algebra - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-true-blue);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-comment {
+            color: #608b4e;
+            font-style: italic;
+        }
+        
+        .algebra-notation {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        
+        .operation-symbol {
+            color: var(--ocu-yellow);
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--slide-bg);
+        }
+        
+        .result-table th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .result-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+        }
+        
+        .result-table tr:nth-child(even) {
+            background: var(--bg-accent);
+        }
+        
+        .example-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--ocu-green);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .activity-box {
+            background: var(--warning-bg);
+            border: 2px dashed var(--warning-border);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .discussion-prompt {
+            background: var(--success-bg);
+            border-left: 4px solid var(--success-border);
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            background: var(--ocu-yellow);
+            color: var(--ocu-black);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <span class="theme-toggle-label">Theme</span>
+        <div class="theme-switch">
+            <input type="checkbox" id="theme-checkbox">
+            <label class="theme-slider" for="theme-checkbox"></label>
+        </div>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="timer" id="timer">00:00:00</div>
+
+    <!-- Presentation Container -->
+    <div class="presentation-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active">
+            <h2>Relational Algebra <span class="emoji">🔄</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 3, Lecture 5</p>
+            <p style="font-size: 1.1em; margin-top: 20px;">Dr. Bobby Reed</p>
+            <p style="margin-top: auto; font-style: italic;">Mastering the mathematical foundation of database queries!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Understand the theoretical foundation of relational databases</li>
+                <li>🎯 Master the five basic relational algebra operations</li>
+                <li>🎯 Apply join operations to combine relations</li>
+                <li>🎯 Solve complex queries using algebraic expressions</li>
+                <li>🎯 Connect relational algebra to SQL operations</li>
+            </ul>
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Relational algebra is the mathematical foundation for SQL. Master this, and SQL becomes intuitive!
+            </div>
+        </div>
+
+        <!-- Slide 3: Introduction to Relational Algebra -->
+        <div class="slide">
+            <h1>What is Relational Algebra?</h1>
+            <p>A theoretical language with operations that work on one or more relations to define another relation without changing the original relations.</p>
+            
+            <div class="example-box">
+                <h3>Key Characteristics:</h3>
+                <ul>
+                    <li>Both operands and results are relations</li>
+                    <li>Output from one operation can become input to another</li>
+                    <li>Allows expressions to be nested (closure property)</li>
+                    <li>Procedural language - defines both what and how</li>
+                </ul>
+            </div>
+            
+            <div class="discussion-prompt">
+                💭 Discussion: How does this differ from SQL, which is declarative?
+            </div>
+        </div>
+
+        <!-- Slide 4: Five Basic Operations -->
+        <div class="slide">
+            <h1>The Five Basic Operations</h1>
+            
+            <div class="two-column">
+                <div>
+                    <h3>1. Selection (σ)</h3>
+                    <p>Selects rows that satisfy a condition</p>
+                    
+                    <h3>2. Projection (∏)</h3>
+                    <p>Selects specific columns</p>
+                    
+                    <h3>3. Cartesian Product (×)</h3>
+                    <p>Combines every row from two relations</p>
+                </div>
+                <div>
+                    <h3>4. Union (∪)</h3>
+                    <p>Combines tuples from two relations</p>
+                    
+                    <h3>5. Set Difference (−)</h3>
+                    <p>Tuples in one relation but not another</p>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Remember:</strong> These five operations can express ANY relational algebra query!
+            </div>
+        </div>
+
+        <!-- Slide 5: Selection Operation -->
+        <div class="slide">
+            <h1>Selection Operation (σ)</h1>
+            <p>Works on a single relation R and defines a relation that contains only those tuples of R that satisfy the specified condition (predicate).</p>
+            
+            <div class="algebra-notation">
+                <span class="operation-symbol">σ</span><sub>predicate</sub>(R)
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: Find all staff with salary > 10000</h3>
+                <div class="algebra-notation">
+                    σ<sub>salary > 10000</sub>(Staff)
+                </div>
+            </div>
+            
+            <table class="result-table">
+                <tr>
+                    <th>staffNo</th><th>fName</th><th>lName</th><th>salary</th>
+                </tr>
+                <tr>
+                    <td>SL21</td><td>John</td><td>White</td><td>30000</td>
+                </tr>
+                <tr>
+                    <td>SG37</td><td>Ann</td><td>Beech</td><td>12000</td>
+                </tr>
+                <tr>
+                    <td>SG14</td><td>David</td><td>Ford</td><td>18000</td>
+                </tr>
+                <tr>
+                    <td>SG5</td><td>Susan</td><td>Brand</td><td>24000</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 6: Projection Operation -->
+        <div class="slide">
+            <h1>Projection Operation (∏)</h1>
+            <p>Works on a single relation R and defines a relation that contains a vertical subset of R, extracting the values of specified attributes and eliminating duplicates.</p>
+            
+            <div class="algebra-notation">
+                <span class="operation-symbol">∏</span><sub>col1, col2, ..., coln</sub>(R)
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: List all staff numbers and salaries</h3>
+                <div class="algebra-notation">
+                    ∏<sub>staffNo, salary</sub>(Staff)
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Important:</strong> Projection removes duplicate rows automatically!
+            </div>
+            
+            <div class="activity-box">
+                <strong>🎯 Quick Exercise:</strong> Write an expression to get unique city names from PropertyForRent relation
+            </div>
+        </div>
+
+        <!-- Slide 7: Combining Selection and Projection -->
+        <div class="slide">
+            <h1>Combining Operations</h1>
+            <p>We can combine selection and projection for more complex queries!</p>
+            
+            <div class="example-box">
+                <h3>Example: List names and salaries of staff earning > 10000</h3>
+                <div class="algebra-notation">
+                    ∏<sub>staffNo, fName, lName, salary</sub>(σ<sub>salary > 10000</sub>(Staff))
+                </div>
+                
+                <p style="margin-top: 20px;"><strong>Read from inside out:</strong></p>
+                <ol>
+                    <li>First apply selection: σ<sub>salary > 10000</sub>(Staff)</li>
+                    <li>Then apply projection to the result</li>
+                </ol>
+            </div>
+            
+            <div class="discussion-prompt">
+                💭 Discussion: How would this look in SQL?
+            </div>
+        </div>
+
+        <!-- Slide 8: Union Operation -->
+        <div class="slide">
+            <h1>Union Operation (∪)</h1>
+            <p>Union of two relations R and S defines a relation containing all tuples of R, or S, or both, with duplicates eliminated.</p>
+            
+            <div class="algebra-notation">
+                R <span class="operation-symbol">∪</span> S
+            </div>
+            
+            <div class="tip-box">
+                <strong>Union Compatibility Required:</strong>
+                <ul>
+                    <li>Same number of attributes</li>
+                    <li>Corresponding attributes must have same domains</li>
+                </ul>
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: List all cities where there is either a branch or a property</h3>
+                <div class="algebra-notation">
+                    ∏<sub>city</sub>(Branch) ∪ ∏<sub>city</sub>(PropertyForRent)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Set Difference Operation -->
+        <div class="slide">
+            <h1>Set Difference Operation (−)</h1>
+            <p>Defines a relation consisting of tuples in relation R but not in S.</p>
+            
+            <div class="algebra-notation">
+                R <span class="operation-symbol">−</span> S
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: List cities where there is a branch but no properties</h3>
+                <div class="algebra-notation">
+                    ∏<sub>city</sub>(Branch) − ∏<sub>city</sub>(PropertyForRent)
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Note:</strong> R and S must be union-compatible!
+            </div>
+            
+            <div class="activity-box">
+                <strong>🎯 Class Activity (5 min):</strong> 
+                <p>Given two relations Students(id, name) and Graduates(id, name), write an expression to find students who haven't graduated yet.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Intersection Operation -->
+        <div class="slide">
+            <h1>Intersection Operation (∩)</h1>
+            <p>Defines a relation consisting of tuples that are in both R and S.</p>
+            
+            <div class="algebra-notation">
+                R <span class="operation-symbol">∩</span> S
+            </div>
+            
+            <p style="margin-top: 30px;"><strong>Can be expressed using basic operations:</strong></p>
+            <div class="algebra-notation">
+                R ∩ S = R − (R − S)
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: List cities with both branches and properties</h3>
+                <div class="algebra-notation">
+                    ∏<sub>city</sub>(Branch) ∩ ∏<sub>city</sub>(PropertyForRent)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Cartesian Product -->
+        <div class="slide">
+            <h1>Cartesian Product (×)</h1>
+            <p>Defines a relation that is the concatenation of every tuple of relation R with every tuple of relation S.</p>
+            
+            <div class="algebra-notation">
+                R <span class="operation-symbol">×</span> S
+            </div>
+            
+            <div class="tip-box">
+                <strong>Result Size:</strong> If R has I tuples and S has J tuples, R × S has I × J tuples
+            </div>
+            
+            <div class="example-box">
+                <h3>Example with Small Relations:</h3>
+                <div class="two-column">
+                    <div>
+                        <strong>Client (3 rows)</strong>
+                        <table class="result-table" style="font-size: 0.9em;">
+                            <tr><th>clientNo</th><th>fName</th></tr>
+                            <tr><td>CR76</td><td>John</td></tr>
+                            <tr><td>CR56</td><td>Aline</td></tr>
+                            <tr><td>CR62</td><td>Mary</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <strong>Viewing (2 rows)</strong>
+                        <table class="result-table" style="font-size: 0.9em;">
+                            <tr><th>clientNo</th><th>propertyNo</th></tr>
+                            <tr><td>CR76</td><td>PG4</td></tr>
+                            <tr><td>CR56</td><td>PA14</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <p>Result: 3 × 2 = 6 rows (every combination)</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Introduction to Joins -->
+        <div class="slide">
+            <h1>Join Operations Overview</h1>
+            <p>Join is a derivative of Cartesian product - it's more useful!</p>
+            
+            <div class="example-box">
+                <h3>Types of Joins:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Theta Join (θ-join):</strong> Join with any condition</li>
+                    <li><strong>Equijoin:</strong> Theta join where condition uses only =</li>
+                    <li><strong>Natural Join (⋈):</strong> Equijoin on all common attributes</li>
+                    <li><strong>Outer Join:</strong> Preserves unmatched tuples</li>
+                    <li><strong>Semijoin (⋉):</strong> Returns only matching tuples from left relation</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Performance Note:</strong> Join is one of the most expensive operations in RDBMS!
+            </div>
+        </div>
+
+        <!-- Slide 13: Theta Join -->
+        <div class="slide">
+            <h1>Theta Join (θ-Join)</h1>
+            <p>Defines a relation containing tuples satisfying a predicate F from the Cartesian product of R and S.</p>
+            
+            <div class="algebra-notation">
+                R ⋈<sub>F</sub> S = σ<sub>F</sub>(R × S)
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: Join Client and Viewing where Client.clientNo = Viewing.clientNo</h3>
+                <div class="algebra-notation">
+                    Client ⋈<sub>Client.clientNo = Viewing.clientNo</sub> Viewing
+                </div>
+            </div>
+            
+            <table class="result-table">
+                <tr>
+                    <th>Client.clientNo</th><th>fName</th><th>lName</th><th>Viewing.clientNo</th><th>propertyNo</th><th>comment</th>
+                </tr>
+                <tr>
+                    <td>CR76</td><td>John</td><td>Kay</td><td>CR76</td><td>PG4</td><td>too remote</td>
+                </tr>
+                <tr>
+                    <td>CR56</td><td>Aline</td><td>Stewart</td><td>CR56</td><td>PA14</td><td>too small</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 14: Natural Join -->
+        <div class="slide">
+            <h1>Natural Join (⋈)</h1>
+            <p>An Equijoin over all common attributes, with one occurrence of each common attribute eliminated.</p>
+            
+            <div class="algebra-notation">
+                R <span class="operation-symbol">⋈</span> S
+            </div>
+            
+            <div class="example-box">
+                <h3>Example: Natural join of Client and Viewing</h3>
+                <p>Common attribute: clientNo (appears only once in result)</p>
+            </div>
+            
+            <table class="result-table">
+                <tr>
+                    <th>clientNo</th><th>fName</th><th>lName</th><th>propertyNo</th><th>comment</th>
+                </tr>
+                <tr>
+                    <td>CR76</td><td>John</td><td>Kay</td><td>PG4</td><td>too remote</td>
+                </tr>
+                <tr>
+                    <td>CR56</td><td>Aline</td><td>Stewart</td><td>PA14</td><td>too small</td>
+                </tr>
+            </table>
+            
+            <div class="discussion-prompt">
+                💭 Discussion: When would you use Natural Join vs Theta Join?
+            </div>
+        </div>
+
+        <!-- Slide 15: Outer Joins -->
+        <div class="slide">
+            <h1>Outer Join Operations</h1>
+            <p>Preserves tuples that would be lost in a regular join</p>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Left Outer Join (⟕)</h3>
+                    <p>Keeps all tuples from left relation</p>
+                    <div class="algebra-notation" style="font-size: 1em;">
+                        R ⟕ S
+                    </div>
+                </div>
+                <div>
+                    <h3>Right Outer Join (⟖)</h3>
+                    <p>Keeps all tuples from right relation</p>
+                    <div class="algebra-notation" style="font-size: 1em;">
+                        R ⟖ S
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Full Outer Join (⟗)</h3>
+            <p>Keeps all tuples from both relations</p>
+            <div class="algebra-notation">
+                R ⟗ S
+            </div>
+            
+            <div class="tip-box">
+                <strong>NULL values:</strong> Used for attributes where no match exists
+            </div>
+        </div>
+
+        <!-- Slide 16: Semijoin -->
+        <div class="slide">
+            <h1>Semijoin (⋉)</h1>
+            <p>Returns tuples from R that participate in the join with S</p>
+            
+            <div class="algebra-notation">
+                R ⋉<sub>F</sub> S = ∏<sub>A</sub>(R ⋈<sub>F</sub> S)
+            </div>
+            <p style="text-align: center;">where A is the set of all attributes in R</p>
+            
+            <div class="example-box">
+                <h3>Use Case: Distributed Databases</h3>
+                <p>Reduces the amount of data transferred between sites</p>
+                <ul>
+                    <li>Send only the join attributes from S to R's site</li>
+                    <li>Perform semijoin locally</li>
+                    <li>Send only matching tuples back</li>
+                </ul>
+            </div>
+            
+            <div class="activity-box">
+                <strong>🎯 Think-Pair-Share (3 min):</strong> 
+                <p>How could semijoin optimize a query across two database servers?</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Division Operation -->
+        <div class="slide">
+            <h1>Division Operation (÷)</h1>
+            <p>Defines a relation over attributes C that consists of tuples from R that match every tuple in S.</p>
+            
+            <div class="algebra-notation">
+                R <span class="operation-symbol">÷</span> S
+            </div>
+            
+            <div class="example-box">
+                <h3>Classic Example: "Find clients who have viewed ALL properties with 3 rooms"</h3>
+                <ol>
+                    <li>R = (clientNo, propertyNo) from Viewing</li>
+                    <li>S = propertyNo where rooms = 3</li>
+                    <li>Result: clientNo who viewed all properties in S</li>
+                </ol>
+            </div>
+            
+            <p style="margin-top: 30px;"><strong>Expressed using basic operations:</strong></p>
+            <div class="algebra-notation" style="font-size: 0.9em;">
+                T1 ← ∏<sub>C</sub>(R)<br>
+                T2 ← ∏<sub>C</sub>((S × T1) − R)<br>
+                T ← T1 − T2
+            </div>
+        </div>
+
+        <!-- Slide 18: Complex Query Example -->
+        <div class="slide">
+            <h1>Complex Query Example</h1>
+            <p><strong>Query:</strong> "Find the names of staff who work in London branches and manage properties with rent > 500"</p>
+            
+            <div class="example-box">
+                <h3>Step-by-step breakdown:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li>Find London branches: σ<sub>city='London'</sub>(Branch)</li>
+                    <li>Find staff in London: Staff ⋈ σ<sub>city='London'</sub>(Branch)</li>
+                    <li>Find expensive properties: σ<sub>rent>500</sub>(PropertyForRent)</li>
+                    <li>Join with staff: Result from step 2 ⋈ Result from step 3</li>
+                    <li>Project names: ∏<sub>fName, lName</sub>(Final result)</li>
+                </ol>
+            </div>
+            
+            <div class="algebra-notation" style="font-size: 0.9em;">
+                ∏<sub>fName, lName</sub>((Staff ⋈ σ<sub>city='London'</sub>(Branch)) ⋈ σ<sub>rent>500</sub>(PropertyForRent))
+            </div>
+        </div>
+
+        <!-- Slide 19: Hands-On Practice -->
+        <div class="slide">
+            <h1>Practice Problems</h1>
+            
+            <div class="activity-box">
+                <h3>🎯 Individual Exercise (10 minutes)</h3>
+                <p>Write relational algebra expressions for:</p>
+                <ol style="font-size: 1.1em; line-height: 2;">
+                    <li>List all staff working in branches in London or Glasgow</li>
+                    <li>Find properties viewed by client 'John Kay'</li>
+                    <li>List staff who don't manage any properties</li>
+                    <li>Find clients who have viewed properties in all cities</li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Strategy Tips:</strong>
+                <ul>
+                    <li>Start with the relations you need</li>
+                    <li>Apply selections early to reduce data</li>
+                    <li>Use appropriate joins for relationships</li>
+                    <li>Project only needed attributes at the end</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 20: Connecting to SQL -->
+        <div class="slide">
+            <h1>Relational Algebra → SQL Mapping</h1>
+            
+            <table class="result-table">
+                <tr>
+                    <th>Relational Algebra</th>
+                    <th>SQL Equivalent</th>
+                </tr>
+                <tr>
+                    <td>σ<sub>condition</sub>(R)</td>
+                    <td>SELECT * FROM R WHERE condition</td>
+                </tr>
+                <tr>
+                    <td>∏<sub>A,B</sub>(R)</td>
+                    <td>SELECT DISTINCT A, B FROM R</td>
+                </tr>
+                <tr>
+                    <td>R × S</td>
+                    <td>SELECT * FROM R CROSS JOIN S</td>
+                </tr>
+                <tr>
+                    <td>R ∪ S</td>
+                    <td>SELECT * FROM R UNION SELECT * FROM S</td>
+                </tr>
+                <tr>
+                    <td>R − S</td>
+                    <td>SELECT * FROM R EXCEPT SELECT * FROM S</td>
+                </tr>
+                <tr>
+                    <td>R ⋈<sub>condition</sub> S</td>
+                    <td>SELECT * FROM R JOIN S ON condition</td>
+                </tr>
+                <tr>
+                    <td>R ⋈ S</td>
+                    <td>SELECT * FROM R NATURAL JOIN S</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 21: Query Optimization Preview -->
+        <div class="slide">
+            <h1>Query Optimization Basics</h1>
+            <p>Multiple algebraic expressions can produce the same result!</p>
+            
+            <div class="example-box">
+                <h3>Example: Two equivalent expressions</h3>
+                <p><strong>Expression 1:</strong></p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    σ<sub>salary>20000</sub>(Staff ⋈ Branch)
+                </div>
+                <p><strong>Expression 2 (More Efficient):</strong></p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    (σ<sub>salary>20000</sub>(Staff)) ⋈ Branch
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Optimization Rules:</strong>
+                <ul>
+                    <li>Perform selections as early as possible</li>
+                    <li>Combine cascaded selections</li>
+                    <li>Perform projections early to reduce tuple size</li>
+                    <li>Use associativity of joins for better ordering</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 22: Real-World Application -->
+        <div class="slide">
+            <h1>Real-World Database Example</h1>
+            
+            <div class="erd-diagram">
+                <pre>
+Database Schema:
+================
+Branch (branchNo, street, city, postcode)
+Staff (staffNo, fName, lName, position, sex, DOB, salary, branchNo)
+PropertyForRent (propertyNo, street, city, postcode, type, rooms, rent, ownerNo, staffNo, branchNo)
+Client (clientNo, fName, lName, telNo, prefType, maxRent, eMail)
+PrivateOwner (ownerNo, fName, lName, address, telNo, eMail, password)
+Viewing (clientNo, propertyNo, viewDate, comment)
+Registration (clientNo, branchNo, staffNo)
+                </pre>
+            </div>
+            
+            <div class="activity-box">
+                <strong>🎯 Group Activity (15 min):</strong> 
+                <p>Design queries for a property rental system using this schema</p>
+            </div>
+        </div>
+
+        <!-- Slide 23: Advanced Topics -->
+        <div class="slide">
+            <h1>Advanced Relational Algebra Topics</h1>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Aggregate Functions</h3>
+                    <ul>
+                        <li>COUNT</li>
+                        <li>SUM</li>
+                        <li>AVG</li>
+                        <li>MIN/MAX</li>
+                    </ul>
+                    <p>Notation: <span style="font-family: monospace;">ℱ<sub>function</sub>(R)</span></p>
+                </div>
+                <div>
+                    <h3>Grouping Operation</h3>
+                    <ul>
+                        <li>GROUP BY equivalent</li>
+                        <li>Combined with aggregates</li>
+                        <li>Creates partitions</li>
+                    </ul>
+                    <p>Notation: <span style="font-family: monospace;"><sub>attributes</sub>ℱ<sub>functions</sub>(R)</span></p>
+                </div>
+            </div>
+            
+            <div class="discussion-prompt">
+                💭 Discussion: How do modern NoSQL databases handle these operations differently?
+            </div>
+        </div>
+
+        <!-- Slide 24: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common Mistakes to Avoid</h1>
+            
+            <div class="example-box">
+                <h3>❌ Pitfall 1: Forgetting Union Compatibility</h3>
+                <p>Cannot do: ∏<sub>staffNo, name</sub>(Staff) ∪ ∏<sub>clientNo</sub>(Client)</p>
+                <p>Different number of attributes!</p>
+            </div>
+            
+            <div class="example-box">
+                <h3>❌ Pitfall 2: Wrong Join Conditions</h3>
+                <p>Cartesian product when you forget the join condition</p>
+                <p>Results in way too many tuples!</p>
+            </div>
+            
+            <div class="example-box">
+                <h3>❌ Pitfall 3: Projection Before Selection</h3>
+                <p>If you project away an attribute needed for selection</p>
+                <p>Always check your operation order!</p>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Best Practice:</strong> Always trace through your expression with sample data!
+            </div>
+        </div>
+
+        <!-- Slide 25: Summary -->
+        <div class="slide">
+            <h1>Key Takeaways</h1>
+            
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>✅ Relational algebra is the foundation of SQL</li>
+                <li>✅ Five basic operations can express any query</li>
+                <li>✅ Joins are powerful but expensive</li>
+                <li>✅ Order of operations matters for optimization</li>
+                <li>✅ Multiple expressions can produce same result</li>
+            </ul>
+            
+            <div class="tip-box">
+                <strong>Next Class:</strong> We'll see how SQL implements these concepts and start writing actual queries!
+            </div>
+            
+            <div class="discussion-prompt">
+                💭 Final Thought: How might AI and machine learning change query optimization in the future?
+            </div>
+        </div>
+
+        <!-- Slide 26: Homework & Resources -->
+        <div class="slide">
+            <h1>Homework & Resources</h1>
+            
+            <div class="example-box">
+                <h3>📚 Reading Assignment</h3>
+                <ul>
+                    <li>Chapter 5: Relational Algebra (Connolly & Begg)</li>
+                    <li>Review SQL preview materials for next class</li>
+                </ul>
+            </div>
+            
+            <div class="activity-box">
+                <h3>📝 Practice Problems</h3>
+                <p>Complete the 10 relational algebra exercises on Canvas</p>
+                <p>Due: Before next class</p>
+            </div>
+            
+            <div class="tip-box">
+                <h3>💡 Additional Resources</h3>
+                <ul>
+                    <li>Online RA Calculator: <code>dbis-uibk.github.io/relax/</code></li>
+                    <li>Video tutorials on Canvas</li>
+                    <li>Office hours: Tuesday/Thursday 2-4 PM</li>
+                </ul>
+            </div>
+            
+            <p style="text-align: center; margin-top: 40px; font-size: 1.2em;">
+                Questions? Let's discuss! 🤔
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
+        <span id="slideInfo">Slide 1 of 26</span>
+        <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
+    </div>
+
+    <!-- JavaScript for Functionality -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let startTime = Date.now();
+        let timerInterval;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('slideInfo').textContent = `Slide ${currentSlide + 1} of ${totalSlides}`;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') showSlide(0);
+            if (e.key === 'End') showSlide(totalSlides - 1);
+            
+            // Number keys for quick navigation
+            if (e.key >= '1' && e.key <= '9') {
+                const slideNum = parseInt(e.key) - 1;
+                if (slideNum < totalSlides) showSlide(slideNum);
+            }
+        });
+
+        // Timer functionality
+        function updateTimer() {
+            const elapsed = Date.now() - startTime;
+            const seconds = Math.floor(elapsed / 1000) % 60;
+            const minutes = Math.floor(elapsed / 60000) % 60;
+            const hours = Math.floor(elapsed / 3600000);
+            
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Start timer
+        timerInterval = setInterval(updateTimer, 1000);
+
+        // Theme toggle
+        const themeCheckbox = document.getElementById('theme-checkbox');
+        const currentTheme = localStorage.getItem('dbTheme') || 'light';
+        
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeCheckbox.checked = true;
+        }
+        
+        themeCheckbox.addEventListener('change', (e) => {
+            const theme = e.target.checked ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('dbTheme', theme);
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);  // Swipe left
+            if (touchEndX > touchStartX + 50) changeSlide(-1); // Swipe right
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

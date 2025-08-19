@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced SQL: Multi-Table Operations & Database Objects - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Optional timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Time Remaining: 05:00</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Advanced SQL</h1>
+            <h2>Multi-Table Operations & Database Objects <span class="emoji">🗄️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 5, Lecture 9</p>
+            <p style="margin-top: 60px; font-size: 1.2em;">Instructor: Bobby Reed</p>
+            <p style="margin-top: auto; font-style: italic;">Mastering complex queries and database programming!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Master multi-table queries and advanced joins</li>
+                <li>🎯 Understand and use subqueries effectively</li>
+                <li>🎯 Apply set operations (UNION, INTERSECT, EXCEPT)</li>
+                <li>🎯 Implement EXISTS and NOT EXISTS conditions</li>
+                <li>🎯 Create and manage database triggers</li>
+                <li>🎯 Design stored procedures and functions</li>
+                <li>🎯 Build and optimize database views</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Agenda -->
+        <div class="slide">
+            <h1>Lecture Roadmap</h1>
+            <div class="two-column">
+                <div>
+                    <h3>Part 1: Advanced Queries (45 min)</h3>
+                    <ul>
+                        <li>Multi-table queries</li>
+                        <li>Advanced join operations</li>
+                        <li>Complex subqueries</li>
+                        <li>Set operations</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Part 2: Database Objects (45 min)</h3>
+                    <ul>
+                        <li>Database triggers</li>
+                        <li>Stored procedures</li>
+                        <li>User-defined functions</li>
+                        <li>Views and materialized views</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tip-box">
+                <strong>Note:</strong> We'll have hands-on exercises throughout to reinforce concepts.
+            </div>
+        </div>
+
+        <!-- Slide 4: Multi-Table Queries Introduction -->
+        <div class="slide">
+            <h1>Multi-Table Queries</h1>
+            <p>When data resides in multiple tables, we need powerful techniques to combine them:</p>
+            
+            <div class="info-box">
+                <p><strong>Key Concepts:</strong></p>
+                <ul>
+                    <li>Can use subqueries if result columns come from same table</li>
+                    <li>Must use JOIN if result columns come from multiple tables</li>
+                    <li>Include multiple tables in FROM clause with comma separator</li>
+                    <li>Use WHERE clause to specify join conditions</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Basic multi-table query with implicit join</span><br>
+                <span class="sql-keyword">SELECT</span> s.fName, s.lName, b.city<br>
+                <span class="sql-keyword">FROM</span> Staff s, Branch b<br>
+                <span class="sql-keyword">WHERE</span> s.branchNo = b.branchNo;
+            </div>
+        </div>
+
+        <!-- Slide 5: Table Aliases -->
+        <div class="slide">
+            <h1>Working with Table Aliases</h1>
+            <p>Aliases simplify queries and resolve ambiguity in column names:</p>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Using aliases for cleaner code</span><br>
+                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName, s.position,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b.branchNo, b.city<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-keyword">INNER JOIN</span> Branch b <span class="sql-keyword">ON</span> s.branchNo = b.branchNo<br>
+                <span class="sql-keyword">WHERE</span> b.city = <span class="sql-string">'London'</span><br>
+                <span class="sql-keyword">ORDER BY</span> s.lName, s.fName;
+            </div>
+
+            <div class="tip-box">
+                <strong>Best Practice:</strong> Always use meaningful aliases - single letters for simple queries, descriptive names for complex ones.
+            </div>
+        </div>
+
+        <!-- Slide 6: Types of Joins -->
+        <div class="slide">
+            <h1>Join Operations Overview</h1>
+            <p>Various forms of join operations serve different purposes:</p>
+
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>Inner Joins</h3>
+                    <ul>
+                        <li><strong>Theta Join:</strong> General condition</li>
+                        <li><strong>Equijoin:</strong> Equality condition</li>
+                        <li><strong>Natural Join:</strong> Automatic on common columns</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>Outer Joins</h3>
+                    <ul>
+                        <li><strong>LEFT JOIN:</strong> All rows from left table</li>
+                        <li><strong>RIGHT JOIN:</strong> All rows from right table</li>
+                        <li><strong>FULL JOIN:</strong> All rows from both tables</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Example of LEFT OUTER JOIN</span><br>
+                <span class="sql-keyword">SELECT</span> b.branchNo, b.city, s.staffNo, s.fName, s.lName<br>
+                <span class="sql-keyword">FROM</span> Branch b<br>
+                <span class="sql-keyword">LEFT OUTER JOIN</span> Staff s <span class="sql-keyword">ON</span> b.branchNo = s.branchNo<br>
+                <span class="sql-keyword">ORDER BY</span> b.branchNo;
+            </div>
+        </div>
+
+        <!-- Slide 7: Set Operations -->
+        <div class="slide">
+            <h1>Set Operations: UNION, INTERSECT, EXCEPT</h1>
+            <p>Combine results from multiple queries using set theory:</p>
+
+            <div class="info-box">
+                <p><strong>Requirements for Set Operations:</strong></p>
+                <ul>
+                    <li>Tables must be union compatible</li>
+                    <li>Same number of columns</li>
+                    <li>Corresponding columns must have compatible data types</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- UNION: Combine results (removes duplicates)</span><br>
+                (<span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> Branch)<br>
+                <span class="sql-keyword">UNION</span><br>
+                (<span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> PropertyForRent);<br><br>
+
+                <span class="sql-comment">-- INTERSECT: Find common values</span><br>
+                (<span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> Branch)<br>
+                <span class="sql-keyword">INTERSECT</span><br>
+                (<span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> PropertyForRent);<br><br>
+
+                <span class="sql-comment">-- EXCEPT: Find differences</span><br>
+                (<span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> Branch)<br>
+                <span class="sql-keyword">EXCEPT</span><br>
+                (<span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> PropertyForRent);
+            </div>
+        </div>
+
+        <!-- Slide 8: EXISTS and NOT EXISTS -->
+        <div class="slide">
+            <h1>EXISTS and NOT EXISTS Predicates</h1>
+            <p>Powerful tools for checking row existence in subqueries:</p>
+
+            <div class="info-box">
+                <ul>
+                    <li>Returns true/false based on subquery results</li>
+                    <li>EXISTS: true if subquery returns at least one row</li>
+                    <li>NOT EXISTS: true if subquery returns no rows</li>
+                    <li>Subquery can return any number of columns</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Find staff who manage properties</span><br>
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, position<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-keyword">WHERE EXISTS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p.staffNo = s.staffNo<br>
+                );<br><br>
+
+                <span class="sql-comment">-- Find branches with no staff</span><br>
+                <span class="sql-keyword">SELECT</span> branchNo, street, city<br>
+                <span class="sql-keyword">FROM</span> Branch b<br>
+                <span class="sql-keyword">WHERE NOT EXISTS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff s<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> s.branchNo = b.branchNo<br>
+                );
+            </div>
+        </div>
+
+        <!-- Slide 9: Activity - Complex Query Challenge -->
+        <div class="slide">
+            <h1>🔨 Hands-On: Complex Query Challenge</h1>
+            <p>Work in pairs to solve this query challenge:</p>
+
+            <div class="info-box">
+                <h3>Challenge Requirements:</h3>
+                <p>Find all properties that:</p>
+                <ol>
+                    <li>Are located in London or Glasgow</li>
+                    <li>Have rent between £300 and £500</li>
+                    <li>Are managed by staff earning more than £30,000</li>
+                    <li>Have been viewed at least once</li>
+                </ol>
+                <p>Return: propertyNo, street, city, rent, staff name</p>
+            </div>
+
+            <button data-timer="300">Start 5-Minute Timer</button>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> You'll need to join at least 3 tables and use EXISTS or a subquery.
+            </div>
+        </div>
+
+        <!-- Slide 10: Solution to Challenge -->
+        <div class="slide">
+            <h1>Query Challenge Solution</h1>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Solution using multiple joins and EXISTS</span><br>
+                <span class="sql-keyword">SELECT DISTINCT</span> p.propertyNo, p.street, p.city, p.rent,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.fName + <span class="sql-string">' '</span> + s.lName <span class="sql-keyword">AS</span> staffName<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                <span class="sql-keyword">INNER JOIN</span> Staff s <span class="sql-keyword">ON</span> p.staffNo = s.staffNo<br>
+                <span class="sql-keyword">WHERE</span> p.city <span class="sql-keyword">IN</span> (<span class="sql-string">'London'</span>, <span class="sql-string">'Glasgow'</span>)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> p.rent <span class="sql-keyword">BETWEEN</span> 300 <span class="sql-keyword">AND</span> 500<br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> s.salary > 30000<br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND EXISTS</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FROM</span> Viewing v<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHERE</span> v.propertyNo = p.propertyNo<br>
+                &nbsp;&nbsp;)<br>
+                <span class="sql-keyword">ORDER BY</span> p.city, p.rent;
+            </div>
+
+            <p style="margin-top: 20px;">Alternative approaches: Using IN with subquery, or additional JOINs</p>
+        </div>
+
+        <!-- Slide 11: Introduction to Triggers -->
+        <div class="slide">
+            <h1>Database Triggers</h1>
+            <p>Automated actions that respond to database events:</p>
+
+            <div class="info-box">
+                <h3>Trigger Components:</h3>
+                <ul>
+                    <li><strong>Event:</strong> INSERT, UPDATE, or DELETE</li>
+                    <li><strong>Timing:</strong> BEFORE, AFTER, or INSTEAD OF</li>
+                    <li><strong>Level:</strong> Row-level or Statement-level</li>
+                    <li><strong>Action:</strong> SQL statements to execute</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Example: Audit trigger for salary changes</span><br>
+                <span class="sql-keyword">CREATE TRIGGER</span> SalaryAuditTrigger<br>
+                <span class="sql-keyword">AFTER UPDATE OF</span> salary <span class="sql-keyword">ON</span> Staff<br>
+                <span class="sql-keyword">FOR EACH ROW</span><br>
+                <span class="sql-keyword">WHEN</span> (NEW.salary != OLD.salary)<br>
+                <span class="sql-keyword">BEGIN</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> SalaryAudit (staffNo, oldSalary, newSalary, changeDate, changedBy)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">VALUES</span> (:OLD.staffNo, :OLD.salary, :NEW.salary, SYSDATE, USER);<br>
+                <span class="sql-keyword">END</span>;
+            </div>
+        </div>
+
+        <!-- Slide 12: Trigger Advantages and Disadvantages -->
+        <div class="slide">
+            <h1>Triggers: Pros and Cons</h1>
+            
+            <div class="comparison-table">
+                <div class="comparison-card good">
+                    <h3>✅ Advantages</h3>
+                    <ul>
+                        <li>Elimination of redundant code</li>
+                        <li>Simplifying modifications</li>
+                        <li>Increased security</li>
+                        <li>Improved data integrity</li>
+                        <li>Enhanced processing power</li>
+                        <li>Good fit with client-server architecture</li>
+                    </ul>
+                </div>
+                <div class="comparison-card bad">
+                    <h3>❌ Disadvantages</h3>
+                    <ul>
+                        <li>Performance overhead</li>
+                        <li>Cascading effects (trigger chains)</li>
+                        <li>Cannot be scheduled</li>
+                        <li>Less portable across databases</li>
+                        <li>Hidden business logic</li>
+                        <li>Debugging complexity</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Best Practice:</strong> Use triggers sparingly for critical integrity constraints and audit trails.
+            </div>
+        </div>
+
+        <!-- Slide 13: Stored Procedures -->
+        <div class="slide">
+            <h1>Stored Procedures</h1>
+            <p>Precompiled SQL code stored in the database for reuse:</p>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create a stored procedure to increase staff salaries</span><br>
+                <span class="sql-keyword">CREATE PROCEDURE</span> IncreaseSalary<br>
+                &nbsp;&nbsp;@BranchNo <span class="sql-keyword">CHAR</span>(4),<br>
+                &nbsp;&nbsp;@Percentage <span class="sql-keyword">DECIMAL</span>(5,2)<br>
+                <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">BEGIN</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">UPDATE</span> Staff<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SET</span> salary = salary * (1 + @Percentage/100)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = @BranchNo;<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = @BranchNo;<br>
+                <span class="sql-keyword">END</span>;<br><br>
+
+                <span class="sql-comment">-- Execute the procedure</span><br>
+                <span class="sql-keyword">EXEC</span> IncreaseSalary <span class="sql-string">'B005'</span>, 5.5;
+            </div>
+
+            <p>Benefits: Performance, security, code reuse, reduced network traffic</p>
+        </div>
+
+        <!-- Slide 14: User-Defined Functions -->
+        <div class="slide">
+            <h1>User-Defined Functions (UDFs)</h1>
+            <p>Custom functions that return values for use in queries:</p>
+
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>Scalar Functions</h3>
+                    <p>Return a single value</p>
+                    <div class="sql-example" style="margin-top: 10px;">
+                        <span class="sql-keyword">CREATE FUNCTION</span> GetFullName<br>
+                        &nbsp;&nbsp;(@FirstName <span class="sql-keyword">VARCHAR</span>(50),<br>
+                        &nbsp;&nbsp; @LastName <span class="sql-keyword">VARCHAR</span>(50))<br>
+                        <span class="sql-keyword">RETURNS VARCHAR</span>(101)<br>
+                        <span class="sql-keyword">AS BEGIN</span><br>
+                        &nbsp;&nbsp;<span class="sql-keyword">RETURN</span> @FirstName + <span class="sql-string">' '</span> + @LastName;<br>
+                        <span class="sql-keyword">END</span>;
+                    </div>
+                </div>
+                <div class="comparison-card">
+                    <h3>Table-Valued Functions</h3>
+                    <p>Return a table result set</p>
+                    <div class="sql-example" style="margin-top: 10px;">
+                        <span class="sql-keyword">CREATE FUNCTION</span> GetStaffByBranch<br>
+                        &nbsp;&nbsp;(@BranchNo <span class="sql-keyword">CHAR</span>(4))<br>
+                        <span class="sql-keyword">RETURNS TABLE AS</span><br>
+                        <span class="sql-keyword">RETURN</span> (<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = @BranchNo<br>
+                        );
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Database Views -->
+        <div class="slide">
+            <h1>Database Views</h1>
+            <p>Virtual tables based on SELECT statements:</p>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create a view for London properties</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> LondonProperties <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> p.propertyNo, p.street, p.type, p.rooms, p.rent,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.fName + <span class="sql-string">' '</span> + s.lName <span class="sql-keyword">AS</span> staffName<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                <span class="sql-keyword">INNER JOIN</span> Staff s <span class="sql-keyword">ON</span> p.staffNo = s.staffNo<br>
+                <span class="sql-keyword">WHERE</span> p.city = <span class="sql-string">'London'</span>;<br><br>
+
+                <span class="sql-comment">-- Use the view like a table</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> LondonProperties<br>
+                <span class="sql-keyword">WHERE</span> rent < 500<br>
+                <span class="sql-keyword">ORDER BY</span> rent;
+            </div>
+
+            <div class="info-box">
+                <h3>View Benefits:</h3>
+                <ul>
+                    <li>Data abstraction and simplification</li>
+                    <li>Security through restricted access</li>
+                    <li>Logical data independence</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: View Restrictions -->
+        <div class="slide">
+            <h1>View Limitations</h1>
+            
+            <div class="warning-box">
+                <h3>⚠️ Update Restrictions:</h3>
+                <ul>
+                    <li>Cannot update views with GROUP BY or aggregate functions</li>
+                    <li>Cannot update views with DISTINCT</li>
+                    <li>Cannot update computed columns</li>
+                    <li>Cannot update views joining multiple tables (usually)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>Other Limitations:</h3>
+                <ul>
+                    <li><strong>Structure Restriction:</strong> View structure fixed at creation</li>
+                    <li><strong>Performance:</strong> Complex views may impact query performance</li>
+                    <li><strong>Dependency:</strong> Changes to base tables can break views</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Solution:</strong> Consider materialized views for better performance with read-heavy workloads.
+            </div>
+        </div>
+
+        <!-- Slide 17: Comprehensive Exercise -->
+        <div class="slide">
+            <h1>🔨 Comprehensive Database Object Exercise</h1>
+            <p>Design a complete solution for a property rental audit system:</p>
+
+            <div class="info-box">
+                <h3>Requirements:</h3>
+                <ol>
+                    <li>Create a trigger to log all rental price changes</li>
+                    <li>Build a stored procedure to calculate average rent by city</li>
+                    <li>Design a view showing properties with their current viewing count</li>
+                    <li>Write a function to determine rental price category (Low/Medium/High)</li>
+                </ol>
+            </div>
+
+            <button data-timer="600">Start 10-Minute Timer</button>
+
+            <p style="margin-top: 20px;">Work in groups of 3-4. We'll review solutions together.</p>
+        </div>
+
+        <!-- Slide 18: Exercise Solution Part 1 -->
+        <div class="slide">
+            <h1>Exercise Solution: Trigger & Procedure</h1>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- 1. Rental price change trigger</span><br>
+                <span class="sql-keyword">CREATE TRIGGER</span> RentChangeAudit<br>
+                <span class="sql-keyword">AFTER UPDATE OF</span> rent <span class="sql-keyword">ON</span> PropertyForRent<br>
+                <span class="sql-keyword">FOR EACH ROW</span><br>
+                <span class="sql-keyword">BEGIN</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> RentAuditLog (propertyNo, oldRent, newRent, changeDate)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">VALUES</span> (:OLD.propertyNo, :OLD.rent, :NEW.rent, SYSDATE);<br>
+                <span class="sql-keyword">END</span>;<br><br>
+
+                <span class="sql-comment">-- 2. Average rent calculation procedure</span><br>
+                <span class="sql-keyword">CREATE PROCEDURE</span> CalculateAvgRentByCity<br>
+                &nbsp;&nbsp;@City <span class="sql-keyword">VARCHAR</span>(50) = <span class="sql-keyword">NULL</span><br>
+                <span class="sql-keyword">AS BEGIN</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">IF</span> @City <span class="sql-keyword">IS NULL</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SELECT</span> city, <span class="sql-keyword">AVG</span>(rent) <span class="sql-keyword">AS</span> avgRent,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> propertyCount<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">GROUP BY</span> city;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ELSE</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SELECT</span> city, <span class="sql-keyword">AVG</span>(rent) <span class="sql-keyword">AS</span> avgRent<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHERE</span> city = @City<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">GROUP BY</span> city;<br>
+                <span class="sql-keyword">END</span>;
+            </div>
+        </div>
+
+        <!-- Slide 19: Exercise Solution Part 2 -->
+        <div class="slide">
+            <h1>Exercise Solution: View & Function</h1>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- 3. View with viewing counts</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> PropertyViewingStats <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> p.propertyNo, p.street, p.city, p.type, p.rent,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(v.clientNo) <span class="sql-keyword">AS</span> viewingCount,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">MAX</span>(v.viewDate) <span class="sql-keyword">AS</span> lastViewDate<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent p<br>
+                <span class="sql-keyword">LEFT JOIN</span> Viewing v <span class="sql-keyword">ON</span> p.propertyNo = v.propertyNo<br>
+                <span class="sql-keyword">GROUP BY</span> p.propertyNo, p.street, p.city, p.type, p.rent;<br><br>
+
+                <span class="sql-comment">-- 4. Rental price category function</span><br>
+                <span class="sql-keyword">CREATE FUNCTION</span> GetRentCategory(@Rent <span class="sql-keyword">MONEY</span>)<br>
+                <span class="sql-keyword">RETURNS VARCHAR</span>(10)<br>
+                <span class="sql-keyword">AS BEGIN</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">DECLARE</span> @Category <span class="sql-keyword">VARCHAR</span>(10);<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SET</span> @Category = <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">CASE</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHEN</span> @Rent < 300 <span class="sql-keyword">THEN</span> <span class="sql-string">'Low'</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHEN</span> @Rent <span class="sql-keyword">BETWEEN</span> 300 <span class="sql-keyword">AND</span> 600 <span class="sql-keyword">THEN</span> <span class="sql-string">'Medium'</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ELSE</span> <span class="sql-string">'High'</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">END</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">RETURN</span> @Category;<br>
+                <span class="sql-keyword">END</span>;
+            </div>
+        </div>
+
+        <!-- Slide 20: Performance Considerations -->
+        <div class="slide">
+            <h1>Performance Best Practices</h1>
+            
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>Query Optimization</h3>
+                    <ul>
+                        <li>Use appropriate indexes</li>
+                        <li>Avoid SELECT *</li>
+                        <li>Minimize subqueries</li>
+                        <li>Use EXISTS over IN for large datasets</li>
+                        <li>Consider query execution plans</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>Database Object Guidelines</h3>
+                    <ul>
+                        <li>Limit trigger complexity</li>
+                        <li>Cache frequently used views</li>
+                        <li>Index columns used in JOINs</li>
+                        <li>Batch operations in procedures</li>
+                        <li>Monitor object dependencies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Remember:</strong> Always test performance impact before deploying to production!
+            </div>
+        </div>
+
+        <!-- Slide 21: Real-World Application -->
+        <div class="slide">
+            <h1>Real-World Scenario: E-Commerce Database</h1>
+            <p>Let's apply our knowledge to an e-commerce platform:</p>
+
+            <div class="erd-diagram">
+                <pre>
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│  CUSTOMERS  │────────►│   ORDERS    │────────►│ ORDER_ITEMS │
+├─────────────┤   1:N   ├─────────────┤   1:N   ├─────────────┤
+│ customer_id │         │ order_id    │         │ item_id     │
+│ email       │         │ customer_id │         │ order_id    │
+│ name        │         │ order_date  │         │ product_id  │
+│ join_date   │         │ total       │         │ quantity    │
+└─────────────┘         └─────────────┘         │ price       │
+                                                 └─────────────┘
+                                                        │
+                                                        ▼
+                                                 ┌─────────────┐
+                                                 │  PRODUCTS   │
+                                                 ├─────────────┤
+                                                 │ product_id  │
+                                                 │ name        │
+                                                 │ price       │
+                                                 │ stock       │
+                                                 └─────────────┘
+                </pre>
+            </div>
+
+            <p>Design triggers for inventory management and views for reporting!</p>
+        </div>
+
+        <!-- Slide 22: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common Mistakes to Avoid</h1>
+            
+            <div class="warning-box">
+                <h3>❌ Don't Do This:</h3>
+                <ul>
+                    <li>Creating triggers that call other triggers (cascading)</li>
+                    <li>Using cursors when set-based operations work</li>
+                    <li>Forgetting to handle NULL values in functions</li>
+                    <li>Creating views with SELECT * from base tables</li>
+                    <li>Ignoring transaction boundaries in procedures</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Do This Instead:</h3>
+                <ul>
+                    <li>Keep triggers simple and focused</li>
+                    <li>Use set-based operations whenever possible</li>
+                    <li>Always handle NULLs explicitly</li>
+                    <li>Specify exact columns in views</li>
+                    <li>Use proper transaction management</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 23: Quiz Time -->
+        <div class="slide">
+            <h1>🎯 Quick Knowledge Check</h1>
+            
+            <div class="info-box">
+                <h3>Question 1:</h3>
+                <p>What's the difference between UNION and UNION ALL?</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Question 2:</h3>
+                <p>When would you use NOT EXISTS instead of NOT IN?</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Question 3:</h3>
+                <p>What are the three timing options for triggers?</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Question 4:</h3>
+                <p>Name two advantages of using stored procedures.</p>
+            </div>
+
+            <button data-timer="180">Start 3-Minute Timer</button>
+        </div>
+
+        <!-- Slide 24: Quiz Answers -->
+        <div class="slide">
+            <h1>Quiz Answers</h1>
+            
+            <div class="success-box">
+                <h3>Answer 1:</h3>
+                <p>UNION removes duplicates; UNION ALL keeps all rows including duplicates (faster)</p>
+            </div>
+
+            <div class="success-box">
+                <h3>Answer 2:</h3>
+                <p>NOT EXISTS handles NULL values better and is often more efficient for large datasets</p>
+            </div>
+
+            <div class="success-box">
+                <h3>Answer 3:</h3>
+                <p>BEFORE, AFTER, and INSTEAD OF</p>
+            </div>
+
+            <div class="success-box">
+                <h3>Answer 4:</h3>
+                <p>Any two: Performance improvement, code reuse, security, reduced network traffic, centralized business logic</p>
+            </div>
+        </div>
+
+        <!-- Slide 25: Summary -->
+        <div class="slide">
+            <h1>Key Takeaways</h1>
+            
+            <div class="two-column">
+                <div>
+                    <h3>Advanced Queries:</h3>
+                    <ul>
+                        <li>✓ Multi-table joins for complex data retrieval</li>
+                        <li>✓ Set operations for combining results</li>
+                        <li>✓ EXISTS for efficient existence checks</li>
+                        <li>✓ Subqueries for nested logic</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Database Objects:</h3>
+                    <ul>
+                        <li>✓ Triggers for automatic actions</li>
+                        <li>✓ Stored procedures for reusable logic</li>
+                        <li>✓ Functions for custom calculations</li>
+                        <li>✓ Views for data abstraction</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Remember:</strong> The key to mastering SQL is practice! Try different approaches to the same problem.
+            </div>
+        </div>
+
+        <!-- Slide 26: Homework Assignment -->
+        <div class="slide">
+            <h1>Homework Assignment</h1>
+            
+            <div class="info-box">
+                <h3>📚 Assignment: Complete Database Solution</h3>
+                <p>Design and implement a library management system with:</p>
+                <ol>
+                    <li><strong>Tables:</strong> Books, Members, Loans, Reservations</li>
+                    <li><strong>Complex Query:</strong> Find overdue books with member details</li>
+                    <li><strong>Trigger:</strong> Automatically update book availability</li>
+                    <li><strong>Stored Procedure:</strong> Check out a book to a member</li>
+                    <li><strong>View:</strong> Show popular books (most borrowed)</li>
+                    <li><strong>Function:</strong> Calculate late fees</li>
+                </ol>
+                
+                <p style="margin-top: 20px;"><strong>Due:</strong> Next class session</p>
+                <p><strong>Submission:</strong> SQL script file via course portal</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Bonus:</strong> Include error handling and transaction management for extra credit!
+            </div>
+        </div>
+
+        <!-- Slide 27: Resources -->
+        <div class="slide">
+            <h1>Additional Resources</h1>
+            
+            <h3>📖 Required Reading:</h3>
+            <ul>
+                <li>Textbook: Chapters 6-8 (Advanced SQL)</li>
+                <li>Textbook: Chapter 11 (Stored Procedures and Triggers)</li>
+            </ul>
+
+            <h3>🔗 Online Resources:</h3>
+            <ul>
+                <li>SQL Performance Explained (use-the-index-luke.com)</li>
+                <li>PostgreSQL Documentation - Advanced Features</li>
+                <li>Oracle PL/SQL Tutorial</li>
+                <li>Microsoft SQL Server Stored Procedures Guide</li>
+            </ul>
+
+            <h3>💻 Practice Platforms:</h3>
+            <ul>
+                <li>SQLZoo - Advanced tutorials</li>
+                <li>HackerRank - SQL challenges</li>
+                <li>LeetCode - Database problems</li>
+            </ul>
+        </div>
+
+        <!-- Slide 28: Q&A and Discussion -->
+        <div class="slide">
+            <h1>Questions & Discussion</h1>
+            
+            <div style="display: flex; justify-content: center; align-items: center; height: 60%; font-size: 8em;">
+                🤔❓
+            </div>
+            
+            <p style="text-align: center; font-size: 1.5em;">What questions do you have about advanced SQL or database objects?</p>
+            
+            <div class="info-box" style="margin-top: 40px;">
+                <p><strong>Office Hours:</strong> Tuesday & Thursday, 2:00-4:00 PM</p>
+                <p><strong>Email:</strong> bobby.reed@okcu.edu</p>
+                <p><strong>Course Forum:</strong> Post questions for peer discussion</p>
+            </div>
+        </div>
+
+        <!-- Slide 29: Next Class Preview -->
+        <div class="slide">
+            <h1>Next Class: Database Views & Data Definitions</h1>
+            
+            <div class="info-box">
+                <h3>We'll explore:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Creating and managing complex views</li>
+                    <li>Materialized views for performance</li>
+                    <li>Data Definition Language (DDL) in depth</li>
+                    <li>Schema modification and evolution</li>
+                    <li>Constraints and assertions</li>
+                    <li>Database security and permissions</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Prepare:</strong> Review CREATE, ALTER, and DROP statements before next class.
+            </div>
+
+            <p style="text-align: center; font-size: 1.5em; margin-top: 40px;">See you next time! 👋</p>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="navigation">
+        <button id="prev-btn">Previous</button>
+        <span class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">29</span>
+        </span>
+        <button id="next-btn">Next</button>
+        <button class="home"><a href="../../index.html" style="color: inherit; text-decoration: none;">Home</a></button>
+    </div>
+
+    <!-- JavaScript for Slide Navigation -->
+    <script>
+        let currentSlide = 1;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let timerInterval;
+
+        // Update total slides display
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            // Hide all slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            // Wrap around if needed
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            // Show current slide
+            slides[currentSlide - 1].classList.add('active');
+            
+            // Update counter
+            document.getElementById('current-slide').textContent = currentSlide;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+        }
+
+        // Navigation button handlers
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            currentSlide--;
+            showSlide(currentSlide);
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentSlide++;
+            showSlide(currentSlide);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                currentSlide--;
+                showSlide(currentSlide);
+            } else if (e.key === 'ArrowRight') {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Timer functionality
+        document.querySelectorAll('[data-timer]').forEach(button => {
+            button.addEventListener('click', function() {
+                const seconds = parseInt(this.getAttribute('data-timer'));
+                startTimer(seconds);
+            });
+        });
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            const timerDisplay = document.getElementById('timer-display');
+            const timerText = document.getElementById('timer-text');
+            
+            timerDisplay.classList.add('active');
+            timerDisplay.style.display = 'block';
+            
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerText.textContent = `Time Remaining: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerText.textContent = 'Time\'s Up!';
+                    setTimeout(() => {
+                        timerDisplay.style.display = 'none';
+                        timerDisplay.classList.remove('active');
+                    }, 3000);
+                }
+                seconds--;
+            }, 1000);
+        }
+
+        // Theme toggle setup
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Create theme toggle if it doesn't exist
+            if (!document.querySelector('.theme-toggle')) {
+                const themeToggle = document.createElement('div');
+                themeToggle.className = 'theme-toggle';
+                themeToggle.innerHTML = `
+                    <label class="theme-switch">
+                        <input type="checkbox" id="theme-checkbox" ${savedTheme === 'dark' ? 'checked' : ''}>
+                        <span class="theme-slider"></span>
+                    </label>
+                    <span class="theme-toggle-label">${savedTheme === 'dark' ? 'Dark' : 'Light'}</span>
+                `;
+                document.body.appendChild(themeToggle);
+                
+                document.getElementById('theme-checkbox').addEventListener('change', function() {
+                    const theme = this.checked ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', theme);
+                    localStorage.setItem('theme', theme);
+                    document.querySelector('.theme-toggle-label').textContent = theme === 'dark' ? 'Dark' : 'Light';
+                });
+            }
+        }
+
+        // Initialize
+        showSlide(currentSlide);
+        initializeTheme();
+    </script>
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 06: Relational Calculus - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .formula-box {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.2em;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+
+        .symbol {
+            font-size: 1.3em;
+            color: var(--ocu-true-blue);
+            font-weight: bold;
+        }
+
+        [data-theme="dark"] .symbol {
+            color: var(--ocu-cyan);
+        }
+
+        .calculus-example {
+            background: #f5f5f5;
+            border: 2px solid #333;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        [data-theme="dark"] .calculus-example {
+            background: #2a2a2a;
+            border-color: var(--ocu-cyan);
+        }
+
+        .qbe-table {
+            background: white;
+            border: 2px solid #333;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        [data-theme="dark"] .qbe-table {
+            background: #1e1e1e;
+        }
+
+        .qbe-table td {
+            border: 1px solid #666;
+            padding: 8px;
+            min-width: 80px;
+        }
+
+        .qbe-header {
+            background: #e0e0e0;
+            font-weight: bold;
+        }
+
+        [data-theme="dark"] .qbe-header {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Optional timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture 05: Relational Calculus
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Relational Calculus</h1>
+            <h2>A Declarative Query Language <span class="emoji">🔍</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 3, Lecture 5</p>
+            <p style="margin-top: auto; font-style: italic;">Instructor: Bobby Reed</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Understand the declarative nature of relational calculus</li>
+                <li>🎯 Master tuple relational calculus expressions</li>
+                <li>🎯 Apply domain relational calculus concepts</li>
+                <li>🎯 Compare calculus with relational algebra</li>
+                <li>🎯 Explore Query-By-Example (QBE)</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Introduction to Relational Calculus -->
+        <div class="slide">
+            <h1>What is Relational Calculus?</h1>
+            <p>A <strong>declarative</strong> query language based on mathematical logic.</p>
+            
+            <div class="demo-box">
+                <h3>Key Distinction</h3>
+                <p><strong>Relational Algebra:</strong> Tells the system HOW to get the data (procedural)</p>
+                <p><strong>Relational Calculus:</strong> Tells the system WHAT data you want (declarative)</p>
+            </div>
+
+            <div class="formula-box">
+                <p>When applied to databases, relational calculus has two forms:</p>
+                <ul>
+                    <li><strong>Tuple Relational Calculus</strong> - Variables range over tuples</li>
+                    <li><strong>Domain Relational Calculus</strong> - Variables range over domain values</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Predicates and Variables -->
+        <div class="slide">
+            <h1>Predicates and Variables</h1>
+            <p>Relational calculus uses predicates to describe desired data:</p>
+
+            <div class="calculus-example">
+                <p>If predicate contains a variable (e.g. 'x is a member of staff'), there must be a range for x.</p>
+                <br>
+                <p>When we substitute values from this range for x, the proposition may be true for some values and false for others.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Remember:</strong> A predicate is a truth-valued function with arguments.
+            </div>
+        </div>
+
+        <!-- Slide 5: Tuple Relational Calculus Basics -->
+        <div class="slide">
+            <h1>Tuple Relational Calculus (TRC)</h1>
+            <p>Variables range over tuples (rows) of relations.</p>
+
+            <div class="formula-box">
+                <h3>Basic Syntax:</h3>
+                <p style="font-size: 1.3em; text-align: center;">
+                    {t | P(t)}
+                </p>
+                <p>Where t is a tuple variable and P(t) is a predicate.</p>
+            </div>
+
+            <div class="calculus-example">
+                <strong>Example: Find all staff earning more than 30,000:</strong><br><br>
+                {S | Staff(S) ∧ S.salary > 30000}
+            </div>
+        </div>
+
+        <!-- Slide 6: Quantifiers in TRC -->
+        <div class="slide">
+            <h1>Quantifiers in Tuple Calculus</h1>
+            
+            <div class="demo-box">
+                <h3>Two Essential Quantifiers:</h3>
+                <ul style="font-size: 1.3em;">
+                    <li><span class="symbol">∃</span> - <strong>Existential quantifier</strong> ('there exists')</li>
+                    <li><span class="symbol">∀</span> - <strong>Universal quantifier</strong> ('for all')</li>
+                </ul>
+            </div>
+
+            <p>Tuple variables qualified by ∀ or ∃ are called <strong>bound variables</strong>, otherwise they're <strong>free variables</strong>.</p>
+
+            <div class="calculus-example">
+                <strong>Existential Example:</strong><br>
+                Staff(S) ∧ (∃B)(Branch(B) ∧ (B.branchNo = S.branchNo) ∧ B.city = 'London')<br><br>
+                <em>Meaning: "There exists a Branch tuple with same branchNo as Staff tuple S, located in London"</em>
+            </div>
+        </div>
+
+        <!-- Slide 7: Universal Quantifier Example -->
+        <div class="slide">
+            <h1>Universal Quantifier in Action</h1>
+            
+            <div class="calculus-example">
+                <strong>Universal Example:</strong><br>
+                (∀B)(¬B.city = 'Paris')<br><br>
+                <em>Meaning: "For all Branch tuples, the city is not Paris"</em>
+            </div>
+
+            <div class="tip-box">
+                <strong>Equivalence:</strong> (∀B)(¬B.city = 'Paris') is equivalent to ¬(∃B)(B.city = 'Paris')
+            </div>
+
+            <p>This demonstrates De Morgan's Laws applied to database queries!</p>
+        </div>
+
+        <!-- Slide 8: Building Well-Formed Formulas -->
+        <div class="slide">
+            <h1>Building Well-Formed Formulas (WFF)</h1>
+            
+            <div class="formula-box">
+                <h3>Atoms (Basic Building Blocks):</h3>
+                <ul>
+                    <li>R(Si) - where Si is a tuple variable and R is a relation</li>
+                    <li>Si.a1 θ Sj.a2 - comparison between attributes</li>
+                    <li>Si.a1 θ c - comparison with constant</li>
+                </ul>
+                <p>Where θ ∈ {<, ≤, >, ≥, =, ≠}</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Recursive Formula Building:</h3>
+                <ul>
+                    <li>An atom is a formula</li>
+                    <li>If F1 and F2 are formulae, so are:
+                        <ul>
+                            <li>F1 ∧ F2 (conjunction)</li>
+                            <li>F1 ∨ F2 (disjunction)</li>
+                            <li>¬F1 (negation)</li>
+                        </ul>
+                    </li>
+                    <li>If F is a formula with free variable X, then (∃X)(F) and (∀X)(F) are formulae</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Practical TRC Examples -->
+        <div class="slide">
+            <h1>Practical TRC Examples</h1>
+            
+            <div class="calculus-example">
+                <strong>1. Find staff who manage properties in Glasgow:</strong><br>
+                {S.fName, S.lName | Staff(S) ∧ (∃P)(PropertyForRent(P) ∧ (P.staffNo = S.staffNo) ∧ P.city = 'Glasgow')}
+            </div>
+
+            <div class="calculus-example">
+                <strong>2. Find staff who do NOT manage any properties:</strong><br>
+                {S.fName, S.lName | Staff(S) ∧ (¬∃P)(PropertyForRent(P) ∧ (S.staffNo = P.staffNo))}<br><br>
+                <strong>Or equivalently:</strong><br>
+                {S.fName, S.lName | Staff(S) ∧ ((∀P)(¬PropertyForRent(P) ∨ ¬(S.staffNo = P.staffNo)))}
+            </div>
+        </div>
+
+        <!-- Slide 10: Safe Expressions -->
+        <div class="slide">
+            <h1>Safe Expressions</h1>
+            <p>Some expressions can generate infinite sets!</p>
+
+            <div class="demo-box">
+                <h3>Unsafe Example:</h3>
+                <p>{S | ¬Staff(S)}</p>
+                <p>This would return all possible tuples that are NOT in Staff - infinite!</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Safety Rule:</strong> All values in the result must come from the domain of the expression (values that appear in the database).
+            </div>
+
+            <p>When restricted to safe expressions, relational calculus is equivalent to relational algebra!</p>
+        </div>
+
+        <!-- Slide 11: Activity - Write TRC Queries -->
+        <div class="slide">
+            <h1>Practice Activity <span class="emoji">💻</span></h1>
+            <div class="activity-box">
+                <h3>20-Minute Exercise: Write TRC Queries</h3>
+                <p>Using our database schema (Branch, Staff, PropertyForRent, Client), write TRC expressions for:</p>
+                <ol>
+                    <li>Find all properties with rent less than £400</li>
+                    <li>List clients who have viewed a property</li>
+                    <li>Find branch offices with no staff</li>
+                    <li>List all staff working in London branches</li>
+                </ol>
+                <p><strong>Bonus:</strong> Can you write each using both existential and universal quantifiers?</p>
+            </div>
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 12: Domain Relational Calculus -->
+        <div class="slide">
+            <h1>Domain Relational Calculus (DRC)</h1>
+            <p>Variables range over domain values (individual attributes) rather than tuples.</p>
+
+            <div class="formula-box">
+                <h3>Basic Syntax:</h3>
+                <p style="font-size: 1.3em; text-align: center;">
+                    {d1, d2, ..., dn | P(d1, d2, ..., dn)}
+                </p>
+                <p>Where each di represents a domain variable.</p>
+            </div>
+
+            <div class="calculus-example">
+                <strong>Example: Find staff in Glasgow properties:</strong><br>
+                {sN, fN, lN, posn, sex, DOB, sal, bN | <br>
+                &nbsp;&nbsp;(∃sN1, cty)(Staff(sN, fN, lN, posn, sex, DOB, sal, bN) ∧<br>
+                &nbsp;&nbsp;PropertyForRent(pN, st, cty, pc, typ, rms, rnt, oN, sN1, bN1) ∧<br>
+                &nbsp;&nbsp;(sN = sN1) ∧ (cty = 'Glasgow'))}
+            </div>
+        </div>
+
+        <!-- Slide 13: TRC vs DRC Comparison -->
+        <div class="slide">
+            <h1>TRC vs DRC Comparison</h1>
+            
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>Tuple Relational Calculus</h3>
+                    <ul>
+                        <li>Variables range over tuples</li>
+                        <li>More intuitive for row-based thinking</li>
+                        <li>Notation: {t | P(t)}</li>
+                        <li>Closer to SQL SELECT syntax</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>Domain Relational Calculus</h3>
+                    <ul>
+                        <li>Variables range over domain values</li>
+                        <li>More granular control</li>
+                        <li>Notation: {d1, ..., dn | P(d1, ..., dn)}</li>
+                        <li>Foundation for QBE</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Important:</strong> Both are equivalent in expressive power when restricted to safe expressions!
+            </div>
+        </div>
+
+        <!-- Slide 14: Introduction to QBE -->
+        <div class="slide">
+            <h1>Query-By-Example (QBE)</h1>
+            <p>A graphical query language based on domain relational calculus.</p>
+
+            <div class="demo-box">
+                <h3>Key Features:</h3>
+                <ul>
+                    <li>Visual, table-based interface</li>
+                    <li>User fills in example of desired output</li>
+                    <li>System returns data matching the pattern</li>
+                    <li>No need to learn formal syntax</li>
+                </ul>
+            </div>
+
+            <p>QBE was one of the first graphical database query languages and influenced modern visual query builders!</p>
+        </div>
+
+        <!-- Slide 15: QBE Example -->
+        <div class="slide">
+            <h1>QBE in Action</h1>
+            <p>Find all staff with salary > 30000 in London branches:</p>
+
+            <table class="qbe-table">
+                <tr class="qbe-header">
+                    <td>Staff</td>
+                    <td>staffNo</td>
+                    <td>fName</td>
+                    <td>lName</td>
+                    <td>salary</td>
+                    <td>branchNo</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>P.</td>
+                    <td>P.</td>
+                    <td>P.</td>
+                    <td>>30000</td>
+                    <td>_x</td>
+                </tr>
+            </table>
+
+            <table class="qbe-table">
+                <tr class="qbe-header">
+                    <td>Branch</td>
+                    <td>branchNo</td>
+                    <td>city</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>_x</td>
+                    <td>London</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>P.</strong> means Print (output)<br>
+                <strong>_x</strong> is an example element (join condition)
+            </div>
+        </div>
+
+        <!-- Slide 16: Complex QBE Operations -->
+        <div class="slide">
+            <h1>Advanced QBE Features</h1>
+            
+            <div class="demo-box">
+                <h3>QBE Operators:</h3>
+                <ul>
+                    <li><strong>P.</strong> - Print/display this column</li>
+                    <li><strong>I.</strong> - Insert a new row</li>
+                    <li><strong>D.</strong> - Delete rows matching pattern</li>
+                    <li><strong>U.</strong> - Update values</li>
+                    <li><strong>_variable</strong> - Example elements for joins</li>
+                    <li><strong>¬</strong> - Negation (NOT)</li>
+                    <li><strong>ALL.</strong> - Universal quantification</li>
+                </ul>
+            </div>
+
+            <div class="calculus-example">
+                <strong>Aggregation Example:</strong><br>
+                P.AVG.ALL - Print average of all values<br>
+                P.COUNT - Count matching rows<br>
+                P.MAX, P.MIN, P.SUM - Other aggregates
+            </div>
+        </div>
+
+        <!-- Slide 17: Calculus to Algebra Equivalence -->
+        <div class="slide">
+            <h1>Calculus ↔ Algebra Equivalence</h1>
+            
+            <div class="formula-box">
+                <h3>Fundamental Theorem:</h3>
+                <p>When restricted to safe expressions, relational calculus (both TRC and DRC) is equivalent to relational algebra.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>What This Means:</h3>
+                <ul>
+                    <li>Every relational algebra expression has an equivalent calculus expression</li>
+                    <li>Every safe calculus expression has an equivalent algebra expression</li>
+                    <li>They have the same expressive power</li>
+                    <li>Choice is about convenience, not capability</li>
+                </ul>
+            </div>
+
+            <p>This equivalence is the foundation for SQL's design!</p>
+        </div>
+
+        <!-- Slide 18: From Calculus to SQL -->
+        <div class="slide">
+            <h1>Calculus Influence on SQL</h1>
+            <p>SQL combines elements from both algebra and calculus:</p>
+
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>From Relational Calculus:</h3>
+                    <ul>
+                        <li>Declarative nature (SELECT...WHERE)</li>
+                        <li>EXISTS and NOT EXISTS (∃ and ¬∃)</li>
+                        <li>ALL and ANY operators (∀ and ∃)</li>
+                        <li>Subqueries with quantifiers</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>Example Mapping:</h3>
+                    <div class="sql-example">
+                        <span class="sql-comment">-- TRC: {S | Staff(S) ∧ S.salary > 30000}</span><br>
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> Staff S<br>
+                        <span class="sql-keyword">WHERE</span> S.salary > 30000;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Practice Converting Between Forms -->
+        <div class="slide">
+            <h1>Group Exercise: Conversion Practice <span class="emoji">🤝</span></h1>
+            <div class="activity-box">
+                <h3>25-Minute Group Activity</h3>
+                <p>Work in pairs to convert between different query forms:</p>
+                
+                <ol>
+                    <li><strong>English:</strong> "Find all branches that have at least one property for rent"</li>
+                    <li>Write in Tuple Relational Calculus</li>
+                    <li>Write in Domain Relational Calculus</li>
+                    <li>Draw as QBE tables</li>
+                    <li>Write in SQL</li>
+                    <li>Write in Relational Algebra</li>
+                </ol>
+                
+                <p><strong>Discuss:</strong> Which form feels most natural? Why?</p>
+            </div>
+            <button data-timer="25">Start 25-Minute Timer</button>
+        </div>
+
+        <!-- Slide 20: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common Pitfalls and Tips</h1>
+            
+            <div class="demo-box">
+                <h3>⚠️ Watch Out For:</h3>
+                <ul>
+                    <li><strong>Unsafe expressions:</strong> Always ensure finite results</li>
+                    <li><strong>Negation scope:</strong> ¬∃ is not the same as ∃¬</li>
+                    <li><strong>Variable binding:</strong> Free vs bound variables matter</li>
+                    <li><strong>Domain restrictions:</strong> Values must exist in database</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <h3>✅ Best Practices:</h3>
+                <ul>
+                    <li>Start with English description</li>
+                    <li>Identify required quantifiers</li>
+                    <li>Build formula incrementally</li>
+                    <li>Test with small examples</li>
+                    <li>Verify safety of expression</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 21: Real-World Applications -->
+        <div class="slide">
+            <h1>Real-World Applications</h1>
+            
+            <div class="demo-box">
+                <h3>Where Calculus Concepts Appear:</h3>
+                <ul>
+                    <li><strong>SQL:</strong> EXISTS, ALL, ANY clauses</li>
+                    <li><strong>ORM Frameworks:</strong> LINQ, Django ORM, Hibernate</li>
+                    <li><strong>NoSQL Query Languages:</strong> MongoDB aggregation pipeline</li>
+                    <li><strong>Business Intelligence Tools:</strong> Visual query builders</li>
+                    <li><strong>Database Theory:</strong> Query optimization, view maintenance</li>
+                </ul>
+            </div>
+
+            <p>Understanding relational calculus helps you:</p>
+            <ul>
+                <li>Write more efficient SQL queries</li>
+                <li>Understand query optimizer behavior</li>
+                <li>Design better database schemas</li>
+                <li>Debug complex queries</li>
+            </ul>
+        </div>
+
+        <!-- Slide 22: Advanced Topics Preview -->
+        <div class="slide">
+            <h1>Advanced Calculus Topics</h1>
+            <p>Topics for further exploration:</p>
+
+            <div class="formula-box">
+                <h3>Beyond Basic Calculus:</h3>
+                <ul>
+                    <li><strong>Datalog:</strong> A declarative logic programming language</li>
+                    <li><strong>Recursive queries:</strong> Fixed-point operators</li>
+                    <li><strong>Temporal logic:</strong> Queries over time-varying data</li>
+                    <li><strong>Probabilistic databases:</strong> Uncertain data queries</li>
+                    <li><strong>Description logic:</strong> Ontology querying</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Research Direction:</strong> Modern query languages continue to evolve based on calculus foundations!
+            </div>
+        </div>
+
+        <!-- Slide 23: Summary and Takeaways -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul>
+                <li>✅ Distinguish declarative from procedural query languages</li>
+                <li>✅ Write queries in tuple relational calculus</li>
+                <li>✅ Apply quantifiers (∃ and ∀) correctly</li>
+                <li>✅ Understand domain relational calculus</li>
+                <li>✅ Use QBE for visual querying</li>
+                <li>✅ Recognize calculus concepts in SQL</li>
+                <li>✅ Ensure expression safety</li>
+            </ul>
+            
+            <div class="demo-box">
+                <p><strong>Next Lecture:</strong> SQL - The Standard Query Language</p>
+                <p><strong>Assignment:</strong> Practice problems on calculus expressions (Due next week)</p>
+                <p><strong>Reading:</strong> Chapter 5 - Relational Calculus</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">23</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Handle special symbols and formulas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation to formula appearances
+            const formulas = document.querySelectorAll('.formula-box, .calculus-example');
+            formulas.forEach(formula => {
+                formula.style.transition = 'all 0.3s ease';
+            });
+
+            // Enhanced slide change logging
+            document.addEventListener('slidechange', (e) => {
+                console.log(`Relational Calculus - Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+                
+                // Special handling for QBE table slides
+                if (e.detail.currentSlide === 14 || e.detail.currentSlide === 15) {
+                    const tables = document.querySelectorAll('.qbe-table');
+                    tables.forEach((table, index) => {
+                        setTimeout(() => {
+                            table.style.opacity = '1';
+                            table.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    });
+                }
+            });
+
+            // Initialize QBE tables with animation
+            const qbeTables = document.querySelectorAll('.qbe-table');
+            qbeTables.forEach(table => {
+                table.style.opacity = '0';
+                table.style.transform = 'translateY(20px)';
+                table.style.transition = 'all 0.5s ease';
+            });
+        });
+
+        // Timer functionality for activities
+        let timerInterval;
+        
+        document.querySelectorAll('[data-timer]').forEach(button => {
+            button.addEventListener('click', function() {
+                const minutes = parseInt(this.dataset.timer);
+                startTimer(minutes);
+                this.disabled = true;
+                this.textContent = 'Timer Running...';
+            });
+        });
+
+        function startTimer(minutes) {
+            let seconds = minutes * 60;
+            const display = document.getElementById('timer-text');
+            const originalText = display.textContent;
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                display.textContent = `Time Remaining: ${mins}:${secs.toString().padStart(2, '0')}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    display.textContent = originalText;
+                    alert('Time\'s up! Let\'s review your work.');
+                    document.querySelectorAll('[data-timer]').forEach(btn => {
+                        btn.disabled = false;
+                        btn.textContent = btn.textContent.replace('Timer Running...', `Start ${btn.dataset.timer}-Minute Timer`);
+                    });
+                }
+                seconds--;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Part 1 - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* SQL-specific styling */
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-function {
+            color: #dcdcaa;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .activity-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--ocu-green);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">SQL Part 1 - Data Manipulation
+                 <button class="home"><a href="../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>SQL - Part 1</h1>
+            <h2 style="color: var(--ocu-cyan);">Structured Query Language</h2>
+            <h3>Data Manipulation</h3>
+            <div style="margin-top: 50px;">
+                <p><strong>CSCI 5603 - Database Design</strong></p>
+                <p>Week 4, Lecture 7</p>
+                <p>Instructor: Bobby Reed</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul>
+                <li>Understand the history and importance of SQL</li>
+                <li>Master the basic SELECT statement structure</li>
+                <li>Learn to filter data with WHERE clauses</li>
+                <li>Sort results using ORDER BY</li>
+                <li>Use aggregate functions (COUNT, SUM, AVG, MIN, MAX)</li>
+                <li>Group data with GROUP BY and HAVING</li>
+                <li>Implement pattern matching with LIKE</li>
+                <li>Write effective SQL queries for data retrieval</li>
+            </ul>
+            <div class="highlight-box" style="margin-top: 30px;">
+                <p><strong>Focus:</strong> This lecture covers SQL Data Manipulation Language (DML) - how to retrieve and query data from existing database tables.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: History of SQL -->
+        <div class="slide">
+            <h1>History of SQL</h1>
+            <h2>The Birth of a Standard</h2>
+            <ul>
+                <li><strong>1974:</strong> D. Chamberlin (IBM) creates SEQUEL - "Structured English Query Language"</li>
+                <li><strong>1976:</strong> SEQUEL/2 defined, renamed to SQL for legal reasons</li>
+                <li><strong>Late 1970s:</strong> ORACLE appears as first commercial RDBMS based on SQL</li>
+                <li><strong>1987:</strong> ANSI and ISO publish initial SQL standard</li>
+                <li><strong>1992:</strong> SQL2/SQL-92 - First major revision</li>
+                <li><strong>1999:</strong> SQL:1999 - Object-oriented features</li>
+                <li><strong>2003-2019:</strong> Continuous evolution (SQL:2003, 2008, 2011, 2016, 2019)</li>
+            </ul>
+            <div class="note-box">
+                <p><strong>Note:</strong> Still pronounced "see-quel" by many, though official pronunciation is "S-Q-L"</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Importance of SQL -->
+        <div class="slide">
+            <h1>Why SQL Matters</h1>
+            <h2>Industry Standard and Beyond</h2>
+            <ul>
+                <li>Part of major application architectures (IBM's Systems Application Architecture)</li>
+                <li>Strategic choice of influential organizations (X/OPEN)</li>
+                <li>Federal Information Processing Standard (FIPS)</li>
+                <li>Required for all database sales to U.S. Government</li>
+                <li>Used in other standards (ISO's IRDS, Remote Data Access)</li>
+                <li>De facto standard for relational databases</li>
+            </ul>
+            <div class="activity-box">
+                <h3>💭 Discussion (5 min)</h3>
+                <p>Why do you think SQL has remained dominant for nearly 50 years while other technologies have come and gone?</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: SQL Objectives -->
+        <div class="slide">
+            <h1>Objectives of SQL</h1>
+            <h2>Design Philosophy</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Core Capabilities</h3>
+                    <ul>
+                        <li>Create database and relation structures</li>
+                        <li>Perform data insertion</li>
+                        <li>Modify existing data</li>
+                        <li>Delete data from relations</li>
+                        <li>Execute simple and complex queries</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Key Characteristics</h3>
+                    <ul>
+                        <li><strong>Non-procedural:</strong> Specify WHAT, not HOW</li>
+                        <li><strong>Transform-oriented:</strong> DDL + DML</li>
+                        <li><strong>Free-format:</strong> Flexible syntax</li>
+                        <li><strong>English-like:</strong> Readable commands</li>
+                        <li><strong>Universal:</strong> Used by all user types</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Database Schema -->
+        <div class="slide">
+            <h1>Our Sample Database Schema</h1>
+            <h2>DreamHome Property Rental</h2>
+            <div class="sql-example">
+                <strong>Branch</strong> (<u>branchNo</u>, street, city, postcode)<br>
+                <strong>Staff</strong> (<u>staffNo</u>, fName, lName, position, sex, DOB, salary, <em>branchNo</em>)<br>
+                <strong>PropertyForRent</strong> (<u>propertyNo</u>, street, city, postcode, type, rooms, rent, <em>ownerNo</em>, <em>staffNo</em>, <em>branchNo</em>)<br>
+                <strong>Client</strong> (<u>clientNo</u>, fName, lName, telNo, prefType, maxRent, eMail)<br>
+                <strong>PrivateOwner</strong> (<u>ownerNo</u>, fName, lName, address, telNo, eMail, password)<br>
+                <strong>Viewing</strong> (<u><em>clientNo</em></u>, <u><em>propertyNo</em></u>, viewDate, comment)<br>
+                <strong>Registration</strong> (<u><em>clientNo</em></u>, <u><em>branchNo</em></u>, <em>staffNo</em>, dateJoined)
+            </div>
+            <p><em>Note: Primary keys are underlined, foreign keys are italicized</em></p>
+        </div>
+
+        <!-- Slide 7: SELECT Statement Structure -->
+        <div class="slide">
+            <h1>The SELECT Statement</h1>
+            <h2>Foundation of SQL Queries</h2>
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> [<span class="sql-keyword">DISTINCT</span> | <span class="sql-keyword">ALL</span>]
+                    { * | [columnExpression [<span class="sql-keyword">AS</span> newName]] [, ...] }<br>
+                <span class="sql-keyword">FROM</span> TableName [alias] [, ...]<br>
+                [<span class="sql-keyword">WHERE</span> condition]<br>
+                [<span class="sql-keyword">GROUP BY</span> columnList] [<span class="sql-keyword">HAVING</span> condition]<br>
+                [<span class="sql-keyword">ORDER BY</span> columnList]
+            </div>
+            <h3>Key Points:</h3>
+            <ul>
+                <li>Order of clauses cannot be changed</li>
+                <li>Only SELECT and FROM are mandatory</li>
+                <li>Keywords are RESERVED WORDS</li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: Basic SELECT Examples -->
+        <div class="slide">
+            <h1>Basic SELECT Queries</h1>
+            <h2>Retrieving All Data</h2>
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff;
+            </div>
+            <table class="table-schema">
+                <tr>
+                    <th>staffNo</th><th>fName</th><th>lName</th><th>position</th><th>DOB</th><th>salary</th><th>branchNo</th>
+                </tr>
+                <tr>
+                    <td>SL21</td><td>John</td><td>White</td><td>Manager</td><td>1-Oct-45</td><td>30000.00</td><td>B005</td>
+                </tr>
+                <tr>
+                    <td>SG37</td><td>Ann</td><td>Beech</td><td>Assistant</td><td>10-Nov-60</td><td>12000.00</td><td>B003</td>
+                </tr>
+                <tr>
+                    <td>SG14</td><td>David</td><td>Ford</td><td>Supervisor</td><td>24-Mar-58</td><td>18000.00</td><td>B003</td>
+                </tr>
+                <tr>
+                    <td>SA9</td><td>Mary</td><td>Howe</td><td>Assistant</td><td>19-Feb-70</td><td>9000.00</td><td>B007</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 9: DISTINCT -->
+        <div class="slide">
+            <h1>Using DISTINCT</h1>
+            <h2>Eliminating Duplicates</h2>
+            <p><strong>Problem:</strong> List property numbers of all properties that have been viewed.</p>
+            
+            <div class="comparison-table">
+                <div>
+                    <h3>Without DISTINCT</h3>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> propertyNo<br>
+                        <span class="sql-keyword">FROM</span> Viewing;
+                    </div>
+                    <table class="table-schema">
+                        <tr><th>propertyNo</th></tr>
+                        <tr><td>PA14</td></tr>
+                        <tr><td>PG4</td></tr>
+                        <tr><td style="background: #ffeb3b;">PG4</td></tr>
+                        <tr><td style="background: #ffeb3b;">PA14</td></tr>
+                        <tr><td>PG36</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <h3>With DISTINCT</h3>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT DISTINCT</span> propertyNo<br>
+                        <span class="sql-keyword">FROM</span> Viewing;
+                    </div>
+                    <table class="table-schema">
+                        <tr><th>propertyNo</th></tr>
+                        <tr><td>PA14</td></tr>
+                        <tr><td>PG4</td></tr>
+                        <tr><td>PG36</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: WHERE Clause -->
+        <div class="slide">
+            <h1>Filtering with WHERE</h1>
+            <h2>Conditional Data Retrieval</h2>
+            <p><strong>Example:</strong> List all staff with salary greater than 10,000</p>
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> salary > 10000;
+            </div>
+            
+            <h3>Comparison Operators</h3>
+            <ul>
+                <li><code>=</code> Equal to</li>
+                <li><code>&lt;&gt;</code> or <code>!=</code> Not equal to</li>
+                <li><code>&lt;</code> Less than</li>
+                <li><code>&lt;=</code> Less than or equal to</li>
+                <li><code>&gt;</code> Greater than</li>
+                <li><code>&gt;=</code> Greater than or equal to</li>
+            </ul>
+        </div>
+
+        <!-- Slide 11: Activity - Basic Queries -->
+        <div class="slide">
+            <h1>🎯 Activity: Write Your First Queries</h1>
+            <h2>15 Minutes - Individual Work</h2>
+            <div class="activity-box">
+                <p>Using our database schema, write SQL queries for:</p>
+                <ol>
+                    <li>List all properties in Glasgow</li>
+                    <li>Find all staff who are Assistants</li>
+                    <li>Show all properties with rent less than 500</li>
+                    <li>Display client names and email addresses</li>
+                    <li>Find all male staff members</li>
+                </ol>
+                <button onclick="startTimer(15)">Start Timer</button>
+            </div>
+        </div>
+
+        <!-- Slide 12: ORDER BY -->
+        <div class="slide">
+            <h1>Sorting Results with ORDER BY</h1>
+            <h2>Single Column Ordering</h2>
+            <p><strong>Example:</strong> List salaries for all staff, arranged in descending order</p>
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">ORDER BY</span> salary <span class="sql-keyword">DESC</span>;
+            </div>
+            
+            <table class="table-schema">
+                <tr><th>staffNo</th><th>fName</th><th>lName</th><th>salary</th></tr>
+                <tr><td>SL21</td><td>John</td><td>White</td><td>30000.00</td></tr>
+                <tr><td>SG5</td><td>Susan</td><td>Brand</td><td>24000.00</td></tr>
+                <tr><td>SG14</td><td>David</td><td>Ford</td><td>18000.00</td></tr>
+                <tr><td>SG37</td><td>Ann</td><td>Beech</td><td>12000.00</td></tr>
+            </table>
+            <p><em>Note: Default is ASC (ascending), use DESC for descending</em></p>
+        </div>
+
+        <!-- Slide 13: Aggregate Functions -->
+        <div class="slide">
+            <h1>Aggregate Functions</h1>
+            <h2>Statistical Operations</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Available Functions</h3>
+                    <ul>
+                        <li><code>COUNT(*)</code> - Number of rows</li>
+                        <li><code>COUNT(column)</code> - Non-null values</li>
+                        <li><code>SUM(column)</code> - Total of values</li>
+                        <li><code>AVG(column)</code> - Average value</li>
+                        <li><code>MIN(column)</code> - Minimum value</li>
+                        <li><code>MAX(column)</code> - Maximum value</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Example</h3>
+                    <div class="sql-example">
+                        <span class="sql-keyword">SELECT</span> 
+                            <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> staff_count,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(salary) <span class="sql-keyword">AS</span> avg_salary,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">MAX</span>(salary) <span class="sql-keyword">AS</span> max_salary<br>
+                        <span class="sql-keyword">FROM</span> Staff;
+                    </div>
+                </div>
+            </div>
+            <div class="note-box">
+                <p><strong>Important:</strong> Aggregate functions can only be used in SELECT list and HAVING clause</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: GROUP BY -->
+        <div class="slide">
+            <h1>GROUP BY Clause</h1>
+            <h2>Grouping for Subtotals</h2>
+            <p><strong>Example:</strong> Find number of staff in each branch and their total salaries</p>
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> <span class="highlight">branchNo</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(staffNo) <span class="sql-keyword">AS</span> myCount,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(salary) <span class="sql-keyword">AS</span> mySum<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">GROUP BY</span> <span class="highlight">branchNo</span><br>
+                <span class="sql-keyword">ORDER BY</span> branchNo;
+            </div>
+            
+            <table class="table-schema">
+                <tr><th>branchNo</th><th>myCount</th><th>mySum</th></tr>
+                <tr><td>B003</td><td>3</td><td>54000.00</td></tr>
+                <tr><td>B005</td><td>2</td><td>39000.00</td></tr>
+                <tr><td>B007</td><td>1</td><td>9000.00</td></tr>
+            </table>
+            
+            <p><strong>Rule:</strong> All columns in SELECT must either be in GROUP BY or be aggregate functions</p>
+        </div>
+
+        <!-- Slide 15: HAVING Clause -->
+        <div class="slide">
+            <h1>HAVING Clause</h1>
+            <h2>Filtering Grouped Results</h2>
+            <p><strong>Example:</strong> For branches with more than 1 staff member, show count and sum of salaries</p>
+            <div class="sql-example">
+                <span class="sql-keyword">SELECT</span> branchNo,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(staffNo) <span class="sql-keyword">AS</span> myCount,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(salary) <span class="sql-keyword">AS</span> mySum<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">GROUP BY</span> branchNo<br>
+                <span class="sql-keyword">HAVING COUNT</span>(staffNo) > 1<br>
+                <span class="sql-keyword">ORDER BY</span> branchNo;
+            </div>
+            
+            <div class="comparison-table">
+                <div>
+                    <h3>WHERE vs HAVING</h3>
+                    <ul>
+                        <li><strong>WHERE:</strong> Filters individual rows</li>
+                        <li><strong>HAVING:</strong> Filters groups</li>
+                        <li>WHERE comes before GROUP BY</li>
+                        <li>HAVING comes after GROUP BY</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Pattern Matching -->
+        <div class="slide">
+            <h1>Pattern Matching with LIKE</h1>
+            <h2>Flexible String Searching</h2>
+            
+            <h3>Special Pattern Symbols</h3>
+            <ul>
+                <li><code>%</code> - Zero or more characters</li>
+                <li><code>_</code> - Exactly one character</li>
+            </ul>
+            
+            <h3>Examples</h3>
+            <div class="sql-example">
+                <span class="sql-comment">-- Find all addresses in Glasgow</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Branch<br>
+                <span class="sql-keyword">WHERE</span> city <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Glasgow%'</span>;<br><br>
+                
+                <span class="sql-comment">-- Find staff with 'o' as second letter of first name</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> fName <span class="sql-keyword">LIKE</span> <span class="sql-string">'_o%'</span>;<br><br>
+                
+                <span class="sql-comment">-- Find properties on streets ending with 'Rd'</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> PropertyForRent<br>
+                <span class="sql-keyword">WHERE</span> street <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Rd'</span>;
+            </div>
+        </div>
+
+        <!-- Slide 17: Writing Good SQL -->
+        <div class="slide">
+            <h1>Writing Good SQL Commands</h1>
+            <h2>Best Practices by Bobby Reed</h2>
+            
+            <div class="two-column">
+                <div>
+                    <h3>✅ DO</h3>
+                    <ul>
+                        <li>Use consistent capitalization for keywords</li>
+                        <li>Start each clause on a new line</li>
+                        <li>Indent subparts of clauses</li>
+                        <li>Use meaningful aliases</li>
+                        <li>Comment complex queries</li>
+                        <li>Test queries incrementally</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>❌ DON'T</h3>
+                    <ul>
+                        <li>Write everything on one line</li>
+                        <li>Use SELECT * in production</li>
+                        <li>Forget to handle NULLs</li>
+                        <li>Ignore performance implications</li>
+                        <li>Mix different formatting styles</li>
+                        <li>Use reserved words as names</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Good formatting example</span><br>
+                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(p.propertyNo) <span class="sql-keyword">AS</span> properties_managed<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> PropertyForRent p <span class="sql-keyword">ON</span> s.staffNo = p.staffNo<br>
+                <span class="sql-keyword">WHERE</span> s.position = <span class="sql-string">'Manager'</span><br>
+                <span class="sql-keyword">GROUP BY</span> s.staffNo, s.fName, s.lName<br>
+                <span class="sql-keyword">HAVING COUNT</span>(p.propertyNo) > 0<br>
+                <span class="sql-keyword">ORDER BY</span> properties_managed <span class="sql-keyword">DESC</span>;
+            </div>
+        </div>
+
+        <!-- Slide 18: Complex Query Activity -->
+        <div class="slide">
+            <h1>🎯 Activity: Complex Queries</h1>
+            <h2>20 Minutes - Pair Programming</h2>
+            <div class="activity-box">
+                <p><strong>Challenge:</strong> Write queries for these business questions:</p>
+                <ol>
+                    <li>Which branch has the highest average staff salary?</li>
+                    <li>List all properties that have never been viewed</li>
+                    <li>Find clients who have viewed more than 3 properties</li>
+                    <li>Show the total rent income potential for each city</li>
+                    <li>Identify staff members who don't manage any properties</li>
+                </ol>
+                <button onclick="startTimer(20)">Start Timer</button>
+                <div style="margin-top: 20px;">
+                    <p><strong>Hint:</strong> Some of these may require subqueries or joins (preview of next lecture!)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common SQL Pitfalls</h1>
+            <h2>Learn from Others' Mistakes</h2>
+            
+            <h3>1. Forgetting GROUP BY</h3>
+            <div class="sql-example">
+                <span class="sql-comment">-- ❌ WRONG: Missing GROUP BY</span><br>
+                <span class="sql-keyword">SELECT</span> branchNo, <span class="sql-function">COUNT</span>(*)<br>
+                <span class="sql-keyword">FROM</span> Staff;<br><br>
+                
+                <span class="sql-comment">-- ✅ CORRECT:</span><br>
+                <span class="sql-keyword">SELECT</span> branchNo, <span class="sql-function">COUNT</span>(*)<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">GROUP BY</span> branchNo;
+            </div>
+            
+            <h3>2. Wrong Clause Order</h3>
+            <div class="sql-example">
+                <span class="sql-comment">-- ❌ WRONG: ORDER BY before WHERE</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">ORDER BY</span> salary<br>
+                <span class="sql-keyword">WHERE</span> salary > 10000;<br><br>
+                
+                <span class="sql-comment">-- ✅ CORRECT:</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> salary > 10000<br>
+                <span class="sql-keyword">ORDER BY</span> salary;
+            </div>
+        </div>
+
+        <!-- Slide 20: Performance Tips -->
+        <div class="slide">
+            <h1>Performance Considerations</h1>
+            <h2>Writing Efficient Queries</h2>
+            
+            <div class="highlight-box">
+                <h3>🚀 Quick Performance Tips</h3>
+                <ul>
+                    <li><strong>Be Specific:</strong> Select only columns you need, not SELECT *</li>
+                    <li><strong>Filter Early:</strong> Use WHERE to reduce data before grouping</li>
+                    <li><strong>Index Awareness:</strong> Filters on indexed columns are faster</li>
+                    <li><strong>Limit Results:</strong> Use LIMIT/TOP when testing queries</li>
+                    <li><strong>Avoid Wildcards at Start:</strong> LIKE '%text' is slower than LIKE 'text%'</li>
+                </ul>
+            </div>
+            
+            <h3>Example: Improving Query Performance</h3>
+            <div class="sql-example">
+                <span class="sql-comment">-- Slower: Gets all columns, then filters</span><br>
+                <span class="sql-keyword">SELECT</span> *<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent<br>
+                <span class="sql-keyword">WHERE</span> city <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Glasgow%'</span>;<br><br>
+                
+                <span class="sql-comment">-- Faster: Specific columns, exact match if possible</span><br>
+                <span class="sql-keyword">SELECT</span> propertyNo, street, rent<br>
+                <span class="sql-keyword">FROM</span> PropertyForRent<br>
+                <span class="sql-keyword">WHERE</span> city = <span class="sql-string">'Glasgow'</span>;
+            </div>
+        </div>
+
+        <!-- Slide 21: Preview of Joins -->
+        <div class="slide">
+            <h1>Preview: Joining Tables</h1>
+            <h2>Coming Next Lecture</h2>
+            <p>So far, we've queried single tables. Real power comes from combining data:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Example: Show staff names with their branch cities</span><br>
+                <span class="sql-keyword">SELECT</span> s.fName, s.lName, b.city<br>
+                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-keyword">INNER JOIN</span> Branch b <span class="sql-keyword">ON</span> s.branchNo = b.branchNo;
+            </div>
+            
+            <h3>Types of Joins We'll Cover:</h3>
+            <ul>
+                <li><strong>INNER JOIN:</strong> Matching rows from both tables</li>
+                <li><strong>LEFT JOIN:</strong> All rows from left table</li>
+                <li><strong>RIGHT JOIN:</strong> All rows from right table</li>
+                <li><strong>FULL OUTER JOIN:</strong> All rows from both tables</li>
+                <li><strong>CROSS JOIN:</strong> Cartesian product</li>
+            </ul>
+        </div>
+
+        <!-- Slide 22: Practice Problems -->
+        <div class="slide">
+            <h1>Practice Problems</h1>
+            <h2>Homework Assignment</h2>
+            <div class="activity-box">
+                <p><strong>Due:</strong> Before next class</p>
+                <p><strong>Submit:</strong> Via course portal</p>
+                
+                <h3>Write SQL queries for:</h3>
+                <ol>
+                    <li>List all staff members earning between 10,000 and 20,000</li>
+                    <li>Count how many properties are available in each city</li>
+                    <li>Find the cheapest property in each property type</li>
+                    <li>Show branches where total staff salary exceeds 40,000</li>
+                    <li>List clients who prefer 'Flat' and have budget over 400</li>
+                    <li>Find staff members whose names contain 'son'</li>
+                    <li>Calculate the average rent for each property type</li>
+                    <li>Show the top 3 highest-paid employees</li>
+                </ol>
+                
+                <p><strong>Bonus:</strong> Write a query using a subquery (preview of next week)</p>
+            </div>
+        </div>
+
+        <!-- Slide 23: Key Takeaways -->
+        <div class="slide">
+            <h1>Key Takeaways</h1>
+            <h2>What You Should Remember</h2>
+            
+            <div class="highlight-box">
+                <h3>✨ Essential SQL Concepts</h3>
+                <ul>
+                    <li>SQL is declarative - you specify WHAT you want, not HOW to get it</li>
+                    <li>SELECT and FROM are the only mandatory clauses</li>
+                    <li>Clause order matters: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY</li>
+                    <li>WHERE filters rows, HAVING filters groups</li>
+                    <li>Aggregate functions operate on sets of rows</li>
+                    <li>Pattern matching with LIKE provides flexible searching</li>
+                    <li>Good formatting makes queries readable and maintainable</li>
+                </ul>
+            </div>
+            
+            <h3>🎯 You Can Now:</h3>
+            <ul>
+                <li>Write basic to intermediate SELECT statements</li>
+                <li>Filter and sort query results</li>
+                <li>Use aggregate functions for calculations</li>
+                <li>Group data and filter groups</li>
+                <li>Apply pattern matching in queries</li>
+            </ul>
+        </div>
+
+        <!-- Slide 24: Resources -->
+        <div class="slide">
+            <h1>Resources & Next Steps</h1>
+            <h2>Continue Your SQL Journey</h2>
+            
+            <h3>📚 Recommended Reading</h3>
+            <ul>
+                <li>Textbook: Chapter 6 (SQL Data Manipulation)</li>
+                <li>SQL Tutorial: w3schools.com/sql</li>
+                <li>Practice: SQLZoo, HackerRank SQL challenges</li>
+            </ul>
+            
+            <h3>🎯 Before Next Class</h3>
+            <ul>
+                <li>Complete homework queries</li>
+                <li>Review today's examples</li>
+                <li>Try variations of the queries we wrote</li>
+                <li>Read Chapter 7 preview (Joins and Subqueries)</li>
+            </ul>
+            
+            <h3>💡 Next Lecture: SQL Part 2</h3>
+            <ul>
+                <li>Multi-table queries (JOINs)</li>
+                <li>Subqueries and nested SELECT</li>
+                <li>Set operations (UNION, INTERSECT, EXCEPT)</li>
+                <li>Advanced filtering techniques</li>
+            </ul>
+        </div>
+
+        <!-- Slide 25: Questions -->
+        <div class="slide">
+            <h1>Questions & Discussion</h1>
+            <h2>Let's Clarify Any Doubts</h2>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <h3>🤔 Common Questions from Students:</h3>
+                <ul style="text-align: left; display: inline-block;">
+                    <li>When should I use WHERE vs HAVING?</li>
+                    <li>Can I use multiple aggregate functions?</li>
+                    <li>How do I handle NULL values?</li>
+                    <li>What's the difference between = and LIKE?</li>
+                    <li>How do I optimize slow queries?</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 50px; text-align: center;">
+                <p><strong>Office Hours:</strong> Tuesday & Thursday, 2-4 PM</p>
+                <p><strong>Email:</strong> bobby.reed@okcu.edu</p>
+                <p><strong>Course Forum:</strong> Post questions anytime!</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
+            <span id="slideNumber">1 / 25</span>
+            <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
+        </div>
+    </div>
+
+    <!-- Timer for activities -->
+    <div class="activity-timer" id="activityTimer">
+        <span id="timerMinutes">00</span>:<span id="timerSeconds">00</span>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        let timerInterval;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('slideNumber').textContent = `${currentSlide} / ${totalSlides}`;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        function startTimer(minutes) {
+            const timerDisplay = document.getElementById('activityTimer');
+            timerDisplay.style.display = 'block';
+            
+            let totalSeconds = minutes * 60;
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                const mins = Math.floor(totalSeconds / 60);
+                const secs = totalSeconds % 60;
+                
+                document.getElementById('timerMinutes').textContent = 
+                    mins.toString().padStart(2, '0');
+                document.getElementById('timerSeconds').textContent = 
+                    secs.toString().padStart(2, '0');
+                
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert('Time\'s up!');
+                    timerDisplay.style.display = 'none';
+                }
+                totalSeconds--;
+            }, 1000);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Escape') {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    document.getElementById('activityTimer').style.display = 'none';
+                }
+            }
+        });
+
+        // Theme toggle
+        function addThemeToggle() {
+            const toggle = document.createElement('button');
+            toggle.className = 'theme-toggle';
+            toggle.innerHTML = '🌙 Dark Mode';
+            toggle.onclick = function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                toggle.innerHTML = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+                localStorage.setItem('theme', newTheme);
+            };
+            document.body.appendChild(toggle);
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'dark') {
+                toggle.innerHTML = '☀️ Light Mode';
+            }
+        }
+
+        // Initialize
+        showSlide(1);
+        addThemeToggle();
+    </script>
+</body>
+</html>
