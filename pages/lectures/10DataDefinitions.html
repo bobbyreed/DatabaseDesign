@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Data Definition - CSCI 3503</title>
+    
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .sql-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+        }
+        
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .sql-datatype {
+            color: #4ec9b0;
+        }
+        
+        .sql-string {
+            color: #ce9178;
+        }
+        
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .table-schema {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            background: var(--bg-secondary);
+        }
+        
+        .table-schema tr:nth-child(even) td {
+            background: var(--bg-accent);
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+    
+    <div class="presentation-container">
+        <!-- Optional timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">SQL Data Definition
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>SQL Data Definition</h1>
+            <h2>Creating Database Structures <span class="emoji">🏗️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 5, Lecture 10</p>
+            <p style="margin-top: auto; font-style: italic;">Building the foundation of your database!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Master SQL Data Definition Language (DDL)</li>
+                <li>🎯 Create and manage database schemas</li>
+                <li>🎯 Define tables with appropriate constraints</li>
+                <li>🎯 Implement data integrity rules</li>
+                <li>🎯 Understand referential actions</li>
+                <li>🎯 Work with domains and indexes</li>
+            </ul>
+            <div class="tip-box">
+                <strong>Remember:</strong> DDL creates the structure, DML manipulates the data!
+            </div>
+        </div>
+
+        <!-- Slide 3: Introduction to DDL -->
+        <div class="slide">
+            <h1>Data Definition Language (DDL)</h1>
+            <p>SQL DDL allows database objects to be created and destroyed.</p>
+            
+            <div class="demo-box">
+                <h3>Main DDL Statements:</h3>
+                <div class="two-column">
+                    <div>
+                        <ul>
+                            <li><code>CREATE SCHEMA/DATABASE</code></li>
+                            <li><code>CREATE/ALTER DOMAIN</code></li>
+                            <li><code>CREATE/ALTER TABLE</code></li>
+                            <li><code>CREATE/ALTER VIEW</code></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><code>DROP SCHEMA/DATABASE</code></li>
+                            <li><code>DROP DOMAIN</code></li>
+                            <li><code>DROP TABLE</code></li>
+                            <li><code>DROP VIEW</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Note:</strong> Many DBMSs also provide <code>CREATE/DROP INDEX</code>
+            </div>
+        </div>
+
+        <!-- Slide 4: CREATE SCHEMA -->
+        <div class="slide">
+            <h1>CREATE SCHEMA</h1>
+            <p>A schema is a named collection of database objects.</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE SCHEMA</span>/<span class="sql-keyword">DATABASE</span> [Name | 
+                    <span class="sql-keyword">AUTHORIZATION</span> CreatorId]
+                <br><br>
+                <span class="sql-keyword">DROP SCHEMA</span>/<span class="sql-keyword">DATABASE</span> Name [<span class="sql-keyword">RESTRICT</span> | <span class="sql-keyword">CASCADE</span>]
+            </div>
+            
+            <div class="demo-box">
+                <h3>Key Points:</h3>
+                <ul>
+                    <li><strong>RESTRICT (default):</strong> Schema must be empty or operation fails</li>
+                    <li><strong>CASCADE:</strong> Drops all objects associated with schema</li>
+                </ul>
+            </div>
+            
+            <button data-timer="300">Activity: Design a Schema (5 min)</button>
+        </div>
+
+        <!-- Slide 5: Data Types Overview -->
+        <div class="slide">
+            <h1>SQL Data Types</h1>
+            <table class="table-schema">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Data Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Character</td>
+                        <td><code>CHAR(n)</code></td>
+                        <td>Fixed-length string</td>
+                    </tr>
+                    <tr>
+                        <td>Character</td>
+                        <td><code>VARCHAR(n)</code></td>
+                        <td>Variable-length string</td>
+                    </tr>
+                    <tr>
+                        <td>Numeric</td>
+                        <td><code>INTEGER</code></td>
+                        <td>Whole numbers</td>
+                    </tr>
+                    <tr>
+                        <td>Numeric</td>
+                        <td><code>SMALLINT</code></td>
+                        <td>Small whole numbers</td>
+                    </tr>
+                    <tr>
+                        <td>Numeric</td>
+                        <td><code>DECIMAL(p,s)</code></td>
+                        <td>Exact decimal numbers</td>
+                    </tr>
+                    <tr>
+                        <td>Date/Time</td>
+                        <td><code>DATE</code></td>
+                        <td>Calendar date</td>
+                    </tr>
+                    <tr>
+                        <td>Date/Time</td>
+                        <td><code>TIME</code></td>
+                        <td>Time of day</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 6: CREATE DOMAIN -->
+        <div class="slide">
+            <h1>CREATE DOMAIN</h1>
+            <p>Domains are user-defined data types with constraints.</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE DOMAIN</span> DomainName [<span class="sql-keyword">AS</span>] dataType
+                    [<span class="sql-keyword">DEFAULT</span> defaultOption]
+                    [<span class="sql-keyword">CHECK</span> (searchCondition)]
+            </div>
+            
+            <h3>Example:</h3>
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE DOMAIN</span> PType <span class="sql-keyword">AS</span> <span class="sql-datatype">CHAR(10)</span>
+                    <span class="sql-keyword">DEFAULT</span> <span class="sql-string">'Flat'</span>
+                    <span class="sql-keyword">CHECK</span> (<span class="sql-keyword">VALUE IN</span> (<span class="sql-string">'House'</span>, <span class="sql-string">'Flat'</span>));
+            </div>
+            
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Domains promote consistency and reusability across tables!
+            </div>
+        </div>
+
+        <!-- Slide 7: Advanced Domain Example -->
+        <div class="slide">
+            <h1>Advanced Domain with Table Lookup</h1>
+            <p>Domains can reference existing tables for validation:</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE DOMAIN</span> BranchNo <span class="sql-keyword">AS</span> <span class="sql-datatype">CHAR(4)</span>
+                    <span class="sql-keyword">CHECK</span> (<span class="sql-keyword">VALUE IN</span> 
+                        (<span class="sql-keyword">SELECT</span> branchNo <span class="sql-keyword">FROM</span> Branch));
+            </div>
+            
+            <h3>Removing Domains:</h3>
+            <div class="sql-example">
+                <span class="sql-keyword">DROP DOMAIN</span> DomainName
+                    [<span class="sql-keyword">RESTRICT</span> | <span class="sql-keyword">CASCADE</span>]
+            </div>
+            
+            <div class="demo-box">
+                <p><strong>Question:</strong> When would CASCADE be necessary for dropping a domain?</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: CREATE TABLE Syntax -->
+        <div class="slide">
+            <h1>CREATE TABLE - Full Syntax</h1>
+            <div class="sql-example" style="font-size: 0.9em;">
+                <span class="sql-keyword">CREATE TABLE</span> TableName
+                {(colName datatype [<span class="sql-keyword">NOT NULL</span>] [<span class="sql-keyword">UNIQUE</span>]
+                [<span class="sql-keyword">DEFAULT</span> defaultOption]
+                [<span class="sql-keyword">CHECK</span> searchCondition] [,…]}
+                [<span class="sql-keyword">PRIMARY KEY</span> (listOfColumns),]
+                {[<span class="sql-keyword">UNIQUE</span> (listOfColumns),] […,]}
+                {[<span class="sql-keyword">FOREIGN KEY</span> (listOfFKColumns)
+                 <span class="sql-keyword">REFERENCES</span> ParentTableName [(listOfCKColumns)],
+                 [<span class="sql-keyword">ON UPDATE</span> referentialAction]
+                 [<span class="sql-keyword">ON DELETE</span> referentialAction ]] [,…]}
+                 {[<span class="sql-keyword">CHECK</span> (searchCondition)] [,…] })
+            </div>
+            
+            <div class="tip-box">
+                <strong>Key Points:</strong>
+                <ul>
+                    <li>Primary keys should always be NOT NULL</li>
+                    <li>FOREIGN KEY clause specifies referential actions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: CREATE TABLE Example -->
+        <div class="slide">
+            <h1>CREATE TABLE - Real Example</h1>
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE TABLE</span> PropertyForRent (
+                    propertyNo <span class="sql-datatype">VARCHAR(5)</span> <span class="sql-keyword">NOT NULL</span>,
+                    type <span class="sql-datatype">CHAR(10)</span> <span class="sql-keyword">NOT NULL</span>,
+                    rooms <span class="sql-datatype">SMALLINT</span> <span class="sql-keyword">NOT NULL DEFAULT</span> 4,
+                    rent <span class="sql-datatype">DECIMAL(6, 2)</span> <span class="sql-keyword">NOT NULL DEFAULT</span> 600,
+                    ownerNo <span class="sql-datatype">VARCHAR(5)</span> <span class="sql-keyword">NOT NULL</span>,
+                    staffNo <span class="sql-datatype">VARCHAR(5)</span>,
+                    branchNo <span class="sql-datatype">VARCHAR(5)</span> <span class="sql-keyword">NOT NULL</span>,
+                    <span class="sql-keyword">PRIMARY KEY</span> (propertyNo),
+                    <span class="sql-keyword">FOREIGN KEY</span> (staffNo) <span class="sql-keyword">REFERENCES</span> Staff (staffNo)
+                        <span class="sql-keyword">ON DELETE SET NULL</span> 
+                        <span class="sql-keyword">ON UPDATE CASCADE</span>);
+            </div>
+            
+            <button data-timer="600">Activity: Create Your First Table (10 min)</button>
+        </div>
+
+        <!-- Slide 10: Integrity Enhancement Features -->
+        <div class="slide">
+            <h1>Integrity Enhancement Features (IEF)</h1>
+            <p>SQL provides five types of integrity constraints:</p>
+            
+            <div class="demo-box">
+                <ol style="font-size: 1.3em; line-height: 2;">
+                    <li><strong>Required Data:</strong> <code>NOT NULL</code></li>
+                    <li><strong>Domain Constraints:</strong> <code>CHECK</code> clauses</li>
+                    <li><strong>Entity Integrity:</strong> <code>PRIMARY KEY</code></li>
+                    <li><strong>Referential Integrity:</strong> <code>FOREIGN KEY</code></li>
+                    <li><strong>General Constraints:</strong> Table-level <code>CHECK</code></li>
+                </ol>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Remember:</strong> Constraints ensure data quality and consistency!
+            </div>
+        </div>
+
+        <!-- Slide 11: Required Data & Domain Constraints -->
+        <div class="slide">
+            <h1>Required Data & Domain Constraints</h1>
+            
+            <h3>Required Data:</h3>
+            <div class="sql-example">
+                position <span class="sql-datatype">VARCHAR(10)</span> <span class="sql-keyword">NOT NULL</span>
+            </div>
+            
+            <h3>Domain Constraints with CHECK:</h3>
+            <div class="sql-example">
+                type <span class="sql-datatype">CHAR(10)</span> <span class="sql-keyword">NOT NULL</span>
+                    <span class="sql-keyword">CHECK</span> (type <span class="sql-keyword">IN</span> (<span class="sql-string">'House'</span>, <span class="sql-string">'Flat'</span>))
+            </div>
+            
+            <div class="demo-box">
+                <p><strong>Exercise:</strong> What happens if we try to insert 'Apartment' as type?</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Entity Integrity -->
+        <div class="slide">
+            <h1>Entity Integrity - Primary Keys</h1>
+            <p>Primary key must contain unique, non-null values for each row.</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Single column primary key</span>
+                <span class="sql-keyword">PRIMARY KEY</span>(staffNo)
+                
+                <span class="sql-comment">-- Composite primary key</span>
+                <span class="sql-keyword">PRIMARY KEY</span>(clientNo, propertyNo)
+            </div>
+            
+            <div class="demo-box">
+                <h3>Rules:</h3>
+                <ul>
+                    <li>Only ONE PRIMARY KEY clause per table</li>
+                    <li>Can ensure uniqueness for alternate keys using UNIQUE</li>
+                </ul>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">UNIQUE</span>(telNo)
+            </div>
+        </div>
+
+        <!-- Slide 13: Referential Integrity -->
+        <div class="slide">
+            <h1>Referential Integrity - Foreign Keys</h1>
+            <p>Ensures relationships between tables remain consistent.</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">FOREIGN KEY</span> (staffNo) <span class="sql-keyword">REFERENCES</span> Staff(staffNo)
+            </div>
+            
+            <div class="demo-box">
+                <h3>Rule:</h3>
+                <p>Foreign key value must either:</p>
+                <ul>
+                    <li>Match a candidate key value in the parent table, OR</li>
+                    <li>Be wholly NULL</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Design Tip:</strong> Always define foreign keys to maintain data integrity!
+            </div>
+        </div>
+
+        <!-- Slide 14: Referential Actions -->
+        <div class="slide">
+            <h1>Referential Actions</h1>
+            <p>What happens when referenced data changes?</p>
+            
+            <table class="table-schema">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>ON DELETE</th>
+                        <th>ON UPDATE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>CASCADE</code></td>
+                        <td>Delete dependent rows</td>
+                        <td>Update dependent values</td>
+                    </tr>
+                    <tr>
+                        <td><code>SET NULL</code></td>
+                        <td>Set FK to NULL</td>
+                        <td>Set FK to NULL</td>
+                    </tr>
+                    <tr>
+                        <td><code>SET DEFAULT</code></td>
+                        <td>Set FK to default value</td>
+                        <td>Set FK to default value</td>
+                    </tr>
+                    <tr>
+                        <td><code>NO ACTION</code></td>
+                        <td>Reject operation</td>
+                        <td>Reject operation</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button data-timer="300">Discussion: When to use each action? (5 min)</button>
+        </div>
+
+        <!-- Slide 15: Referential Actions Examples -->
+        <div class="slide">
+            <h1>Referential Actions in Practice</h1>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- When staff member is deleted, set property's staffNo to NULL</span>
+                <span class="sql-keyword">FOREIGN KEY</span> (staffNo) <span class="sql-keyword">REFERENCES</span> Staff
+                    <span class="sql-keyword">ON DELETE SET NULL</span>
+                
+                <span class="sql-comment">-- When owner ID changes, update all their properties</span>
+                <span class="sql-keyword">FOREIGN KEY</span> (ownerNo) <span class="sql-keyword">REFERENCES</span> Owner
+                    <span class="sql-keyword">ON UPDATE CASCADE</span>
+            </div>
+            
+            <div class="demo-box">
+                <p><strong>Real-world scenario:</strong> Bobby Reed manages properties. If Bobby leaves the company, what should happen to his property assignments?</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: ALTER TABLE -->
+        <div class="slide">
+            <h1>ALTER TABLE</h1>
+            <p>Modify existing table structure:</p>
+            
+            <div class="demo-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Add a new column to a table</li>
+                    <li>Drop a column from a table</li>
+                    <li>Add a new table constraint</li>
+                    <li>Drop a table constraint</li>
+                    <li>Set a default for a column</li>
+                    <li>Drop a default for a column</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Warning:</strong> ALTER operations can be dangerous on production databases!
+            </div>
+        </div>
+
+        <!-- Slide 17: ALTER TABLE Examples -->
+        <div class="slide">
+            <h1>ALTER TABLE - Examples</h1>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Add a new column</span>
+                <span class="sql-keyword">ALTER TABLE</span> Staff
+                    <span class="sql-keyword">ADD</span> email <span class="sql-datatype">VARCHAR(50)</span>;
+                
+                <span class="sql-comment">-- Remove default value</span>
+                <span class="sql-keyword">ALTER TABLE</span> Staff
+                    <span class="sql-keyword">ALTER</span> position <span class="sql-keyword">DROP DEFAULT</span>;
+                
+                <span class="sql-comment">-- Set new default</span>
+                <span class="sql-keyword">ALTER TABLE</span> PropertyForRent
+                    <span class="sql-keyword">ALTER</span> type <span class="sql-keyword">SET DEFAULT</span> <span class="sql-string">'Flat'</span>;
+            </div>
+            
+            <button data-timer="480">Exercise: Modify a Table Structure (8 min)</button>
+        </div>
+
+        <!-- Slide 18: DROP TABLE -->
+        <div class="slide">
+            <h1>DROP TABLE</h1>
+            <p>Removes a table and all its data permanently!</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">DROP TABLE</span> TableName [<span class="sql-keyword">RESTRICT</span> | <span class="sql-keyword">CASCADE</span>]
+                
+                <span class="sql-comment">-- Example</span>
+                <span class="sql-keyword">DROP TABLE</span> PropertyForRent;
+            </div>
+            
+            <div class="demo-box">
+                <h3>Behavior:</h3>
+                <ul>
+                    <li><strong>RESTRICT:</strong> Fails if other objects depend on this table</li>
+                    <li><strong>CASCADE:</strong> Drops all dependent objects</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box" style="background: #ffcccc;">
+                <strong>⚠️ DANGER:</strong> There's no undo for DROP TABLE!
+            </div>
+        </div>
+
+        <!-- Slide 19: CREATE INDEX -->
+        <div class="slide">
+            <h1>Indexes for Performance</h1>
+            <p>Indexes speed up data retrieval but slow down modifications.</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Create an index on a single column</span>
+                <span class="sql-keyword">CREATE INDEX</span> idx_staff_name 
+                    <span class="sql-keyword">ON</span> Staff(lName);
+                
+                <span class="sql-comment">-- Create a composite index</span>
+                <span class="sql-keyword">CREATE INDEX</span> idx_property_location 
+                    <span class="sql-keyword">ON</span> PropertyForRent(city, postcode);
+                
+                <span class="sql-comment">-- Drop an index</span>
+                <span class="sql-keyword">DROP INDEX</span> idx_staff_name;
+            </div>
+            
+            <div class="demo-box">
+                <p><strong>Trade-off:</strong> Faster queries vs. slower inserts/updates</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Complete Database Example -->
+        <div class="slide">
+            <h1>Complete Database Example</h1>
+            <p>Let's create Bobby Reed's property management database:</p>
+            
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-comment">-- Create schema</span>
+                <span class="sql-keyword">CREATE SCHEMA</span> PropertyManagement;
+                
+                <span class="sql-comment">-- Create domain</span>
+                <span class="sql-keyword">CREATE DOMAIN</span> PropertyType <span class="sql-keyword">AS</span> <span class="sql-datatype">VARCHAR(10)</span>
+                    <span class="sql-keyword">CHECK</span> (<span class="sql-keyword">VALUE IN</span> (<span class="sql-string">'House'</span>, <span class="sql-string">'Flat'</span>, <span class="sql-string">'Studio'</span>));
+                
+                <span class="sql-comment">-- Create Staff table</span>
+                <span class="sql-keyword">CREATE TABLE</span> Staff (
+                    staffNo <span class="sql-datatype">VARCHAR(5)</span> <span class="sql-keyword">PRIMARY KEY</span>,
+                    fName <span class="sql-datatype">VARCHAR(15)</span> <span class="sql-keyword">NOT NULL</span>,
+                    lName <span class="sql-datatype">VARCHAR(15)</span> <span class="sql-keyword">NOT NULL</span>,
+                    position <span class="sql-datatype">VARCHAR(10)</span> <span class="sql-keyword">NOT NULL</span>,
+                    salary <span class="sql-datatype">DECIMAL(7,2)</span> <span class="sql-keyword">CHECK</span> (salary > 0)
+                );
+            </div>
+        </div>
+
+        <!-- Slide 21: Hands-On Practice -->
+        <div class="slide">
+            <h1>Hands-On Practice <span class="emoji">💻</span></h1>
+            <h2>Create a Student Registration System</h2>
+            
+            <div class="demo-box">
+                <h3>Requirements:</h3>
+                <ol>
+                    <li>Create a STUDENT table with appropriate constraints</li>
+                    <li>Create a COURSE table</li>
+                    <li>Create an ENROLLMENT table linking students to courses</li>
+                    <li>Add appropriate foreign keys with referential actions</li>
+                </ol>
+            </div>
+            
+            <button data-timer="900">Group Exercise: Design & Implement (15 min)</button>
+        </div>
+
+        <!-- Slide 22: Common DDL Mistakes -->
+        <div class="slide">
+            <h1>Common DDL Mistakes to Avoid</h1>
+            
+            <div class="comparison-table">
+                <div class="comparison-card bad">
+                    <h3>❌ Don't Do This</h3>
+                    <ul>
+                        <li>Forgetting NOT NULL on required fields</li>
+                        <li>No primary key defined</li>
+                        <li>Missing foreign key constraints</li>
+                        <li>Using wrong data types (e.g., VARCHAR for dates)</li>
+                        <li>No CHECK constraints for valid ranges</li>
+                    </ul>
+                </div>
+                <div class="comparison-card good">
+                    <h3>✅ Do This Instead</h3>
+                    <ul>
+                        <li>Always specify NOT NULL for required data</li>
+                        <li>Every table needs a primary key</li>
+                        <li>Define all relationships with FKs</li>
+                        <li>Choose appropriate data types</li>
+                        <li>Add CHECK constraints for business rules</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Best Practices -->
+        <div class="slide">
+            <h1>DDL Best Practices</h1>
+            
+            <div class="demo-box">
+                <h2>Bobby Reed's Database Design Rules:</h2>
+                <ol style="font-size: 1.2em; line-height: 2;">
+                    <li>📝 Always document your schema design</li>
+                    <li>🔑 Choose meaningful primary keys</li>
+                    <li>📊 Use appropriate data types and sizes</li>
+                    <li>✅ Implement all necessary constraints</li>
+                    <li>🔄 Plan for future changes (but don't over-engineer)</li>
+                    <li>🧪 Test DDL in development before production</li>
+                    <li>💾 Always backup before ALTER/DROP operations</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 24: Advanced Topics Preview -->
+        <div class="slide">
+            <h1>Advanced DDL Topics</h1>
+            <p>Coming in future lectures:</p>
+            
+            <div class="two-column">
+                <div class="demo-box">
+                    <h3>Views</h3>
+                    <ul>
+                        <li>Virtual tables</li>
+                        <li>CREATE VIEW statement</li>
+                        <li>Updatable views</li>
+                        <li>WITH CHECK OPTION</li>
+                    </ul>
+                </div>
+                <div class="demo-box">
+                    <h3>Advanced Constraints</h3>
+                    <ul>
+                        <li>Triggers</li>
+                        <li>Stored procedures</li>
+                        <li>User-defined functions</li>
+                        <li>Assertions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 25: Real-World Application -->
+        <div class="slide">
+            <h1>Real-World Application</h1>
+            <h2>Bobby Reed's Property Management System</h2>
+            
+            <div class="erd-diagram">
+                <pre>
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│    STAFF    │         │  PROPERTY   │         │    OWNER    │
+├─────────────┤         ├─────────────┤         ├─────────────┤
+│ staffNo PK  │◄────────│ propertyNo PK│────────►│ ownerNo PK  │
+│ fName       │    1:M  │ type        │  M:1    │ fName       │
+│ lName       │         │ rooms       │         │ lName       │
+│ position    │         │ rent        │         │ telNo       │
+│ salary      │         │ staffNo FK  │         │ email       │
+└─────────────┘         │ ownerNo FK  │         └─────────────┘
+                        └─────────────┘
+                </pre>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Question:</strong> What referential actions would you choose and why?
+            </div>
+        </div>
+
+        <!-- Slide 26: Review Exercise -->
+        <div class="slide">
+            <h1>Review Exercise</h1>
+            <p>Fix the following table definition:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- What's wrong with this?</span>
+                <span class="sql-keyword">CREATE TABLE</span> Employee (
+                    id <span class="sql-datatype">VARCHAR</span>,
+                    name <span class="sql-datatype">CHAR(5)</span>,
+                    salary <span class="sql-datatype">VARCHAR(10)</span>,
+                    dept_id <span class="sql-datatype">INTEGER</span>
+                );
+            </div>
+            
+            <button data-timer="300">Think Time (5 min)</button>
+            
+            <div class="demo-box">
+                <p><strong>Issues to identify:</strong> Missing PK, wrong data types, no constraints, no FK</p>
+            </div>
+        </div>
+
+        <!-- Slide 27: Solution -->
+        <div class="slide">
+            <h1>Corrected Table Definition</h1>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE TABLE</span> Employee (
+                    id <span class="sql-datatype">INTEGER</span> <span class="sql-keyword">PRIMARY KEY</span>,
+                    name <span class="sql-datatype">VARCHAR(50)</span> <span class="sql-keyword">NOT NULL</span>,
+                    salary <span class="sql-datatype">DECIMAL(10,2)</span> <span class="sql-keyword">CHECK</span> (salary >= 0),
+                    dept_id <span class="sql-datatype">INTEGER</span> <span class="sql-keyword">NOT NULL</span>,
+                    <span class="sql-keyword">FOREIGN KEY</span> (dept_id) <span class="sql-keyword">REFERENCES</span> Department(dept_id)
+                        <span class="sql-keyword">ON DELETE RESTRICT</span>
+                        <span class="sql-keyword">ON UPDATE CASCADE</span>
+                );
+            </div>
+            
+            <div class="tip-box">
+                <strong>Improvements:</strong> Proper data types, constraints, and referential integrity
+            </div>
+        </div>
+
+        <!-- Slide 28: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>✅ Create and manage database schemas</li>
+                <li>✅ Define tables with appropriate data types</li>
+                <li>✅ Implement all types of constraints</li>
+                <li>✅ Use domains for consistency</li>
+                <li>✅ Apply referential actions properly</li>
+                <li>✅ Modify tables with ALTER TABLE</li>
+                <li>✅ Safely remove database objects</li>
+            </ul>
+            
+            <div class="demo-box">
+                <p><strong>Remember:</strong> Good database design starts with proper DDL!</p>
+            </div>
+        </div>
+
+        <!-- Slide 29: Assignment -->
+        <div class="slide">
+            <h1>Assignment: Database Design Project</h1>
+            
+            <div class="demo-box">
+                <h2>Create a Complete Database Schema</h2>
+                <p>Design and implement a database for a small business of your choice.</p>
+                
+                <h3>Requirements:</h3>
+                <ul>
+                    <li>At least 5 tables with relationships</li>
+                    <li>Use of domains for common data types</li>
+                    <li>Appropriate constraints on all tables</li>
+                    <li>Proper referential actions</li>
+                    <li>At least 2 indexes for performance</li>
+                </ul>
+                
+                <p><strong>Due:</strong> Next week before class</p>
+                <p><strong>Submit:</strong> SQL script with comments explaining design decisions</p>
+            </div>
+        </div>
+
+        <!-- Final Slide: Next Lecture Preview -->
+        <div class="slide">
+            <h1>Next Time: Views & Advanced DDL</h1>
+            <h2>Coming in Lecture 11:</h2>
+            
+            <div class="demo-box">
+                <ul style="font-size: 1.3em; line-height: 2;">
+                    <li>📊 Creating and managing views</li>
+                    <li>🔒 View security and permissions</li>
+                    <li>🔄 Updatable vs. read-only views</li>
+                    <li>⚡ Performance considerations</li>
+                    <li>🎯 WITH CHECK OPTION</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <p><strong>Prepare:</strong> Review today's DDL concepts - views build on tables!</p>
+                <p><strong>Office Hours:</strong> Bobby Reed - Tuesdays 2-4 PM</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Database-specific interactions can go here
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+        });
+        
+        // Timer functionality for activities
+        document.querySelectorAll('[data-timer]').forEach(button => {
+            button.addEventListener('click', function() {
+                const seconds = parseInt(this.dataset.timer);
+                startTimer(seconds);
+            });
+        });
+        
+        function startTimer(seconds) {
+            const display = document.getElementById('timer-display');
+            const text = document.getElementById('timer-text');
+            display.classList.add('active');
+            
+            const interval = setInterval(() => {
+                const minutes = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                text.textContent = `Time Remaining: ${minutes}:${secs.toString().padStart(2, '0')}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    text.textContent = 'Time\'s Up!';
+                    setTimeout(() => {
+                        display.classList.remove('active');
+                    }, 3000);
+                }
+                seconds--;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
