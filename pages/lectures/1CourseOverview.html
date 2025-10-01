@@ -415,10 +415,11 @@
                 <div class="instructor-details">
                     <h2>Bobby Reed</h2>
                     <ul>
-                        <li><strong>Instructor</strong> of Computer Science & Mathematics</li>
-                        <li><strong>BA/MA</strong> - University of Central Oklahoma</li>
-                        <li><strong>MLIS</strong> - Oklahoma University<br>
-                            <span style="margin-left: 40px;">Focus: Emerging Technologies</span></li>
+                        <li><strong>Director</strong> of Computer Science & Mathematics</li>
+                        <li><strong>Student Advisor</strong> at OCU</li>
+                        <li><strong>BS Computer Science</strong> - Oklahoma State University</li>
+                        <li><strong>MS Computer Science</strong> - Oklahoma Christian University<br>
+                            <span style="margin-left: 40px;">Focus: Cybersecurity</span></li>
                     </ul>
                 </div>
             </div>
@@ -429,9 +430,13 @@
             <h1>Class Communication</h1>
             <div class="contact-info">
                 <h3>📚 Course Materials</h3>
-                <p style="font-size: 1.3em;"><a href="https://ocuonline.okcu.edu" target="_blank">D2L</a></p>
-                <p style="font-size: 1.3em;"><a href="databasedesign.netlify.app" target="_blank">This Site</a></p>
+                <p style="font-size: 1.3em;"><a href="https://ocuonline.okcu.edu" target="_blank">https://ocuonline.okcu.edu</a></p>
                 <p>All course materials, lectures, and assignments</p>
+            </div>
+            
+            <div class="contact-info">
+                <h3>🕐 Office Hours</h3>
+                <p style="font-size: 1.3em;">By appointment (via Teams)</p>
             </div>
             
             <div class="contact-info">
@@ -721,7 +726,44 @@
             </div>
         </div>
 
-        <!-- Slide 19: Exercise Part 2 - Table Design -->
+        <!-- Slide 19: Code Explanation - Database Creation -->
+        <div class="slide">
+            <h1>Understanding: Database Creation <span class="emoji">🔍</span></h1>
+            
+            <div class="demo-box">
+                <h3>Command 1: CREATE DATABASE library_db;</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><code>CREATE DATABASE</code> - SQL command to make a new database</li>
+                    <li><code>library_db</code> - The name we're giving our database</li>
+                    <li><code>;</code> - Semicolon ends every SQL statement</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Result:</strong> Creates an empty database container that will hold all our tables</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Command 2: \c library_db</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><code>\c</code> - PostgreSQL meta-command (not SQL) meaning "connect"</li>
+                    <li><code>library_db</code> - The database to connect to</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Result:</strong> Switches from default database to our new library_db</p>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Command 3: CREATE SCHEMA library;</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><code>CREATE SCHEMA</code> - Makes a logical grouping within the database</li>
+                    <li><code>library</code> - Name of our schema (like a folder)</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Think of it as:</strong> Database = Filing Cabinet, Schema = Drawer, Tables = Folders</p>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Key Concept:</strong> A database is a container for tables. A schema is an optional organizational layer within a database.
+            </div>
+        </div>
+
+        <!-- Slide 20: Exercise Part 2 - Table Design -->
         <div class="slide">
             <h1>Part 2: Create Tables <span class="timer-badge">15 min</span></h1>
             
@@ -766,7 +808,7 @@ CREATE TABLE members (
             </div>
         </div>
 
-        <!-- Slide 20: Exercise Part 3 - Insert Data -->
+        <!-- Slide 22: Exercise Part 3 - Insert Data -->
         <div class="slide">
             <h1>Part 3: Insert Sample Data <span class="timer-badge">15 min</span></h1>
             
@@ -804,7 +846,49 @@ INSERT INTO members (email, first_name, last_name) VALUES
             </div>
         </div>
 
-        <!-- Slide 21: Exercise Part 4 - Queries -->
+        <!-- Slide 23: Code Explanation - INSERT Statements -->
+        <div class="slide">
+            <h1>Understanding: INSERT Statements <span class="emoji">🔍</span></h1>
+            
+            <div class="demo-box">
+                <h3>Basic INSERT Structure</h3>
+                <div class="code-example">INSERT INTO authors (first_name, last_name, birth_date, nationality) VALUES</div>
+                <ul style="font-size: 1.1em;">
+                    <li><code>INSERT INTO</code> - SQL command to add data</li>
+                    <li><code>authors</code> - Target table name</li>
+                    <li><code>(first_name, last_name...)</code> - List of columns we're filling</li>
+                    <li><code>VALUES</code> - Keyword before the actual data</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>The VALUES Section</h3>
+                <div class="code-example">('Jane', 'Austen', '1775-12-16', 'British'),</div>
+                <ul style="font-size: 1.1em;">
+                    <li><code>( )</code> - Each parenthesis set is one row</li>
+                    <li><code>'Jane'</code> - Text values need single quotes</li>
+                    <li><code>'1775-12-16'</code> - Dates in 'YYYY-MM-DD' format</li>
+                    <li><code>,</code> - Comma separates multiple rows</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Important Notes</h3>
+                <ul style="font-size: 1.1em;">
+                    <li>🔢 Numbers don't need quotes: <code>1813, 432</code></li>
+                    <li>📝 Text always needs quotes: <code>'Jane', 'British'</code></li>
+                    <li>📅 Dates need quotes and format: <code>'1775-12-16'</code></li>
+                    <li>🔑 author_id is SERIAL, so it auto-generates (we don't insert it)</li>
+                    <li>🔗 Foreign keys (like author_id in books) must match existing values</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Key Concept:</strong> INSERT adds rows to tables. The column list and values must match in order and data type.
+            </div>
+        </div>
+
+        <!-- Slide 24: Exercise Part 4 - Queries -->
         <div class="slide">
             <h1>Part 4: Query Practice <span class="timer-badge">15 min</span></h1>
             
@@ -841,7 +925,7 @@ ORDER BY book_count DESC;
             </div>
         </div>
 
-        <!-- Slide 22: Exercise Part 5 - Advanced -->
+        <!-- Slide 26: Exercise Part 5 - Advanced -->
         <div class="slide">
             <h1>Part 5: Loans Table <span class="timer-badge">5 min</span></h1>
             <h2>Bonus: Create a Relationship Table</h2>
@@ -882,9 +966,51 @@ WHERE l.return_date IS NULL;
             </div>
         </div>
 
+        <!-- Slide 27: Code Explanation - Relationship Tables -->
+        <div class="slide">
+            <h1>Understanding: Relationship Tables <span class="emoji">🔍</span></h1>
+            
+            <div class="demo-box">
+                <h3>Junction/Bridge Tables</h3>
+                <div class="code-example">book_id INTEGER REFERENCES books(book_id),
+member_id INTEGER REFERENCES members(member_id)</div>
+                <ul style="font-size: 1.1em;">
+                    <li><strong>Purpose:</strong> Connects two tables in a many-to-many relationship</li>
+                    <li>One member can borrow many books</li>
+                    <li>One book can be borrowed by many members (over time)</li>
+                    <li>The loans table tracks each borrowing event</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Advanced Constraints</h3>
+                <div class="code-example">CONSTRAINT valid_dates CHECK (return_date > loan_date)</div>
+                <ul style="font-size: 1.1em;">
+                    <li><code>CONSTRAINT valid_dates</code> - Names the rule for error messages</li>
+                    <li><code>CHECK</code> - Validates data before allowing insert/update</li>
+                    <li><code>return_date > loan_date</code> - Books must be returned after borrowing</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Working with NULL</h3>
+                <div class="code-example">WHERE l.return_date IS NULL</div>
+                <ul style="font-size: 1.1em;">
+                    <li><code>NULL</code> - Represents "unknown" or "not applicable"</li>
+                    <li><code>IS NULL</code> - Tests for NULL (can't use = NULL)</li>
+                    <li>In our case: NULL return_date = book still checked out</li>
+                    <li>Multiple JOINs connect all three tables together</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Key Concept:</strong> Relationship tables connect other tables and often include additional data about the relationship (like loan_date).
+            </div>
+        </div>
+
         <!-- HOMEWORK SECTION -->
 
-        <!-- Slide 23: Homework Assignment -->
+        <!-- Slide 28: Homework Assignment -->
         <div class="slide">
             <h1>Homework Week 1 <span class="emoji">📝</span></h1>
             <h2>Complete Your Development Environment</h2>
@@ -933,6 +1059,7 @@ WHERE l.return_date IS NULL;
                     <li>Screenshot of DataGrip with your database</li>
                     <li>DataGrip ER diagram</li>
                     <li>Your 5 SQL queries with results</li>
+                    <li>Brief reflection (200 words) on setup challenges</li>
                 </ol>
             </div>
             
