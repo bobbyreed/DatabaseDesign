@@ -1,0 +1,20 @@
+{
+  "name": "database-design-course",
+  "version": "1.0.0",
+  "description": "Database Design Course Website with Attendance Management System",
+  "main": "index.html",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "keywords": [
+    "database",
+    "course",
+    "attendance",
+    "education"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.3"
+  }
+}

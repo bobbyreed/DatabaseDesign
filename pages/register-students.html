@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - CSCI 5603</title>
+    <link rel="stylesheet" href="../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <script src="../js/classroom-auth.js"></script>
+
+    <style>
+        body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #00447c 0%, #003057 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .swipe-area {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 3px dashed var(--blueprint-sky);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .swipe-area.active {
+            border-color: var(--blueprint-purple);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        #cardInput {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1em;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 2px solid #28a745;
+            color: #28a745;
+            display: block;
+        }
+
+        .status-message.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            display: block;
+        }
+
+        .students-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            background: var(--bg-secondary);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--blueprint-sky);
+        }
+
+        .student-name {
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .student-date {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--blueprint-sky) 0%, var(--blueprint-purple) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--blueprint-sky);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--blueprint-sky-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--blueprint-sky);
+        }
+
+        .btn-secondary:hover {
+            background: var(--blueprint-sky);
+            color: white;
+        }
+
+        .export-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--bg-secondary);
+        }
+
+        .manual-entry-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--bg-secondary);
+        }
+
+        .manual-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid var(--blueprint-sky);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1em;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--blueprint-purple);
+        }
+
+        @media (max-width: 768px) {
+            .manual-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Student Registration</h1>
+            <p>CSCI 5603 - Database Design</p>
+        </header>
+
+        <div class="card">
+            <h2>Swipe Student Card to Register</h2>
+
+            <div class="swipe-area active" id="swipeArea">
+                <h3>🎴 Ready to Scan</h3>
+                <p>Swipe a student ID card to register them for the course</p>
+                <p style="font-size: 0.9em; color: var(--text-muted); margin-top: 10px;">
+                    Click here first, then swipe the card
+                </p>
+            </div>
+
+            <input type="text" id="cardInput" autocomplete="off">
+
+            <div id="statusMessage" class="status-message"></div>
+
+            <div class="manual-entry-section">
+                <h3>Manual Entry</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">
+                    Register a student without a card swipe (e.g., forgot ID)
+                </p>
+                <div class="manual-form">
+                    <div class="form-group">
+                        <label for="manualFirstName">First Name</label>
+                        <input type="text" id="manualFirstName" placeholder="First Name" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="manualLastName">Last Name</label>
+                        <input type="text" id="manualLastName" placeholder="Last Name" autocomplete="off">
+                    </div>
+                    <button class="btn btn-primary" onclick="registerManually()">Register Student</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-label">Total Students</div>
+                    <div class="stat-number" id="totalStudents">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Registered Today</div>
+                    <div class="stat-number" id="todayCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Registered Students</h2>
+            <div class="students-list" id="studentsList">
+                <p style="text-align: center; color: var(--text-muted); padding: 20px;">
+                    No students registered yet. Swipe a card to begin.
+                </p>
+            </div>
+
+            <div class="export-section">
+                <h3>Actions</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="exportToCSV()">📥 Export to CSV</button>
+                    <button class="btn btn-secondary" onclick="clearAllStudents()">🗑️ Clear All Students</button>
+                    <a href="./attendance.html" class="btn btn-primary">✓ Take Attendance</a>
+                    <a href="./attendance-overview.html" class="btn btn-primary">📊 View Overview</a>
+                    <a href="../index.html" class="btn btn-secondary">🏠 Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API base URL
+        const API_BASE = '/.netlify/functions';
+
+        // Global state
+        let students = [];
+
+        // Mock data generator - callable from console
+        window.addMockStudents = async function() {
+            const mockNames = [
+                { firstName: 'Emma', lastName: 'Johnson' },
+                { firstName: 'Liam', lastName: 'Williams' },
+                { firstName: 'Olivia', lastName: 'Brown' },
+                { firstName: 'Noah', lastName: 'Jones' },
+                { firstName: 'Ava', lastName: 'Garcia' },
+                { firstName: 'Ethan', lastName: 'Miller' },
+                { firstName: 'Sophia', lastName: 'Davis' },
+                { firstName: 'Mason', lastName: 'Rodriguez' },
+                { firstName: 'Isabella', lastName: 'Martinez' },
+                { firstName: 'Logan', lastName: 'Hernandez' },
+                { firstName: 'Mia', lastName: 'Lopez' },
+                { firstName: 'Lucas', lastName: 'Gonzalez' },
+                { firstName: 'Charlotte', lastName: 'Wilson' },
+                { firstName: 'Oliver', lastName: 'Anderson' },
+                { firstName: 'Amelia', lastName: 'Thomas' },
+                { firstName: 'Elijah', lastName: 'Taylor' },
+                { firstName: 'Harper', lastName: 'Moore' },
+                { firstName: 'James', lastName: 'Jackson' },
+                { firstName: 'Evelyn', lastName: 'Martin' },
+                { firstName: 'Benjamin', lastName: 'Lee' },
+                { firstName: 'Abigail', lastName: 'Perez' },
+                { firstName: 'William', lastName: 'Thompson' }
+            ];
+
+            console.log('🎭 Adding 22 mock students...');
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const student of mockNames) {
+                try {
+                    const response = await fetch(`${API_BASE}/register-student`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            firstName: student.firstName,
+                            lastName: student.lastName,
+                            fullName: `${student.firstName} ${student.lastName}`,
+                            rawCardData: null
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        console.log(`✓ Registered: ${student.firstName} ${student.lastName}`);
+                        successCount++;
+                    } else {
+                        console.log(`✗ Failed: ${student.firstName} ${student.lastName} - ${data.error}`);
+                        failCount++;
+                    }
+                } catch (error) {
+                    console.error(`✗ Error registering ${student.firstName} ${student.lastName}:`, error);
+                    failCount++;
+                }
+
+                // Small delay to avoid overwhelming the API
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            console.log(`\n📊 Results: ${successCount} successful, ${failCount} failed`);
+            await updateUI();
+            console.log('✅ Done! Check the page for updated student list.');
+        };
+
+        // Get registered students from database
+        async function getStudents() {
+            try {
+                const response = await fetch(`${API_BASE}/get-students`);
+                const data = await response.json();
+
+                if (data.success) {
+                    students = data.students;
+                    return data;
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching students:', error);
+                showStatus('Error loading students: ' + error.message, false);
+                return { students: [], total: 0, registeredToday: 0 };
+            }
+        }
+
+        // Parse card swipe data
+        function parseCardData(rawData) {
+            // Format: %B6039500482025215^REED/BOBBY^2108701B00122548?;6039500482025215=2108701000122548?
+            // We want the data between the ^ symbols: REED/BOBBY
+            const match = rawData.match(/\^([^\/]+)\/([^\^]+)\^/);
+
+            if (match) {
+                const lastName = match[1].trim();
+                const firstName = match[2].trim();
+                return {
+                    lastName,
+                    firstName,
+                    fullName: `${firstName} ${lastName}`,
+                    rawData: rawData
+                };
+            }
+            return null;
+        }
+
+        // Show status message
+        function showStatus(message, isSuccess = true) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${isSuccess ? 'success' : 'error'}`;
+
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Register a student
+        async function registerStudent(studentData) {
+            try {
+                const response = await fetch(`${API_BASE}/register-student`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName: studentData.firstName,
+                        lastName: studentData.lastName,
+                        fullName: studentData.fullName,
+                        rawCardData: studentData.rawData
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus(`✓ ${studentData.fullName} registered successfully!`, true);
+                    await updateUI();
+                    return true;
+                } else {
+                    if (response.status === 409) {
+                        showStatus(`${studentData.fullName} is already registered!`, false);
+                    } else {
+                        showStatus(`Error: ${data.error}`, false);
+                    }
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error registering student:', error);
+                showStatus('Error registering student: ' + error.message, false);
+                return false;
+            }
+        }
+
+        // Register student manually (without card swipe)
+        async function registerManually() {
+            const firstName = document.getElementById('manualFirstName').value.trim();
+            const lastName = document.getElementById('manualLastName').value.trim();
+
+            if (!firstName || !lastName) {
+                showStatus('Please enter both first and last name', false);
+                return;
+            }
+
+            const studentData = {
+                firstName: firstName,
+                lastName: lastName,
+                fullName: `${firstName} ${lastName}`,
+                rawData: null
+            };
+
+            const success = await registerStudent(studentData);
+
+            if (success) {
+                // Clear the form
+                document.getElementById('manualFirstName').value = '';
+                document.getElementById('manualLastName').value = '';
+                document.getElementById('manualFirstName').focus();
+            }
+        }
+
+        // Remove a student
+        async function removeStudent(studentId) {
+            if (!confirm('Are you sure you want to remove this student?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/delete-student`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: studentId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus('Student removed successfully', true);
+                    await updateUI();
+                } else {
+                    showStatus(`Error: ${data.error}`, false);
+                }
+            } catch (error) {
+                console.error('Error removing student:', error);
+                showStatus('Error removing student: ' + error.message, false);
+            }
+        }
+
+        // Update UI
+        async function updateUI() {
+            const data = await getStudents();
+            const studentsList = document.getElementById('studentsList');
+            const totalStudents = document.getElementById('totalStudents');
+            const todayCount = document.getElementById('todayCount');
+
+            // Update stats
+            totalStudents.textContent = data.total || 0;
+            todayCount.textContent = data.registeredToday || 0;
+
+            // Update students list
+            if (!students || students.length === 0) {
+                studentsList.innerHTML = `
+                    <p style="text-align: center; color: var(--text-muted); padding: 20px;">
+                        No students registered yet. Swipe a card to begin.
+                    </p>
+                `;
+            } else {
+                studentsList.innerHTML = students.map(student => `
+                    <div class="student-item">
+                        <div>
+                            <div class="student-name">${student.full_name}</div>
+                            <div class="student-date">
+                                Registered: ${new Date(student.registered_date).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}
+                            </div>
+                        </div>
+                        <button class="remove-btn" onclick="removeStudent(${student.id})">Remove</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            if (!students || students.length === 0) {
+                alert('No students to export');
+                return;
+            }
+
+            // Create CSV content
+            const headers = ['Last Name', 'First Name', 'Full Name', 'Registration Date'];
+            const rows = students.map(s => [
+                s.last_name,
+                s.first_name,
+                s.full_name,
+                new Date(s.registered_date).toLocaleString()
+            ]);
+
+            const csv = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `csci5603-students-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Clear all students
+        async function clearAllStudents() {
+            if (!confirm('Are you sure you want to remove ALL students? This cannot be undone!')) {
+                return;
+            }
+
+            if (confirm('Really? This will delete all registration data!')) {
+                try {
+                    // Delete all students one by one
+                    for (const student of students) {
+                        await fetch(`${API_BASE}/delete-student`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: student.id })
+                        });
+                    }
+                    showStatus('All students removed', true);
+                    await updateUI();
+                } catch (error) {
+                    console.error('Error clearing students:', error);
+                    showStatus('Error clearing students: ' + error.message, false);
+                }
+            }
+        }
+
+        // Handle card input
+        const cardInput = document.getElementById('cardInput');
+        const swipeArea = document.getElementById('swipeArea');
+
+        // Focus input when clicking swipe area
+        swipeArea.addEventListener('click', () => {
+            cardInput.focus();
+        });
+
+        // Keep input focused, but not when interacting with buttons or manual entry fields
+        cardInput.addEventListener('blur', (e) => {
+            // Don't refocus if user clicked a button, link, or manual entry field
+            if (e.relatedTarget && (
+                e.relatedTarget.tagName === 'BUTTON' ||
+                e.relatedTarget.tagName === 'A' ||
+                e.relatedTarget.id === 'manualFirstName' ||
+                e.relatedTarget.id === 'manualLastName'
+            )) {
+                return;
+            }
+            setTimeout(() => cardInput.focus(), 100);
+        });
+
+        // Handle card swipe
+        cardInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+
+            // Card data typically ends with ?
+            if (value.includes('?')) {
+                const studentData = parseCardData(value);
+
+                if (studentData) {
+                    registerStudent(studentData);
+                } else {
+                    showStatus('Could not read card data. Please try again.', false);
+                }
+
+                // Clear input
+                cardInput.value = '';
+            }
+        });
+
+        // Handle Enter key for manual entry
+        document.addEventListener('DOMContentLoaded', () => {
+            const manualInputs = document.querySelectorAll('#manualFirstName, #manualLastName');
+            manualInputs.forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        registerManually();
+                    }
+                });
+            });
+        });
+
+        // Initialize with authentication
+        ClassroomAuth.initAuthUI({
+            pageName: 'Student Registration',
+            onSuccess: function() {
+                updateUI();
+                cardInput.focus();
+            }
+        });
+
+        // Keep focus on input, but not when interacting with UI elements
+        setInterval(() => {
+            const activeElement = document.activeElement;
+            // Don't refocus if user is typing in manual entry fields
+            if (activeElement && (
+                activeElement.id === 'manualFirstName' ||
+                activeElement.id === 'manualLastName'
+            )) {
+                return;
+            }
+            // Only refocus if nothing else is focused or if body is focused
+            if (!activeElement || activeElement === document.body) {
+                cardInput.focus();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
