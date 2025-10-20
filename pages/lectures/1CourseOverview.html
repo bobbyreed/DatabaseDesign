@@ -116,8 +116,8 @@
         }
         
         .code-example {
-            background: #1e1e1e;
-            color: #d4d4d4;
+            background: var(--syntax-bg);
+            color: var(--syntax-text);
             padding: 15px 20px;
             border-radius: 8px;
             font-family: 'IBM Plex Mono', monospace;
@@ -126,9 +126,9 @@
             border-left: 4px solid var(--ocu-cyan);
             overflow-x: auto;
         }
-        
+
         .code-example .comment {
-            color: #6a9955;
+            color: var(--syntax-comment);
             font-style: italic;
         }
         
@@ -340,7 +340,7 @@
                     <tr><td>On time</td><td style="text-align: right; color: var(--ocu-green);">100%</td></tr>
                     <tr><td>1 day late</td><td style="text-align: right; color: var(--ocu-yellow);">90%</td></tr>
                     <tr><td>2-7 days late</td><td style="text-align: right;">-10% per day</td></tr>
-                    <tr><td>&gt; 1 week late</td><td style="text-align: right; color: red;">50% maximum</td></tr>
+                    <tr><td>&gt; 1 week late</td><td style="text-align: right; color: var(--error-color);">50% maximum</td></tr>
                 </table>
                 <p style="margin-top: 10px;"><strong>Extensions:</strong> Request at least 24 hours before due date</p>
             </div>
@@ -481,7 +481,7 @@
                     </tr>
                     <tr>
                         <td><strong>Retakes:</strong></td>
-                        <td style="text-align: right; color: red;">❌ Not permitted</td>
+                        <td style="text-align: right; color: var(--error-color);">❌ Not permitted</td>
                     </tr>
                 </table>
             </div>

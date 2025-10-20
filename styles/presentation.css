@@ -25,7 +25,7 @@
     --ocu-true-blue-dark: #005a8d;  /* Darker blue for better contrast on white */
     --ocu-code-light: #005580;      /* Accessible blue for inline code on light backgrounds */
     --ocu-code-dark: #9ddcf9;       /* Accessible light blue for inline code on dark backgrounds */
-    
+
     /* Semantic colors for light mode (default) */
     --bg-primary: #ffffff;
     --bg-secondary: #f8f9fa;
@@ -47,6 +47,20 @@
     --nav-bg: #00669b;
     --nav-text: #ffffff;
     --button-hover: #043d5d;
+
+    /* Error and warning text colors */
+    --error-color: #c41e3a;         /* WCAG AA compliant red for errors */
+    --error-light: #ff6b6b;         /* Lighter error for less critical issues */
+
+    /* Syntax highlighting for code examples (light mode) */
+    --syntax-bg: #f5f5f5;           /* Light background for code blocks */
+    --syntax-text: #2c3e50;         /* Dark text for readability */
+    --syntax-keyword: #0066cc;      /* Blue for keywords (SQL, JS, etc.) */
+    --syntax-string: #117722;       /* Green for strings */
+    --syntax-comment: #6a737d;      /* Gray for comments */
+    --syntax-function: #6f42c1;     /* Purple for functions */
+    --syntax-number: #005cc5;       /* Blue for numbers */
+    --syntax-operator: #d73a49;     /* Red for operators */
 }
 
 /* Dark Mode Variables */
@@ -71,6 +85,20 @@
     --nav-bg: #043d5d;
     --nav-text: #ffffff;
     --button-hover: #009edb;
+
+    /* Error and warning text colors (dark mode) */
+    --error-color: #ff6b6b;         /* Brighter red for dark backgrounds */
+    --error-light: #ff8787;         /* Even lighter for less critical */
+
+    /* Syntax highlighting for code examples (dark mode) */
+    --syntax-bg: #1e1e1e;           /* Dark background for code blocks */
+    --syntax-text: #d4d4d4;         /* Light gray text */
+    --syntax-keyword: #569cd6;      /* Blue for keywords */
+    --syntax-string: #ce9178;       /* Orange for strings */
+    --syntax-comment: #6a9955;      /* Green for comments */
+    --syntax-function: #dcdcaa;     /* Yellow for functions */
+    --syntax-number: #b5cea8;       /* Light green for numbers */
+    --syntax-operator: #d4d4d4;     /* Light gray for operators */
 }
 
 /* Reset and Base Styles */
@@ -646,4 +674,45 @@ pre {
     font-size: 1em;
     line-height: 1.4;
     color: var(--text-primary);
+}
+
+/* SQL/JSON/XML Code Examples with Theme-Aware Syntax Highlighting */
+.sql-example, .json-example, .xml-example {
+    background: var(--syntax-bg);
+    color: var(--syntax-text);
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    margin: 20px 0;
+    font-size: 1.1em;
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+    line-height: 1.6;
+}
+
+/* Syntax Highlighting Classes */
+.sql-keyword, .json-keyword {
+    color: var(--syntax-keyword);
+    font-weight: 600;
+}
+
+.sql-string, .json-string {
+    color: var(--syntax-string);
+}
+
+.sql-comment, .json-comment, .xml-comment {
+    color: var(--syntax-comment);
+    font-style: italic;
+}
+
+.sql-function {
+    color: var(--syntax-function);
+}
+
+.sql-number, .json-number {
+    color: var(--syntax-number);
+}
+
+.sql-operator {
+    color: var(--syntax-operator);
 }
