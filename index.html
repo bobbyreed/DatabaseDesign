@@ -5,332 +5,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Design - CSCI 5603</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
-    
-    <!-- Import Courier Prime for analog feel -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="styles/database-theme.css">
+
     <style>
-        :root {
-            /* OCU Brand Colors - Keeping consistent */
-            --ocu-black: #000000;
-            --ocu-true-blue: #00669b;
-            --ocu-white: #ffffff;
-            --ocu-dark-blue: #043d5d;
-            --ocu-cyan: #009edb;
-            --ocu-light-blue: #9ddcf9;
-            --ocu-green: #70bf54;
-            --ocu-light-green: #afd46c;
-            --ocu-yellow: #ffc222;
-            
-            /* Light mode colors */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-primary: #000000;
-            --text-secondary: #043d5d;
-            --link-color: #00669b;
-            --link-hover: #043d5d;
-            --border-color: #009edb;
-            --shadow-color: rgba(0, 102, 155, 0.1);
-        }
-        
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #9ddcf9;
-            --link-color: #009edb;
-            --link-hover: #9ddcf9;
-            --border-color: #009edb;
-            --shadow-color: rgba(0, 158, 219, 0.2);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Home page specific styles using database theme */
         body {
-            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace;
-            background: linear-gradient(135deg, #00669b 0%, #009edb 100%);
+            background: linear-gradient(135deg, var(--db-entity) 0%, var(--db-relationship) 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            transition: background 0.3s ease;
+            padding: var(--db-space-4);
         }
-        
-        .container {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px var(--shadow-color);
-            padding: 40px;
+
+        .home-container {
+            background: var(--db-paper);
+            border-radius: var(--db-radius-xl);
+            box-shadow: var(--db-shadow-xl);
+            padding: var(--db-space-10);
             max-width: 1400px;
             width: 100%;
-            transition: all 0.3s ease;
         }
-        
-        header {
+
+        .home-header {
             text-align: center;
-            padding: 30px 0;
-            border-bottom: 3px solid var(--border-color);
-            margin-bottom: 40px;
+            padding: var(--db-space-8) 0;
+            border-bottom: 3px solid var(--db-entity);
+            margin-bottom: var(--db-space-8);
         }
-        
-        h1 {
-            font-size: 3em;
-            color: var(--ocu-true-blue);
-            margin-bottom: 10px;
-            font-weight: 700;
-            letter-spacing: -1px;
+
+        .home-header h1 {
+            font-size: var(--db-text-5xl);
+            color: var(--db-entity);
+            margin-bottom: var(--db-space-3);
+            border: none;
+            padding: 0;
         }
-        
+
         .subtitle {
-            font-size: 1.4em;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            font-weight: 400;
+            font-size: var(--db-text-2xl);
+            color: var(--db-text-secondary);
+            margin-bottom: var(--db-space-2);
+            font-weight: 500;
         }
-        
+
         .meta-info {
-            color: var(--text-secondary);
-            font-size: 1.1em;
-            margin-top: 10px;
+            color: var(--db-text-muted);
+            font-size: var(--db-text-lg);
+            margin-top: var(--db-space-2);
         }
-        
-        .lectures-container {
-            position: relative;
-            overflow: hidden;
-            margin: 40px 0;
+
+        .info-section {
+            background: var(--db-grid);
+            padding: var(--db-space-8);
+            border-radius: var(--db-radius-lg);
+            margin: var(--db-space-8) 0;
+            border: 2px solid var(--db-border);
+            border-left: 6px solid var(--db-entity);
         }
-        
+
+        .info-section h2 {
+            color: var(--db-entity);
+            margin-bottom: var(--db-space-4);
+            font-size: var(--db-text-3xl);
+        }
+
+        .info-section h3 {
+            margin-top: var(--db-space-6);
+            color: var(--db-relationship);
+        }
+
+        .info-section p {
+            line-height: var(--db-leading-relaxed);
+            margin-bottom: var(--db-space-4);
+        }
+
+        .info-section ul {
+            margin-left: var(--db-space-8);
+            line-height: var(--db-leading-relaxed);
+        }
+
+        .info-section li {
+            margin-bottom: var(--db-space-3);
+        }
+
+        /* Lecture Grid */
         .lectures-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
+            gap: var(--db-space-6);
+            margin-bottom: var(--db-space-8);
         }
-        
+
+        /* Lecture Card - Entity Box Style */
         .lecture-card {
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            padding: 25px;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s ease;
+            background: var(--db-paper);
+            border-radius: var(--db-radius-lg);
+            padding: var(--db-space-6);
+            border: 2px solid var(--db-border);
+            border-left: 4px solid var(--db-relationship);
+            transition: all var(--db-transition);
             position: relative;
             display: flex;
             flex-direction: column;
             min-height: 250px;
+            box-shadow: var(--db-shadow);
         }
-        
+
         .lecture-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px var(--shadow-color);
-            border-color: var(--ocu-green);
+            transform: translateY(-4px);
+            box-shadow: var(--db-shadow-lg);
+            border-left-color: var(--db-entity);
         }
-        
+
         .lecture-number {
-            background: var(--ocu-true-blue);
+            background: var(--db-entity);
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
+            padding: var(--db-space-1) var(--db-space-3);
+            border-radius: var(--db-radius-full);
+            font-size: var(--db-text-sm);
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: var(--db-space-4);
+            right: var(--db-space-4);
             font-weight: 600;
         }
-        
+
         .lecture-date {
-            color: var(--text-secondary);
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            color: var(--db-text-muted);
+            font-size: var(--db-text-sm);
+            margin-bottom: var(--db-space-2);
             font-weight: 500;
         }
-        
+
         .lecture-card h3 {
-            color: var(--text-primary);
-            margin: 15px 0;
-            font-size: 1.4em;
+            color: var(--db-text-primary);
+            margin: var(--db-space-3) 0;
+            font-size: var(--db-text-xl);
             font-weight: 600;
         }
-        
+
         .lecture-card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 1em;
+            color: var(--db-text-secondary);
+            line-height: var(--db-leading-normal);
+            font-size: var(--db-text-base);
+            flex-grow: 1;
         }
-        
+
         .lecture-card a {
-            display: inline-block;
-            margin-top: auto;
-            padding: 10px 20px;
-            background: var(--ocu-true-blue);
+            display: inline-flex;
+            align-items: center;
+            margin-top: var(--db-space-4);
+            padding: var(--db-space-3) var(--db-space-5);
+            background: var(--db-entity);
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            border-radius: var(--db-radius);
+            transition: all var(--db-transition-fast);
             align-self: flex-start;
             font-weight: 600;
+            font-size: var(--db-text-sm);
         }
-        
+
         .lecture-card a:hover {
-            background: var(--ocu-dark-blue);
-            transform: translateX(5px);
+            background: var(--db-relationship);
+            transform: translateX(4px);
         }
-        
+
+        /* Status Badges */
         .status-badge {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.85em;
+            bottom: var(--db-space-4);
+            right: var(--db-space-4);
+            padding: var(--db-space-1) var(--db-space-3);
+            border-radius: var(--db-radius-full);
+            font-size: var(--db-text-xs);
             font-weight: 600;
         }
-        
+
         .status-ready {
-            background: var(--ocu-green);
+            background: var(--db-success);
             color: white;
         }
-        
+
         .status-coming {
-            background: var(--ocu-yellow);
-            color: var(--ocu-black);
+            background: var(--db-warning);
+            color: var(--db-text-primary);
         }
-        
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--bg-primary);
-            padding: 10px;
-            border-radius: 30px;
-            box-shadow: 0 4px 10px var(--shadow-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .theme-toggle-label {
-            color: var(--text-primary);
-            font-size: 0.9em;
-            user-select: none;
-            font-weight: 500;
-        }
-        
-        .theme-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
-        }
-        
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .theme-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--ocu-light-blue);
-            transition: .4s;
-            border-radius: 30px;
-        }
-        
-        .theme-slider:before {
-            position: absolute;
-            content: "☀️";
-            height: 24px;
-            width: 24px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-        
-        input:checked + .theme-slider {
-            background-color: var(--ocu-dark-blue);
-        }
-        
-        input:checked + .theme-slider:before {
-            transform: translateX(30px);
-            content: "🌙";
-        }
-        
-        .info-section {
-            background: var(--bg-secondary);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-            border: 2px solid var(--border-color);
-        }
-        
-        .info-section h2 {
-            color: var(--ocu-true-blue);
-            margin-bottom: 15px;
-            font-size: 1.8em;
-            font-weight: 600;
-        }
-        
-        .info-section p {
-            color: var(--text-primary);
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-        
-        .info-section ul {
-            margin-left: 30px;
-            line-height: 1.8;
-        }
-        
-        .info-section li {
-            margin-bottom: 10px;
-            color: var(--text-primary);
-        }
-        
+
         footer {
             text-align: center;
             color: white;
-            padding: 20px;
-            font-size: 1.1em;
+            padding: var(--db-space-4);
+            font-size: var(--db-text-lg);
+            background: linear-gradient(135deg, var(--db-entity) 0%, var(--db-relationship) 100%);
+            margin: var(--db-space-8) calc(-1 * var(--db-space-10)) calc(-1 * var(--db-space-10));
+            border-radius: 0 0 var(--db-radius-xl) var(--db-radius-xl);
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
+            .home-header h1 {
+                font-size: var(--db-text-4xl);
             }
-            
+
             .subtitle {
-                font-size: 1.2em;
+                font-size: var(--db-text-xl);
             }
-            
+
             .lectures-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
+
+            .home-container {
+                padding: var(--db-space-6);
             }
         }
-    </style>
 </head>
 <body>
     <!-- Theme Toggle -->
@@ -344,12 +233,12 @@
     </div>
     
 
-    <div class="container">
-        <header>
+    <div class="home-container">
+        <div class="home-header">
             <h1>Database Design</h1>
             <p class="subtitle">CSCI 5603 - Graduate Course</p>
             <p class="meta-info">Spring 2025 | 8-Week Intensive</p>
-        </header>
+        </div>
         
         <div class="info-section">
             <h2>📊 Course Overview</h2>
