@@ -10,16 +10,21 @@
     --ocu-black: #000000;
     --ocu-true-blue: #00669b;
     --ocu-white: #ffffff;
-    
+
     /* Secondary Colors */
     --ocu-dark-blue: #043d5d;
     --ocu-cyan: #009edb;
     --ocu-light-blue: #9ddcf9;
-    
+
     /* Accent Colors */
     --ocu-green: #70bf54;
     --ocu-light-green: #afd46c;
     --ocu-yellow: #ffc222;
+
+    /* Accessible Variations (WCAG AA compliant) */
+    --ocu-true-blue-dark: #005a8d;  /* Darker blue for better contrast on white */
+    --ocu-code-light: #005580;      /* Accessible blue for inline code on light backgrounds */
+    --ocu-code-dark: #9ddcf9;       /* Accessible light blue for inline code on dark backgrounds */
     
     /* Semantic colors for light mode (default) */
     --bg-primary: #ffffff;
@@ -208,7 +213,7 @@ input:checked + .theme-slider:before {
 
 /* Typography - Analog Font Style */
 h1 {
-    color: var(--ocu-true-blue);
+    color: var(--ocu-true-blue-dark);
     font-size: 2.8em;
     margin-bottom: 30px;
     border-bottom: 3px solid var(--border-color);
@@ -528,13 +533,13 @@ code {
     padding: 2px 8px;
     border-radius: 4px;
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
-    color: var(--ocu-true-blue);
+    color: var(--ocu-code-light);
     transition: all 0.3s ease;
     font-weight: 500;
 }
 
 [data-theme="dark"] code {
-    color: var(--ocu-cyan);
+    color: var(--ocu-code-dark);
 }
 
 /* Special List Styles */
