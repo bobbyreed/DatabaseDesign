@@ -1,0 +1,799 @@
+/**
+ * Database Design Course - Unified Theme
+ * Inspired by ER diagrams, UML schemas, and database design tools
+ * Version: 2.0
+ */
+
+/* ============================================
+   FONT IMPORTS
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   CSS VARIABLES - DATABASE SCHEMA PALETTE
+   ============================================ */
+:root {
+    /* ========== Core Database Colors ========== */
+    /* Inspired by database design tools and ER diagrams */
+
+    /* Primary Schema Colors */
+    --db-entity: #1e3a8a;           /* Deep blue - Primary entities (rectangles) */
+    --db-relationship: #0891b2;     /* Cyan - Relationships (diamonds) */
+    --db-attribute: #059669;        /* Green - Attributes (ovals) */
+    --db-primary-key: #f59e0b;      /* Amber - Primary keys */
+    --db-foreign-key: #8b5cf6;      /* Purple - Foreign keys */
+
+    /* Constraint Colors */
+    --db-constraint: #dc2626;       /* Red - Constraints/errors */
+    --db-nullable: #6b7280;         /* Gray - Nullable/optional */
+    --db-required: #1e3a8a;         /* Blue - Required fields */
+
+    /* Background Scheme */
+    --db-canvas: #ffffff;           /* White - Main canvas (like schema diagrams) */
+    --db-grid: #f8fafc;             /* Light gray - Grid background */
+    --db-paper: #fefefe;            /* Off-white - Card backgrounds */
+    --db-border: #e2e8f0;           /* Light border - Subtle separators */
+    --db-divider: #cbd5e1;          /* Medium border - Prominent separators */
+
+    /* Text Hierarchy */
+    --db-text-primary: #0f172a;     /* Near black - Primary text (high contrast) */
+    --db-text-secondary: #334155;   /* Dark gray - Secondary text */
+    --db-text-muted: #64748b;       /* Medium gray - Muted text */
+    --db-text-light: #94a3b8;       /* Light gray - Disabled/placeholder */
+
+    /* Semantic Colors (High Contrast) */
+    --db-success: #059669;          /* Green - Success states */
+    --db-success-bg: #d1fae5;       /* Light green bg */
+    --db-warning: #d97706;          /* Orange - Warnings */
+    --db-warning-bg: #fef3c7;       /* Light orange bg */
+    --db-error: #dc2626;            /* Red - Errors */
+    --db-error-bg: #fee2e2;         /* Light red bg */
+    --db-info: #0891b2;             /* Cyan - Info */
+    --db-info-bg: #cffafe;          /* Light cyan bg */
+
+    /* Interactive States */
+    --db-hover: #eff6ff;            /* Light blue hover */
+    --db-active: #dbeafe;           /* Darker blue active */
+    --db-focus: #3b82f6;            /* Bright blue focus ring */
+
+    /* Shadows & Elevation */
+    --db-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --db-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --db-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --db-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --db-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+    /* Spacing Scale (based on 4px base unit) */
+    --db-space-1: 0.25rem;  /* 4px */
+    --db-space-2: 0.5rem;   /* 8px */
+    --db-space-3: 0.75rem;  /* 12px */
+    --db-space-4: 1rem;     /* 16px */
+    --db-space-5: 1.25rem;  /* 20px */
+    --db-space-6: 1.5rem;   /* 24px */
+    --db-space-8: 2rem;     /* 32px */
+    --db-space-10: 2.5rem;  /* 40px */
+    --db-space-12: 3rem;    /* 48px */
+    --db-space-16: 4rem;    /* 64px */
+
+    /* Border Radius Scale */
+    --db-radius-sm: 0.25rem;   /* 4px - Small elements */
+    --db-radius: 0.5rem;       /* 8px - Default */
+    --db-radius-md: 0.75rem;   /* 12px - Cards */
+    --db-radius-lg: 1rem;      /* 16px - Large cards */
+    --db-radius-xl: 1.5rem;    /* 24px - Modals */
+    --db-radius-full: 9999px;  /* Fully rounded */
+
+    /* Typography Scale */
+    --db-text-xs: 0.75rem;     /* 12px */
+    --db-text-sm: 0.875rem;    /* 14px */
+    --db-text-base: 1rem;      /* 16px */
+    --db-text-lg: 1.125rem;    /* 18px */
+    --db-text-xl: 1.25rem;     /* 20px */
+    --db-text-2xl: 1.5rem;     /* 24px */
+    --db-text-3xl: 1.875rem;   /* 30px */
+    --db-text-4xl: 2.25rem;    /* 36px */
+    --db-text-5xl: 3rem;       /* 48px */
+
+    /* Line Heights */
+    --db-leading-tight: 1.25;
+    --db-leading-normal: 1.5;
+    --db-leading-relaxed: 1.75;
+
+    /* Font Families */
+    --db-font-mono: 'JetBrains Mono', 'IBM Plex Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    --db-font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    /* Transitions */
+    --db-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --db-transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --db-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Z-Index Scale */
+    --db-z-base: 0;
+    --db-z-dropdown: 1000;
+    --db-z-sticky: 1100;
+    --db-z-fixed: 1200;
+    --db-z-modal: 1300;
+    --db-z-popover: 1400;
+    --db-z-tooltip: 1500;
+}
+
+/* ========== Dark Mode Variables ========== */
+[data-theme="dark"] {
+    /* Dark mode color adjustments */
+    --db-entity: #3b82f6;
+    --db-relationship: #06b6d4;
+    --db-attribute: #10b981;
+    --db-primary-key: #fbbf24;
+    --db-foreign-key: #a78bfa;
+
+    --db-canvas: #0f172a;
+    --db-grid: #1e293b;
+    --db-paper: #1e293b;
+    --db-border: #334155;
+    --db-divider: #475569;
+
+    --db-text-primary: #f1f5f9;
+    --db-text-secondary: #cbd5e1;
+    --db-text-muted: #94a3b8;
+    --db-text-light: #64748b;
+
+    --db-hover: #1e293b;
+    --db-active: #334155;
+
+    --db-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --db-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+    --db-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    --db-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+    --db-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   BASE RESET & DEFAULTS
+   ============================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-base);
+    line-height: var(--db-leading-normal);
+    color: var(--db-text-primary);
+    background: var(--db-canvas);
+    transition: background-color var(--db-transition), color var(--db-transition);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+/* Headings with database schema styling */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--db-font-mono);
+    font-weight: 600;
+    line-height: var(--db-leading-tight);
+    color: var(--db-text-primary);
+    letter-spacing: -0.025em;
+}
+
+h1 {
+    font-size: var(--db-text-4xl);
+    font-weight: 700;
+    margin-bottom: var(--db-space-6);
+    padding-bottom: var(--db-space-4);
+    border-bottom: 2px solid var(--db-entity);
+    color: var(--db-entity);
+}
+
+h2 {
+    font-size: var(--db-text-3xl);
+    margin-bottom: var(--db-space-5);
+    margin-top: var(--db-space-8);
+    color: var(--db-entity);
+}
+
+h3 {
+    font-size: var(--db-text-2xl);
+    margin-bottom: var(--db-space-4);
+    margin-top: var(--db-space-6);
+    color: var(--db-relationship);
+}
+
+h4 {
+    font-size: var(--db-text-xl);
+    margin-bottom: var(--db-space-3);
+    margin-top: var(--db-space-4);
+}
+
+h5 {
+    font-size: var(--db-text-lg);
+    margin-bottom: var(--db-space-2);
+}
+
+h6 {
+    font-size: var(--db-text-base);
+    margin-bottom: var(--db-space-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Paragraph and text */
+p {
+    margin-bottom: var(--db-space-4);
+    color: var(--db-text-secondary);
+}
+
+/* Lists with ER diagram styling */
+ul, ol {
+    margin-left: var(--db-space-6);
+    margin-bottom: var(--db-space-4);
+}
+
+li {
+    margin-bottom: var(--db-space-2);
+    color: var(--db-text-secondary);
+}
+
+/* Database relationship list style */
+ul.db-list {
+    list-style: none;
+    margin-left: 0;
+}
+
+ul.db-list li {
+    padding-left: var(--db-space-6);
+    position: relative;
+}
+
+ul.db-list li::before {
+    content: "├─";
+    position: absolute;
+    left: 0;
+    color: var(--db-relationship);
+    font-weight: 600;
+}
+
+ul.db-list li:last-child::before {
+    content: "└─";
+}
+
+/* Inline code */
+code {
+    font-family: var(--db-font-mono);
+    font-size: 0.9em;
+    padding: 0.125rem 0.375rem;
+    background: var(--db-info-bg);
+    color: var(--db-entity);
+    border-radius: var(--db-radius-sm);
+    font-weight: 500;
+    border: 1px solid var(--db-border);
+}
+
+[data-theme="dark"] code {
+    background: var(--db-grid);
+    color: var(--db-relationship);
+}
+
+/* Code blocks */
+pre {
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-sm);
+    line-height: var(--db-leading-relaxed);
+    padding: var(--db-space-4);
+    background: var(--db-grid);
+    border: 1px solid var(--db-border);
+    border-left: 3px solid var(--db-entity);
+    border-radius: var(--db-radius);
+    overflow-x: auto;
+    margin-bottom: var(--db-space-4);
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    border: none;
+    color: var(--db-text-primary);
+}
+
+/* Links */
+a {
+    color: var(--db-entity);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    transition: color var(--db-transition-fast);
+}
+
+a:hover {
+    color: var(--db-relationship);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--db-focus);
+    outline-offset: 2px;
+    border-radius: var(--db-radius-sm);
+}
+
+/* ============================================
+   COMPONENTS - Entity Boxes (Cards)
+   ============================================ */
+
+/* Base entity card (like ER diagram rectangles) */
+.db-entity-card,
+.card {
+    background: var(--db-paper);
+    border: 2px solid var(--db-border);
+    border-radius: var(--db-radius-md);
+    padding: var(--db-space-6);
+    margin-bottom: var(--db-space-6);
+    box-shadow: var(--db-shadow);
+    transition: all var(--db-transition);
+}
+
+.db-entity-card:hover,
+.card:hover {
+    border-color: var(--db-entity);
+    box-shadow: var(--db-shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Primary entity (emphasized) */
+.db-entity-card.primary {
+    border-color: var(--db-entity);
+    border-width: 3px;
+    border-left-width: 6px;
+}
+
+/* Relationship card (diamond shape hint via styling) */
+.db-relationship-card {
+    background: linear-gradient(135deg, var(--db-paper) 0%, var(--db-grid) 100%);
+    border: 2px dashed var(--db-relationship);
+    border-radius: var(--db-radius-md);
+    padding: var(--db-space-6);
+    margin-bottom: var(--db-space-6);
+}
+
+/* ============================================
+   COMPONENTS - Buttons
+   ============================================ */
+
+.btn,
+button:not(.unstyled) {
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-sm);
+    font-weight: 600;
+    padding: var(--db-space-3) var(--db-space-5);
+    border-radius: var(--db-radius);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--db-transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--db-space-2);
+    text-decoration: none;
+}
+
+/* Primary button (entity blue) */
+.btn-primary,
+button.btn-primary {
+    background: var(--db-entity);
+    color: white;
+    border-color: var(--db-entity);
+}
+
+.btn-primary:hover {
+    background: var(--db-relationship);
+    border-color: var(--db-relationship);
+    transform: translateY(-1px);
+    box-shadow: var(--db-shadow-md);
+}
+
+/* Secondary button (outlined) */
+.btn-secondary,
+button.btn-secondary {
+    background: transparent;
+    color: var(--db-entity);
+    border-color: var(--db-entity);
+}
+
+.btn-secondary:hover {
+    background: var(--db-entity);
+    color: white;
+}
+
+/* Success button (green) */
+.btn-success {
+    background: var(--db-success);
+    color: white;
+    border-color: var(--db-success);
+}
+
+.btn-success:hover {
+    background: var(--db-attribute);
+    border-color: var(--db-attribute);
+}
+
+/* Danger button (red) */
+.btn-danger {
+    background: var(--db-error);
+    color: white;
+    border-color: var(--db-error);
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
+/* Disabled state */
+.btn:disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ============================================
+   COMPONENTS - Forms & Inputs
+   ============================================ */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-base);
+    padding: var(--db-space-3);
+    border: 2px solid var(--db-border);
+    border-radius: var(--db-radius);
+    background: var(--db-canvas);
+    color: var(--db-text-primary);
+    transition: all var(--db-transition-fast);
+    width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--db-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+label {
+    font-size: var(--db-text-sm);
+    font-weight: 600;
+    color: var(--db-text-secondary);
+    margin-bottom: var(--db-space-2);
+    display: block;
+}
+
+/* ============================================
+   COMPONENTS - Badges & Tags
+   ============================================ */
+
+/* Primary key badge (gold) */
+.badge-pk,
+.db-badge-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--db-space-1) var(--db-space-3);
+    background: var(--db-primary-key);
+    color: white;
+    border-radius: var(--db-radius-full);
+    font-size: var(--db-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+/* Foreign key badge (purple) */
+.badge-fk,
+.db-badge-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--db-space-1) var(--db-space-3);
+    background: var(--db-foreign-key);
+    color: white;
+    border-radius: var(--db-radius-full);
+    font-size: var(--db-text-xs);
+    font-weight: 600;
+}
+
+/* Status badges */
+.badge-success {
+    background: var(--db-success-bg);
+    color: var(--db-success);
+    border: 1px solid var(--db-success);
+}
+
+.badge-warning {
+    background: var(--db-warning-bg);
+    color: var(--db-warning);
+    border: 1px solid var(--db-warning);
+}
+
+.badge-error {
+    background: var(--db-error-bg);
+    color: var(--db-error);
+    border: 1px solid var(--db-error);
+}
+
+/* ============================================
+   COMPONENTS - Alerts & Notifications
+   ============================================ */
+
+.alert {
+    padding: var(--db-space-4);
+    border-radius: var(--db-radius);
+    border-left: 4px solid;
+    margin-bottom: var(--db-space-4);
+}
+
+.alert-info {
+    background: var(--db-info-bg);
+    border-color: var(--db-info);
+    color: var(--db-text-primary);
+}
+
+.alert-success {
+    background: var(--db-success-bg);
+    border-color: var(--db-success);
+    color: var(--db-text-primary);
+}
+
+.alert-warning {
+    background: var(--db-warning-bg);
+    border-color: var(--db-warning);
+    color: var(--db-text-primary);
+}
+
+.alert-error {
+    background: var(--db-error-bg);
+    border-color: var(--db-error);
+    color: var(--db-text-primary);
+}
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--db-space-4);
+}
+
+.container-sm {
+    max-width: 640px;
+}
+
+.container-md {
+    max-width: 768px;
+}
+
+.container-lg {
+    max-width: 1024px;
+}
+
+/* Grid layouts (schema-like) */
+.db-grid {
+    display: grid;
+    gap: var(--db-space-4);
+}
+
+.db-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.db-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.db-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Responsive grid */
+.db-grid-auto {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Flexbox utilities */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.gap-2 { gap: var(--db-space-2); }
+.gap-4 { gap: var(--db-space-4); }
+.gap-6 { gap: var(--db-space-6); }
+
+/* ============================================
+   THEME TOGGLE
+   ============================================ */
+
+.theme-toggle {
+    position: fixed;
+    top: var(--db-space-4);
+    right: var(--db-space-4);
+    z-index: var(--db-z-fixed);
+    background: var(--db-paper);
+    padding: var(--db-space-2) var(--db-space-3);
+    border-radius: var(--db-radius-full);
+    border: 2px solid var(--db-border);
+    box-shadow: var(--db-shadow);
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-2);
+}
+
+.theme-switch {
+    position: relative;
+    width: 48px;
+    height: 24px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--db-border);
+    transition: var(--db-transition);
+    border-radius: var(--db-radius-full);
+}
+
+.theme-slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: var(--db-transition);
+    border-radius: 50%;
+}
+
+input:checked + .theme-slider {
+    background: var(--db-entity);
+}
+
+input:checked + .theme-slider::before {
+    transform: translateX(24px);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    :root {
+        font-size: 14px;
+    }
+
+    .db-grid-2,
+    .db-grid-3,
+    .db-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: var(--db-space-3);
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Spacing */
+.mt-2 { margin-top: var(--db-space-2); }
+.mt-4 { margin-top: var(--db-space-4); }
+.mt-6 { margin-top: var(--db-space-6); }
+.mb-2 { margin-bottom: var(--db-space-2); }
+.mb-4 { margin-bottom: var(--db-space-4); }
+.mb-6 { margin-bottom: var(--db-space-6); }
+.p-4 { padding: var(--db-space-4); }
+.p-6 { padding: var(--db-space-6); }
+
+/* Text alignment */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Font weights */
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Colors */
+.text-primary { color: var(--db-text-primary); }
+.text-secondary { color: var(--db-text-secondary); }
+.text-muted { color: var(--db-text-muted); }
+.text-entity { color: var(--db-entity); }
+.text-relationship { color: var(--db-relationship); }
+.text-success { color: var(--db-success); }
+.text-error { color: var(--db-error); }
+
+/* Background colors */
+.bg-paper { background: var(--db-paper); }
+.bg-grid { background: var(--db-grid); }
+.bg-entity { background: var(--db-entity); color: white; }
+.bg-success { background: var(--db-success); color: white; }
+.bg-error { background: var(--db-error); color: white; }
+
+/* Borders */
+.border { border: 1px solid var(--db-border); }
+.border-2 { border: 2px solid var(--db-border); }
+.border-entity { border-color: var(--db-entity); }
+.rounded { border-radius: var(--db-radius); }
+.rounded-lg { border-radius: var(--db-radius-lg); }
+
+/* Shadows */
+.shadow { box-shadow: var(--db-shadow); }
+.shadow-md { box-shadow: var(--db-shadow-md); }
+.shadow-lg { box-shadow: var(--db-shadow-lg); }
+
+/* Display */
+.hidden { display: none; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--db-grid);
+    border-radius: var(--db-radius);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--db-border);
+    border-radius: var(--db-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--db-divider);
+}

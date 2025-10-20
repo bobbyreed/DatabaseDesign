@@ -1,0 +1,648 @@
+/**
+ * Attendance System Styles
+ * Builds on database-theme.css
+ * Specific components for student registration and attendance tracking
+ */
+
+/* ============================================
+   ATTENDANCE PAGE LAYOUTS
+   ============================================ */
+
+.attendance-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--db-entity) 0%, var(--db-relationship) 100%);
+    padding: var(--db-space-6);
+}
+
+.attendance-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.attendance-header {
+    background: linear-gradient(135deg, var(--db-entity) 0%, #0c4a6e 100%);
+    color: white;
+    padding: var(--db-space-8);
+    border-radius: var(--db-radius-lg);
+    margin-bottom: var(--db-space-6);
+    text-align: center;
+    box-shadow: var(--db-shadow-lg);
+}
+
+.attendance-header h1 {
+    color: white;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.attendance-header p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: var(--db-space-2);
+}
+
+/* ============================================
+   CARD SWIPE AREA
+   ============================================ */
+
+.swipe-area {
+    background: linear-gradient(135deg,
+        rgba(14, 165, 233, 0.1) 0%,
+        rgba(139, 92, 246, 0.1) 100%);
+    border: 3px dashed var(--db-relationship);
+    border-radius: var(--db-radius-lg);
+    padding: var(--db-space-10);
+    text-align: center;
+    margin-bottom: var(--db-space-6);
+    transition: all var(--db-transition);
+}
+
+.swipe-area.active {
+    border-color: var(--db-foreign-key);
+    background: linear-gradient(135deg,
+        rgba(139, 92, 246, 0.2) 0%,
+        rgba(14, 165, 233, 0.2) 100%);
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0%, 100% {
+        border-color: var(--db-foreign-key);
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+    }
+    50% {
+        border-color: var(--db-relationship);
+        box-shadow: 0 0 0 8px rgba(139, 92, 246, 0);
+    }
+}
+
+.swipe-area h3 {
+    color: var(--db-foreign-key);
+    margin-bottom: var(--db-space-3);
+}
+
+.swipe-area p {
+    color: var(--db-text-secondary);
+    font-size: var(--db-text-lg);
+}
+
+/* Hidden card input */
+#cardInput,
+#card-swipe-input {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+/* ============================================
+   STATUS MESSAGES
+   ============================================ */
+
+.status-message {
+    padding: var(--db-space-4);
+    border-radius: var(--db-radius);
+    margin-bottom: var(--db-space-4);
+    text-align: center;
+    font-size: var(--db-text-lg);
+    font-weight: 600;
+    display: none;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.status-message.success {
+    background: var(--db-success-bg);
+    border: 2px solid var(--db-success);
+    color: var(--db-success);
+    display: block;
+}
+
+.status-message.error {
+    background: var(--db-error-bg);
+    border: 2px solid var(--db-error);
+    color: var(--db-error);
+    display: block;
+}
+
+/* ============================================
+   STUDENT LIST
+   ============================================ */
+
+.students-list {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: var(--db-space-2);
+}
+
+.student-item {
+    background: var(--db-grid);
+    padding: var(--db-space-4);
+    margin-bottom: var(--db-space-3);
+    border-radius: var(--db-radius);
+    border-left: 4px solid var(--db-relationship);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--db-transition-fast);
+}
+
+.student-item:hover {
+    background: var(--db-hover);
+    border-left-color: var(--db-entity);
+    transform: translateX(4px);
+    box-shadow: var(--db-shadow);
+}
+
+.student-item.present {
+    border-left-color: var(--db-success);
+    background: var(--db-success-bg);
+}
+
+.student-item.late {
+    border-left-color: var(--db-warning);
+    background: var(--db-warning-bg);
+}
+
+.student-item.absent {
+    border-left-color: var(--db-nullable);
+    opacity: 0.6;
+}
+
+.student-name {
+    font-size: var(--db-text-lg);
+    font-weight: 600;
+    color: var(--db-text-primary);
+}
+
+.student-date,
+.student-time {
+    color: var(--db-text-muted);
+    font-size: var(--db-text-sm);
+    margin-top: var(--db-space-1);
+}
+
+.student-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--db-space-2);
+}
+
+/* ============================================
+   STATISTICS BOXES
+   ============================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--db-space-4);
+    margin-bottom: var(--db-space-6);
+}
+
+.stat-box {
+    background: linear-gradient(135deg, var(--db-entity) 0%, var(--db-relationship) 100%);
+    color: white;
+    padding: var(--db-space-6);
+    border-radius: var(--db-radius-lg);
+    text-align: center;
+    box-shadow: var(--db-shadow-md);
+    transition: all var(--db-transition);
+}
+
+.stat-box:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--db-shadow-lg);
+}
+
+.stat-number {
+    font-size: var(--db-text-5xl);
+    font-weight: 700;
+    margin: var(--db-space-2) 0;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: var(--db-text-base);
+    opacity: 0.95;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
+   DATE SELECTOR
+   ============================================ */
+
+.date-selector {
+    background: var(--db-paper);
+    padding: var(--db-space-4);
+    border-radius: var(--db-radius);
+    border: 2px solid var(--db-border);
+    margin-bottom: var(--db-space-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--db-space-4);
+    flex-wrap: wrap;
+}
+
+.date-selector label {
+    font-weight: 600;
+    color: var(--db-text-primary);
+    margin-right: var(--db-space-2);
+}
+
+.date-selector input[type="date"] {
+    padding: var(--db-space-2) var(--db-space-4);
+    border: 2px solid var(--db-border);
+    border-radius: var(--db-radius);
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-base);
+}
+
+.date-selector select {
+    padding: var(--db-space-2) var(--db-space-4);
+    border: 2px solid var(--db-border);
+    border-radius: var(--db-radius);
+}
+
+/* ============================================
+   MANUAL ENTRY FORM
+   ============================================ */
+
+.manual-entry-section {
+    margin-top: var(--db-space-8);
+    padding-top: var(--db-space-6);
+    border-top: 2px solid var(--db-divider);
+}
+
+.manual-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: var(--db-space-4);
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: var(--db-space-2);
+    font-weight: 600;
+    color: var(--db-text-primary);
+}
+
+.form-group input {
+    padding: var(--db-space-3);
+    border: 2px solid var(--db-border);
+    border-radius: var(--db-radius);
+    background: var(--db-canvas);
+    color: var(--db-text-primary);
+    font-size: var(--db-text-base);
+    font-family: var(--db-font-mono);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--db-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.action-buttons {
+    display: flex;
+    gap: var(--db-space-3);
+    margin-top: var(--db-space-4);
+    flex-wrap: wrap;
+}
+
+.export-section {
+    margin-top: var(--db-space-6);
+    padding-top: var(--db-space-6);
+    border-top: 2px solid var(--db-divider);
+}
+
+/* Remove button */
+.remove-btn {
+    background: var(--db-error);
+    color: white;
+    border: none;
+    padding: var(--db-space-2) var(--db-space-4);
+    border-radius: var(--db-radius);
+    cursor: pointer;
+    font-size: var(--db-text-sm);
+    font-weight: 600;
+    transition: all var(--db-transition-fast);
+}
+
+.remove-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+    box-shadow: var(--db-shadow);
+}
+
+/* ============================================
+   ATTENDANCE OVERVIEW GRID
+   ============================================ */
+
+.attendance-overview {
+    background: var(--db-paper);
+    padding: var(--db-space-6);
+    border-radius: var(--db-radius-lg);
+    box-shadow: var(--db-shadow);
+}
+
+.legend {
+    display: flex;
+    gap: var(--db-space-6);
+    margin-bottom: var(--db-space-6);
+    padding: var(--db-space-4);
+    background: var(--db-grid);
+    border-radius: var(--db-radius);
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-2);
+}
+
+.legend-box {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--db-radius-sm);
+    border: 2px solid var(--db-border);
+}
+
+.legend-box.present {
+    background: var(--db-success);
+}
+
+.legend-box.late {
+    background: var(--db-warning);
+}
+
+.legend-box.absent {
+    background: var(--db-nullable);
+}
+
+.legend-box.future {
+    background: var(--db-grid);
+}
+
+.student-row {
+    display: grid;
+    grid-template-columns: 200px repeat(auto-fit, minmax(40px, 1fr));
+    gap: var(--db-space-2);
+    padding: var(--db-space-3);
+    border-bottom: 1px solid var(--db-border);
+    align-items: center;
+}
+
+.student-row:hover {
+    background: var(--db-hover);
+}
+
+.student-row-name {
+    font-weight: 600;
+    color: var(--db-text-primary);
+}
+
+.attendance-box {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--db-radius-sm);
+    border: 2px solid var(--db-border);
+    cursor: pointer;
+    transition: all var(--db-transition-fast);
+    position: relative;
+}
+
+.attendance-box:hover {
+    transform: scale(1.1);
+    box-shadow: var(--db-shadow);
+}
+
+.attendance-box.present {
+    background: var(--db-success);
+    border-color: var(--db-success);
+}
+
+.attendance-box.late {
+    background: var(--db-warning);
+    border-color: var(--db-warning);
+}
+
+.attendance-box.absent {
+    background: var(--db-nullable);
+    border-color: var(--db-nullable);
+}
+
+.attendance-box.future {
+    background: var(--db-grid);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Tooltip */
+.tooltip {
+    position: fixed;
+    background: var(--db-text-primary);
+    color: white;
+    padding: var(--db-space-2) var(--db-space-3);
+    border-radius: var(--db-radius);
+    font-size: var(--db-text-sm);
+    pointer-events: none;
+    z-index: var(--db-z-tooltip);
+    box-shadow: var(--db-shadow-lg);
+    display: none;
+}
+
+.tooltip.show {
+    display: block;
+}
+
+/* ============================================
+   FILTER CONTROLS
+   ============================================ */
+
+.filter-controls {
+    display: flex;
+    gap: var(--db-space-3);
+    margin-bottom: var(--db-space-4);
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: var(--db-space-2) var(--db-space-4);
+    border: 2px solid var(--db-border);
+    background: transparent;
+    color: var(--db-text-primary);
+    border-radius: var(--db-radius);
+    cursor: pointer;
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-sm);
+    font-weight: 500;
+    transition: all var(--db-transition-fast);
+}
+
+.filter-btn:hover {
+    background: var(--db-hover);
+    border-color: var(--db-entity);
+}
+
+.filter-btn.active {
+    background: var(--db-entity);
+    color: white;
+    border-color: var(--db-entity);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .attendance-page {
+        padding: var(--db-space-4);
+    }
+
+    .attendance-header {
+        padding: var(--db-space-6);
+    }
+
+    .manual-form {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-row {
+        grid-template-columns: 1fr;
+    }
+
+    .attendance-box {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* ============================================
+   CLASSROOM AUTH OVERLAY
+   ============================================ */
+
+#auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+        rgba(30, 58, 138, 0.95) 0%,
+        rgba(8, 145, 178, 0.95) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--db-z-modal);
+    overflow-y: auto;
+    padding: var(--db-space-4);
+}
+
+.auth-content {
+    background: white;
+    padding: var(--db-space-10);
+    border-radius: var(--db-radius-xl);
+    box-shadow: var(--db-shadow-xl);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    margin: auto;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.auth-icon {
+    font-size: 4em;
+    margin-bottom: var(--db-space-4);
+}
+
+.auth-content h2 {
+    color: var(--db-entity);
+    margin-bottom: var(--db-space-3);
+}
+
+.auth-content p {
+    color: var(--db-text-secondary);
+    margin-bottom: var(--db-space-2);
+}
+
+.auth-instruction {
+    font-weight: 600;
+    margin-top: var(--db-space-4) !important;
+}
+
+.auth-content input {
+    width: 100%;
+    padding: var(--db-space-4);
+    margin: var(--db-space-4) 0;
+    border: 2px solid var(--db-relationship);
+    border-radius: var(--db-radius);
+    font-size: var(--db-text-lg);
+    font-family: var(--db-font-mono);
+    text-align: center;
+}
+
+.auth-content input:focus {
+    outline: none;
+    border-color: var(--db-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.auth-message {
+    min-height: 30px;
+    margin: var(--db-space-3) 0;
+    font-weight: 600;
+}
+
+.auth-message.success {
+    color: var(--db-success);
+}
+
+.auth-message.error {
+    color: var(--db-error);
+}
+
+.auth-help {
+    margin-top: var(--db-space-4);
+    color: var(--db-text-muted);
+}
+
+.auth-help small {
+    font-size: var(--db-text-sm);
+}
