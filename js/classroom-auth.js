@@ -122,6 +122,8 @@
                 align-items: center;
                 z-index: 999999;
                 font-family: 'Courier Prime', 'IBM Plex Mono', monospace;
+                overflow-y: auto;
+                padding: 20px;
             }
 
             .auth-content {
@@ -132,6 +134,9 @@
                 text-align: center;
                 max-width: 500px;
                 width: 90%;
+                margin: auto;
+                max-height: 90vh;
+                overflow-y: auto;
             }
 
             .auth-icon {
