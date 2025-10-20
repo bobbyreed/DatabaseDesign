@@ -6,23 +6,22 @@
 
 const { getDB, successResponse, errorResponse, handleOptions } = require('./db-config');
 
-// TODO: Update these dates with your actual class schedule
 const CLASS_DATES = [
-    '2025-01-13', // Class 1
-    '2025-01-15', // Class 2
-    '2025-01-20', // Class 3
-    '2025-01-22', // Class 4
-    '2025-01-27', // Class 5
-    '2025-01-29', // Class 6
-    '2025-02-03', // Class 7
-    '2025-02-05', // Class 8
-    '2025-02-10', // Class 9
-    '2025-02-12', // Class 10
-    '2025-02-17', // Class 11
-    '2025-02-19', // Class 12
-    '2025-02-24', // Class 13
-    '2025-02-26', // Class 14
-    '2025-03-03'  // Class 15
+    '2025-10-22', // Class 1
+    '2025-10-27', // Class 2
+    '2025-10-29', // Class 3
+    '2025-11-03', // Class 4
+    '2025-11-05', // Class 5
+    '2025-11-10', // Class 6
+    '2025-11-12', // Class 7
+    '2025-11-17', // Class 8
+    '2025-11-19', // Class 9
+    '2025-11-24', // Class 10
+    '2025-11-26', // Class 11 (No Class)
+    '2025-12-01', // Class 12
+    '2025-12-03', // Class 13
+    '2025-12-08', // Class 14
+    '2025-12-10'  // Class 15
 ];
 
 exports.handler = async (event, context) => {

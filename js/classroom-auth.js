@@ -8,7 +8,7 @@
     'use strict';
 
     // CONFIGURATION - Update with your instructor card pattern
-    const INSTRUCTOR_CARD_PATTERN = 'LASTNAME/FIRSTNAME'; // TODO: Update with actual card data
+    const INSTRUCTOR_CARD_PATTERN = `REED/BOBBY`; 
     const AUTH_KEY = 'classroom_auth';
     const AUTH_TIMEOUT = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
 
