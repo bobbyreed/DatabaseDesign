@@ -1335,6 +1335,30 @@ member_id INTEGER REFERENCES members(member_id)</div>
                 <h3>2. DataGrip Screenshot</h3>
                 <p><strong>What:</strong> Screenshot of DataGrip interface showing your library_db tables and connections</p>
                 <p><strong>Why:</strong> Proves you can use professional database tools. Modern development relies on IDEs like DataGrip for productivity, debugging, and visual database management.</p>
+
+                <p style="margin-top: 20px;"><strong>How to Connect DataGrip to Your CLI Database:</strong></p>
+                <ol style="font-size: 1.05em; line-height: 1.8; margin-top: 10px;">
+                    <li><strong>Open DataGrip</strong> and click the <code>+</code> icon in the Database tool window</li>
+                    <li><strong>Select:</strong> <code>Data Source → PostgreSQL</code></li>
+                    <li><strong>Configure Connection:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Name:</strong> <code>library_db</code></li>
+                            <li><strong>Host:</strong> <code>localhost</code></li>
+                            <li><strong>Port:</strong> <code>5432</code> (default PostgreSQL port)</li>
+                            <li><strong>Database:</strong> <code>library_db</code></li>
+                            <li><strong>User:</strong> <code>postgres</code></li>
+                            <li><strong>Password:</strong> Leave blank (or enter your postgres password if you set one)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Download Drivers:</strong> Click "Download missing driver files" if prompted</li>
+                    <li><strong>Test Connection:</strong> Click "Test Connection" to verify it works</li>
+                    <li><strong>Apply & OK:</strong> Click "Apply" then "OK" to save the connection</li>
+                    <li><strong>Expand database:</strong> In the Database tool window, expand <code>library_db → schemas → public → tables</code> to see your tables</li>
+                </ol>
+
+                <div class="tip-box" style="margin-top: 15px;">
+                    <strong>Troubleshooting:</strong> If connection fails, ensure PostgreSQL service is running: <code>sudo service postgresql start</code> (WSL/Linux) or <code>brew services start postgresql@14</code> (Mac)
+                </div>
             </div>
 
             <div class="demo-box">
