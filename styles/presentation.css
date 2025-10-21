@@ -401,6 +401,30 @@ li {
     border-radius: 8px;
     margin: 20px 0;
     transition: all 0.3s ease;
+    color: #000000;  /* Force black text for WCAG AA compliance on light green background */
+}
+
+.tip-box h3, .tip h3 {
+    color: #1a5c1a;  /* Darker green for headings - WCAG AA compliant on light green background */
+}
+
+.tip-box strong, .tip strong {
+    color: #2d7a2d;  /* Darker green for strong text - WCAG AA compliant on light green background */
+}
+
+[data-theme="dark"] .tip-box,
+[data-theme="dark"] .tip {
+    color: #ffffff;  /* White text for dark mode */
+}
+
+[data-theme="dark"] .tip-box h3,
+[data-theme="dark"] .tip h3 {
+    color: var(--success-border);  /* Light green for headings in dark mode */
+}
+
+[data-theme="dark"] .tip-box strong,
+[data-theme="dark"] .tip strong {
+    color: var(--success-border);  /* Light green for strong in dark mode */
 }
 
 .warning-box, .warning {
@@ -410,6 +434,30 @@ li {
     border-radius: 8px;
     margin: 20px 0;
     transition: all 0.3s ease;
+    color: #000000;  /* Force black text for WCAG AA compliance on light yellow background */
+}
+
+.warning-box h3, .warning h3 {
+    color: #5c4a00;  /* Dark brown/gold for headings - WCAG AA compliant on light yellow background */
+}
+
+.warning-box strong, .warning strong {
+    color: #7a6200;  /* Dark gold for strong text - WCAG AA compliant on light yellow background */
+}
+
+[data-theme="dark"] .warning-box,
+[data-theme="dark"] .warning {
+    color: #ffffff;  /* White text for dark mode */
+}
+
+[data-theme="dark"] .warning-box h3,
+[data-theme="dark"] .warning h3 {
+    color: var(--warning-border);  /* Yellow for headings in dark mode */
+}
+
+[data-theme="dark"] .warning-box strong,
+[data-theme="dark"] .warning strong {
+    color: var(--warning-border);  /* Yellow for strong in dark mode */
 }
 
 .demo-box {
