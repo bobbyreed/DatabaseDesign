@@ -1320,7 +1320,53 @@ member_id INTEGER REFERENCES members(member_id)</div>
             </div>
         </div>
 
-        <!-- Slide 33: Understanding the Assignment -->
+        <!-- Slide 33: Setting PostgreSQL Password -->
+        <div class="slide">
+            <h1>Setting PostgreSQL Password <span class="emoji">🔐</span></h1>
+            <h2>Required for DataGrip Connection</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ Important</h3>
+                <p style="font-size: 1.2em;">DataGrip requires a password to connect to PostgreSQL. By default, the <code>postgres</code> user may not have a password set. You need to set one via CLI first.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Step-by-Step: Set PostgreSQL Password</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Connect to PostgreSQL as the postgres user:</strong>
+                        <div class="code-example">sudo -u postgres psql</div>
+                    </li>
+                    <li><strong>Set a password for the postgres user:</strong>
+                        <div class="code-example">ALTER USER postgres WITH PASSWORD 'your_password_here';</div>
+                        <p style="margin-top: 10px; font-size: 0.95em;"><em>Replace <code>your_password_here</code> with a secure password of your choice</em></p>
+                    </li>
+                    <li><strong>Exit PostgreSQL:</strong>
+                        <div class="code-example">\q</div>
+                    </li>
+                    <li><strong>Remember your password!</strong> You'll need it to connect DataGrip to your database</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Example</h3>
+                <div class="code-example">
+                    <span class="comment"># Connect to PostgreSQL</span><br>
+                    sudo -u postgres psql<br>
+                    <br>
+                    <span class="comment"># Set password (use a strong password!)</span><br>
+                    ALTER USER postgres WITH PASSWORD 'SecurePass123!';<br>
+                    <br>
+                    <span class="comment"># Exit</span><br>
+                    \q
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Security Tip:</strong> Choose a strong password that you'll remember. You can also create a separate database user instead of using the postgres superuser for better security practices.
+            </div>
+        </div>
+
+        <!-- Slide 34: Understanding the Assignment -->
         <div class="slide">
             <h1>Why These Requirements? <span class="emoji">🎯</span></h1>
             <h2>Understanding Each Component</h2>
@@ -1347,7 +1393,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
                             <li><strong>Port:</strong> <code>5432</code> (default PostgreSQL port)</li>
                             <li><strong>Database:</strong> <code>library_db</code></li>
                             <li><strong>User:</strong> <code>postgres</code></li>
-                            <li><strong>Password:</strong> Leave blank (or enter your postgres password if you set one)</li>
+                            <li><strong>Password:</strong> Enter the password you set in the previous slide</li>
                         </ul>
                     </li>
                     <li><strong>Download Drivers:</strong> Click "Download missing driver files" if prompted</li>
@@ -1368,7 +1414,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
             </div>
         </div>
 
-        <!-- Slide 34: Understanding the Assignment (continued) -->
+        <!-- Slide 35: Understanding the Assignment (continued) -->
         <div class="slide">
             <h1>Why These Requirements? <span class="emoji">🎯</span></h1>
             <h2>Understanding Each Component (continued)</h2>
@@ -1423,7 +1469,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">33</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
