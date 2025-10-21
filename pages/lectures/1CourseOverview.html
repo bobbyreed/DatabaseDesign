@@ -1136,9 +1136,141 @@ member_id INTEGER REFERENCES members(member_id)</div>
             </div>
         </div>
 
+        <!-- DATAGRIP SETUP SECTION -->
+
+        <!-- Slide 28: DataGrip Free Trial & Installation -->
+        <div class="slide">
+            <h1>DataGrip Setup <span class="emoji">🛠️</span></h1>
+            <h2>Free Trial Activation and Install</h2>
+
+            <div class="demo-box">
+                <h3>What is DataGrip?</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>Professional database IDE by JetBrains</li>
+                    <li>Supports PostgreSQL, MySQL, MongoDB, and many more databases</li>
+                    <li>Smart code completion and refactoring tools</li>
+                    <li>Visual database management and ER diagram generation</li>
+                    <li><strong>FREE for students!</strong></li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Installation Steps</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li>Visit <a href="https://www.jetbrains.com/datagrip/" style="color: var(--ocu-cyan);">jetbrains.com/datagrip/</a></li>
+                    <li>Click <strong>"Download"</strong> to get the free 30-day trial</li>
+                    <li>Choose your operating system (Windows, Mac, or Linux)</li>
+                    <li>Run the installer and follow the setup wizard</li>
+                    <li>Launch DataGrip - you'll activate your student license in the next step</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Important:</strong> Start with the free trial, then apply for the student license (next slide) to get it free while you're a student!
+            </div>
+        </div>
+
+        <!-- Slide 29: DataGrip Student License -->
+        <div class="slide">
+            <h1>DataGrip Student License <span class="emoji">🎓</span></h1>
+            <h2>Get Professional Tools for Free</h2>
+
+            <div class="activity-box">
+                <h3>Apply for Free Student License</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li>Go to <a href="https://www.jetbrains.com/student/" style="color: var(--ocu-cyan);">jetbrains.com/student/</a></li>
+                    <li>Click <strong>"Apply now"</strong></li>
+                    <li>Choose <strong>"Official document"</strong> as verification method</li>
+                    <li>Enter your <code>@okcu.edu</code> email address</li>
+                    <li>Upload your student ID or enrollment verification</li>
+                    <li>Submit the application</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>What You Get</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>✅ <strong>Free access</strong> to all JetBrains IDEs (DataGrip, IntelliJ, PyCharm, etc.)</li>
+                    <li>✅ <strong>One year license</strong> renewable annually while you're a student</li>
+                    <li>✅ <strong>Professional features</strong> used by industry developers</li>
+                    <li>✅ <strong>Automatic updates</strong> to latest versions</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>⏱️ Processing Time</h3>
+                <p style="font-size: 1.15em;">License approval typically takes 1-2 business days. Apply early so you have DataGrip ready for homework!</p>
+            </div>
+        </div>
+
+        <!-- Slide 30: What is an ER Diagram? -->
+        <div class="slide">
+            <h1>Entity-Relationship Diagrams <span class="emoji">📊</span></h1>
+            <h2>Visualizing Database Structure</h2>
+
+            <div class="demo-box">
+                <h3>What is an ER Diagram?</h3>
+                <p style="font-size: 1.2em; margin: 15px 0;">
+                    An <strong>Entity-Relationship (ER) Diagram</strong> is a visual representation of your database structure, showing:
+                </p>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Entities</strong> - Tables in your database (e.g., Authors, Books, Members)</li>
+                    <li><strong>Attributes</strong> - Columns within each table (e.g., title, isbn, email)</li>
+                    <li><strong>Relationships</strong> - How tables connect to each other</li>
+                    <li><strong>Cardinality</strong> - One-to-one, one-to-many, many-to-many relationships</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Why Use ER Diagrams?</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>📋 <strong>Planning:</strong> Design databases before writing code</li>
+                    <li>🔍 <strong>Documentation:</strong> Communicate database structure to teams</li>
+                    <li>🐛 <strong>Debugging:</strong> Identify missing relationships or design flaws</li>
+                    <li>📚 <strong>Learning:</strong> Understand existing database structures quickly</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Coming Up:</strong> We'll have a full lecture dedicated to ER diagram design. For now, we'll use DataGrip to automatically generate diagrams from our library_db!
+            </div>
+        </div>
+
+        <!-- Slide 31: ER Diagrams in DataGrip -->
+        <div class="slide">
+            <h1>DataGrip ER Diagrams <span class="emoji">🔍</span></h1>
+            <h2>Auto-Generate Visual Database Maps</h2>
+
+            <div class="activity-box">
+                <h3>Creating an ER Diagram in DataGrip</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Connect to database:</strong> Add your library_db connection in DataGrip</li>
+                    <li><strong>Right-click database:</strong> In the Database tool window, right-click your database</li>
+                    <li><strong>Select diagrams:</strong> Choose <code>Diagrams → Show Visualization</code></li>
+                    <li><strong>Customize view:</strong> Drag tables, zoom in/out, show/hide columns</li>
+                    <li><strong>Export diagram:</strong> Right-click diagram → <code>Export to Image</code></li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>What You'll See</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>📦 <strong>Tables</strong> displayed as boxes with table names</li>
+                    <li>📝 <strong>Columns</strong> listed inside each table box</li>
+                    <li>🔑 <strong>Primary keys</strong> marked with key icons</li>
+                    <li>🔗 <strong>Foreign keys</strong> shown as connecting lines between tables</li>
+                    <li>🎨 <strong>Color coding</strong> for different data types and constraints</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Homework Hint:</strong> You'll need to create and export an ER diagram of library_db for this week's homework. Practice now!
+            </div>
+        </div>
+
         <!-- HOMEWORK SECTION -->
 
-        <!-- Slide 28: Homework Assignment -->
+        <!-- Slide 32: Homework Assignment -->
         <div class="slide">
             <h1>Homework Week 1 <span class="emoji">📝</span></h1>
             <h2>Complete Your Development Environment</h2>
@@ -1188,7 +1320,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
             </div>
         </div>
 
-        <!-- Slide 29: Understanding the Assignment -->
+        <!-- Slide 33: Understanding the Assignment -->
         <div class="slide">
             <h1>Why These Requirements? <span class="emoji">🎯</span></h1>
             <h2>Understanding Each Component</h2>
@@ -1212,7 +1344,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
             </div>
         </div>
 
-        <!-- Slide 30: Understanding the Assignment (continued) -->
+        <!-- Slide 34: Understanding the Assignment (continued) -->
         <div class="slide">
             <h1>Why These Requirements? <span class="emoji">🎯</span></h1>
             <h2>Understanding Each Component (continued)</h2>
@@ -1267,7 +1399,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">29</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">33</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
