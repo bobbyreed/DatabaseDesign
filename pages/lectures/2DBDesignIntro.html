@@ -6,7 +6,7 @@
     <title>Introduction to Databases - CSCI 5603</title>
     
     <!-- Database Design Presentation Styles with Theme Support -->
-    <link rel="stylesheet" href="/styles/presentation.css">
+    <link rel="stylesheet" href="../../styles/presentation.css">
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     
     <!-- Import Courier Prime for analog feel -->
@@ -30,32 +30,9 @@
             margin: 20px 0;
             font-family: 'Courier Prime', monospace;
         }
-        
-        .sql-example {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 20px;
-            border-radius: 10px;
-            font-family: 'IBM Plex Mono', monospace;
-            margin: 20px 0;
-            border-left: 4px solid var(--ocu-cyan);
-            overflow-x: auto;
-        }
-        
-        .sql-keyword {
-            color: #569cd6;
-            font-weight: bold;
-        }
-        
-        .sql-string {
-            color: #ce9178;
-        }
-        
-        .sql-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-        
+
+        /* SQL syntax highlighting classes now in presentation.css */
+
         .table-schema {
             border-collapse: collapse;
             width: 100%;
@@ -96,16 +73,8 @@
             margin: 20px 0;
             box-shadow: 0 4px 6px var(--shadow-color);
         }
-        
-        .file-format-example {
-            background: #2d2d2d;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.95em;
-        }
+
+        /* File format examples use code-example class from presentation.css */
     </style>
 </head>
 <body>
@@ -115,7 +84,7 @@
         <!-- Timer display -->
         <div class="timer-display" id="timer-display">
             <span id="timer-text">Lecture 02: Introduction to Databases
-                 <button class="home"><a href="../index.html">Home</a></button>
+                 <button class="home"><a href="../../index.html">Home</a></button>
             </span>
         </div>
 

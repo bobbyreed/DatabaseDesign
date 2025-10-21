@@ -79,14 +79,6 @@
             text-decoration: underline;
         }
         
-        .warning-box {
-            background: var(--warning-bg);
-            border: 2px solid var(--warning-border);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        
         .instructor-info {
             display: flex;
             align-items: center;
@@ -116,8 +108,8 @@
         }
         
         .code-example {
-            background: #1e1e1e;
-            color: #d4d4d4;
+            background: var(--syntax-bg);
+            color: var(--syntax-text);
             padding: 15px 20px;
             border-radius: 8px;
             font-family: 'IBM Plex Mono', monospace;
@@ -126,9 +118,9 @@
             border-left: 4px solid var(--ocu-cyan);
             overflow-x: auto;
         }
-        
+
         .code-example .comment {
-            color: #6a9955;
+            color: var(--syntax-comment);
             font-style: italic;
         }
         
@@ -183,18 +175,6 @@
             border: 1px solid var(--border-color);
         }
         
-        .tip-box {
-            background: var(--success-bg);
-            border: 2px solid var(--success-border);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        
-        .tip-box strong {
-            color: var(--success-border);
-        }
-        
         .homework-item {
             background: var(--bg-accent);
             padding: 20px;
@@ -233,7 +213,7 @@
         <!-- Timer display -->
         <div class="timer-display" id="timer-display">
             <span id="timer-text">Lecture 00 - Course Overview
-                 <button class="home"><a href="../index.html">Home</a></button>
+                 <button class="home"><a href="../../index.html">Home</a></button>
             </span>
         </div>
 
@@ -340,7 +320,7 @@
                     <tr><td>On time</td><td style="text-align: right; color: var(--ocu-green);">100%</td></tr>
                     <tr><td>1 day late</td><td style="text-align: right; color: var(--ocu-yellow);">90%</td></tr>
                     <tr><td>2-7 days late</td><td style="text-align: right;">-10% per day</td></tr>
-                    <tr><td>&gt; 1 week late</td><td style="text-align: right; color: red;">50% maximum</td></tr>
+                    <tr><td>&gt; 1 week late</td><td style="text-align: right; color: var(--error-color);">50% maximum</td></tr>
                 </table>
                 <p style="margin-top: 10px;"><strong>Extensions:</strong> Request at least 24 hours before due date</p>
             </div>
@@ -386,8 +366,6 @@
                 <strong>Remember:</strong> AI is a tool to enhance learning, not replace understanding. You'll need to explain your database designs in exams without AI assistance.
             </div>
         </div>
-
-        <!-- ORIGINAL COURSE OVERVIEW CONTENT CONTINUES -->
 
         <!-- Slide 7: Course Readings -->
         <div class="slide">
@@ -481,7 +459,7 @@
                     </tr>
                     <tr>
                         <td><strong>Retakes:</strong></td>
-                        <td style="text-align: right; color: red;">❌ Not permitted</td>
+                        <td style="text-align: right; color: var(--error-color);">❌ Not permitted</td>
                     </tr>
                 </table>
             </div>
@@ -788,7 +766,95 @@
             </div>
         </div>
 
-        <!-- Slide 19: Code Explanation - Database Creation -->
+        <!-- Slide 19: Brief Individual Conferences -->
+        <div class="slide">
+            <h1>Quick Check-In <span class="emoji">👥</span></h1>
+            <h2>Brief Individual Conferences</h2>
+
+            <div class="activity-box">
+                <h3>What's Happening Now</h3>
+                <p style="font-size: 1.2em;">I'll be meeting with each of you individually for a <strong>1-2 minute conference</strong> to:</p>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>✅ Verify your development environment is working</li>
+                    <li>✅ Answer any setup questions you have</li>
+                    <li>✅ Make sure you're comfortable with course expectations</li>
+                    <li>✅ Learn your preferred name and pronounce it correctly</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>While You Wait</h3>
+                <p style="font-size: 1.2em;">While others are meeting with me, please set up your course GitHub repository by following the instructions on the next slide.</p>
+                <p style="font-size: 1.15em; margin-top: 15px;"><strong>This is required</strong> - you'll use this repository for all homework submissions throughout the semester.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> Take your time with the GitHub setup. I'll call you when it's your turn for our brief conference.
+            </div>
+        </div>
+
+        <!-- Slide 20: GitHub Repository Setup -->
+        <div class="slide">
+            <h1>GitHub Repository Setup <span class="emoji">📦</span></h1>
+            <h2>Create Your Course Repository</h2>
+
+            <div class="activity-box">
+                <h3>Step 1: Create Repository on GitHub</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li>Go to <a href="https://github.com" style="color: var(--ocu-cyan);">github.com</a> and sign in (or create an account)</li>
+                    <li>Click <strong>"New repository"</strong></li>
+                    <li><strong>Name your repository:</strong> <code>DatabaseDesign[YourPreferredName]</code>
+                        <ul style="margin-top: 10px;">
+                            <li>Example: <code>DatabaseDesignRaj</code> or <code>DatabaseDesignPriya</code></li>
+                            <li><strong>Important:</strong> Use the name you prefer to be called, not necessarily your formal/legal name</li>
+                        </ul>
+                    </li>
+                    <li>Make it <strong>Public</strong></li>
+                    <li>Check <strong>"Add a README file"</strong></li>
+                    <li>Click <strong>"Create repository"</strong></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 21: GitHub Repository Collaboration & Clone -->
+        <div class="slide">
+            <h1>GitHub Repository Setup <span class="emoji">📦</span></h1>
+            <h2>Add Collaborator & Clone Locally</h2>
+
+            <div class="activity-box">
+                <h3>Step 2: Add Instructor as Collaborator</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li>In your new repository, click <strong>"Settings"</strong></li>
+                    <li>In the left sidebar, click <strong>"Collaborators"</strong></li>
+                    <li>Click <strong>"Add people"</strong></li>
+                    <li>Enter username: <code>bobbyreed</code></li>
+                    <li>Click <strong>"Add bobbyreed to this repository"</strong></li>
+                </ol>
+            </div>
+
+            <div class="activity-box">
+                <h3>Step 3: Clone Repository Locally</h3>
+                <div class="code-example">
+                    <span class="comment"># Clone your repository</span><br>
+                    git clone https://github.com/YOUR_USERNAME/DatabaseDesignYourName.git<br>
+                    <br>
+                    <span class="comment"># Navigate into the repository</span><br>
+                    cd DatabaseDesignYourName<br>
+                    <br>
+                    <span class="comment"># Create folder structure for homework</span><br>
+                    mkdir -p Homework/Homework1<br>
+                    <br>
+                    <span class="comment"># Verify the structure was created</span><br>
+                    ls -R
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> We'll put all of today's work inside the <code>Homework/Homework1</code> folder.
+            </div>
+        </div>
+
+        <!-- Slide 22: Code Explanation - Database Creation -->
         <div class="slide">
             <h1>Understanding: Database Creation <span class="emoji">🔍</span></h1>
             
@@ -1076,7 +1142,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
         <div class="slide">
             <h1>Homework Week 1 <span class="emoji">📝</span></h1>
             <h2>Complete Your Development Environment</h2>
-            
+
             <div class="homework-item">
                 <h3>1. Finish CLI Setup <span style="color: var(--ocu-cyan);">(if needed)</span></h3>
                 <ul>
@@ -1086,7 +1152,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
                     <li>Take a screenshot of successful connection</li>
                 </ul>
             </div>
-            
+
             <div class="homework-item">
                 <h3>2. Install DataGrip <span style="color: var(--ocu-cyan);">(Required)</span></h3>
                 <ol style="font-size: 1.1em;">
@@ -1098,41 +1164,77 @@ member_id INTEGER REFERENCES members(member_id)</div>
                     <li>Take a screenshot of DataGrip showing your tables</li>
                 </ol>
             </div>
-            
+
             <div class="homework-item">
-                <h3>3. Database Exploration</h3>
+                <h3>3. Database Exploration & Documentation</h3>
                 <ul>
                     <li>Using DataGrip, create an ER diagram of library_db</li>
                     <li>Write 5 additional SQL queries exploring the data</li>
-                    <li>Export results as CSV files</li>
+                    <li>Document everything in a markdown file named <code>Homework1.md</code></li>
                 </ul>
             </div>
-        </div>
 
-        <!-- Slide 24: Homework Submission -->
-        <div class="slide">
-            <h1>Homework Submission <span class="emoji">📤</span></h1>
-            
-            <div class="demo-box">
-                <h3>What to Submit</h3>
-                <p style="font-size: 1.2em;">Create a single PDF containing:</p>
-                <ol style="font-size: 1.15em;">
+            <div class="warning-box" style="margin-top: 30px;">
+                <h3>📤 Submission Format</h3>
+                <p style="font-size: 1.15em; margin: 15px 0;">Turn in a <strong>commit link</strong> containing <code>Homework1.md</code> with:</p>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
                     <li>Screenshot of CLI PostgreSQL connection</li>
                     <li>Screenshot of DataGrip with your database</li>
-                    <li>DataGrip ER diagram</li>
+                    <li>DataGrip ER diagram (export as image)</li>
                     <li>Your 5 SQL queries with results</li>
                     <li>Brief reflection (200 words) on setup challenges</li>
                 </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>⏰ Due:</strong> Sunday 11:59 PM | Submit commit link via D2L</p>
             </div>
-            
-            <div class="warning-box">
-                <h3>⏰ Due Date</h3>
-                <p style="font-size: 1.3em;"><strong>Friday 11:59 PM</strong></p>
-                <p>Submit via D2L Assignment Dropbox</p>
+        </div>
+
+        <!-- Slide 29: Understanding the Assignment -->
+        <div class="slide">
+            <h1>Why These Requirements? <span class="emoji">🎯</span></h1>
+            <h2>Understanding Each Component</h2>
+
+            <div class="demo-box">
+                <h3>1. CLI PostgreSQL Screenshot</h3>
+                <p><strong>What:</strong> Screenshot showing successful connection to PostgreSQL via command line</p>
+                <p><strong>Why:</strong> Demonstrates you can interact with databases at the foundational level. CLI skills are essential for server administration, automation, and troubleshooting where GUIs aren't available.</p>
             </div>
-            
+
+            <div class="demo-box">
+                <h3>2. DataGrip Screenshot</h3>
+                <p><strong>What:</strong> Screenshot of DataGrip interface showing your library_db tables and connections</p>
+                <p><strong>Why:</strong> Proves you can use professional database tools. Modern development relies on IDEs like DataGrip for productivity, debugging, and visual database management.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>3. ER Diagram</h3>
+                <p><strong>What:</strong> Entity-Relationship diagram showing tables, columns, and relationships</p>
+                <p><strong>Why:</strong> Visual database design is crucial for understanding schema structure, identifying relationships, and communicating designs to teams. This skill is fundamental for database architects.</p>
+            </div>
+        </div>
+
+        <!-- Slide 30: Understanding the Assignment (continued) -->
+        <div class="slide">
+            <h1>Why These Requirements? <span class="emoji">🎯</span></h1>
+            <h2>Understanding Each Component (continued)</h2>
+
+            <div class="demo-box">
+                <h3>4. Five SQL Queries</h3>
+                <p><strong>What:</strong> Five original SQL queries exploring the library_db data with their results</p>
+                <p><strong>Why:</strong> Writing queries is the core skill of database work. This demonstrates you can retrieve, filter, join, and aggregate data. Different query types (SELECT, JOIN, GROUP BY, etc.) solve real business problems and answer analytical questions.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>5. Reflection (200 words)</h3>
+                <p><strong>What:</strong> Brief written reflection on challenges faced during setup</p>
+                <p><strong>Why:</strong> Metacognition enhances learning. Documenting obstacles and solutions helps you retain knowledge, builds troubleshooting skills, and creates a reference for future issues. Technical writing is also a crucial professional skill.</p>
+            </div>
+
             <div class="tip-box">
-                <strong>Pro Tip:</strong> DataGrip has a 30-day trial even without a license. Apply for the student license early to avoid interruption!
+                <h3>Why Markdown + Git?</h3>
+                <p><strong>Version Control:</strong> Git commits create a permanent, timestamped record of your work</p>
+                <p><strong>Industry Standard:</strong> Markdown is the universal format for technical documentation</p>
+                <p><strong>Portfolio Building:</strong> Your commits become part of your professional portfolio</p>
+                <p><strong>Collaboration Skills:</strong> Learning git workflows prepares you for team development</p>
             </div>
         </div>
 
@@ -1165,7 +1267,7 @@ member_id INTEGER REFERENCES members(member_id)</div>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">29</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
