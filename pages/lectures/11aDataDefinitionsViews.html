@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 11: SQL Data Definitions and Views - CSCI 5603</title>
+    
+    <!-- Database Design Presentation Styles -->
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+        
+        /* Database-specific styling */
+        .erd-diagram {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        /* SQL syntax highlighting classes now in presentation.css */
+
+        .table-schema {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--bg-accent);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table-schema th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table-schema td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-card {
+            background: var(--bg-accent);
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid var(--border-color);
+        }
+        
+        .comparison-card.bad {
+            border-top-color: #ff5555;
+            background: rgba(255, 85, 85, 0.1);
+        }
+        
+        .comparison-card.good {
+            border-top-color: #50fa7b;
+            background: rgba(80, 250, 123, 0.1);
+        }
+        
+        .demo-box {
+            background: var(--bg-accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .activity-box {
+            background: var(--ocu-light-blue);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .activity-box h3 {
+            margin-top: 0;
+            color: white;
+        }
+        
+        .code-example {
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 10px 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+        <!-- Timer display with home button -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Lecture 11: Data Definitions & Views
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>SQL: Data Definitions & Views</h1>
+            <h2>Chapter 7 <span class="emoji">🗄️</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 6, Lecture 11</p>
+            <p style="margin-top: 60px; font-style: italic;">Instructor: Bobby Reed</p>
+            <p style="margin-top: auto; font-style: italic;">Building robust database structures!</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul style="font-size: 1.4em; line-height: 2;">
+                <li>🎯 Master SQL Data Definition Language (DDL)</li>
+                <li>🎯 Create and modify database tables with constraints</li>
+                <li>🎯 Understand and implement database views</li>
+                <li>🎯 Apply security through GRANT and REVOKE</li>
+                <li>🎯 Design updatable views with CHECK OPTION</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: DDL Overview -->
+        <div class="slide">
+            <h1>SQL Data Definition Language (DDL)</h1>
+            <p>DDL allows database objects to be created and destroyed:</p>
+            
+            <div class="demo-box">
+                <h3>Main DDL Statements:</h3>
+                <ul style="font-size: 1.2em;">
+                    <li><code>CREATE SCHEMA/DATABASE</code> - <code>DROP SCHEMA/DATABASE</code></li>
+                    <li><code>CREATE/ALTER DOMAIN</code> - <code>DROP DOMAIN</code></li>
+                    <li><code>CREATE/ALTER TABLE</code> - <code>DROP TABLE</code></li>
+                    <li><code>CREATE/ALTER VIEW</code> - <code>DROP VIEW</code></li>
+                    <li><code>CREATE INDEX</code> - <code>DROP INDEX</code></li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Remember:</strong> DDL statements affect the structure of the database, not the data itself!
+            </div>
+        </div>
+
+        <!-- Slide 4: CREATE TABLE -->
+        <div class="slide">
+            <h1>CREATE TABLE Statement</h1>
+            <p>Creating tables with columns and constraints:</p>
+
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE TABLE</span> PropertyForRent (<br>
+                &nbsp;&nbsp;propertyNo <span class="sql-keyword">VARCHAR</span>(5) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;type <span class="sql-keyword">CHAR</span>(10) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;rooms <span class="sql-keyword">SMALLINT NOT NULL DEFAULT</span> 4,<br>
+                &nbsp;&nbsp;rent <span class="sql-keyword">DECIMAL</span>(6, 2) <span class="sql-keyword">NOT NULL DEFAULT</span> 600,<br>
+                &nbsp;&nbsp;ownerNo <span class="sql-keyword">VARCHAR</span>(5) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;staffNo <span class="sql-keyword">VARCHAR</span>(5),<br>
+                &nbsp;&nbsp;branchNo <span class="sql-keyword">VARCHAR</span>(5) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">PRIMARY KEY</span> (propertyNo),<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (staffNo) <span class="sql-keyword">REFERENCES</span> Staff (staffNo)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ON DELETE SET NULL</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ON UPDATE CASCADE</span><br>
+                );
+            </div>
+        </div>
+
+        <!-- Slide 5: Integrity Constraints -->
+        <div class="slide">
+            <h1>Integrity Enhancement Features (IEF)</h1>
+            
+            <div class="comparison-table">
+                <div class="demo-box">
+                    <h3>Entity Integrity</h3>
+                    <p>Primary key must contain unique, non-null values</p>
+                    <div class="code-example"><span class="sql-keyword">PRIMARY KEY</span>(staffNo)
+<span class="sql-keyword">PRIMARY KEY</span>(clientNo, propertyNo)</div>
+                    <p>Only ONE primary key per table!</p>
+                </div>
+                
+                <div class="demo-box">
+                    <h3>Referential Integrity</h3>
+                    <p>Foreign key must match existing primary key or be NULL</p>
+                    <div class="code-example"><span class="sql-keyword">FOREIGN KEY</span> (staffNo) 
+  <span class="sql-keyword">REFERENCES</span> Staff
+  <span class="sql-keyword">ON DELETE CASCADE</span>
+  <span class="sql-keyword">ON UPDATE SET NULL</span></div>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>Referential Actions:</strong> CASCADE, SET NULL, SET DEFAULT, NO ACTION (default)
+            </div>
+        </div>
+
+        <!-- Slide 6: Additional Constraints -->
+        <div class="slide">
+            <h1>Additional Table Constraints</h1>
+            
+            <table class="table-schema">
+                <thead>
+                    <tr>
+                        <th>Constraint Type</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>NOT NULL</code></td>
+                        <td>Column cannot contain NULL values</td>
+                        <td><code>name VARCHAR(100) NOT NULL</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>UNIQUE</code></td>
+                        <td>All values must be different</td>
+                        <td><code>email VARCHAR(255) UNIQUE</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>DEFAULT</code></td>
+                        <td>Provides default value if none specified</td>
+                        <td><code>rooms SMALLINT DEFAULT 4</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>CHECK</code></td>
+                        <td>Validates data against condition</td>
+                        <td><code>CHECK (rent > 0 AND rent < 10000)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 7: ALTER TABLE -->
+        <div class="slide">
+            <h1>ALTER TABLE Statement</h1>
+            <p>Modifying existing table structure:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Add a new column</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Staff<br>
+                <span class="sql-keyword">ADD</span> email <span class="sql-keyword">VARCHAR</span>(255);<br><br>
+                
+                <span class="sql-comment">-- Drop a column</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Staff<br>
+                <span class="sql-keyword">DROP COLUMN</span> email;<br><br>
+                
+                <span class="sql-comment">-- Modify default value</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> PropertyForRent<br>
+                <span class="sql-keyword">ALTER</span> type <span class="sql-keyword">SET DEFAULT</span> 'Flat';<br><br>
+                
+                <span class="sql-comment">-- Add constraint</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Staff<br>
+                <span class="sql-keyword">ADD CONSTRAINT</span> salary_check <span class="sql-keyword">CHECK</span> (salary > 0);
+            </div>
+        </div>
+
+        <!-- Slide 8: CREATE DOMAIN -->
+        <div class="slide">
+            <h1>CREATE DOMAIN</h1>
+            <p>Creating reusable custom data types:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Create a domain for property types</span><br>
+                <span class="sql-keyword">CREATE DOMAIN</span> PropertyType <span class="sql-keyword">AS CHAR</span>(10)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> 'Flat'<br>
+                &nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (<span class="sql-keyword">VALUE IN</span> ('House', 'Flat', 'Apartment'));<br><br>
+                
+                <span class="sql-comment">-- Use the domain in table creation</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Property (<br>
+                &nbsp;&nbsp;propertyNo <span class="sql-keyword">VARCHAR</span>(5) <span class="sql-keyword">PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;type PropertyType <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;...<br>
+                );
+            </div>
+            
+            <div class="tip-box">
+                <strong>Benefit:</strong> Domains ensure consistency across multiple tables using the same data type!
+            </div>
+        </div>
+
+        <!-- Slide 9: Introduction to Views -->
+        <div class="slide">
+            <h1>Introduction to Views <span class="emoji">👁️</span></h1>
+            
+            <div class="demo-box">
+                <h2>What is a View?</h2>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>A <strong>virtual table</strong> derived from one or more base tables</li>
+                    <li>Dynamically generated from a SELECT query</li>
+                    <li>Does not physically store data (usually)</li>
+                    <li>Updates automatically when base tables change</li>
+                </ul>
+            </div>
+            
+            <div class="erd-diagram">
+                <pre>
+┌──────────────┐     CREATE VIEW     ┌──────────────┐
+│  Base Table  │ ─────────────────►  │     View     │
+│   (Real)     │      SELECT         │  (Virtual)   │
+└──────────────┘                     └──────────────┘
+                </pre>
+            </div>
+        </div>
+
+        <!-- Slide 10: Advantages of Views -->
+        <div class="slide">
+            <h1>Advantages of Views ✅</h1>
+            
+            <div class="demo-box">
+                <ul style="font-size: 1.3em; line-height: 2;">
+                    <li><strong>Data Independence:</strong> Shield users from schema changes</li>
+                    <li><strong>Currency:</strong> Always shows current data</li>
+                    <li><strong>Improved Security:</strong> Restrict access to sensitive columns</li>
+                    <li><strong>Reduced Complexity:</strong> Simplify complex queries</li>
+                    <li><strong>Convenience:</strong> Pre-defined commonly used queries</li>
+                    <li><strong>Customization:</strong> Tailored views for different users</li>
+                    <li><strong>Data Integrity:</strong> Can enforce business rules</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Disadvantages of Views -->
+        <div class="slide">
+            <h1>Disadvantages of Views ❌</h1>
+            
+            <div class="warning-box">
+                <ul style="font-size: 1.3em; line-height: 2;">
+                    <li><strong>Update Restriction:</strong> Not all views are updatable</li>
+                    <li><strong>Structure Restriction:</strong> Cannot index a view directly</li>
+                    <li><strong>Performance:</strong> Can be slower than direct queries</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <strong>Performance Tip:</strong> View resolution happens at query time, which can impact performance for complex views accessed frequently. Consider materialized views for better performance.
+            </div>
+        </div>
+
+        <!-- Slide 12: CREATE VIEW Examples -->
+        <div class="slide">
+            <h1>CREATE VIEW Syntax</h1>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE VIEW</span> ViewName [(column_list)]<br>
+                <span class="sql-keyword">AS</span> subselect<br>
+                [<span class="sql-keyword">WITH</span> [<span class="sql-keyword">CASCADED</span> | <span class="sql-keyword">LOCAL</span>] <span class="sql-keyword">CHECK OPTION</span>]
+            </div>
+            
+            <div class="demo-box">
+                <h3>Key Points:</h3>
+                <ul>
+                    <li>Column list needed if names are ambiguous</li>
+                    <li>The subselect is the "defining query"</li>
+                    <li>WITH CHECK OPTION ensures view integrity</li>
+                    <li>Need SELECT privilege on all referenced tables</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 13: Horizontal View -->
+        <div class="slide">
+            <h1>Horizontal View Example</h1>
+            <p>Restricting rows visible to users:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Manager at branch B003 sees only their staff</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> Manager3Staff<br>
+                <span class="sql-keyword">AS SELECT</span> *<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> branchNo = 'B003';
+            </div>
+            
+            <table class="table-schema">
+                <thead>
+                    <tr>
+                        <th>staffNo</th>
+                        <th>fName</th>
+                        <th>lName</th>
+                        <th>position</th>
+                        <th>branchNo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SG37</td>
+                        <td>Ann</td>
+                        <td>Beech</td>
+                        <td>Assistant</td>
+                        <td>B003</td>
+                    </tr>
+                    <tr>
+                        <td>SG14</td>
+                        <td>David</td>
+                        <td>Ford</td>
+                        <td>Supervisor</td>
+                        <td>B003</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 14: Vertical View -->
+        <div class="slide">
+            <h1>Vertical View Example</h1>
+            <p>Restricting columns visible to users:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Hide salary information from general users</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> Staff3<br>
+                <span class="sql-keyword">AS SELECT</span> staffNo, fName, lName, position, sex<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> branchNo = 'B003';
+            </div>
+            
+            <div class="tip-box">
+                <strong>Security Note:</strong> Vertical views are excellent for hiding sensitive columns like salary, SSN, or personal information while still providing necessary access to other data.
+            </div>
+        </div>
+
+        <!-- Slide 15: Grouped View -->
+        <div class="slide">
+            <h1>Grouped and Joined View</h1>
+            <p>Creating summary views with aggregations:</p>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Staff property management summary</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> StaffPropCnt (branchNo, staffNo, cnt)<br>
+                <span class="sql-keyword">AS SELECT</span> s.branchNo, s.staffNo, <span class="sql-keyword">COUNT</span>(*)<br>
+                <span class="sql-keyword">FROM</span> Staff s, PropertyForRent p<br>
+                <span class="sql-keyword">WHERE</span> s.staffNo = p.staffNo<br>
+                <span class="sql-keyword">GROUP BY</span> s.branchNo, s.staffNo;
+            </div>
+            
+            <div class="warning-box">
+                <strong>Restriction:</strong> Grouped views cannot be joined with base tables or other views!
+            </div>
+        </div>
+
+        <!-- Slide 16: View Resolution -->
+        <div class="slide">
+            <h1>View Resolution Process</h1>
+            <p>How the DBMS processes queries on views:</p>
+            
+            <div class="demo-box">
+                <h3>Resolution Steps:</h3>
+                <ol style="font-size: 1.2em; line-height: 1.8;">
+                    <li>View column names → defining query columns</li>
+                    <li>View name in FROM → defining query FROM</li>
+                    <li>WHERE clauses combined with AND</li>
+                    <li>GROUP BY/HAVING copied from defining query</li>
+                    <li>ORDER BY translated to base columns</li>
+                    <li>Final merged query executed</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 17: View Materialization -->
+        <div class="slide">
+            <h1>View Materialization</h1>
+            
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>View Resolution</h3>
+                    <ul>
+                        <li>Query translated each time</li>
+                        <li>Always current data</li>
+                        <li>Can be slow for complex views</li>
+                        <li>No storage overhead</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card">
+                    <h3>View Materialization</h3>
+                    <ul>
+                        <li>Stored as temporary table</li>
+                        <li>Faster query performance</li>
+                        <li>Must maintain currency</li>
+                        <li>Storage overhead</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <strong>When to Materialize:</strong> Complex views accessed frequently with base tables that change infrequently.
+            </div>
+        </div>
+
+        <!-- Slide 18: Updatable Views -->
+        <div class="slide">
+            <h1>View Update Restrictions</h1>
+            <p>Not all views can be updated. A view is updatable only if:</p>
+            
+            <div class="warning-box">
+                <ul style="font-size: 1.2em;">
+                    <li>No aggregate functions (COUNT, SUM, AVG, etc.)</li>
+                    <li>No GROUP BY or HAVING clauses</li>
+                    <li>No DISTINCT keyword</li>
+                    <li>No computed columns</li>
+                    <li>Single table (no joins in some DBMSs)</li>
+                    <li>Includes all NOT NULL columns from base table</li>
+                </ul>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- This view IS updatable</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> SimpleStaff <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff <span class="sql-keyword">WHERE</span> salary > 20000;<br><br>
+                
+                <span class="sql-comment">-- This view is NOT updatable (has GROUP BY)</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> StaffCount <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> branchNo, <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">FROM</span> Staff <span class="sql-keyword">GROUP BY</span> branchNo;
+            </div>
+        </div>
+
+        <!-- Slide 19: WITH CHECK OPTION -->
+        <div class="slide">
+            <h1>WITH CHECK OPTION</h1>
+            <p>Ensuring data integrity in updatable views:</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">CREATE VIEW</span> Manager3Staff<br>
+                <span class="sql-keyword">AS SELECT</span> *<br>
+                <span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-keyword">WHERE</span> branchNo = 'B003'<br>
+                <span class="sql-keyword">WITH CHECK OPTION</span>;
+            </div>
+            
+            <div class="demo-box">
+                <h3>What it does:</h3>
+                <p>Prevents INSERT or UPDATE operations that would create rows not visible through the view.</p>
+                
+                <p><strong>Example:</strong> Cannot insert staff with branchNo = 'B005' through Manager3Staff view.</p>
+            </div>
+            
+            <div class="tip-box">
+                <strong>CASCADED vs LOCAL:</strong> CASCADED (default) checks all underlying views, LOCAL only checks current view.
+            </div>
+        </div>
+
+        <!-- Slide 20: DROP VIEW -->
+        <div class="slide">
+            <h1>DROP VIEW Statement</h1>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">DROP VIEW</span> ViewName [<span class="sql-keyword">RESTRICT</span> | <span class="sql-keyword">CASCADE</span>]
+            </div>
+            
+            <div class="demo-box">
+                <h3>Options:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>RESTRICT (default):</strong> Fails if other objects depend on this view</li>
+                    <li><strong>CASCADE:</strong> Deletes view and all dependent objects</li>
+                </ul>
+            </div>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Simple drop</span><br>
+                <span class="sql-keyword">DROP VIEW</span> Manager3Staff;<br><br>
+                
+                <span class="sql-comment">-- Drop with cascade</span><br>
+                <span class="sql-keyword">DROP VIEW</span> StaffPropCnt <span class="sql-keyword">CASCADE</span>;
+            </div>
+        </div>
+
+        <!-- Slide 21: GRANT Privileges -->
+        <div class="slide">
+            <h1>GRANT Statement</h1>
+            <p>Giving users permission to access database objects:</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">GRANT</span> {PrivilegeList | <span class="sql-keyword">ALL PRIVILEGES</span>}<br>
+                <span class="sql-keyword">ON</span> ObjectName<br>
+                <span class="sql-keyword">TO</span> {AuthorizationIdList | <span class="sql-keyword">PUBLIC</span>}<br>
+                [<span class="sql-keyword">WITH GRANT OPTION</span>]
+            </div>
+            
+            <div class="demo-box">
+                <h3>Available Privileges:</h3>
+                <ul>
+                    <li><code>SELECT</code> - Read data</li>
+                    <li><code>INSERT</code> - Add new rows</li>
+                    <li><code>UPDATE</code> - Modify existing rows</li>
+                    <li><code>DELETE</code> - Remove rows</li>
+                    <li><code>REFERENCES</code> - Create foreign keys</li>
+                    <li><code>USAGE</code> - Use domains, sequences</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 22: GRANT Examples -->
+        <div class="slide">
+            <h1>GRANT Examples</h1>
+            
+            <div class="sql-example">
+                <span class="sql-comment">-- Give Manager full privileges with ability to grant to others</span><br>
+                <span class="sql-keyword">GRANT ALL PRIVILEGES</span><br>
+                <span class="sql-keyword">ON</span> Staff<br>
+                <span class="sql-keyword">TO</span> Manager <span class="sql-keyword">WITH GRANT OPTION</span>;<br><br>
+                
+                <span class="sql-comment">-- Give specific users limited access to specific columns</span><br>
+                <span class="sql-keyword">GRANT SELECT</span>, <span class="sql-keyword">UPDATE</span> (salary)<br>
+                <span class="sql-keyword">ON</span> Staff<br>
+                <span class="sql-keyword">TO</span> Personnel, Director;<br><br>
+                
+                <span class="sql-comment">-- Give all users read access</span><br>
+                <span class="sql-keyword">GRANT SELECT</span><br>
+                <span class="sql-keyword">ON</span> Branch<br>
+                <span class="sql-keyword">TO PUBLIC</span>;
+            </div>
+        </div>
+
+        <!-- Slide 23: REVOKE Statement -->
+        <div class="slide">
+            <h1>REVOKE Statement</h1>
+            <p>Removing previously granted privileges:</p>
+            
+            <div class="sql-example">
+                <span class="sql-keyword">REVOKE</span> [<span class="sql-keyword">GRANT OPTION FOR</span>]<br>
+                &nbsp;&nbsp;{PrivilegeList | <span class="sql-keyword">ALL PRIVILEGES</span>}<br>
+                <span class="sql-keyword">ON</span> ObjectName<br>
+                <span class="sql-keyword">FROM</span> {AuthorizationIdList | <span class="sql-keyword">PUBLIC</span>}<br>
+                [<span class="sql-keyword">RESTRICT</span> | <span class="sql-keyword">CASCADE</span>]
+            </div>
+            
+            <div class="warning-box">
+                <ul>
+                    <li><strong>GRANT OPTION FOR:</strong> Revokes ability to grant, not the privilege itself</li>
+                    <li><strong>CASCADE:</strong> Revokes from user and anyone they granted to</li>
+                    <li><strong>RESTRICT:</strong> Fails if would create abandoned objects</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 24: Practice Exercise 1 -->
+        <div class="slide">
+            <h1>Practice Exercise 1 <span class="emoji">💻</span></h1>
+            <div class="activity-box">
+                <h3>20-Minute Exercise: Design a University Database</h3>
+                <p>Create the following:</p>
+                <ol>
+                    <li>Tables for Students, Courses, and Enrollments with appropriate constraints</li>
+                    <li>A view showing students enrolled in each course</li>
+                    <li>A view hiding sensitive student information</li>
+                    <li>Grant appropriate privileges to different user roles</li>
+                </ol>
+                
+                <p style="margin-top: 20px;"><strong>Consider:</strong></p>
+                <ul>
+                    <li>Primary and foreign keys</li>
+                    <li>NOT NULL constraints</li>
+                    <li>CHECK constraints for valid data</li>
+                    <li>Which views should be updatable?</li>
+                </ul>
+            </div>
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 25: Practice Exercise 2 -->
+        <div class="slide">
+            <h1>Practice Exercise 2 <span class="emoji">🔧</span></h1>
+            <div class="activity-box">
+                <h3>15-Minute Challenge: View Design</h3>
+                <p>Given a company database with tables:</p>
+                <ul>
+                    <li>Employees (emp_id, name, salary, dept_id, manager_id)</li>
+                    <li>Departments (dept_id, dept_name, location)</li>
+                    <li>Projects (proj_id, proj_name, budget, dept_id)</li>
+                </ul>
+                
+                <p style="margin-top: 20px;"><strong>Create views for:</strong></p>
+                <ol>
+                    <li>HR to see employee info without salaries</li>
+                    <li>Managers to see only their department's employees</li>
+                    <li>Finance to see project budgets by department</li>
+                    <li>A materialized view for expensive report queries</li>
+                </ol>
+            </div>
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 26: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common Pitfalls to Avoid ⚠️</h1>
+            
+            <div class="warning-box">
+                <h3>DDL Mistakes:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Forgetting NOT NULL on primary keys</li>
+                    <li>Circular foreign key references</li>
+                    <li>Wrong referential actions (CASCADE when should be RESTRICT)</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h3>View Mistakes:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Assuming all views are updatable</li>
+                    <li>Not using WITH CHECK OPTION when needed</li>
+                    <li>Creating overly complex nested views</li>
+                    <li>Forgetting about performance implications</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 27: Best Practices -->
+        <div class="slide">
+            <h1>Best Practices <span class="emoji">🌟</span></h1>
+            
+            <div class="tip-box">
+                <h3>Design Guidelines:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Always define primary keys</li>
+                    <li>Use meaningful constraint names</li>
+                    <li>Document your views' purposes</li>
+                    <li>Test referential actions before production</li>
+                    <li>Use domains for consistency</li>
+                    <li>Grant minimal necessary privileges</li>
+                </ul>
+            </div>
+            
+            <div class="demo-box">
+                <h3>Performance Tips:</h3>
+                <ul>
+                    <li>Index foreign key columns</li>
+                    <li>Consider materialized views for complex queries</li>
+                    <li>Avoid views with many joins for updates</li>
+                    <li>Monitor view usage and optimize as needed</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Final Slide: Summary -->
+        <div class="slide">
+            <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
+            <h2>You Can Now:</h2>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>✅ Create and modify tables with full constraint support</li>
+                <li>✅ Design effective views for security and simplicity</li>
+                <li>✅ Understand view resolution and materialization</li>
+                <li>✅ Implement access control with GRANT/REVOKE</li>
+                <li>✅ Create updatable views with CHECK OPTION</li>
+            </ul>
+            
+            <div class="demo-box">
+                <p><strong>Next Lecture:</strong> Advanced SQL - Stored Procedures and Triggers</p>
+                <p><strong>Assignment:</strong> Complete the DDL and Views lab exercise</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+
+    <!-- Lecture-Specific JavaScript -->
+    <script>
+        // Database-specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+        });
+        
+        // Add syntax highlighting for SQL examples if needed
+        document.querySelectorAll('.sql-example').forEach(block => {
+            block.addEventListener('click', function() {
+                // Optional: Add copy-to-clipboard functionality
+                const text = this.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    console.log('SQL copied to clipboard');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
