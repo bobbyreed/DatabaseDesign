@@ -592,7 +592,560 @@
             <button data-timer="25">Start 25-Minute Timer</button>
         </div>
 
-        <!-- Slide 21: Summary -->
+        <!-- IN-CLASS EXERCISES -->
+
+        <!-- Slide 21: Exercise Overview -->
+        <div class="slide">
+            <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
+            <h2>Multi-JOIN & Aggregation Practice</h2>
+
+            <div class="demo-box">
+                <h3>Exercise Overview</h3>
+                <p style="font-size: 1.2em;">Today, you'll practice writing complex SQL queries involving three-table JOINs and advanced aggregation with GROUP BY and HAVING clauses.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Learning Objectives</h3>
+                <ul style="font-size: 1.15em;">
+                    <li>✅ Write multi-table INNER JOIN queries</li>
+                    <li>✅ Use table aliases for readability</li>
+                    <li>✅ Apply COUNT and AVG with GROUP BY</li>
+                    <li>✅ Filter aggregated results with HAVING</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 22: Exercise 1 -->
+        <div class="slide">
+            <h1>Exercise 1: Three-Table JOIN</h1>
+            <h2>Individual Exercise (20 minutes)</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Write an SQL query that requires a <strong>THREE-TABLE INNER JOIN</strong> and uses table aliases for readability.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Query Goal:</h3>
+                <p style="font-size: 1.15em;">"Find the instructors who teach courses taken by student 'S10001', along with the course names and grades."</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Schema:</h3>
+                <div style="font-family: monospace; font-size: 0.95em;">
+                    <strong>Student</strong>(studentID, firstName, lastName, email, major, GPA)<br>
+                    <strong>Course</strong>(courseID, courseName, department, credits, instructorName)<br>
+                    <strong>Enrollment</strong>(studentID, courseID, semester, grade, enrollDate)
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3>Requirements:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Join all three tables: Student, Course, and Enrollment</li>
+                    <li>Use table aliases (e.g., s, c, e) for readability</li>
+                    <li>Select: studentID, student name, course name, instructor name, grade</li>
+                    <li>Filter for student 'S10001'</li>
+                </ul>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 23: Understanding Exercise 1 -->
+        <div class="slide">
+            <h1>Understanding: Three-Table JOINs</h1>
+
+            <div class="tip-box">
+                <h3>Solution:</h3>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-keyword">SELECT</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;s.studentID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;s.firstName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;s.lastName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;c.courseName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;c.instructorName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;e.grade<br>
+                <span class="sql-keyword">FROM</span> Student s<br>
+                <span class="sql-keyword">INNER JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.studentID = e.studentID<br>
+                <span class="sql-keyword">INNER JOIN</span> Course c <span class="sql-keyword">ON</span> e.courseID = c.courseID<br>
+                <span class="sql-keyword">WHERE</span> s.studentID = <span class="sql-string">'S10001'</span>;
+            </div>
+
+            <div class="demo-box">
+                <h3>Key Insights:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>JOIN Order:</strong> Start with Student, join Enrollment (linking table), then Course</li>
+                    <li><strong>Table Aliases:</strong> s, e, c make the query much more readable</li>
+                    <li><strong>ON Conditions:</strong> Connect tables via foreign keys (studentID and courseID)</li>
+                    <li><strong>INNER JOIN:</strong> Only returns rows where matches exist in all three tables</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 24: Understanding Exercise 1 (continued) -->
+        <div class="slide">
+            <h1>Understanding: JOIN Execution Flow</h1>
+
+            <div class="concept-box">
+                <h3>How the Database Processes This Query:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Step 1:</strong> Filter Student table WHERE studentID = 'S10001'</li>
+                    <li><strong>Step 2:</strong> JOIN with Enrollment using matching studentID values</li>
+                    <li><strong>Step 3:</strong> JOIN result with Course using matching courseID values</li>
+                    <li><strong>Step 4:</strong> Project (SELECT) the requested columns</li>
+                </ol>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Sample Result Set:</h3>
+                <table class="table-result">
+                    <tr>
+                        <th>studentID</th>
+                        <th>firstName</th>
+                        <th>lastName</th>
+                        <th>courseName</th>
+                        <th>instructorName</th>
+                        <th>grade</th>
+                    </tr>
+                    <tr>
+                        <td>S10001</td>
+                        <td>John</td>
+                        <td>Smith</td>
+                        <td>Database Design</td>
+                        <td>Dr. Reed</td>
+                        <td>A</td>
+                    </tr>
+                    <tr>
+                        <td>S10001</td>
+                        <td>John</td>
+                        <td>Smith</td>
+                        <td>Data Structures</td>
+                        <td>Dr. Johnson</td>
+                        <td>B+</td>
+                    </tr>
+                    <tr>
+                        <td>S10001</td>
+                        <td>John</td>
+                        <td>Smith</td>
+                        <td>Algorithms</td>
+                        <td>Dr. Martinez</td>
+                        <td>A-</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Using aliases (s, e, c) is considered best practice for multi-table queries!
+            </div>
+        </div>
+
+        <!-- Slide 25: Exercise 2 -->
+        <div class="slide">
+            <h1>Exercise 2: Aggregation & Grouping</h1>
+            <h2>Individual Exercise (20 minutes)</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Write SQL queries using <strong>COUNT and AVG</strong> with GROUP BY and a HAVING clause to answer two analytical questions about department data.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Question 1:</h3>
+                <p>"Find each department's total number of courses and average credits per course. Only include departments offering more than 2 courses."</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Question 2:</h3>
+                <p>"Find each department's average course credits. Only include departments where the average credits is greater than or equal to 3.0."</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Schema Reminder:</h3>
+                <p style="font-family: monospace;">Course(courseID, courseName, department, credits, instructorName)</p>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 26: Understanding Exercise 2 -->
+        <div class="slide">
+            <h1>Understanding: Aggregation Solutions</h1>
+
+            <div class="tip-box">
+                <h3>Solutions:</h3>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.9em;">
+                <span class="sql-comment">-- Question 1: Count and avg with HAVING for course count</span><br>
+                <span class="sql-keyword">SELECT</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_courses,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(credits) <span class="sql-keyword">AS</span> avg_credits<br>
+                <span class="sql-keyword">FROM</span> Course<br>
+                <span class="sql-keyword">GROUP BY</span> department<br>
+                <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(*) > 2;<br><br>
+
+                <span class="sql-comment">-- Question 2: Avg with HAVING for credit threshold</span><br>
+                <span class="sql-keyword">SELECT</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(credits) <span class="sql-keyword">AS</span> avg_credits<br>
+                <span class="sql-keyword">FROM</span> Course<br>
+                <span class="sql-keyword">GROUP BY</span> department<br>
+                <span class="sql-keyword">HAVING</span> <span class="sql-function">AVG</span>(credits) >= 3.0;
+            </div>
+        </div>
+
+        <!-- Slide 27: Understanding Exercise 2 (continued) -->
+        <div class="slide">
+            <h1>Understanding: GROUP BY vs HAVING</h1>
+
+            <div class="concept-box">
+                <h3>The Difference:</h3>
+                <table class="table-result" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Clause</th>
+                        <th>Purpose</th>
+                        <th>When It's Applied</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>WHERE</strong></td>
+                        <td>Filter individual rows</td>
+                        <td>Before grouping</td>
+                        <td>WHERE credits > 3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GROUP BY</strong></td>
+                        <td>Organize rows into groups</td>
+                        <td>After WHERE filtering</td>
+                        <td>GROUP BY department</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HAVING</strong></td>
+                        <td>Filter groups</td>
+                        <td>After grouping</td>
+                        <td>HAVING COUNT(*) > 2</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Sample Result (Question 1):</h3>
+                <table class="table-result">
+                    <tr>
+                        <th>department</th>
+                        <th>total_courses</th>
+                        <th>avg_credits</th>
+                    </tr>
+                    <tr>
+                        <td>Computer Science</td>
+                        <td>5</td>
+                        <td>3.4</td>
+                    </tr>
+                    <tr>
+                        <td>Mathematics</td>
+                        <td>4</td>
+                        <td>3.25</td>
+                    </tr>
+                    <tr>
+                        <td>Engineering</td>
+                        <td>3</td>
+                        <td>3.67</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="warning-box">
+                <strong>Important:</strong> You CANNOT use WHERE to filter on aggregated values. That's what HAVING is for!
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 28: Homework Overview -->
+        <div class="slide">
+            <h1>Homework Assignment <span class="emoji">📝</span></h1>
+            <h2>Week 8: OUTER JOINs & ROLLUP</h2>
+
+            <div class="demo-box">
+                <h3>Assignment Overview</h3>
+                <p style="font-size: 1.15em;">This week's homework extends today's exercises by exploring OUTER JOIN syntax and advanced aggregation with ROLLUP/CUBE clauses for hierarchical reporting.</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
+                <p>Submit via Canvas as a single PDF</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Components:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Homework Extension 1:</strong> INNER to OUTER JOIN Conversion (50 points)</li>
+                    <li><strong>Homework Extension 2:</strong> ROLLUP/CUBE Report (50 points)</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total: 100 points</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 29: Homework Extension 1 -->
+        <div class="slide">
+            <h1>Homework Extension 1: OUTER JOIN Conversion</h1>
+            <h2>Building on Exercise 1</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Rewrite the three-table JOIN query from Exercise 1 using a combination of <strong>LEFT or RIGHT OUTER JOIN</strong> syntax instead of INNER JOIN.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Original Query (INNER JOIN):</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+                    <span class="sql-keyword">SELECT</span> s.studentID, s.firstName, s.lastName,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.courseName, c.instructorName, e.grade<br>
+                    <span class="sql-keyword">FROM</span> Student s<br>
+                    <span class="sql-keyword">INNER JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.studentID = e.studentID<br>
+                    <span class="sql-keyword">INNER JOIN</span> Course c <span class="sql-keyword">ON</span> e.courseID = c.courseID<br>
+                    <span class="sql-keyword">WHERE</span> s.studentID = <span class="sql-string">'S10001'</span>;
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Rewrite using LEFT/RIGHT JOIN:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Replace at least one INNER JOIN with LEFT or RIGHT JOIN</li>
+                            <li>Ensure the query still returns the same results for student 'S10001'</li>
+                        </ul>
+                    </li>
+                    <li><strong>Write explanation (150-200 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>How does the result set differ with OUTER JOIN?</li>
+                            <li>In what scenario (with incomplete data) would OUTER JOIN show different results?</li>
+                            <li>Provide a specific example of when you'd want to see NULL values</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 30: OUTER JOIN Guidance -->
+        <div class="slide">
+            <h1>Understanding OUTER JOINs</h1>
+
+            <div class="concept-box">
+                <h3>Hint for Homework Extension 1:</h3>
+                <p style="font-size: 1.05em;">Consider what happens if a student is enrolled (in Student table) but has NO enrollment records yet. An INNER JOIN would exclude them, but a LEFT JOIN would include them with NULL values for course data.</p>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Example Conversion:</h3>
+                <span class="sql-keyword">SELECT</span> s.studentID, s.firstName, s.lastName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.courseName, c.instructorName, e.grade<br>
+                <span class="sql-keyword">FROM</span> Student s<br>
+                <span class="sql-keyword">LEFT JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.studentID = e.studentID<br>
+                <span class="sql-keyword">LEFT JOIN</span> Course c <span class="sql-keyword">ON</span> e.courseID = c.courseID<br>
+                <span class="sql-keyword">WHERE</span> s.studentID = <span class="sql-string">'S10001'</span>;
+            </div>
+
+            <div class="tip-box">
+                <h3>Difference in Results:</h3>
+                <p>If student 'S10001' exists but has zero enrollments:</p>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>INNER JOIN:</strong> Returns 0 rows</li>
+                    <li><strong>LEFT JOIN:</strong> Returns 1 row with NULLs for courseName, instructorName, grade</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 31: Homework Extension 2 -->
+        <div class="slide">
+            <h1>Homework Extension 2: ROLLUP Report</h1>
+            <h2>Building on Exercise 2</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Write a single SQL query that uses the <strong>ROLLUP clause</strong> to generate a report that includes department-level aggregations PLUS the overall total.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Report Requirements:</h3>
+                <p>Your query should produce a result set showing:</p>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li>Each department's total course count and average credits</li>
+                    <li>A grand total row showing overall course count and average credits across ALL departments</li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Database Note:</h3>
+                <p>ROLLUP syntax varies by database:</p>
+                <ul style="font-size: 0.95em;">
+                    <li><strong>MySQL/PostgreSQL:</strong> GROUP BY department WITH ROLLUP</li>
+                    <li><strong>SQL Server:</strong> GROUP BY ROLLUP(department)</li>
+                    <li><strong>Oracle:</strong> GROUP BY ROLLUP(department)</li>
+                </ul>
+                <p style="margin-top: 10px;">Use the syntax appropriate for your database!</p>
+            </div>
+        </div>
+
+        <!-- Slide 32: ROLLUP Example -->
+        <div class="slide">
+            <h1>Understanding ROLLUP</h1>
+
+            <div class="sql-example" style="font-size: 0.9em;">
+                <h3>ROLLUP Query Example (MySQL):</h3>
+                <span class="sql-keyword">SELECT</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_courses,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(credits) <span class="sql-keyword">AS</span> avg_credits<br>
+                <span class="sql-keyword">FROM</span> Course<br>
+                <span class="sql-keyword">GROUP BY</span> department <span class="sql-keyword">WITH ROLLUP</span>;
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Expected Result Set:</h3>
+                <table class="table-result">
+                    <tr>
+                        <th>department</th>
+                        <th>total_courses</th>
+                        <th>avg_credits</th>
+                    </tr>
+                    <tr>
+                        <td>Computer Science</td>
+                        <td>5</td>
+                        <td>3.40</td>
+                    </tr>
+                    <tr>
+                        <td>Mathematics</td>
+                        <td>4</td>
+                        <td>3.25</td>
+                    </tr>
+                    <tr>
+                        <td>Engineering</td>
+                        <td>3</td>
+                        <td>3.67</td>
+                    </tr>
+                    <tr style="background: #ffffcc;">
+                        <td><strong>NULL (Grand Total)</strong></td>
+                        <td><strong>12</strong></td>
+                        <td><strong>3.42</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Point:</strong> The NULL in the department column indicates the grand total row!
+            </div>
+        </div>
+
+        <!-- Slide 33: CUBE vs ROLLUP -->
+        <div class="slide">
+            <h1>BONUS: CUBE vs ROLLUP</h1>
+
+            <div class="concept-box">
+                <h3>Optional Enhancement (5 bonus points):</h3>
+                <p style="font-size: 1.05em;">If your database supports CUBE, write a second query using CUBE instead of ROLLUP and explain the difference in output.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>ROLLUP vs CUBE:</h3>
+                <table class="table-result" style="font-size: 0.9em;">
+                    <tr>
+                        <th>Operation</th>
+                        <th>What It Does</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td><strong>ROLLUP</strong></td>
+                        <td>Creates subtotals + grand total in hierarchical order</td>
+                        <td>When grouping columns have a natural hierarchy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CUBE</strong></td>
+                        <td>Creates all possible combinations of subtotals</td>
+                        <td>When you want to analyze data from all dimensions</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>CUBE Example (for multi-column grouping):</h3>
+                <span class="sql-keyword">GROUP BY</span> <span class="sql-keyword">CUBE</span>(department, semester)
+                <p style="margin-top: 10px;">This would produce:</p>
+                <ul style="font-size: 0.95em;">
+                    <li>Totals for each (department, semester) combination</li>
+                    <li>Totals for each department across all semesters</li>
+                    <li>Totals for each semester across all departments</li>
+                    <li>Grand total across both dimensions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 34: Submission Requirements -->
+        <div class="slide">
+            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+
+            <div class="demo-box">
+                <h3>Format:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>File:</strong> LastName_FirstName_Week8_Homework.pdf</li>
+                    <li><strong>Platform:</strong> Canvas</li>
+                    <li><strong>Due:</strong> Before next class</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Document Structure:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Cover Page:</strong> Name, date, "Week 8 Homework"</li>
+                    <li><strong>Page 2-3:</strong> Extension 1
+                        <ul style="margin-top: 8px;">
+                            <li>Rewritten OUTER JOIN query</li>
+                            <li>Explanation (150-200 words)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Page 4-5:</strong> Extension 2
+                        <ul style="margin-top: 8px;">
+                            <li>ROLLUP query with results</li>
+                            <li>Screenshot or table showing output</li>
+                            <li>(Optional) CUBE query for bonus points</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading:</h3>
+                <table class="table-result" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>OUTER JOIN</strong></td>
+                        <td>50</td>
+                        <td>Correct syntax (25), Explanation (20), Example (5)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ROLLUP Query</strong></td>
+                        <td>50</td>
+                        <td>Correct syntax (30), Results shown (15), Formatting (5)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CUBE (Bonus)</strong></td>
+                        <td>+5</td>
+                        <td>Correct implementation and explanation</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 35: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -604,10 +1157,12 @@
                 <li>✅ Combine queries with set operations</li>
                 <li>✅ Optimize complex queries for performance</li>
                 <li>✅ Avoid common SQL pitfalls</li>
+                <li>✅ Write multi-table INNER JOINs with aliases</li>
+                <li>✅ Use COUNT and AVG with GROUP BY and HAVING</li>
             </ul>
             <div class="demo-box">
                 <p><strong>Next Lecture:</strong> Database Views and Stored Procedures</p>
-                <p><strong>Assignment:</strong> Complete the advanced SQL problem set (due next week)</p>
+                <p><strong>Homework:</strong> OUTER JOIN conversion & ROLLUP query (due next week)</p>
             </div>
         </div>
 
@@ -615,7 +1170,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">21</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

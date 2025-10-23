@@ -719,7 +719,437 @@
             </div>
         </div>
 
-        <!-- Slide 25: Summary -->
+        <!-- IN-CLASS EXERCISES SECTION -->
+
+        <!-- Slide 25: Exercise Overview -->
+        <div class="slide">
+            <h1>IN-CLASS EXERCISES</h1>
+            <h2>Subquery/JOIN Optimization & Window Functions</h2>
+
+            <div class="info-box">
+                <h3>Today's Exercises Focus On:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Exercise 1:</strong> Comparing Subquery vs. JOIN approaches</li>
+                    <li><strong>Exercise 2:</strong> Applying Window Functions for ranking</li>
+                </ul>
+                <p style="margin-top: 20px;">These exercises reinforce advanced SQL query optimization and analytical functions.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Setup:</strong> We'll use a Sales database with Employee and SalesTransaction tables.
+            </div>
+
+            <div class="activity-box">
+                <h3>Database Schema:</h3>
+                <p><strong>SalesEmployee</strong>(employeeID, firstName, lastName, region, hireDate, baseSalary)</p>
+                <p><strong>SalesTransaction</strong>(transactionID, employeeID, saleDate, amount, productCategory)</p>
+            </div>
+        </div>
+
+        <!-- Slide 26: Exercise 1 - Subquery vs. JOIN Optimization -->
+        <div class="slide">
+            <h1>Exercise 1: Subquery vs. JOIN Optimization</h1>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Write <strong>two equivalent SQL queries</strong> to solve the same problem using different approaches, then compare their readability.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Problem Statement:</h3>
+                <p>Find all sales employees who have made at least one sale in the "Electronics" product category.</p>
+                <p style="margin-top: 10px;"><strong>Return:</strong> employeeID, firstName, lastName, region</p>
+            </div>
+
+            <div class="sql-example">
+                <h3>Write two queries:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Query 1:</strong> Using INNER JOIN to connect tables</li>
+                    <li><strong>Query 2:</strong> Using an IN subquery to filter employees</li>
+                </ol>
+            </div>
+
+            <button data-timer="420">Start 7-Minute Timer</button>
+
+            <div class="tip-box">
+                <strong>Remember:</strong> Both queries should produce identical results, but the approaches differ.
+            </div>
+        </div>
+
+        <!-- Slide 27: Understanding Exercise 1 - Solution Part 1 -->
+        <div class="slide">
+            <h1>Exercise 1 Solution: INNER JOIN Approach</h1>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Query 1: Using INNER JOIN</h3>
+                <span class="sql-keyword">SELECT DISTINCT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.employeeID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.firstName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.lastName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.region<br>
+                <span class="sql-keyword">FROM</span> SalesEmployee se<br>
+                <span class="sql-keyword">INNER JOIN</span> SalesTransaction st<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ON</span> se.employeeID = st.employeeID<br>
+                <span class="sql-keyword">WHERE</span> st.productCategory = <span class="sql-string">'Electronics'</span><br>
+                <span class="sql-keyword">ORDER BY</span> se.lastName, se.firstName;
+            </div>
+
+            <div class="info-box">
+                <h3>Key Points:</h3>
+                <ul>
+                    <li><strong>DISTINCT</strong> is necessary to eliminate duplicate employee records (an employee may have multiple Electronics sales)</li>
+                    <li><strong>INNER JOIN</strong> combines rows from both tables where the join condition matches</li>
+                    <li>Filter is applied AFTER the join using WHERE clause</li>
+                    <li>This approach is often efficient for well-indexed tables</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 28: Understanding Exercise 1 - Solution Part 2 -->
+        <div class="slide">
+            <h1>Exercise 1 Solution: IN Subquery Approach</h1>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Query 2: Using IN Subquery</h3>
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;employeeID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;firstName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;lastName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;region<br>
+                <span class="sql-keyword">FROM</span> SalesEmployee<br>
+                <span class="sql-keyword">WHERE</span> employeeID <span class="sql-keyword">IN</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SELECT</span> employeeID<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FROM</span> SalesTransaction<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHERE</span> productCategory = <span class="sql-string">'Electronics'</span><br>
+                )<br>
+                <span class="sql-keyword">ORDER BY</span> lastName, firstName;
+            </div>
+
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>INNER JOIN</h3>
+                    <ul>
+                        <li>More readable for complex multi-table queries</li>
+                        <li>Requires DISTINCT to avoid duplicates</li>
+                        <li>Can easily add columns from both tables</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>IN Subquery</h3>
+                    <ul>
+                        <li>Cleaner when only filtering, not combining columns</li>
+                        <li>No DISTINCT needed (IN handles uniqueness)</li>
+                        <li>Conceptually separates filter logic from main query</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 29: Exercise 2 - Window Function Application -->
+        <div class="slide">
+            <h1>Exercise 2: Window Function Application</h1>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Use the <strong>RANK() or ROW_NUMBER()</strong> window function to rank sales employees by their total sales performance within specific geographical regions.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li>Calculate the total sales amount for each employee</li>
+                    <li>Rank employees within their region (Region 1: rank 1, 2, 3...; Region 2: rank 1, 2, 3...)</li>
+                    <li>Return: region, employeeID, full name, totalSales, rank</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> Use PARTITION BY to create separate rankings per region, and ORDER BY to determine ranking order.
+            </div>
+
+            <button data-timer="480">Start 8-Minute Timer</button>
+        </div>
+
+        <!-- Slide 30: Understanding Exercise 2 - Window Function Solution -->
+        <div class="slide">
+            <h1>Exercise 2 Solution: RANK() Window Function</h1>
+
+            <div class="sql-example" style="font-size: 0.8em;">
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.region,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.employeeID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;se.firstName + <span class="sql-string">' '</span> + se.lastName <span class="sql-keyword">AS</span> fullName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SUM</span>(st.amount) <span class="sql-keyword">AS</span> totalSales,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">RANK</span>() <span class="sql-keyword">OVER</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">PARTITION BY</span> se.region<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ORDER BY</span> <span class="sql-keyword">SUM</span>(st.amount) <span class="sql-keyword">DESC</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;) <span class="sql-keyword">AS</span> salesRank<br>
+                <span class="sql-keyword">FROM</span> SalesEmployee se<br>
+                <span class="sql-keyword">INNER JOIN</span> SalesTransaction st<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ON</span> se.employeeID = st.employeeID<br>
+                <span class="sql-keyword">GROUP BY</span> se.region, se.employeeID, se.firstName, se.lastName<br>
+                <span class="sql-keyword">ORDER BY</span> se.region, salesRank;
+            </div>
+
+            <div class="demo-box">
+                <h3>Sample Results:</h3>
+                <table class="table-result" style="font-size: 0.8em;">
+                    <tr>
+                        <th>region</th>
+                        <th>employeeID</th>
+                        <th>fullName</th>
+                        <th>totalSales</th>
+                        <th>salesRank</th>
+                    </tr>
+                    <tr>
+                        <td>East</td>
+                        <td>E001</td>
+                        <td>Sarah Johnson</td>
+                        <td>$485,000</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>East</td>
+                        <td>E003</td>
+                        <td>Mike Chen</td>
+                        <td>$412,000</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>West</td>
+                        <td>W002</td>
+                        <td>Lisa Martinez</td>
+                        <td>$520,000</td>
+                        <td>1</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 31: Understanding Exercise 2 - RANK vs ROW_NUMBER -->
+        <div class="slide">
+            <h1>RANK() vs. ROW_NUMBER()</h1>
+
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>RANK()</h3>
+                    <p>Assigns the same rank to ties, with gaps in the sequence.</p>
+                    <div class="demo-box" style="margin-top: 10px; font-size: 0.85em;">
+                        <strong>Example with ties:</strong>
+                        <ul style="list-style: none; margin-top: 5px;">
+                            <li>$50,000 → Rank 1</li>
+                            <li>$50,000 → Rank 1</li>
+                            <li>$45,000 → Rank 3 (gap after tie)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="comparison-card">
+                    <h3>ROW_NUMBER()</h3>
+                    <p>Assigns unique sequential numbers, even for ties.</p>
+                    <div class="demo-box" style="margin-top: 10px; font-size: 0.85em;">
+                        <strong>Example with ties:</strong>
+                        <ul style="list-style: none; margin-top: 5px;">
+                            <li>$50,000 → Row 1</li>
+                            <li>$50,000 → Row 2 (arbitrary order)</li>
+                            <li>$45,000 → Row 3 (no gap)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>When to use which:</strong> Use RANK() when you want to recognize ties in performance. Use ROW_NUMBER() when you need strict sequential numbering for pagination or unique IDs.
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 32: Homework Overview -->
+        <div class="slide">
+            <h1>HOMEWORK EXTENSIONS</h1>
+            <h2>Advanced Query Optimization</h2>
+
+            <div class="info-box">
+                <h3>Assignment Overview:</h3>
+                <p style="font-size: 1.1em;">Build on today's in-class exercises by exploring additional query techniques and analytical functions.</p>
+
+                <ul style="font-size: 1.1em; line-height: 1.8; margin-top: 20px;">
+                    <li><strong>Extension 1:</strong> EXISTS Correlated Subquery (builds on Exercise 1)</li>
+                    <li><strong>Extension 2:</strong> LAG/LEAD Window Functions (builds on Exercise 2)</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>Important:</strong> Complete both extensions and include written explanations as specified in each section.
+            </div>
+        </div>
+
+        <!-- Slide 33: Homework Extension 1 - EXISTS Correlated Subquery -->
+        <div class="slide">
+            <h1>Extension 1: EXISTS Correlated Subquery</h1>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Rewrite the same query from Exercise 1 (finding employees who sold Electronics) using an <strong>EXISTS correlated subquery</strong> instead of JOIN or IN.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Requirements:</h3>
+                <ol style="line-height: 1.7;">
+                    <li>Write the SQL query using EXISTS</li>
+                    <li>Test that it produces the same results as your Exercise 1 queries</li>
+                    <li>Write a <strong>100-word explanation</strong> of how EXISTS differs from IN/JOIN in its execution model</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> EXISTS returns TRUE as soon as it finds one matching row, making it efficient for existence checks. The subquery is correlated (references the outer query).
+            </div>
+        </div>
+
+        <!-- Slide 34: Extension 1 Guidance -->
+        <div class="slide">
+            <h1>Extension 1: EXISTS Example & Guidance</h1>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Template for EXISTS Approach:</h3>
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;employeeID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;firstName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;lastName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;region<br>
+                <span class="sql-keyword">FROM</span> SalesEmployee se<br>
+                <span class="sql-keyword">WHERE EXISTS</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your correlated subquery here</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Remember to reference se.employeeID from outer query</span><br>
+                )<br>
+                <span class="sql-keyword">ORDER BY</span> lastName, firstName;
+            </div>
+
+            <div class="info-box">
+                <h3>In Your Explanation, Address:</h3>
+                <ul style="line-height: 1.7;">
+                    <li>How EXISTS evaluates (returns TRUE/FALSE vs. a list of values)</li>
+                    <li>Why EXISTS can be more efficient than IN for large datasets</li>
+                    <li>What "correlated" means in this context</li>
+                    <li>How EXISTS handles duplicate values differently than IN</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 35: Homework Extension 2 - LAG/LEAD Window Functions -->
+        <div class="slide">
+            <h1>Extension 2: LAG/LEAD Window Functions</h1>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Use the <strong>LAG() or LEAD()</strong> window function to calculate the sales difference between an employee and the person ranked immediately above them in their region.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Requirements:</h3>
+                <ol style="line-height: 1.7;">
+                    <li>Build on the Exercise 2 query (ranking by total sales per region)</li>
+                    <li>Add a column showing the sales amount of the next-higher-ranked employee</li>
+                    <li>Calculate the difference between current employee's sales and the higher-ranked employee</li>
+                    <li>Return: region, employeeID, fullName, totalSales, rank, previousEmployeeSales, salesGap</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> LAG() looks backward (to previous row), LEAD() looks forward (to next row). Since we ORDER BY DESC, LAG() gets the higher sales amount.
+            </div>
+        </div>
+
+        <!-- Slide 36: Extension 2 Guidance -->
+        <div class="slide">
+            <h1>Extension 2: LAG/LEAD Example & Guidance</h1>
+
+            <div class="sql-example" style="font-size: 0.75em;">
+                <h3>Using LAG() to Get Previous Row Value:</h3>
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;region,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;employeeID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;fullName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;totalSales,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;salesRank,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">LAG</span>(totalSales) <span class="sql-keyword">OVER</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">PARTITION BY</span> region<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ORDER BY</span> totalSales <span class="sql-keyword">DESC</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;) <span class="sql-keyword">AS</span> previousEmployeeSales,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">LAG</span>(totalSales) <span class="sql-keyword">OVER</span> (...) - totalSales <span class="sql-keyword">AS</span> salesGap<br>
+                <span class="sql-keyword">FROM</span> ( <span class="sql-comment">-- Your Exercise 2 query as a subquery</span> )<br>
+                <span class="sql-keyword">ORDER BY</span> region, salesRank;
+            </div>
+
+            <div class="demo-box">
+                <h3>Expected Result Structure:</h3>
+                <table class="table-result" style="font-size: 0.75em;">
+                    <tr>
+                        <th>region</th>
+                        <th>fullName</th>
+                        <th>totalSales</th>
+                        <th>salesRank</th>
+                        <th>previousEmployeeSales</th>
+                        <th>salesGap</th>
+                    </tr>
+                    <tr>
+                        <td>East</td>
+                        <td>Sarah Johnson</td>
+                        <td>$485,000</td>
+                        <td>1</td>
+                        <td>NULL</td>
+                        <td>NULL</td>
+                    </tr>
+                    <tr>
+                        <td>East</td>
+                        <td>Mike Chen</td>
+                        <td>$412,000</td>
+                        <td>2</td>
+                        <td>$485,000</td>
+                        <td>$73,000</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 37: Submission Requirements -->
+        <div class="slide">
+            <h1>Homework Submission Requirements</h1>
+
+            <div class="info-box">
+                <h3>What to Submit:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>SQL Script File</strong> (.sql) containing:
+                        <ul style="margin-top: 10px;">
+                            <li>Extension 1: EXISTS query with SQL comments</li>
+                            <li>Extension 2: LAG/LEAD query with SQL comments</li>
+                        </ul>
+                    </li>
+                    <li><strong>Written Explanation</strong> (PDF or Word):
+                        <ul style="margin-top: 10px;">
+                            <li>100-word explanation for Extension 1 (EXISTS execution model)</li>
+                            <li>Screenshots showing query results</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <h3>Grading Criteria:</h3>
+                <ul>
+                    <li>SQL queries execute without errors (40%)</li>
+                    <li>Queries produce correct results (40%)</li>
+                    <li>Written explanation demonstrates understanding (20%)</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>Due Date:</strong> Submit via course portal by next class session
+            </div>
+        </div>
+
+        <!-- Slide 38: Summary -->
         <div class="slide">
             <h1>Key Takeaways</h1>
             
@@ -846,7 +1276,7 @@
     <div class="navigation">
         <button id="prev-btn">Previous</button>
         <span class="slide-counter">
-            <span id="current-slide">1</span> / <span id="total-slides">29</span>
+            <span id="current-slide">1</span> / <span id="total-slides">42</span>
         </span>
         <button id="next-btn">Next</button>
         <button class="home"><a href="../../index.html" style="color: inherit; text-decoration: none;">Home</a></button>

@@ -592,14 +592,492 @@
             </ul>
         </div>
 
-        <!-- Slide 22: Practice Problems -->
+        <!-- IN-CLASS EXERCISES -->
+
+        <!-- Slide 22: Exercise Overview -->
         <div class="slide">
-            <h1>Practice Problems</h1>
-            <h2>Homework Assignment</h2>
+            <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
+            <h2>Basic DQL & DML Practice</h2>
+
+            <div class="demo-box">
+                <h3>Exercise Overview</h3>
+                <p style="font-size: 1.2em;">Today, you'll practice writing fundamental SQL queries including SELECT statements with various WHERE conditions and basic data manipulation (INSERT, UPDATE, DELETE) operations.</p>
+            </div>
+
             <div class="activity-box">
-                <p><strong>Due:</strong> Before next class</p>
-                <p><strong>Submit:</strong> Via course portal</p>
-                
+                <h3>Learning Objectives</h3>
+                <ul style="font-size: 1.15em;">
+                    <li>✅ Write SELECT queries with different filter types</li>
+                    <li>✅ Apply range, equality, and pattern matching conditions</li>
+                    <li>✅ Execute INSERT, UPDATE, and DELETE statements</li>
+                    <li>✅ Handle real-world data modification scenarios</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 23: Exercise 1 -->
+        <div class="slide">
+            <h1>Exercise 1: Basic Select & Filter</h1>
+            <h2>Individual Exercise (20 minutes)</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Using the Student/Course schema below, write and execute <strong>five basic SELECT queries</strong>, each using a different WHERE condition.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Schema:</h3>
+                <div style="font-family: monospace; font-size: 0.95em;">
+                    <strong>Student</strong>(studentID, firstName, lastName, email, major, GPA, enrollmentDate)<br>
+                    <strong>Course</strong>(courseID, courseName, department, credits, instructorName)<br>
+                    <strong>Enrollment</strong>(studentID, courseID, semester, grade, enrollDate)
+                </div>
+            </div>
+
+            <div class="sql-example">
+                <h3>Write queries for:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Equality:</strong> Find all students with major = 'Computer Science'</li>
+                    <li><strong>Range:</strong> Find all students with GPA between 3.0 and 4.0</li>
+                    <li><strong>Comparison:</strong> Find all courses with credits > 3</li>
+                    <li><strong>LIKE:</strong> Find all students whose email ends with '@okcu.edu'</li>
+                    <li><strong>Combined:</strong> Find CS majors with GPA >= 3.5</li>
+                </ol>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 24: Understanding Exercise 1 -->
+        <div class="slide">
+            <h1>Understanding: SELECT & Filter Queries</h1>
+
+            <div class="tip-box">
+                <h3>Solutions:</h3>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.9em;">
+                <span class="sql-comment">-- Query 1: Equality</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
+                <span class="sql-keyword">WHERE</span> major = <span class="sql-string">'Computer Science'</span>;<br><br>
+
+                <span class="sql-comment">-- Query 2: Range (using BETWEEN)</span><br>
+                <span class="sql-keyword">SELECT</span> studentID, firstName, lastName, GPA<br>
+                <span class="sql-keyword">FROM</span> Student<br>
+                <span class="sql-keyword">WHERE</span> GPA <span class="sql-keyword">BETWEEN</span> 3.0 <span class="sql-keyword">AND</span> 4.0;<br><br>
+
+                <span class="sql-comment">-- Query 3: Comparison</span><br>
+                <span class="sql-keyword">SELECT</span> courseID, courseName, credits<br>
+                <span class="sql-keyword">FROM</span> Course<br>
+                <span class="sql-keyword">WHERE</span> credits > 3;<br><br>
+
+                <span class="sql-comment">-- Query 4: Pattern matching with LIKE</span><br>
+                <span class="sql-keyword">SELECT</span> firstName, lastName, email<br>
+                <span class="sql-keyword">FROM</span> Student<br>
+                <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">LIKE</span> <span class="sql-string">'%@okcu.edu'</span>;<br><br>
+
+                <span class="sql-comment">-- Query 5: Combined conditions</span><br>
+                <span class="sql-keyword">SELECT</span> studentID, firstName, lastName, major, GPA<br>
+                <span class="sql-keyword">FROM</span> Student<br>
+                <span class="sql-keyword">WHERE</span> major = <span class="sql-string">'Computer Science'</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> GPA >= 3.5;
+            </div>
+        </div>
+
+        <!-- Slide 25: Understanding Exercise 1 (continued) -->
+        <div class="slide">
+            <h1>Understanding: WHERE Condition Types</h1>
+
+            <div class="demo-box">
+                <h3>Key Insights from Exercise 1:</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Condition Type</th>
+                        <th>Operator</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Equality</strong></td>
+                        <td>=</td>
+                        <td>Exact match (major = 'Computer Science')</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Range</strong></td>
+                        <td>BETWEEN...AND</td>
+                        <td>Values within a range (GPA 3.0-4.0)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Comparison</strong></td>
+                        <td>>, <, >=, <=, !=</td>
+                        <td>Relative comparisons (credits > 3)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pattern Match</strong></td>
+                        <td>LIKE with % and _</td>
+                        <td>Flexible string matching</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Combined</strong></td>
+                        <td>AND, OR, NOT</td>
+                        <td>Multiple conditions together</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <h3>Performance Tip:</h3>
+                <p>Pattern matching with LIKE '%text' (wildcard at start) is slower than 'text%' because it can't use indexes efficiently.</p>
+            </div>
+        </div>
+
+        <!-- Slide 26: Exercise 2 -->
+        <div class="slide">
+            <h1>Exercise 2: Simple Data Manipulation (DML)</h1>
+            <h2>Individual Exercise (20 minutes)</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ Important:</h3>
+                <p>DML statements modify data. Always double-check your WHERE clauses!</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p>Write the appropriate INSERT, UPDATE, and DELETE statements for these three scenarios:</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Scenario 1: INSERT</h3>
+                <p>A new student has enrolled:</p>
+                <ul style="font-size: 1.05em; font-family: monospace;">
+                    <li>studentID: 'S12345'</li>
+                    <li>firstName: 'Maria', lastName: 'Garcia'</li>
+                    <li>email: 'maria.garcia@okcu.edu'</li>
+                    <li>major: 'Data Science', GPA: 3.8</li>
+                    <li>enrollmentDate: '2024-01-15'</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Scenario 2: UPDATE</h3>
+                <p>Student 'S10001' has changed their major from 'Biology' to 'Biochemistry' and their new GPA is 3.65.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Scenario 3: DELETE</h3>
+                <p>Remove all enrollment records for semester 'Fall2020' (old data cleanup).</p>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 27: Understanding Exercise 2 -->
+        <div class="slide">
+            <h1>Understanding: DML Operations</h1>
+
+            <div class="tip-box">
+                <h3>Solutions:</h3>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-comment">-- Scenario 1: INSERT new student</span><br>
+                <span class="sql-keyword">INSERT INTO</span> Student (studentID, firstName, lastName, email, major, GPA, enrollmentDate)<br>
+                <span class="sql-keyword">VALUES</span> (<span class="sql-string">'S12345'</span>, <span class="sql-string">'Maria'</span>, <span class="sql-string">'Garcia'</span>, <span class="sql-string">'maria.garcia@okcu.edu'</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Data Science'</span>, 3.8, <span class="sql-string">'2024-01-15'</span>);<br><br>
+
+                <span class="sql-comment">-- Scenario 2: UPDATE existing student</span><br>
+                <span class="sql-keyword">UPDATE</span> Student<br>
+                <span class="sql-keyword">SET</span> major = <span class="sql-string">'Biochemistry'</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;GPA = 3.65<br>
+                <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;<br><br>
+
+                <span class="sql-comment">-- Scenario 3: DELETE old enrollment records</span><br>
+                <span class="sql-keyword">DELETE FROM</span> Enrollment<br>
+                <span class="sql-keyword">WHERE</span> semester = <span class="sql-string">'Fall2020'</span>;
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Critical Safety Rules:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>Always use WHERE:</strong> UPDATE and DELETE without WHERE affect ALL rows!</li>
+                    <li><strong>Test with SELECT first:</strong> Run SELECT with same WHERE to verify which rows will be affected</li>
+                    <li><strong>Use transactions:</strong> Wrap modifications in BEGIN/COMMIT for rollback capability</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 28: Understanding Exercise 2 (continued) -->
+        <div class="slide">
+            <h1>Understanding: DML Best Practices</h1>
+
+            <div class="demo-box">
+                <h3>Testing DML Before Execution:</h3>
+                <div class="sql-example" style="font-size: 0.9em;">
+                    <span class="sql-comment">-- Before UPDATE, test with SELECT</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
+                    <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;<br>
+                    <span class="sql-comment">-- Verify this returns the correct student!</span><br><br>
+
+                    <span class="sql-comment">-- Then execute UPDATE</span><br>
+                    <span class="sql-keyword">UPDATE</span> Student<br>
+                    <span class="sql-keyword">SET</span> major = <span class="sql-string">'Biochemistry'</span>, GPA = 3.65<br>
+                    <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;<br><br>
+
+                    <span class="sql-comment">-- Verify the change</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
+                    <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3>Common DML Mistakes to Avoid:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li>❌ Forgetting WHERE clause (affects all rows!)</li>
+                    <li>❌ Using wrong operator (= vs IN for multiple values)</li>
+                    <li>❌ Violating foreign key constraints</li>
+                    <li>❌ Not checking affected row count after execution</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 29: Homework Overview -->
+        <div class="slide">
+            <h1>Homework Assignment <span class="emoji">📝</span></h1>
+            <h2>Week 7: Query Optimization & Transactions</h2>
+
+            <div class="demo-box">
+                <h3>Assignment Overview</h3>
+                <p style="font-size: 1.15em;">This week's homework extends today's exercises by introducing query optimization analysis and transaction management for data integrity.</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
+                <p>Submit via Canvas as a single PDF</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Components:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Homework Extension 1:</strong> EXPLAIN Plan Analysis (50 points)</li>
+                    <li><strong>Homework Extension 2:</strong> Transaction Implementation (50 points)</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total: 100 points</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 30: Homework Extension 1 -->
+        <div class="slide">
+            <h1>Homework Extension 1: EXPLAIN Plan Analysis</h1>
+            <h2>Building on Exercise 1</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Provide a <strong>screenshot of the EXPLAIN plan</strong> for two of your SELECT queries from Exercise 1 and analyze which is more efficient.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Choose two queries from Exercise 1:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Pick two queries with different complexity levels</li>
+                            <li>Suggested: Query 1 (simple equality) vs Query 5 (combined conditions)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Generate EXPLAIN output:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Run EXPLAIN before each query</li>
+                            <li>Capture clear screenshots showing the execution plan</li>
+                        </ul>
+                    </li>
+                    <li><strong>Write analysis (200-250 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Compare the two EXPLAIN outputs</li>
+                            <li>Identify key differences (scan type, rows examined, etc.)</li>
+                            <li>Determine which query is likely more efficient and why</li>
+                            <li>Suggest one optimization (e.g., adding an index)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 31: EXPLAIN Example -->
+        <div class="slide">
+            <h1>Understanding EXPLAIN Plans</h1>
+
+            <div class="sql-example">
+                <h3>Example Usage:</h3>
+                <span class="sql-keyword">EXPLAIN</span> <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
+                <span class="sql-keyword">WHERE</span> major = <span class="sql-string">'Computer Science'</span> <span class="sql-keyword">AND</span> GPA >= 3.5;
+            </div>
+
+            <div class="demo-box">
+                <h3>Key Metrics to Analyze:</h3>
+                <table class="table-schema" style="font-size: 0.9em;">
+                    <tr>
+                        <th>Metric</th>
+                        <th>What It Means</th>
+                        <th>Better Value</th>
+                    </tr>
+                    <tr>
+                        <td><strong>type</strong></td>
+                        <td>Access method (ALL, index, range, etc.)</td>
+                        <td>index > ALL (full table scan)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>rows</strong></td>
+                        <td>Estimated rows examined</td>
+                        <td>Lower is better</td>
+                    </tr>
+                    <tr>
+                        <td><strong>key</strong></td>
+                        <td>Which index used (if any)</td>
+                        <td>Using an index is better than NULL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Extra</strong></td>
+                        <td>Additional info (Using where, Using index, etc.)</td>
+                        <td>"Using index" is optimal</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> Different databases (MySQL, PostgreSQL, SQL Server) have slightly different EXPLAIN syntax and output formats. Consult your database documentation!
+            </div>
+        </div>
+
+        <!-- Slide 32: Homework Extension 2 -->
+        <div class="slide">
+            <h1>Homework Extension 2: Transaction Implementation</h1>
+            <h2>Building on Exercise 2</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Wrap your three DML statements from Exercise 2 inside a <strong>single SQL transaction</strong> and explain when to use COMMIT vs ROLLBACK.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Write Transaction Block:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Include BEGIN TRANSACTION (or START TRANSACTION)</li>
+                            <li>Place all three DML statements (INSERT, UPDATE, DELETE) inside</li>
+                            <li>Add appropriate COMMIT or ROLLBACK statement</li>
+                        </ul>
+                    </li>
+                    <li><strong>Explain Your Choice (150-200 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Why did you choose COMMIT or ROLLBACK?</li>
+                            <li>What scenarios would require ROLLBACK?</li>
+                            <li>How do transactions ensure data integrity?</li>
+                            <li>What happens if the database crashes mid-transaction?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 33: Transaction Example -->
+        <div class="slide">
+            <h1>Understanding Transactions</h1>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Transaction Template:</h3>
+                <span class="sql-keyword">BEGIN TRANSACTION</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your INSERT statement</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> Student (...) <span class="sql-keyword">VALUES</span> (...);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your UPDATE statement</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">UPDATE</span> Student <span class="sql-keyword">SET</span> ... <span class="sql-keyword">WHERE</span> ...;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your DELETE statement</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DELETE FROM</span> Enrollment <span class="sql-keyword">WHERE</span> ...;<br><br>
+
+                <span class="sql-comment">-- If all successful:</span><br>
+                <span class="sql-keyword">COMMIT</span>;<br><br>
+
+                <span class="sql-comment">-- If error occurs or you want to undo:</span><br>
+                <span class="sql-comment">-- ROLLBACK;</span>
+            </div>
+
+            <div class="demo-box">
+                <h3>ACID Properties of Transactions:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Atomicity:</strong> All or nothing - either all statements succeed or none do</li>
+                    <li><strong>Consistency:</strong> Database moves from one valid state to another</li>
+                    <li><strong>Isolation:</strong> Concurrent transactions don't interfere</li>
+                    <li><strong>Durability:</strong> Committed changes are permanent</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 34: Submission Requirements -->
+        <div class="slide">
+            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+
+            <div class="demo-box">
+                <h3>Format:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>File:</strong> LastName_FirstName_Week7_Homework.pdf</li>
+                    <li><strong>Platform:</strong> Canvas</li>
+                    <li><strong>Due:</strong> Before next class</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Document Structure:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Cover Page:</strong> Name, date, "Week 7 Homework"</li>
+                    <li><strong>Page 2-3:</strong> Extension 1
+                        <ul style="margin-top: 8px;">
+                            <li>Screenshot of EXPLAIN for Query 1</li>
+                            <li>Screenshot of EXPLAIN for Query 2</li>
+                            <li>Analysis (200-250 words)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Page 4-5:</strong> Extension 2
+                        <ul style="margin-top: 8px;">
+                            <li>Complete transaction block code</li>
+                            <li>Explanation (150-200 words)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading:</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>EXPLAIN Analysis</strong></td>
+                        <td>50</td>
+                        <td>Screenshots (15), Analysis quality (25), Optimization (10)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transaction</strong></td>
+                        <td>50</td>
+                        <td>Correct syntax (25), Explanation (20), ACID understanding (5)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 35: Practice Problems -->
+        <div class="slide">
+            <h1>Additional Practice Problems</h1>
+            <h2>Optional Extra Practice</h2>
+            <div class="activity-box">
+                <p><strong>For additional practice (not graded):</strong></p>
+
                 <h3>Write SQL queries for:</h3>
                 <ol>
                     <li>List all staff members earning between 10,000 and 20,000</li>
@@ -611,7 +1089,7 @@
                     <li>Calculate the average rent for each property type</li>
                     <li>Show the top 3 highest-paid employees</li>
                 </ol>
-                
+
                 <p><strong>Bonus:</strong> Write a query using a subquery (preview of next week)</p>
             </div>
         </div>
@@ -699,7 +1177,7 @@
         <!-- Navigation -->
         <div class="navigation">
             <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
-            <span id="slideNumber">1 / 25</span>
+            <span id="slideNumber">1 / 38</span>
             <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
         </div>
     </div>

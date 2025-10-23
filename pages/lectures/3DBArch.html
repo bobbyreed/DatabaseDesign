@@ -870,7 +870,495 @@
             </div>
         </div>
 
-        <!-- Slide 25: Summary -->
+        <!-- IN-CLASS EXERCISES SECTION -->
+
+        <!-- Slide 26: Exercise Overview -->
+        <div class="slide">
+            <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
+            <h2>Architecture Mapping & Debate <span class="timer-badge">40 minutes</span></h2>
+
+            <div class="demo-box">
+                <h3>Exercise Overview</h3>
+                <p style="font-size: 1.2em;">Today, you'll apply your understanding of database architecture through two practical exercises. You'll map system components and debate architectural trade-offs for real-world scenarios.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Learning Objectives</h3>
+                <ul style="font-size: 1.15em;">
+                    <li>✅ Label and explain components within a three-tier architecture</li>
+                    <li>✅ Understand the role and function of the DBMS in system architecture</li>
+                    <li>✅ Compare centralized vs. distributed database architectures</li>
+                    <li>✅ Analyze performance and maintenance trade-offs</li>
+                    <li>✅ Justify architectural decisions based on requirements</li>
+                </ul>
+            </div>
+
+            <button data-timer="40">Start 40-Minute Timer</button>
+        </div>
+
+        <!-- Slide 27: Exercise 1 - System Component Mapping -->
+        <div class="slide">
+            <h1>Exercise 1: System Component Mapping <span class="timer-badge">20 min</span></h1>
+            <h2>Individual Exercise: Three-Tier Architecture</h2>
+
+            <div class="exercise-step">
+                <h3>Scenario:</h3>
+                <p style="font-size: 1.1em;">You are a database architect presenting a system design to stakeholders. You need to clearly explain how data flows through a three-tier web application architecture.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>The Three-Tier Architecture Diagram:</h3>
+                <div class="erd-diagram" style="font-size: 0.9em;">
+                    <pre>
+┌────────────────────────────────────────────────────┐
+│              Tier 1: Presentation                  │
+│  ┌──────────────────────────────────────────────┐  │
+│  │         Web Browser (Client)                 │  │
+│  │  • HTML/CSS/JavaScript                       │  │
+│  │  • User Interface                            │  │
+│  │  • ???  (Label A - What happens here?)       │  │
+│  └──────────────┬───────────────────────────────┘  │
+└─────────────────┼───────────────────────────────────┘
+                  │ HTTP/HTTPS Requests
+                  ▼
+┌────────────────────────────────────────────────────┐
+│           Tier 2: Application Server               │
+│  ┌──────────────────────────────────────────────┐  │
+│  │   Application Server (Node.js/Java/Python)   │  │
+│  │  • Business Logic                            │  │
+│  │  • ???  (Label B - What component?)          │  │
+│  │  • Session Management                        │  │
+│  │  • ???  (Label C - What happens here?)       │  │
+│  └──────────────┬───────────────────────────────┘  │
+└─────────────────┼───────────────────────────────────┘
+                  │ SQL Queries
+                  ▼
+┌────────────────────────────────────────────────────┐
+│           Tier 3: Database Server                  │
+│  ┌──────────────────────────────────────────────┐  │
+│  │          DBMS (MySQL/PostgreSQL)             │  │
+│  │  • ???  (Label D - Core function?)           │  │
+│  │  • Transaction Management                    │  │
+│  │  • Security & Access Control                 │  │
+│  └──────────────┬───────────────────────────────┘  │
+│                 │                                   │
+│  ┌──────────────▼───────────────────────────────┐  │
+│  │         Physical Database Files              │  │
+│  │  • ???  (Label E - What's stored here?)      │  │
+│  └──────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Exercise 1 - Instructions -->
+        <div class="slide">
+            <h1>Exercise 1: Labeling Instructions</h1>
+
+            <div class="activity-box">
+                <h3>Your Task (20 minutes):</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Label Each Component (10 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Label A:</strong> What happens in the browser related to data?</li>
+                            <li><strong>Label B:</strong> What key component sits in the application server?</li>
+                            <li><strong>Label C:</strong> What processing occurs before sending queries to the database?</li>
+                            <li><strong>Label D:</strong> What is the core function of the DBMS?</li>
+                            <li><strong>Label E:</strong> What exactly is stored in physical database files?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Explain the DBMS Role (10 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Write 2-3 sentences explaining how the DBMS acts as an intermediary between the application server and the physical data</li>
+                            <li>Describe at least two specific functions the DBMS performs (e.g., query optimization, concurrency control)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> Think about data flow - how does a user's request transform as it moves from browser to database and back?
+            </div>
+        </div>
+
+        <!-- Slide 29: Understanding Exercise 1 -->
+        <div class="slide">
+            <h1>Understanding: Three-Tier Architecture <span class="emoji">🔍</span></h1>
+
+            <div class="demo-box">
+                <h3>Expected Labels:</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Label</th>
+                        <th>Component</th>
+                        <th>Function</th>
+                    </tr>
+                    <tr>
+                        <td><strong>A</strong></td>
+                        <td>Render UI & Capture Input</td>
+                        <td>Display data to user, capture form submissions and clicks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B</strong></td>
+                        <td>API/Web Framework</td>
+                        <td>RESTful APIs, routing, request handling</td>
+                    </tr>
+                    <tr>
+                        <td><strong>C</strong></td>
+                        <td>Data Validation & Business Rules</td>
+                        <td>Validate input, apply business logic before querying DB</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D</strong></td>
+                        <td>Query Processing & Execution</td>
+                        <td>Parse SQL, optimize queries, execute against physical storage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>E</strong></td>
+                        <td>Tables, Indexes, Logs</td>
+                        <td>Physical storage of data structures, indexes for fast lookup</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="demo-box">
+                <h3>The DBMS Role:</h3>
+                <p style="font-size: 1.05em;">The DBMS serves as a <strong>sophisticated intermediary</strong> that:</p>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li>Translates high-level SQL queries into low-level file operations</li>
+                    <li>Optimizes query execution paths for performance</li>
+                    <li>Manages concurrent access from multiple application server instances</li>
+                    <li>Enforces data integrity constraints and security policies</li>
+                    <li>Provides transaction guarantees (ACID properties)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 30: Exercise 2 - Centralized vs Distributed Debate -->
+        <div class="slide">
+            <h1>Exercise 2: Architecture Debate <span class="timer-badge">20 min</span></h1>
+            <h2>Group Exercise: Centralized vs. Distributed Databases</h2>
+
+            <div class="warning-box">
+                <h3>Your Assignment:</h3>
+                <p style="font-size: 1.15em;">Your group will be assigned either <strong>Centralized Architecture</strong> or <strong>Distributed Architecture</strong>. You must defend your assigned architecture for a <strong>global banking system</strong>.</p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>🏢 Centralized Architecture</h3>
+                        <p><strong>Definition:</strong> Single database instance serving all users, typically hosted in one primary data center</p>
+                        <div class="erd-diagram" style="font-size: 0.8em; padding: 15px;">
+                            <pre>
+        All Users
+           │││
+           ▼▼▼
+    ┌──────────────┐
+    │   Single     │
+    │   Database   │
+    │   Server     │
+    └──────────────┘
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>🌐 Distributed Architecture</h3>
+                        <p><strong>Definition:</strong> Multiple database instances across geographic locations, data partitioned or replicated</p>
+                        <div class="erd-diagram" style="font-size: 0.8em; padding: 15px;">
+                            <pre>
+  Users    Users    Users
+   │││      │││      │││
+   ▼▼▼      ▼▼▼      ▼▼▼
+┌──────┐ ┌──────┐ ┌──────┐
+│ DB1  │ │ DB2  │ │ DB3  │
+│ US   │ │ EU   │ │ Asia │
+└───┬──┘ └──┬───┘ └──┬───┘
+    └────┬─────┬──────┘
+       Sync/Replication
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Context:</strong> The bank handles millions of transactions daily across 50 countries. Consider performance AND maintenance!
+            </div>
+        </div>
+
+        <!-- Slide 31: Exercise 2 - Debate Instructions -->
+        <div class="slide">
+            <h1>Exercise 2: Debate Preparation</h1>
+
+            <div class="activity-box">
+                <h3>Your Task (20 minutes):</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Identify THREE PROS of your assigned architecture (8 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Focus on performance benefits (response time, throughput, scalability)</li>
+                            <li>Focus on maintenance advantages (updates, backups, consistency)</li>
+                            <li>Provide specific examples for the banking scenario</li>
+                        </ul>
+                    </li>
+                    <li><strong>Identify THREE CONS of your assigned architecture (8 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Be honest about performance limitations</li>
+                            <li>Acknowledge maintenance challenges</li>
+                            <li>Consider cost implications</li>
+                        </ul>
+                    </li>
+                    <li><strong>Justify Your Position (4 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Despite the cons, why is your architecture still the better choice?</li>
+                            <li>What mitigation strategies can address the drawbacks?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Think about real banking scenarios - international wire transfers, ATM withdrawals, fraud detection systems.
+            </div>
+        </div>
+
+        <!-- Slide 32: Understanding Exercise 2 -->
+        <div class="slide">
+            <h1>Understanding: Architecture Trade-offs <span class="emoji">🔍</span></h1>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>✅ Centralized Pros:</h3>
+                        <ul style="font-size: 0.95em;">
+                            <li><strong>Data Consistency:</strong> Single source of truth, no sync issues</li>
+                            <li><strong>Simpler Maintenance:</strong> One system to update/patch/backup</li>
+                            <li><strong>Lower Cost:</strong> Single infrastructure to manage</li>
+                        </ul>
+                        <h3>❌ Centralized Cons:</h3>
+                        <ul style="font-size: 0.95em;">
+                            <li><strong>Single Point of Failure:</strong> Outage affects all users globally</li>
+                            <li><strong>Latency Issues:</strong> Users far from server experience delays</li>
+                            <li><strong>Scaling Limits:</strong> Vertical scaling eventually hits ceiling</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>✅ Distributed Pros:</h3>
+                        <ul style="font-size: 0.95em;">
+                            <li><strong>High Availability:</strong> Regional failures don't kill system</li>
+                            <li><strong>Low Latency:</strong> Users connect to nearest server</li>
+                            <li><strong>Horizontal Scaling:</strong> Add more nodes as needed</li>
+                        </ul>
+                        <h3>❌ Distributed Cons:</h3>
+                        <ul style="font-size: 0.95em;">
+                            <li><strong>Consistency Challenges:</strong> CAP theorem - can't have it all</li>
+                            <li><strong>Complex Maintenance:</strong> Multiple systems, sync protocols</li>
+                            <li><strong>Higher Cost:</strong> Infrastructure across multiple regions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Real-World Insight:</strong> Most large banks use a hybrid approach - centralized for critical transactions, distributed for read-heavy operations like account inquiries.
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 33: Homework Overview -->
+        <div class="slide">
+            <h1>Homework Assignment <span class="emoji">📝</span></h1>
+            <h2>Week 3: Architecture Analysis</h2>
+
+            <div class="demo-box">
+                <h3>Assignment Overview</h3>
+                <p style="font-size: 1.15em;">This week's homework extends today's exercises into deeper security and architectural analysis. You'll identify vulnerabilities and write a comparative essay on architecture choices.</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
+                <p>Submit via Canvas as a single PDF document</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Assignment Components:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Homework Extension 1:</strong> Security Vulnerability Analysis (50 points)</li>
+                    <li><strong>Homework Extension 2:</strong> Architecture Comparison Essay (50 points)</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 34: Homework Extension 1 -->
+        <div class="slide">
+            <h1>Homework Extension 1: Security Analysis</h1>
+            <h2>Building on Exercise 1 - Three-Tier Architecture</h2>
+
+            <div class="exercise-step">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Based on the three-tier architecture diagram from Exercise 1, identify <strong>three specific points</strong> in the architecture where security vulnerabilities could be exploited. For each vulnerability, suggest a specific architectural countermeasure.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Requirements:</h3>
+                <p style="font-size: 1.05em;">For each of the THREE vulnerabilities, provide:</p>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Vulnerability Identification:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Name and location in architecture (which tier?)</li>
+                            <li>Description of the security risk (2-3 sentences)</li>
+                            <li>Example attack scenario</li>
+                        </ul>
+                    </li>
+                    <li><strong>Architectural Countermeasure:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Specific technical solution (not generic advice like "use strong passwords")</li>
+                            <li>Where in the architecture it should be implemented</li>
+                            <li>How it mitigates the identified vulnerability</li>
+                        </ul>
+                    </li>
+                    <li><strong>Trade-offs:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>What performance or complexity cost does the countermeasure introduce?</li>
+                            <li>Is the trade-off worth it? Why or why not?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 35: Homework Extension 1 - Examples -->
+        <div class="slide">
+            <h1>Security Vulnerability Examples</h1>
+
+            <div class="demo-box">
+                <h3>Hint: Common Vulnerability Areas</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Tier 1 (Browser):</strong> Cross-Site Scripting (XSS), Man-in-the-Middle attacks</li>
+                    <li><strong>Tier 2 (App Server):</strong> SQL Injection, Authentication bypass, Session hijacking</li>
+                    <li><strong>Tier 3 (Database):</strong> Unauthorized direct access, Data exfiltration, Privilege escalation</li>
+                    <li><strong>Between Tiers:</strong> Unencrypted communication, Weak API authentication</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Format Your Response:</h3>
+                <div class="code-example" style="font-size: 0.9em;">
+<strong>Vulnerability 1: SQL Injection in Application Server</strong><br>
+Location: Tier 2 - Application Server<br>
+Description: Attackers can inject malicious SQL through user input fields...<br>
+Attack Scenario: User enters `'; DROP TABLE users; --` in login field...<br><br>
+<strong>Countermeasure: Parameterized Queries (Prepared Statements)</strong><br>
+Implementation: All database queries in app server must use prepared statements...<br>
+Mitigation: Treats user input as data, not executable code...<br>
+Trade-off: Minimal performance overhead (~5%), but eliminates major attack vector...
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Target Length:</strong> Approximately 150-200 words per vulnerability (450-600 words total)
+            </div>
+        </div>
+
+        <!-- Slide 36: Homework Extension 2 -->
+        <div class="slide">
+            <h1>Homework Extension 2: Architecture Essay</h1>
+            <h2>Building on Exercise 2 - Centralized vs. Distributed</h2>
+
+            <div class="exercise-step">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Choose a <strong>specific application</strong> (e.g., social media platform, ride-sharing service, streaming service) and write a <strong>400-word essay</strong> arguing which architecture (centralized or distributed) is superior for meeting that application's requirements.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Your Essay Must Include:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Application Selection & Requirements (75-100 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Describe your chosen application</li>
+                            <li>Identify key requirements: high availability? rapid scaling? global reach? data consistency?</li>
+                            <li>Estimate scale (users, transactions/sec, data volume)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Architecture Recommendation (150-200 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>State your recommendation: centralized or distributed?</li>
+                            <li>Explain how your chosen architecture meets the requirements</li>
+                            <li>Provide specific technical details (sharding strategy, replication model, consistency approach)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Trade-off Analysis (100-150 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Acknowledge the disadvantages of your chosen architecture</li>
+                            <li>Explain why the benefits outweigh the costs for this specific application</li>
+                            <li>Suggest one mitigation strategy for the biggest drawback</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <strong>Word Count:</strong> Approximately 400 words (±30 words). Use specific technical terminology!
+            </div>
+        </div>
+
+        <!-- Slide 37: Submission Requirements -->
+        <div class="slide">
+            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+
+            <div class="demo-box">
+                <h3>Format & Submission:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>File Format:</strong> Single PDF document</li>
+                    <li><strong>File Naming:</strong> LastName_FirstName_Week3_Homework.pdf</li>
+                    <li><strong>Submission Platform:</strong> Canvas (link in course homepage)</li>
+                    <li><strong>Due Date:</strong> Before class begins next week</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Document Structure:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Cover Page:</strong> Your name, date, course number, "Week 3 Homework"</li>
+                    <li><strong>Pages 2-4:</strong> Extension 1 - Security Vulnerability Analysis (one page per vulnerability)</li>
+                    <li><strong>Page 5:</strong> Extension 2 - Architecture Comparison Essay</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading Criteria:</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Key Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Analysis</strong></td>
+                        <td>50</td>
+                        <td>Vulnerability accuracy (15), Countermeasure quality (20), Trade-off analysis (15)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Architecture Essay</strong></td>
+                        <td>50</td>
+                        <td>Technical depth (20), Justification strength (20), Writing clarity (10)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Use diagrams where appropriate! A simple architecture diagram can strengthen your arguments.
+            </div>
+        </div>
+
+        <!-- Slide 38: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -883,10 +1371,10 @@
                 <li>✅ Design appropriate views for different users</li>
                 <li>✅ Compare different database architectures</li>
             </ul>
-            
+
             <div class="demo-box" style="margin-top: 30px;">
                 <p><strong>Next Lecture:</strong> Entity-Relationship Modeling</p>
-                <p><strong>Assignment:</strong> Compare file-based vs database approach for a real scenario</p>
+                <p><strong>Homework:</strong> Security vulnerability analysis & architecture essay (due next week)</p>
                 <p><strong>Reading:</strong> Chapter 2 - Database System Concepts and Architecture</p>
             </div>
         </div>
@@ -895,7 +1383,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">38</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

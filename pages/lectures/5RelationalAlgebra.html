@@ -764,10 +764,475 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 25: Summary -->
+        <!-- IN-CLASS EXERCISES SECTION -->
+
+        <!-- Slide 26: Exercise Overview -->
+        <div class="slide">
+            <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
+            <h2>Operator Matching & Evaluation</h2>
+
+            <div class="example-box">
+                <h3>Exercise Overview</h3>
+                <p style="font-size: 1.2em;">Today, you'll practice translating plain-language queries into relational algebra expressions and evaluating complex expressions step-by-step. These skills are essential for understanding how databases process queries.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Learning Objectives</h3>
+                <ul style="font-size: 1.15em;">
+                    <li>✅ Match query requirements to appropriate relational algebra operators</li>
+                    <li>✅ Write complete relational algebra expressions</li>
+                    <li>✅ Decompose complex expressions into intermediate steps</li>
+                    <li>✅ Trace data flow through algebraic operations</li>
+                    <li>✅ Understand operator precedence and associativity</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Time Allocation:</strong> 40 minutes total (20 min per exercise)
+            </div>
+        </div>
+
+        <!-- Slide 27: Exercise 1 - Operator Matching -->
+        <div class="slide">
+            <h1>Exercise 1: Operator Matching</h1>
+            <h2>Individual Exercise: Query Translation</h2>
+
+            <div class="activity-box">
+                <h3>Your Task (20 minutes):</h3>
+                <p style="font-size: 1.1em;">Match the following five plain-language queries to the correct relational algebra operators, then write the complete expression.</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Schema Reference:</h3>
+                <div style="font-size: 0.95em; font-family: monospace;">
+<strong>Customer</strong> (customerID, name, city, creditLimit)<br>
+<strong>Order</strong> (orderID, customerID, orderDate, totalAmount)<br>
+<strong>Product</strong> (productID, productName, price, category)<br>
+<strong>OrderItem</strong> (orderID, productID, quantity)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Exercise 1 - Five Queries -->
+        <div class="slide">
+            <h1>Exercise 1: The Five Queries</h1>
+
+            <div class="example-box">
+                <h3>Query 1:</h3>
+                <p>"Find all customers who haven't placed any orders"</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Query 2:</h3>
+                <p>"List the names and cities of customers with credit limit over $10,000"</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Query 3:</h3>
+                <p>"Find all products ordered by customer with ID 'C001'"</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Query 4:</h3>
+                <p>"List all orders with their customer names and total amounts"</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Query 5:</h3>
+                <p>"Find customers who have ordered products from every category"</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> Consider which operators you need: σ (selection), π (projection), ⋈ (join), ∪ (union), − (difference), ÷ (division)
+            </div>
+        </div>
+
+        <!-- Slide 29: Understanding Exercise 1 -->
+        <div class="slide">
+            <h1>Understanding: Operator Matching Solutions</h1>
+
+            <div class="example-box" style="font-size: 0.85em;">
+                <h3>Query 1 Solution:</h3>
+                <p>"Find all customers who haven't placed any orders"</p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    ∏<sub>customerID</sub>(Customer) − ∏<sub>customerID</sub>(Order)
+                </div>
+                <p><strong>Operators used:</strong> Projection (π), Set Difference (−)</p>
+            </div>
+
+            <div class="example-box" style="font-size: 0.85em;">
+                <h3>Query 2 Solution:</h3>
+                <p>"List the names and cities of customers with credit limit over $10,000"</p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    ∏<sub>name, city</sub>(σ<sub>creditLimit > 10000</sub>(Customer))
+                </div>
+                <p><strong>Operators used:</strong> Selection (σ), Projection (π)</p>
+            </div>
+
+            <div class="example-box" style="font-size: 0.85em;">
+                <h3>Query 3 Solution (Complex):</h3>
+                <p>"Find all products ordered by customer with ID 'C001'"</p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    ∏<sub>productName</sub>((σ<sub>customerID='C001'</sub>(Order)) ⋈ OrderItem ⋈ Product)
+                </div>
+                <p><strong>Operators used:</strong> Selection (σ), Join (⋈), Projection (π)</p>
+            </div>
+        </div>
+
+        <!-- Slide 30: Understanding Exercise 1 (continued) -->
+        <div class="slide">
+            <h1>Understanding: Complex Queries</h1>
+
+            <div class="example-box" style="font-size: 0.85em;">
+                <h3>Query 4 Solution (Multi-Join):</h3>
+                <p>"List all orders with their customer names and total amounts"</p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    ∏<sub>orderID, name, totalAmount</sub>(Customer ⋈ Order)
+                </div>
+                <p><strong>Operators used:</strong> Natural Join (⋈), Projection (π)</p>
+                <p><strong>Note:</strong> Natural join on common attribute customerID</p>
+            </div>
+
+            <div class="example-box" style="font-size: 0.85em;">
+                <h3>Query 5 Solution (Division - Most Complex):</h3>
+                <p>"Find customers who have ordered products from every category"</p>
+                <div class="algebra-notation" style="font-size: 0.8em;">
+                    ∏<sub>customerID, category</sub>(Order ⋈ OrderItem ⋈ Product) ÷ ∏<sub>category</sub>(Product)
+                </div>
+                <p><strong>Operators used:</strong> Join (⋈), Projection (π), Division (÷)</p>
+                <p><strong>Note:</strong> Division is perfect for "for all" queries</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Complexity Ranking:</strong> Query 5 > Query 3 > Query 4 > Query 1 > Query 2<br>
+                (Query 5 uses the most operators and is conceptually most challenging)
+            </div>
+        </div>
+
+        <!-- Slide 31: Exercise 2 - Expression Evaluation -->
+        <div class="slide">
+            <h1>Exercise 2: Step-by-Step Evaluation</h1>
+            <h2>Individual Exercise: Decomposing Complex Expressions</h2>
+
+            <div class="activity-box">
+                <h3>Your Task (20 minutes):</h3>
+                <p style="font-size: 1.1em;">Given the complex relational algebra expression below, decompose it into step-by-step operations and describe the intermediate result after each operation.</p>
+            </div>
+
+            <div class="example-box">
+                <h3>The Expression:</h3>
+                <div class="algebra-notation" style="font-size: 0.85em;">
+                    ∏<sub>customerID, name</sub>((σ<sub>totalAmount > 1000</sub>(Order)) ⋈ Customer ⋈ (σ<sub>city = 'Boston'</sub>(Customer)))
+                </div>
+                <p style="margin-top: 15px;"><strong>Plain English:</strong> "Find the ID and name of customers from Boston who have placed orders over $1,000"</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Schema Reminder:</h3>
+                <div style="font-size: 0.95em; font-family: monospace;">
+<strong>Customer</strong> (customerID, name, city, creditLimit)<br>
+<strong>Order</strong> (orderID, customerID, orderDate, totalAmount)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 32: Exercise 2 - Instructions -->
+        <div class="slide">
+            <h1>Exercise 2: Decomposition Instructions</h1>
+
+            <div class="activity-box">
+                <h3>For Each Operation:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Identify the Operation:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>What operator is being applied?</li>
+                            <li>What are its operands?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Describe the Intermediate Result:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>What attributes does the result have?</li>
+                            <li>What tuples are included (conceptually)?</li>
+                            <li>How many tuples (estimate)?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Explain the Purpose:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Why is this operation necessary?</li>
+                            <li>How does it contribute to the final answer?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Strategy:</strong> Work from inside-out, evaluating innermost expressions first. Number each step (Step 1, Step 2, etc.)
+            </div>
+        </div>
+
+        <!-- Slide 33: Understanding Exercise 2 -->
+        <div class="slide">
+            <h1>Understanding: Step-by-Step Evaluation</h1>
+
+            <div class="example-box" style="font-size: 0.9em;">
+                <h3>Step 1: σ<sub>totalAmount > 1000</sub>(Order)</h3>
+                <p><strong>Operation:</strong> Selection on Order relation</p>
+                <p><strong>Intermediate Result:</strong> Subset of Order with only high-value orders (totalAmount > 1000)</p>
+                <p><strong>Attributes:</strong> orderID, customerID, orderDate, totalAmount</p>
+                <p><strong>Purpose:</strong> Filter to expensive orders early to reduce subsequent join size</p>
+            </div>
+
+            <div class="example-box" style="font-size: 0.9em;">
+                <h3>Step 2: σ<sub>city = 'Boston'</sub>(Customer)</h3>
+                <p><strong>Operation:</strong> Selection on Customer relation</p>
+                <p><strong>Intermediate Result:</strong> Subset of Customer with only Boston customers</p>
+                <p><strong>Attributes:</strong> customerID, name, city, creditLimit</p>
+                <p><strong>Purpose:</strong> Filter to Boston customers early (selection pushdown optimization)</p>
+            </div>
+        </div>
+
+        <!-- Slide 34: Understanding Exercise 2 (continued) -->
+        <div class="slide">
+            <h1>Understanding: Join Operations</h1>
+
+            <div class="example-box" style="font-size: 0.9em;">
+                <h3>Step 3: (Result from Step 1) ⋈ Customer</h3>
+                <p><strong>Operation:</strong> Natural join on customerID</p>
+                <p><strong>Intermediate Result:</strong> High-value orders paired with all their customer information</p>
+                <p><strong>Attributes:</strong> orderID, customerID, orderDate, totalAmount, name, city, creditLimit</p>
+                <p><strong>Purpose:</strong> Connect orders to customers to get customer details</p>
+            </div>
+
+            <div class="example-box" style="font-size: 0.9em;">
+                <h3>Step 4: (Result from Step 3) ⋈ (Result from Step 2)</h3>
+                <p><strong>Operation:</strong> Join with Boston customers</p>
+                <p><strong>Intermediate Result:</strong> Only Boston customers' high-value orders</p>
+                <p><strong>Attributes:</strong> Same as Step 3 (no new attributes, but filtered tuples)</p>
+                <p><strong>Purpose:</strong> Ensure we only keep orders from Boston customers</p>
+            </div>
+
+            <div class="example-box" style="font-size: 0.9em;">
+                <h3>Step 5: ∏<sub>customerID, name</sub>(Result from Step 4)</h3>
+                <p><strong>Operation:</strong> Projection</p>
+                <p><strong>Final Result:</strong> customerID and name of qualifying customers</p>
+                <p><strong>Attributes:</strong> customerID, name</p>
+                <p><strong>Purpose:</strong> Extract only the requested attributes, remove duplicates</p>
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 35: Homework Overview -->
+        <div class="slide">
+            <h1>Homework Assignment <span class="emoji">📝</span></h1>
+            <h2>Week 5: Procedural Implementation & Fundamental Operators</h2>
+
+            <div class="example-box">
+                <h3>Assignment Overview</h3>
+                <p style="font-size: 1.15em;">This week's homework extends the in-class exercises into practical implementation and deeper theoretical understanding. You'll translate algebra to code and rewrite expressions using only fundamental operators.</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
+                <p>Submit via Canvas as a single PDF document</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Assignment Components:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Homework Extension 1:</strong> Procedural Implementation (50 points)</li>
+                    <li><strong>Homework Extension 2:</strong> Fundamental Operator Rewrite (50 points)</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 36: Homework Extension 1 -->
+        <div class="slide">
+            <h1>Homework Extension 1: Procedural Implementation</h1>
+            <h2>Building on Exercise 1 - Operator Matching</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Select the <strong>two most complex</strong> relational algebra expressions from Exercise 1 (Query 3 and Query 5) and implement them in <strong>Python pseudocode</strong> to show how the result set is built step-by-step.</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Choose the Two Complex Queries:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Query 3: Products ordered by a specific customer (uses σ, ⋈, π)</li>
+                            <li>Query 5: Customers who ordered from every category (uses ⋈, π, ÷)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Write Python-Like Pseudocode:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Represent relations as lists of dictionaries or sets of tuples</li>
+                            <li>Implement each operator as a function or loop</li>
+                            <li>Show intermediate variables clearly</li>
+                            <li>Use comments to explain each step</li>
+                        </ul>
+                    </li>
+                    <li><strong>Demonstrate with Sample Data:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Provide small sample input (3-5 tuples per relation)</li>
+                            <li>Trace through your code showing intermediate results</li>
+                            <li>Show the final output</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 37: Homework Extension 1 - Example -->
+        <div class="slide">
+            <h1>Pseudocode Example Format</h1>
+
+            <div class="example-box">
+                <h3>Example Pseudocode Structure (Simplified Query):</h3>
+                <div style="font-family: monospace; font-size: 0.85em; background: var(--code-bg); padding: 15px; border-radius: 8px;">
+# Query: Find customers with creditLimit > 10000<br>
+# Expression: σ<sub>creditLimit > 10000</sub>(Customer)<br>
+<br>
+# Sample input data<br>
+Customer = [<br>
+&nbsp;&nbsp;{'customerID': 'C001', 'name': 'Alice', 'creditLimit': 15000},<br>
+&nbsp;&nbsp;{'customerID': 'C002', 'name': 'Bob', 'creditLimit': 5000},<br>
+&nbsp;&nbsp;{'customerID': 'C003', 'name': 'Carol', 'creditLimit': 20000}<br>
+]<br>
+<br>
+# Selection operation<br>
+def selection(relation, condition):<br>
+&nbsp;&nbsp;result = []<br>
+&nbsp;&nbsp;for tuple in relation:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if condition(tuple):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(tuple)<br>
+&nbsp;&nbsp;return result<br>
+<br>
+# Apply selection<br>
+result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
+<br>
+# Output: [{'customerID': 'C001', ...}, {'customerID': 'C003', ...}]
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Your pseudocode should be this detailed for BOTH complex queries!</strong>
+            </div>
+        </div>
+
+        <!-- Slide 38: Homework Extension 2 -->
+        <div class="slide">
+            <h1>Homework Extension 2: Fundamental Operators</h1>
+            <h2>Building on Exercise 2 - Expression Evaluation</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Rewrite the complex expression from Exercise 2 using <strong>ONLY the five fundamental operators</strong>: σ (selection), π (projection), ∪ (union), − (difference), × (Cartesian product). <strong>No joins allowed!</strong></p>
+            </div>
+
+            <div class="example-box">
+                <h3>Original Expression:</h3>
+                <div class="algebra-notation" style="font-size: 0.85em;">
+                    ∏<sub>customerID, name</sub>((σ<sub>totalAmount > 1000</sub>(Order)) ⋈ Customer ⋈ (σ<sub>city = 'Boston'</sub>(Customer)))
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Your Rewritten Expression Must:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li>Use <strong>only σ, π, ∪, −, ×</strong> (no ⋈, no derived operators)</li>
+                    <li>Be semantically equivalent (produce the same result)</li>
+                    <li>Show all intermediate steps clearly</li>
+                    <li>Explain why each fundamental operator is used</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 39: Homework Extension 2 - Hints -->
+        <div class="slide">
+            <h1>Rewriting Joins with Fundamentals</h1>
+
+            <div class="tip-box">
+                <h3>Key Insight: Join = Cartesian Product + Selection</h3>
+                <p style="font-size: 1.1em;">Remember that:</p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    R ⋈<sub>condition</sub> S = σ<sub>condition</sub>(R × S)
+                </div>
+                <p style="margin-top: 15px;">And for natural join:</p>
+                <div class="algebra-notation" style="font-size: 0.9em;">
+                    R ⋈ S = σ<sub>R.A = S.A</sub>(R × S)
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;">where A is the common attribute</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Your Deliverable (150-200 words):</h3>
+                <ol style="font-size: 1.05em;">
+                    <li><strong>Rewritten Expression:</strong> The full expression using only fundamental operators</li>
+                    <li><strong>Step-by-Step Breakdown:</strong> Label each operation (Step 1, Step 2, ...)</li>
+                    <li><strong>Explanation:</strong> For each step, explain:
+                        <ul style="margin-top: 8px;">
+                            <li>What fundamental operator you used</li>
+                            <li>Why it's equivalent to the original operation</li>
+                            <li>What the intermediate result contains</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 40: Submission Requirements -->
+        <div class="slide">
+            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+
+            <div class="example-box">
+                <h3>Format & Submission:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>File Format:</strong> Single PDF document</li>
+                    <li><strong>File Naming:</strong> LastName_FirstName_Week5_Homework.pdf</li>
+                    <li><strong>Submission Platform:</strong> Canvas</li>
+                    <li><strong>Due Date:</strong> Before class begins next week</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Document Structure:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Cover Page:</strong> Name, date, course, "Week 5 Homework"</li>
+                    <li><strong>Pages 2-3:</strong> Extension 1 - Pseudocode for Query 3</li>
+                    <li><strong>Pages 4-5:</strong> Extension 1 - Pseudocode for Query 5 (with division)</li>
+                    <li><strong>Pages 6-7:</strong> Extension 2 - Fundamental operator rewrite with explanation</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <h3>Grading Criteria:</h3>
+                <table class="result-table" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Key Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Pseudocode</strong></td>
+                        <td>50</td>
+                        <td>Correctness (25), Code clarity (15), Sample data trace (10)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fundamental Rewrite</strong></td>
+                        <td>50</td>
+                        <td>Correctness (30), Explanation quality (15), Equivalence proof (5)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 41: Summary -->
         <div class="slide">
             <h1>Key Takeaways</h1>
-            
+
             <ul style="font-size: 1.3em; line-height: 2;">
                 <li>✅ Relational algebra is the foundation of SQL</li>
                 <li>✅ Five basic operations can express any query</li>
@@ -775,17 +1240,17 @@ Registration (clientNo, branchNo, staffNo)
                 <li>✅ Order of operations matters for optimization</li>
                 <li>✅ Multiple expressions can produce same result</li>
             </ul>
-            
+
             <div class="tip-box">
                 <strong>Next Class:</strong> We'll see how SQL implements these concepts and start writing actual queries!
             </div>
-            
+
             <div class="discussion-prompt">
                 💭 Final Thought: How might AI and machine learning change query optimization in the future?
             </div>
         </div>
 
-        <!-- Slide 26: Homework & Resources -->
+        <!-- Slide 42: Homework & Resources -->
         <div class="slide">
             <h1>Homework & Resources</h1>
             
@@ -821,7 +1286,7 @@ Registration (clientNo, branchNo, staffNo)
     <!-- Navigation -->
     <div class="navigation">
         <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
-        <span id="slideInfo">Slide 1 of 26</span>
+        <span id="slideInfo">Slide 1 of 42</span>
         <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
     </div>
 

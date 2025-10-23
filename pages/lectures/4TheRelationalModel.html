@@ -798,7 +798,463 @@
             </div>
         </div>
 
-        <!-- Slide 25: Summary -->
+        <!-- IN-CLASS EXERCISES SECTION -->
+
+        <!-- Slide 26: Exercise Overview -->
+        <div class="slide">
+            <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
+            <h2>Schema Translation & Constraints <span class="timer-badge">40 minutes</span></h2>
+
+            <div class="demo-box">
+                <h3>Exercise Overview</h3>
+                <p style="font-size: 1.2em;">Today, you'll practice converting conceptual schemas to relational schemas and identifying integrity constraint violations. These skills are essential for translating database designs into implementation-ready specifications.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Learning Objectives</h3>
+                <ul style="font-size: 1.15em;">
+                    <li>✅ Convert conceptual schemas to formal relational notation</li>
+                    <li>✅ Identify and label Primary Keys (PK) and Foreign Keys (FK)</li>
+                    <li>✅ Recognize Entity, Referential, and Domain integrity constraints</li>
+                    <li>✅ Identify constraint violations in INSERT/UPDATE statements</li>
+                    <li>✅ Apply formal relational model principles</li>
+                </ul>
+            </div>
+
+            <button data-timer="40">Start 40-Minute Timer</button>
+        </div>
+
+        <!-- Slide 27: Exercise 1 - Schema Translation -->
+        <div class="slide">
+            <h1>Exercise 1: Schema-to-Table Translation <span class="timer-badge">20 min</span></h1>
+            <h2>Individual Exercise: Conceptual to Relational</h2>
+
+            <div class="exercise-step">
+                <h3>Scenario:</h3>
+                <p style="font-size: 1.1em;">You've been given a conceptual schema for an online bookstore. Your task is to convert it into a formal Relational Schema with proper notation.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Conceptual Schema:</h3>
+                <div class="code-example" style="font-size: 1em;">
+<strong>Entity: Book</strong><br>
+• ISBN (unique identifier)<br>
+• title<br>
+• publication_year<br>
+• price<br>
+• publisher_id (references Publisher)<br><br>
+
+<strong>Entity: Publisher</strong><br>
+• publisher_id (unique identifier)<br>
+• name<br>
+• country<br>
+• website<br><br>
+
+<strong>Entity: Author</strong><br>
+• author_id (unique identifier)<br>
+• first_name<br>
+• last_name<br>
+• birth_year<br><br>
+
+<strong>Relationship: Book_Author</strong><br>
+• A book can have multiple authors<br>
+• An author can write multiple books<br>
+• Tracks ISBN and author_id<br>
+• Also tracks author_order (1st author, 2nd author, etc.)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Exercise 1 - Instructions -->
+        <div class="slide">
+            <h1>Exercise 1: Translation Instructions</h1>
+
+            <div class="activity-box">
+                <h3>Your Task (20 minutes):</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Convert to Relational Schema (10 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Write each entity as a relation using the format: <br>
+                                <code>RelationName (<span style="text-decoration: underline;">PK</span>, attribute1, attribute2, FK→ReferencedRelation)</code></li>
+                            <li>Underline Primary Keys or use <strong>PK:</strong> notation</li>
+                            <li>Use arrow notation (→) or label Foreign Keys as <strong>FK:</strong></li>
+                            <li>Remember: Many-to-many relationships require a junction table!</li>
+                        </ul>
+                    </li>
+                    <li><strong>Document Your Design (10 min):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>For each relation, write one sentence explaining its purpose</li>
+                            <li>For each Foreign Key, explain what relationship it represents</li>
+                            <li>Identify the primary key of the Book_Author junction table (hint: it's composite!)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> The Book_Author relationship is many-to-many, so it needs its own relation (junction table) with foreign keys to both Book and Author.
+            </div>
+        </div>
+
+        <!-- Slide 29: Understanding Exercise 1 -->
+        <div class="slide">
+            <h1>Understanding: Schema Translation <span class="emoji">🔍</span></h1>
+
+            <div class="demo-box">
+                <h3>Expected Relational Schema:</h3>
+                <div class="code-example" style="font-size: 0.95em; line-height: 1.7;">
+<strong>Book</strong> (<span style="text-decoration: underline;">ISBN</span>, title, publication_year, price, publisher_id)<br>
+&nbsp;&nbsp;• <strong>PK:</strong> ISBN<br>
+&nbsp;&nbsp;• <strong>FK:</strong> publisher_id → Publisher(publisher_id)<br><br>
+
+<strong>Publisher</strong> (<span style="text-decoration: underline;">publisher_id</span>, name, country, website)<br>
+&nbsp;&nbsp;• <strong>PK:</strong> publisher_id<br><br>
+
+<strong>Author</strong> (<span style="text-decoration: underline;">author_id</span>, first_name, last_name, birth_year)<br>
+&nbsp;&nbsp;• <strong>PK:</strong> author_id<br><br>
+
+<strong>Book_Author</strong> (<span style="text-decoration: underline;">ISBN, author_id</span>, author_order)<br>
+&nbsp;&nbsp;• <strong>PK:</strong> (ISBN, author_id) - Composite key<br>
+&nbsp;&nbsp;• <strong>FK:</strong> ISBN → Book(ISBN)<br>
+&nbsp;&nbsp;• <strong>FK:</strong> author_id → Author(author_id)
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Key Insights:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>1:N Relationship:</strong> Book → Publisher is represented by a FK in Book</li>
+                    <li><strong>M:N Relationship:</strong> Book ↔ Author requires a separate junction table</li>
+                    <li><strong>Composite PK:</strong> Book_Author uses both ISBN and author_id as primary key</li>
+                    <li><strong>Additional Attribute:</strong> author_order in Book_Author tracks ordering of authors</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 30: Exercise 2 - Constraint Violations -->
+        <div class="slide">
+            <h1>Exercise 2: Constraint Violation Challenge <span class="timer-badge">20 min</span></h1>
+            <h2>Individual Exercise: Identify Integrity Violations</h2>
+
+            <div class="warning-box">
+                <h3>Your Mission:</h3>
+                <p style="font-size: 1.15em;">Given a relational schema and three problematic INSERT/UPDATE statements, identify which specific integrity constraint each statement violates.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>The Schema:</h3>
+                <div class="code-example" style="font-size: 0.9em;">
+<strong>Department</strong> (<span style="text-decoration: underline;">dept_id</span>, dept_name, location)<br>
+&nbsp;&nbsp;• PK: dept_id<br>
+&nbsp;&nbsp;• dept_id is INTEGER, dept_name is VARCHAR(50) NOT NULL<br><br>
+
+<strong>Employee</strong> (<span style="text-decoration: underline;">emp_id</span>, emp_name, salary, dept_id)<br>
+&nbsp;&nbsp;• PK: emp_id<br>
+&nbsp;&nbsp;• FK: dept_id → Department(dept_id)<br>
+&nbsp;&nbsp;• emp_id is INTEGER, salary is DECIMAL(10,2) CHECK (salary > 0)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 31: Exercise 2 - Problematic Statements -->
+        <div class="slide">
+            <h1>Exercise 2: The Problematic Statements</h1>
+
+            <div class="demo-box">
+                <h3>Statement 1:</h3>
+                <div class="sql-example">
+<span class="sql-keyword">INSERT INTO</span> Employee (emp_id, emp_name, salary, dept_id)<br>
+<span class="sql-keyword">VALUES</span> (<span class="sql-keyword">NULL</span>, <span class="sql-string">'Sarah Johnson'</span>, 75000.00, 10);
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Statement 2:</h3>
+                <div class="sql-example">
+<span class="sql-keyword">INSERT INTO</span> Employee (emp_id, emp_name, salary, dept_id)<br>
+<span class="sql-keyword">VALUES</span> (105, <span class="sql-string">'Michael Chen'</span>, 68000.00, 99);<br>
+<span class="sql-comment">-- Note: Department 99 does not exist in the Department table</span>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Statement 3:</h3>
+                <div class="sql-example">
+<span class="sql-keyword">UPDATE</span> Employee<br>
+<span class="sql-keyword">SET</span> salary = -5000.00<br>
+<span class="sql-keyword">WHERE</span> emp_id = 102;
+                </div>
+            </div>
+
+            <div class="activity-box">
+                <h3>Your Task (20 minutes):</h3>
+                <p>For <strong>each statement</strong>, identify:</p>
+                <ol style="font-size: 1.05em;">
+                    <li>Which integrity constraint is violated? (Entity, Referential, or Domain)</li>
+                    <li>Why is this a violation? (2-3 sentences)</li>
+                    <li>What would happen if the DBMS tried to execute this statement?</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 32: Understanding Exercise 2 -->
+        <div class="slide">
+            <h1>Understanding: Constraint Violations <span class="emoji">🔍</span></h1>
+
+            <div class="demo-box">
+                <h3>Statement 1: Entity Integrity Violation</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Constraint Type:</strong> Entity Integrity</li>
+                    <li><strong>Why Violation:</strong> Attempting to insert NULL into emp_id, which is the PRIMARY KEY. Entity integrity requires that no attribute of a primary key can be NULL.</li>
+                    <li><strong>What Happens:</strong> DBMS rejects the insert with error: <em>"Cannot insert NULL into primary key column"</em></li>
+                    <li><strong>Rationale:</strong> Primary keys identify tuples; NULL would mean "unknown identity"</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Statement 2: Referential Integrity Violation</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Constraint Type:</strong> Referential Integrity</li>
+                    <li><strong>Why Violation:</strong> The dept_id value (99) does not exist in the Department table. Foreign key values must either match an existing primary key or be NULL.</li>
+                    <li><strong>What Happens:</strong> DBMS rejects the insert with error: <em>"Foreign key constraint violation"</em></li>
+                    <li><strong>Rationale:</strong> Would create an orphan record - employee assigned to non-existent department</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Statement 3: Domain Constraint Violation</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Constraint Type:</strong> Domain Constraint (CHECK constraint)</li>
+                    <li><strong>Why Violation:</strong> The salary value (-5000.00) violates the CHECK constraint (salary > 0). Negative salaries are not in the valid domain.</li>
+                    <li><strong>What Happens:</strong> DBMS rejects the update with error: <em>"CHECK constraint violation"</em></li>
+                    <li><strong>Rationale:</strong> Salary must be a positive value; negative salary makes no business sense</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 33: Homework Overview -->
+        <div class="slide">
+            <h1>Homework Assignment <span class="emoji">📝</span></h1>
+            <h2>Week 4: SQL Implementation & Constraint Correction</h2>
+
+            <div class="demo-box">
+                <h3>Assignment Overview</h3>
+                <p style="font-size: 1.15em;">This week's homework takes your relational schema work into implementation. You'll write SQL CREATE TABLE statements and correct constraint violations.</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
+                <p>Submit via Canvas as a single PDF document + SQL file</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Assignment Components:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Homework Extension 1:</strong> SQL CREATE TABLE Statements (50 points)</li>
+                    <li><strong>Homework Extension 2:</strong> Constraint Violation Corrections (50 points)</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 34: Homework Extension 1 -->
+        <div class="slide">
+            <h1>Homework Extension 1: SQL Implementation</h1>
+            <h2>Building on Exercise 1 - Online Bookstore Schema</h2>
+
+            <div class="exercise-step">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Convert the <strong>relational schema</strong> you created in Exercise 1 (Online Bookstore) into complete <strong>SQL CREATE TABLE statements</strong>.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>All Four Tables:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Book, Publisher, Author, Book_Author</li>
+                            <li>Use appropriate data types (VARCHAR, INT, DECIMAL, etc.)</li>
+                            <li>Consider reasonable length constraints (e.g., ISBN is 13 characters)</li>
+                        </ul>
+                    </li>
+                    <li><strong>PRIMARY KEY Constraints:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Declare primary keys inline or using table-level constraint</li>
+                            <li>Remember: Book_Author has a COMPOSITE primary key</li>
+                        </ul>
+                    </li>
+                    <li><strong>FOREIGN KEY Constraints:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>All foreign keys must be properly declared</li>
+                            <li>Use REFERENCES keyword to link to parent tables</li>
+                            <li>Ensure parent tables are created before child tables</li>
+                        </ul>
+                    </li>
+                    <li><strong>NOT NULL Constraints:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Add NOT NULL for at least ONE attribute per table (beyond PKs)</li>
+                            <li>Choose attributes where NULL would not make sense (e.g., book title)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 35: Homework Extension 1 - Example Format -->
+        <div class="slide">
+            <h1>SQL CREATE TABLE Example</h1>
+
+            <div class="demo-box">
+                <h3>Expected Format (Example for Publisher):</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Create Publisher table first (no dependencies)</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Publisher (<br>
+&nbsp;&nbsp;publisher_id <span class="sql-keyword">INT PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;country <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;website <span class="sql-keyword">VARCHAR</span>(255)<br>
+);<br><br>
+
+<span class="sql-comment">-- Create Book table (depends on Publisher)</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Book (<br>
+&nbsp;&nbsp;ISBN <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;publication_year <span class="sql-keyword">INT</span>,<br>
+&nbsp;&nbsp;price <span class="sql-keyword">DECIMAL</span>(8,2) <span class="sql-keyword">CHECK</span> (price >= 0),<br>
+&nbsp;&nbsp;publisher_id <span class="sql-keyword">INT</span>,<br>
+&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (publisher_id) <span class="sql-keyword">REFERENCES</span> Publisher(publisher_id)<br>
+);
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Deliverable:</strong> Submit a .sql file named <code>LastName_FirstName_Bookstore.sql</code> with all four CREATE TABLE statements in the correct order (parents before children).
+            </div>
+        </div>
+
+        <!-- Slide 36: Homework Extension 2 -->
+        <div class="slide">
+            <h1>Homework Extension 2: Fixing Violations</h1>
+            <h2>Building on Exercise 2 - Department/Employee Schema</h2>
+
+            <div class="exercise-step">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Take the three problematic INSERT/UPDATE statements from Exercise 2 and <strong>correct them</strong> so they no longer violate any integrity constraints.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Requirements:</h3>
+                <p style="font-size: 1.05em;">For <strong>each of the three statements</strong>, provide:</p>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>The Corrected SQL Statement:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Rewrite the statement so it would execute successfully</li>
+                            <li>Use realistic values that satisfy all constraints</li>
+                            <li>Ensure data types and formats are correct</li>
+                        </ul>
+                    </li>
+                    <li><strong>Explanation of Changes (3-4 sentences):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>What specific change did you make?</li>
+                            <li>Why does this change resolve the constraint violation?</li>
+                            <li>What assumptions did you make (e.g., "I assumed department 10 exists")?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Alternative Solutions (1-2 sentences):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Is there another way to fix this violation?</li>
+                            <li>Example: For referential integrity violations, could you insert the missing parent record?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 37: Homework Extension 2 - Example -->
+        <div class="slide">
+            <h1>Constraint Correction Example</h1>
+
+            <div class="demo-box">
+                <h3>Original (Violates Entity Integrity):</h3>
+                <div class="sql-example">
+<span class="sql-keyword">INSERT INTO</span> Employee (emp_id, emp_name, salary, dept_id)<br>
+<span class="sql-keyword">VALUES</span> (<span class="sql-keyword">NULL</span>, <span class="sql-string">'Sarah Johnson'</span>, 75000.00, 10);
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Corrected Statement:</h3>
+                <div class="sql-example">
+<span class="sql-keyword">INSERT INTO</span> Employee (emp_id, emp_name, salary, dept_id)<br>
+<span class="sql-keyword">VALUES</span> (105, <span class="sql-string">'Sarah Johnson'</span>, 75000.00, 10);
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Explanation:</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;">
+                    I changed the emp_id from NULL to 105, which is a valid integer value. This resolves the entity integrity violation because primary keys cannot contain NULL values. The DBMS requires every tuple to have a unique, non-NULL identifier. I assumed that emp_id 105 is not already in use; in practice, I would query the database first to find an available ID or use an AUTO_INCREMENT feature.
+                </p>
+                <p style="font-size: 1.05em; line-height: 1.7; margin-top: 10px;">
+                    <strong>Alternative Solution:</strong> Use AUTO_INCREMENT for emp_id so the DBMS automatically assigns the next available ID, eliminating the need to specify it manually.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 38: Submission Requirements -->
+        <div class="slide">
+            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+
+            <div class="demo-box">
+                <h3>Format & Submission:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>File 1:</strong> PDF document with your homework write-up</li>
+                    <li><strong>File 2:</strong> SQL file with CREATE TABLE statements</li>
+                    <li><strong>File Naming:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>LastName_FirstName_Week4_Homework.pdf</li>
+                            <li>LastName_FirstName_Bookstore.sql</li>
+                        </ul>
+                    </li>
+                    <li><strong>Submission Platform:</strong> Canvas (upload both files)</li>
+                    <li><strong>Due Date:</strong> Before class begins next week</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>PDF Document Structure:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Cover Page:</strong> Your name, date, course number, "Week 4 Homework"</li>
+                    <li><strong>Page 2:</strong> Extension 1 - Brief explanation of your SQL choices (data types, constraint decisions)</li>
+                    <li><strong>Pages 3-5:</strong> Extension 2 - Corrected statements with explanations (one page per statement)</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading Criteria:</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Key Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>SQL CREATE TABLE</strong></td>
+                        <td>50</td>
+                        <td>Syntax correctness (20), Constraint completeness (20), Design quality (10)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Constraint Corrections</strong></td>
+                        <td>50</td>
+                        <td>Correctness of fixes (30), Explanation quality (15), Alternative solutions (5)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 39: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -810,10 +1266,10 @@
                 <li>✅ Convert conceptual designs to relational schemas</li>
                 <li>✅ Recognize and avoid common design pitfalls</li>
             </ul>
-            
+
             <div class="demo-box" style="margin-top: 30px;">
-                <p><strong>Next Lecture:</strong> Entity-Relationship Modeling</p>
-                <p><strong>Assignment:</strong> Complete the relational model exercises in the lab</p>
+                <p><strong>Next Lecture:</strong> Relational Algebra - Query Operations</p>
+                <p><strong>Homework:</strong> SQL CREATE TABLE statements & constraint corrections (due next week)</p>
                 <p><strong>Reading:</strong> Chapter 4 - The Relational Model (Pages 89-132)</p>
             </div>
         </div>
@@ -822,7 +1278,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">25</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">39</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

@@ -705,7 +705,197 @@
             <button data-timer="15">Start 15-Minute Timer</button>
         </div>
 
-        <!-- Slide 26: Common Pitfalls -->
+        <!-- IN-CLASS EXERCISES SECTION -->
+
+        <!-- Slide 26: Exercise - Creating a Simplified View -->
+        <div class="slide">
+            <h1>IN-CLASS EXERCISE</h1>
+            <h2>Creating a Simplified View for Security</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Write the <strong>CREATE VIEW</strong> statement for a provided complex SELECT query and submit a brief written justification for how the view enhances security.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Scenario:</h3>
+                <p>The company has a detailed <strong>EmployeeDetails</strong> table that includes sensitive information:</p>
+                <div class="demo-box" style="margin-top: 10px;">
+                    <p><strong>EmployeeDetails</strong>(empID, firstName, lastName, email, phone, salary, SSN, bankAccount, address, department, hireDate, performanceRating)</p>
+                </div>
+                <p style="margin-top: 15px;">The HR team needs to share employee contact information with department coordinators, but should NOT expose sensitive financial or performance data.</p>
+            </div>
+
+            <div class="sql-example">
+                <h3>Complex Base Query (DO NOT share this directly):</h3>
+                <span class="sql-keyword">SELECT</span> empID, firstName, lastName, email, <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phone, department, hireDate<br>
+                <span class="sql-keyword">FROM</span> EmployeeDetails<br>
+                <span class="sql-keyword">WHERE</span> department <span class="sql-keyword">IS NOT NULL</span><br>
+                <span class="sql-keyword">ORDER BY</span> department, lastName;
+            </div>
+
+            <button data-timer="420">Start 7-Minute Timer</button>
+        </div>
+
+        <!-- Slide 27: Understanding the Exercise - Solution Part 1 -->
+        <div class="slide">
+            <h1>Exercise Solution: CREATE VIEW Statement</h1>
+
+            <div class="sql-example" style="font-size: 0.9em;">
+                <h3>View Creation:</h3>
+                <span class="sql-keyword">CREATE VIEW</span> EmployeeContactInfo <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;empID,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;firstName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;lastName,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;email,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;phone,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;hireDate<br>
+                <span class="sql-keyword">FROM</span> EmployeeDetails<br>
+                <span class="sql-keyword">WHERE</span> department <span class="sql-keyword">IS NOT NULL</span><br>
+                <span class="sql-keyword">ORDER BY</span> department, lastName;
+            </div>
+
+            <div class="demo-box">
+                <h3>Usage by Department Coordinators:</h3>
+                <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
+                    <span class="sql-comment">-- Simple, secure access for coordinators</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> EmployeeContactInfo<br>
+                    <span class="sql-keyword">WHERE</span> department = <span class="sql-string">'Engineering'</span>;
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Understanding the Exercise - Security Justification -->
+        <div class="slide">
+            <h1>How This View Enhances Security</h1>
+
+            <div class="comparison-table">
+                <div class="comparison-card bad">
+                    <h3>Without the View ❌</h3>
+                    <ul style="line-height: 1.7;">
+                        <li>Coordinators need SELECT access to EmployeeDetails table</li>
+                        <li>Exposes salary, SSN, bankAccount, and performanceRating</li>
+                        <li>Risk of data leakage through uncontrolled queries</li>
+                        <li>Difficult to audit what data was accessed</li>
+                    </ul>
+                </div>
+                <div class="comparison-card good">
+                    <h3>With the View ✅</h3>
+                    <ul style="line-height: 1.7;">
+                        <li>Coordinators only have SELECT access to the view</li>
+                        <li>Sensitive columns are completely hidden</li>
+                        <li>Queries are pre-defined and controlled</li>
+                        <li>Easy to audit: all access goes through the view</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3>Security Justification (Example):</h3>
+                <p>"The EmployeeContactInfo view enhances security by implementing the principle of least privilege. Department coordinators can access only the contact and organizational data necessary for their role, while sensitive financial data (salary, bankAccount) and confidential information (SSN, performanceRating) remain completely hidden. This vertical partitioning prevents unauthorized data exposure and simplifies access control management, as permissions are granted at the view level rather than through complex column-level restrictions on the base table."</p>
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 29: Homework Extension - View Update Restriction -->
+        <div class="slide">
+            <h1>HOMEWORK EXTENSION</h1>
+            <h2>Demonstrating View Update Restriction</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Demonstrate the <strong>View Update Restriction</strong> by writing a failed UPDATE statement on the created view and explaining in 50 words why the DBMS rejects the update.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Requirements:</h3>
+                <ol style="line-height: 1.7;">
+                    <li>Write an UPDATE statement that attempts to modify the <code>EmployeeContactInfo</code> view</li>
+                    <li>The UPDATE should fail due to view update restrictions</li>
+                    <li>Write a 50-word explanation of why the DBMS rejects this specific update</li>
+                    <li>Reference the specific update restriction rule that applies</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> Consider what happens when you try to update a view that has an ORDER BY clause, or try to insert data that doesn't satisfy the WHERE condition.
+            </div>
+        </div>
+
+        <!-- Slide 30: Homework Guidance -->
+        <div class="slide">
+            <h1>Homework Guidance: View Update Restrictions</h1>
+
+            <div class="warning-box">
+                <h3>Common View Update Restrictions:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>GROUP BY/Aggregate Functions:</strong> Cannot update views with COUNT, SUM, AVG, etc.</li>
+                    <li><strong>DISTINCT:</strong> Cannot update views using DISTINCT keyword</li>
+                    <li><strong>Computed Columns:</strong> Cannot update calculated or derived columns</li>
+                    <li><strong>Missing NOT NULL Columns:</strong> Cannot INSERT if view excludes required columns from base table</li>
+                    <li><strong>ORDER BY (in some DBMS):</strong> Some systems restrict updates on views with ORDER BY</li>
+                </ol>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <h3>Example Failed UPDATE:</h3>
+                <span class="sql-comment">-- This might fail due to the ORDER BY clause</span><br>
+                <span class="sql-keyword">UPDATE</span> EmployeeContactInfo<br>
+                <span class="sql-keyword">SET</span> email = <span class="sql-string">'newemail@company.com'</span><br>
+                <span class="sql-keyword">WHERE</span> empID = 12345;<br><br>
+
+                <span class="sql-comment">-- OR try to insert a row that violates the WHERE condition</span><br>
+                <span class="sql-keyword">INSERT INTO</span> EmployeeContactInfo<br>
+                &nbsp;&nbsp;(empID, firstName, lastName, department)<br>
+                <span class="sql-keyword">VALUES</span> (99999, <span class="sql-string">'John'</span>, <span class="sql-string">'Doe'</span>, <span class="sql-keyword">NULL</span>);<br>
+                <span class="sql-comment">-- Fails: department is NULL, violates view's WHERE condition</span>
+            </div>
+        </div>
+
+        <!-- Slide 31: Submission Requirements -->
+        <div class="slide">
+            <h1>Homework Submission Requirements</h1>
+
+            <div class="info-box">
+                <h3>What to Submit:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>SQL Script File</strong> (.sql) containing:
+                        <ul style="margin-top: 10px;">
+                            <li>The CREATE VIEW statement from the in-class exercise</li>
+                            <li>Your attempted UPDATE or INSERT statement that fails</li>
+                            <li>SQL comments documenting the expected error</li>
+                        </ul>
+                    </li>
+                    <li><strong>Written Explanation</strong> (PDF or Word):
+                        <ul style="margin-top: 10px;">
+                            <li>Security justification from in-class exercise (see slide 28)</li>
+                            <li>50-word explanation of why the DBMS rejects your UPDATE/INSERT</li>
+                            <li>Screenshot of the error message from your DBMS</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <h3>Grading Criteria:</h3>
+                <ul>
+                    <li>CREATE VIEW statement is correct (20%)</li>
+                    <li>Security justification demonstrates understanding (30%)</li>
+                    <li>UPDATE/INSERT demonstrates a valid restriction (25%)</li>
+                    <li>50-word explanation accurately identifies the restriction rule (25%)</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>Due Date:</strong> Submit via course portal by next class session
+            </div>
+        </div>
+
+        <!-- Slide 32: Common Pitfalls -->
         <div class="slide">
             <h1>Common Pitfalls to Avoid ⚠️</h1>
             
@@ -778,7 +968,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

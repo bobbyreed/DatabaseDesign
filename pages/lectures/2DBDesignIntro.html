@@ -669,10 +669,401 @@ Client (clientNo, fName, lName, address, telNo)
             </div>
         </div>
 
-        <!-- Slide 26: Looking Ahead -->
+        <!-- IN-CLASS EXERCISES SECTION -->
+
+        <!-- Slide 26: Exercise Overview -->
+        <div class="slide">
+            <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
+            <h2>Conceptual Modeling & Design Critique <span class="timer-badge">40 minutes</span></h2>
+
+            <div class="demo-box">
+                <h3>Exercise Overview</h3>
+                <p style="font-size: 1.2em;">Today, you'll practice conceptual database design through two hands-on exercises. These will reinforce your understanding of entities, relationships, and design principles.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Learning Objectives</h3>
+                <ul style="font-size: 1.15em;">
+                    <li>✅ Identify entities and relationships in a real-world scenario</li>
+                    <li>✅ Understand different types of relationships (one-to-one, one-to-many, many-to-many)</li>
+                    <li>✅ Analyze and critique conceptual database schemas</li>
+                    <li>✅ Recognize common design flaws and propose improvements</li>
+                    <li>✅ Apply database design best practices</li>
+                </ul>
+            </div>
+
+            <button data-timer="40">Start 40-Minute Timer</button>
+        </div>
+
+        <!-- Slide 27: Exercise 1 - Whiteboard Conceptualization -->
+        <div class="slide">
+            <h1>Exercise 1: Whiteboard Conceptualization <span class="timer-badge">20 min</span></h1>
+            <h2>Group Exercise: University Course Registration System</h2>
+
+            <div class="exercise-step">
+                <h3>Scenario:</h3>
+                <p style="font-size: 1.1em;">You are designing a database for a university course registration system. The system needs to track:</p>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Students:</strong> Student ID, name, email, major, year of study</li>
+                    <li><strong>Courses:</strong> Course code, title, credits, department</li>
+                    <li><strong>Professors:</strong> Professor ID, name, email, department, office location</li>
+                    <li><strong>Enrollments:</strong> Which students are enrolled in which courses</li>
+                    <li><strong>Teaching Assignments:</strong> Which professors teach which courses</li>
+                    <li><strong>Course Offerings:</strong> Courses offered in specific semesters (Fall 2025, Spring 2026, etc.)</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Instructions (Working in Groups of 3-4):</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Identify Entities (5 min):</strong> List all the main entities in this system. What are the "things" we need to store data about?</li>
+                    <li><strong>Identify Relationships (10 min):</strong> Draw lines connecting entities and label each relationship. Is it one-to-one, one-to-many, or many-to-many?</li>
+                    <li><strong>Document Relationship Types (5 min):</strong> For each relationship, write a brief explanation of why you chose that cardinality</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 28: Exercise 1 - Expected Outputs -->
+        <div class="slide">
+            <h1>Exercise 1: Expected Outputs</h1>
+
+            <div class="demo-box">
+                <h3>Your Group Should Produce:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>List of Entities</strong> (minimum 5):
+                        <ul style="margin-top: 10px;">
+                            <li>Example: Student, Course, Professor, Enrollment, Department</li>
+                        </ul>
+                    </li>
+                    <li><strong>Relationship Diagram</strong> on whiteboard/paper showing:
+                        <ul style="margin-top: 10px;">
+                            <li>Entities as boxes</li>
+                            <li>Relationships as lines with labels</li>
+                            <li>Cardinality notation (1:1, 1:N, M:N)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Relationship Type Justifications:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Example: "Student to Enrollment is one-to-many because one student can enroll in multiple courses"</li>
+                            <li>Example: "Course to Student is many-to-many (through Enrollment) because many students can enroll in one course, and one student can enroll in many courses"</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Tip:</strong> Think about the questions you'd need to answer: "Which courses is student X taking?" or "Who is teaching course Y this semester?"
+            </div>
+        </div>
+
+        <!-- Slide 29: Understanding Exercise 1 -->
+        <div class="slide">
+            <h1>Understanding: Entities and Relationships <span class="emoji">🔍</span></h1>
+
+            <div class="demo-box">
+                <h3>What are Entities?</h3>
+                <p><strong>Entities</strong> are the "things" or objects in the real world that we want to store information about in our database.</p>
+                <ul style="font-size: 1.1em; margin-top: 10px;">
+                    <li>They become <strong>tables</strong> in a relational database</li>
+                    <li>Each entity should represent a distinct concept</li>
+                    <li>Examples: Student, Course, Professor, Department</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>What are Relationships?</h3>
+                <p><strong>Relationships</strong> describe how entities are connected to each other.</p>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Relationship Type</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>One-to-One (1:1)</strong></td>
+                        <td>One entity instance relates to exactly one instance of another</td>
+                        <td>Student → Student Profile</td>
+                    </tr>
+                    <tr>
+                        <td><strong>One-to-Many (1:N)</strong></td>
+                        <td>One entity instance relates to many instances of another</td>
+                        <td>Professor → Courses Taught</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Many-to-Many (M:N)</strong></td>
+                        <td>Many instances of one entity relate to many of another</td>
+                        <td>Students ↔ Courses (via Enrollment)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Concept:</strong> Many-to-many relationships typically require a "junction table" (like Enrollment) to properly represent them in a relational database.
+            </div>
+        </div>
+
+        <!-- Slide 30: Exercise 2 - Design Critique -->
+        <div class="slide">
+            <h1>Exercise 2: Design Critique <span class="timer-badge">20 min</span></h1>
+            <h2>Individual Exercise: Music Library Schemas</h2>
+
+            <div class="warning-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.15em;">Compare two deliberately flawed conceptual schemas for a music library database. Identify the problems and propose specific improvements for each.</p>
+            </div>
+
+            <div class="exercise-step">
+                <h3>Schema A: "Artist-Centric" Design</h3>
+                <div class="code-example" style="font-size: 0.95em;">
+<strong>Artist</strong> (artist_id, artist_name, birth_year, genres, albums_list, all_songs_list)<br>
+<strong>Song</strong> (song_id, title, duration, lyrics, artist_name, album_title, release_year)
+                </div>
+                <p style="margin-top: 10px; font-size: 0.95em;"><em>Note: genres, albums_list, and all_songs_list are stored as comma-separated text values</em></p>
+            </div>
+
+            <div class="exercise-step">
+                <h3>Schema B: "Song-First" Design</h3>
+                <div class="code-example" style="font-size: 0.95em;">
+<strong>MusicTrack</strong> (track_id, title, duration, artist_name, artist_bio, album_name, album_release_year, genre)<br>
+<strong>Playlist</strong> (playlist_id, playlist_name, song_titles, song_ids, total_duration)
+                </div>
+                <p style="margin-top: 10px; font-size: 0.95em;"><em>Note: artist_bio is stored with every song. song_titles and song_ids are comma-separated lists</em></p>
+            </div>
+        </div>
+
+        <!-- Slide 31: Exercise 2 - Analysis Instructions -->
+        <div class="slide">
+            <h1>Exercise 2: Analysis Instructions</h1>
+
+            <div class="activity-box">
+                <h3>For Each Schema (Schema A and Schema B):</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Identify Data Redundancy Issues (5 min per schema):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>What data is being duplicated unnecessarily?</li>
+                            <li>Which fields violate the principle of atomic values?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Identify Integrity Problems (5 min per schema):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>What happens if an artist's name is misspelled in one place?</li>
+                            <li>How difficult would it be to update album information?</li>
+                            <li>What if an album has multiple genres or artists?</li>
+                        </ul>
+                    </li>
+                    <li><strong>Propose Specific Improvements (5 min per schema):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>What tables should be added or modified?</li>
+                            <li>How should relationships be restructured?</li>
+                            <li>What fields should be moved or removed?</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> Think about the limitations we discussed earlier: separation of data, duplication, data dependence, and fixed queries.
+            </div>
+        </div>
+
+        <!-- Slide 32: Understanding Exercise 2 -->
+        <div class="slide">
+            <h1>Understanding: Design Flaws & Solutions <span class="emoji">🔍</span></h1>
+
+            <div class="demo-box">
+                <h3>Common Design Flaws in Schema A:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Multivalued Attributes:</strong> genres, albums_list, all_songs_list stored as comma-separated values
+                        <ul><li>❌ Makes querying difficult: "Find all artists in genre X"</li></ul>
+                    </li>
+                    <li><strong>Data Duplication:</strong> artist_name, album_title, release_year duplicated in Song table
+                        <ul><li>❌ Inconsistency risk if artist name changes</li></ul>
+                    </li>
+                    <li><strong>Missing Relationships:</strong> No explicit Album entity
+                        <ul><li>❌ Can't efficiently manage album-level data</li></ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>Common Design Flaws in Schema B:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Extreme Data Redundancy:</strong> artist_bio repeated for every song by that artist
+                        <ul><li>❌ Wastes storage space and causes update anomalies</li></ul>
+                    </li>
+                    <li><strong>No Artist or Album Entities:</strong> Everything crammed into MusicTrack
+                        <ul><li>❌ Can't query "all albums by artist X" efficiently</li></ul>
+                    </li>
+                    <li><strong>Playlist Design:</strong> Storing song_ids and song_titles as comma-separated lists
+                        <ul><li>❌ Violates first normal form; difficult to maintain</li></ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>✅ Better Approach:</h3>
+                <p>Separate entities: <strong>Artist</strong>, <strong>Album</strong>, <strong>Song</strong>, <strong>Genre</strong>, <strong>Playlist</strong>, plus junction tables like <strong>ArtistGenre</strong>, <strong>PlaylistSong</strong></p>
+            </div>
+        </div>
+
+        <!-- HOMEWORK SECTION -->
+
+        <!-- Slide 33: Homework Overview -->
+        <div class="slide">
+            <h1>Homework Assignment <span class="emoji">📝</span></h1>
+            <h2>Week 2: Conceptual Design Extensions</h2>
+
+            <div class="demo-box">
+                <h3>Assignment Overview</h3>
+                <p style="font-size: 1.15em;">This week's homework consists of two extensions building directly on today's in-class exercises. You'll take your conceptual work to the next level by creating UML diagrams and writing critical analysis.</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
+                <p>Submit via Canvas as a single PDF document</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Assignment Components:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Homework Extension 1:</strong> UML Class Diagram (50 points)</li>
+                    <li><strong>Homework Extension 2:</strong> Design Justification Essay (50 points)</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 34: Homework Extension 1 -->
+        <div class="slide">
+            <h1>Homework Extension 1: UML Class Diagram</h1>
+            <h2>Building on Exercise 1 - University Course Registration</h2>
+
+            <div class="exercise-step">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Convert the entities and relationships you identified in Exercise 1 (University Course Registration System) into an <strong>initial UML class diagram</strong> showing attributes and multiplicity.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Classes:</strong> Create a UML class box for each entity you identified
+                        <ul style="margin-top: 8px;">
+                            <li>Include class name at the top</li>
+                            <li>List all relevant attributes with data types (e.g., studentID: int, name: String)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Relationships:</strong> Draw association lines between classes
+                        <ul style="margin-top: 8px;">
+                            <li>Label each relationship (e.g., "enrolls in", "teaches", "offered in")</li>
+                            <li>Show direction with arrows where appropriate</li>
+                        </ul>
+                    </li>
+                    <li><strong>Multiplicity:</strong> Indicate cardinality on both ends of each relationship
+                        <ul style="margin-top: 8px;">
+                            <li>Examples: 1, 0..1, 1..*, 0..*, or specific numbers like 3..5</li>
+                            <li>Example: Student [1..*] ——enrolls in——→ [0..*] Course</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Tools You Can Use:</strong> Draw.io, Lucidchart, UMLet, or hand-drawn (must be legible and scanned clearly)
+            </div>
+        </div>
+
+        <!-- Slide 35: Homework Extension 2 -->
+        <div class="slide">
+            <h1>Homework Extension 2: Design Justification</h1>
+            <h2>Building on Exercise 2 - Music Library Critique</h2>
+
+            <div class="exercise-step">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Select the <strong>better</strong> of the two music library schemas (Schema A or Schema B) from Exercise 2, then write a <strong>200-word justification</strong> explaining why your proposed improvement resolves a potential data redundancy or integrity issue.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Your Essay Must Include:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Schema Selection (1 sentence):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>State which schema you believe is the better starting point and why</li>
+                        </ul>
+                    </li>
+                    <li><strong>Problem Identification (75-100 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Describe the specific data redundancy or integrity issue in your chosen schema</li>
+                            <li>Explain the consequences of this flaw (e.g., update anomalies, wasted storage, inconsistency risks)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Proposed Improvement (75-100 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Describe your specific design improvement (new tables, restructured relationships, etc.)</li>
+                            <li>Explain how your improvement resolves the identified issue</li>
+                            <li>Discuss any trade-offs or additional considerations</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <strong>Word Count:</strong> Approximately 200 words (±20 words). Quality over quantity - be concise and precise!
+            </div>
+        </div>
+
+        <!-- Slide 36: Submission Requirements -->
+        <div class="slide">
+            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+
+            <div class="demo-box">
+                <h3>Format & Submission:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>File Format:</strong> Single PDF document</li>
+                    <li><strong>File Naming:</strong> LastName_FirstName_Week2_Homework.pdf</li>
+                    <li><strong>Submission Platform:</strong> Canvas (link in course homepage)</li>
+                    <li><strong>Due Date:</strong> Before class begins next week</li>
+                </ul>
+            </div>
+
+            <div class="activity-box">
+                <h3>Document Structure:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Cover Page:</strong> Your name, date, course number, "Week 2 Homework"</li>
+                    <li><strong>Page 2:</strong> Extension 1 - UML Class Diagram (full-page diagram)</li>
+                    <li><strong>Page 3:</strong> Extension 2 - Design Justification Essay (formatted text)</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading Criteria:</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Key Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>UML Diagram</strong></td>
+                        <td>50</td>
+                        <td>Completeness (20), Correct multiplicity (15), Proper UML notation (10), Clarity (5)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Justification Essay</strong></td>
+                        <td>50</td>
+                        <td>Problem identification (20), Solution quality (20), Writing clarity (10)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Review your in-class exercise notes before starting. Your group work provides an excellent foundation!
+            </div>
+        </div>
+
+        <!-- Slide 37: Looking Ahead -->
         <div class="slide">
             <h1>What's Next?</h1>
-            
+
             <div class="concept-box">
                 <h2>In Our Next Lecture:</h2>
                 <h3>The Relational Model</h3>
@@ -683,25 +1074,26 @@ Client (clientNo, fName, lName, address, telNo)
                     <li>Mathematical foundations</li>
                 </ul>
             </div>
-            
+
             <div class="warning-box">
                 <h3>Before Next Class:</h3>
                 <ul>
                     <li>Review today's concepts</li>
                     <li>Read Chapter 2 in the textbook</li>
                     <li>Install MySQL or PostgreSQL on your machine</li>
+                    <li><strong>Complete your Week 2 homework and submit via Canvas</strong></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 27: Assignment Preview -->
+        <!-- Slide 38: Assignment Preview -->
         <div class="slide">
             <h1>Assignment 1: Database Design Proposal</h1>
-            
+
             <div class="concept-box">
                 <h3>Task:</h3>
                 <p>Identify a real-world scenario that currently uses file-based storage and propose a database solution</p>
-                
+
                 <h3>Requirements:</h3>
                 <ol>
                     <li>Describe the current file-based system and its limitations</li>
@@ -709,16 +1101,16 @@ Client (clientNo, fName, lName, address, telNo)
                     <li>Explain the advantages of your database approach</li>
                     <li>Identify potential challenges in migration</li>
                 </ol>
-                
+
                 <h3>Due Date:</h3>
                 <p>Next week before class</p>
-                
+
                 <h3>Format:</h3>
                 <p>Presentation</p>
             </div>
         </div>
 
-        <!-- Final Slide: Summary -->
+        <!-- Slide 39: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -742,7 +1134,7 @@ Client (clientNo, fName, lName, address, telNo)
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">39</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
