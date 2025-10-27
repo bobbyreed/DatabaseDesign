@@ -137,7 +137,7 @@
         <!-- Slide 1: Title Slide -->
         <div class="slide active">
             <h2>Relational Algebra <span class="emoji">🔄</span></h2>
-            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
             <p style="font-size: 1.3em;">Week 3, Lecture 5</p>
             <p style="font-size: 1.1em; margin-top: 20px;">Dr. Bobby Reed</p>
             <p style="margin-top: auto; font-style: italic;">Mastering the mathematical foundation of database queries!</p>
@@ -158,7 +158,22 @@
             </div>
         </div>
 
-        <!-- Slide 3: Introduction to Relational Algebra -->
+        <!-- Slide 3: Historical Context -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>Codd's Mathematical Foundation</h2>
+
+            <div class="example-box">
+                <h3>Codd's Formal Foundation (1970, 1972)</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">E.F. Codd introduced Relational Algebra and Relational Calculus in his early papers (1970, 1972) to provide a formal, mathematical basis for manipulating data. This mathematical foundation was essential for two critical purposes: proving a query language's theoretical power and enabling systematic query optimization.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> Relational Algebra isn't just academic theory—it's the foundation that enables modern database query optimizers to automatically find the most efficient way to execute your SQL queries. Every SQL statement you write is transformed into relational algebra expressions behind the scenes.
+            </div>
+        </div>
+
+        <!-- Slide 4: Introduction to Relational Algebra -->
         <div class="slide">
             <h1>What is Relational Algebra?</h1>
             <p>A theoretical language with operations that work on one or more relations to define another relation without changing the original relations.</p>
@@ -1034,7 +1049,7 @@ Registration (clientNo, branchNo, staffNo)
 
             <div class="tip-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Canvas as a single PDF document</p>
+                <p>Submit via Commit URL turned into D2L</p>
             </div>
 
             <div class="activity-box">
@@ -1190,20 +1205,21 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
             <div class="example-box">
                 <h3>Format & Submission:</h3>
                 <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File Format:</strong> Single PDF document</li>
-                    <li><strong>File Naming:</strong> LastName_FirstName_Week5_Homework.pdf</li>
-                    <li><strong>Submission Platform:</strong> Canvas</li>
+                    <li><strong>File Format:</strong> Markdown document (.md)</li>
+                    <li><strong>File Naming:</strong> LastName_FirstName_Week5_Homework.md</li>
+                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
+                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
                     <li><strong>Due Date:</strong> Before class begins next week</li>
                 </ul>
             </div>
 
             <div class="activity-box">
-                <h3>Document Structure:</h3>
+                <h3>Markdown Document Structure:</h3>
                 <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Cover Page:</strong> Name, date, course, "Week 5 Homework"</li>
-                    <li><strong>Pages 2-3:</strong> Extension 1 - Pseudocode for Query 3</li>
-                    <li><strong>Pages 4-5:</strong> Extension 1 - Pseudocode for Query 5 (with division)</li>
-                    <li><strong>Pages 6-7:</strong> Extension 2 - Fundamental operator rewrite with explanation</li>
+                    <li><strong>Header:</strong> Name, date, course, "Week 5 Homework"</li>
+                    <li><strong>Section 1:</strong> Extension 1 - Pseudocode for Query 3</li>
+                    <li><strong>Section 2:</strong> Extension 1 - Pseudocode for Query 5 (with division)</li>
+                    <li><strong>Section 3:</strong> Extension 2 - Fundamental operator rewrite with explanation</li>
                 </ol>
             </div>
 
@@ -1286,7 +1302,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
     <!-- Navigation -->
     <div class="navigation">
         <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
-        <span id="slideInfo">Slide 1 of 42</span>
+        <span id="slideInfo">Slide 1 of 43</span>
         <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
     </div>
 

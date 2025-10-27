@@ -293,6 +293,14 @@
             const data = await getAttendanceForDate(date);
             const grid = document.getElementById('attendanceGrid');
 
+            // Compute stats if not provided by API
+            if (!data.stats || typeof data.stats !== 'object') {
+                const total = data.attendance ? data.attendance.length : 0;
+                const present = data.attendance ? data.attendance.filter(s => s.present).length : 0;
+                const absent = total - present;
+                data.stats = { total, present, absent };
+            }
+
             // Update stats
             document.getElementById('presentCount').textContent = data.stats.present || 0;
             document.getElementById('absentCount').textContent = data.stats.absent || 0;

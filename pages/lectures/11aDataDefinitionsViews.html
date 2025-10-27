@@ -131,7 +131,7 @@
         <div class="slide active">
             <h1>SQL: Data Definitions & Views</h1>
             <h2>Chapter 7 <span class="emoji">🗄️</span></h2>
-            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
             <p style="font-size: 1.3em;">Week 6, Lecture 11</p>
             <p style="margin-top: 60px; font-style: italic;">Instructor: Bobby Reed</p>
             <p style="margin-top: auto; font-style: italic;">Building robust database structures!</p>
@@ -149,7 +149,27 @@
             </ul>
         </div>
 
-        <!-- Slide 3: DDL Overview -->
+        <!-- Slide 3: Historical Context -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>The Evolution of Views and Database Models</h2>
+
+            <div class="concept-box">
+                <h3>Views for Security and Simplicity</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">Views have been a feature of RDBMS since their early days (e.g., in System R) as a crucial mechanism for security (restricting users to a subset of data) and simplicity (hiding complex joins). This design choice allowed database administrators to provide controlled, tailored access to data without duplicating it—a fundamental principle of database security and usability that remains essential today.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>The NoSQL Movement (Mid-2000s)</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">The NoSQL movement emerged in the mid-2000s primarily to address the scalability and availability challenges faced by massive web applications (like Google and Amazon) using traditional relational databases. Companies like Google (with BigTable) and Amazon (with Dynamo) pioneered new database architectures that sacrificed some relational guarantees for horizontal scalability and high availability—fundamentally challenging the 30-year dominance of the relational model.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> While relational databases excel at data integrity and complex queries, the NoSQL movement demonstrated that different application demands (web-scale, high availability, flexible schemas) require different database architectures. Modern database design isn't about choosing "SQL vs. NoSQL"—it's about understanding which tool fits your specific requirements.
+            </div>
+        </div>
+
+        <!-- Slide 4: DDL Overview -->
         <div class="slide">
             <h1>SQL Data Definition Language (DDL)</h1>
             <p>DDL allows database objects to be created and destroyed:</p>
@@ -968,7 +988,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

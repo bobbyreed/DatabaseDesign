@@ -125,7 +125,7 @@
         <div class="slide active">
             <h1>Relational Calculus</h1>
             <h2>A Declarative Query Language <span class="emoji">🔍</span></h2>
-            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
             <p style="font-size: 1.3em;">Week 3, Lecture 5</p>
             <p style="margin-top: auto; font-style: italic;">Instructor: Bobby Reed</p>
         </div>
@@ -142,11 +142,26 @@
             </ul>
         </div>
 
-        <!-- Slide 3: Introduction to Relational Calculus -->
+        <!-- Slide 3: Historical Context -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>Codd's Mathematical Foundation</h2>
+
+            <div class="concept-box">
+                <h3>Theoretical Completeness</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">E.F. Codd used Relational Calculus to define the concept of <strong>Relational Completeness</strong>, a formal measure of a query language's expressive power. He proved that a query language is "relationally complete" if it can express all operations expressible in relational calculus—establishing the benchmark for evaluating database query languages.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> When we say SQL is "relationally complete," we mean it can express any query that relational calculus can express. This mathematical foundation gives us confidence that SQL is powerful enough for real-world database applications while remaining formally well-defined.
+            </div>
+        </div>
+
+        <!-- Slide 4: Introduction to Relational Calculus -->
         <div class="slide">
             <h1>What is Relational Calculus?</h1>
             <p>A <strong>declarative</strong> query language based on mathematical logic.</p>
-            
+
             <div class="demo-box">
                 <h3>Key Distinction</h3>
                 <p><strong>Relational Algebra:</strong> Tells the system HOW to get the data (procedural)</p>
@@ -744,7 +759,7 @@
 
             <div class="tip-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Canvas as a single PDF</p>
+                <p>Submit via Commit URL turned into D2L</p>
             </div>
 
             <div class="activity-box">
@@ -873,21 +888,23 @@
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
             <div class="demo-box">
-                <h3>Format:</h3>
+                <h3>Format & Submission:</h3>
                 <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File:</strong> LastName_FirstName_Week6_Homework.pdf</li>
-                    <li><strong>Platform:</strong> Canvas</li>
+                    <li><strong>File Format:</strong> Markdown document (.md)</li>
+                    <li><strong>File Naming:</strong> LastName_FirstName_Week6_Homework.md</li>
+                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
+                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
                     <li><strong>Due:</strong> Before next class</li>
                 </ul>
             </div>
 
             <div class="activity-box">
-                <h3>Document Structure:</h3>
+                <h3>Markdown Document Structure:</h3>
                 <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Cover Page:</strong> Name, date, "Week 6 Homework"</li>
-                    <li><strong>Page 2:</strong> Extension 1 - Declarative vs Procedural Essay (150 words)</li>
-                    <li><strong>Page 3:</strong> Extension 2 - DRC Expression</li>
-                    <li><strong>Page 4:</strong> Extension 2 - Conversion Explanation</li>
+                    <li><strong>Header:</strong> Name, date, "Week 6 Homework"</li>
+                    <li><strong>Section 1:</strong> Extension 1 - Declarative vs Procedural Essay (150 words)</li>
+                    <li><strong>Section 2:</strong> Extension 2 - DRC Expression</li>
+                    <li><strong>Section 3:</strong> Extension 2 - Conversion Explanation</li>
                 </ol>
             </div>
 
@@ -938,7 +955,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

@@ -91,7 +91,7 @@
         <!-- Slide 1: Title -->
         <div class="slide active">
             <h1>Introduction to Databases <span class="emoji">🗄️</span></h1>
-            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
             <p style="font-size: 1.3em;">Week 1, Lecture 2</p>
             <p style="margin-top: auto; font-style: italic;">Building the data foundations of tomorrow!</p>
         </div>
@@ -112,7 +112,27 @@
             </div>
         </div>
 
-        <!-- Slide 3: File-Based Systems Introduction -->
+        <!-- Slide 3: Historical Context -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>Foundations of Modern Database Design</h2>
+
+            <div class="concept-box">
+                <h3>E.F. Codd's 1970 Paper</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">Edgar F. Codd published his seminal paper, <em>"A Relational Model of Data for Large Shared Data Banks"</em> in 1970. This groundbreaking work fundamentally changed how data was logically structured and stored, introducing the revolutionary concept of separating logical organization from physical storage.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>Peter Chen and the ER Model (1976)</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">Peter Chen created the Entity-Relationship Model (ERM) in 1976, providing the first widely accepted graphical tool for conceptual database design. This model became the foundation for modern database design methodologies and is still extensively used today.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> These two innovations—Codd's relational model and Chen's ER diagrams—transformed database design from an ad-hoc practice into a principled discipline.
+            </div>
+        </div>
+
+        <!-- Slide 4: File-Based Systems Introduction -->
         <div class="slide">
             <h1>File-Based Systems</h1>
             <p>Before databases, we had file-based systems...</p>
@@ -906,9 +926,31 @@ Client (clientNo, fName, lName, address, telNo)
             </div>
         </div>
 
+        <!-- Slide 33: Video - Database Design Concepts -->
+        <div class="slide">
+            <h1>Video: Database Design Fundamentals <span class="emoji">🎬</span></h1>
+
+            <div style="max-width: 900px; margin: 40px auto;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    <iframe
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                        src="https://www.youtube.com/embed/6XrL5jXmTwM"
+                        title="Database Design Video"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <strong>Note:</strong> This video reinforces the key concepts we've covered today about database design, entities, and relationships.
+            </div>
+        </div>
+
         <!-- HOMEWORK SECTION -->
 
-        <!-- Slide 33: Homework Overview -->
+        <!-- Slide 34: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
             <h2>Week 2: Conceptual Design Extensions</h2>
@@ -920,7 +962,7 @@ Client (clientNo, fName, lName, address, telNo)
 
             <div class="warning-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Canvas as a single PDF document</p>
+                <p>Submit via Commit URL turned into D2L</p>
             </div>
 
             <div class="activity-box">
@@ -1018,9 +1060,10 @@ Client (clientNo, fName, lName, address, telNo)
             <div class="demo-box">
                 <h3>Format & Submission:</h3>
                 <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File Format:</strong> Single PDF document</li>
-                    <li><strong>File Naming:</strong> LastName_FirstName_Week2_Homework.pdf</li>
-                    <li><strong>Submission Platform:</strong> Canvas (link in course homepage)</li>
+                    <li><strong>File Format:</strong> Markdown document (.md)</li>
+                    <li><strong>File Naming:</strong> LastName_FirstName_Week2_Homework.md</li>
+                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
+                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
                     <li><strong>Due Date:</strong> Before class begins next week</li>
                 </ul>
             </div>
@@ -1134,7 +1177,7 @@ Client (clientNo, fName, lName, address, telNo)
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">39</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">40</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

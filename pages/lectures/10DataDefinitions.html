@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Data Definition - CSCI 3503</title>
+    <title>SQL Data Definition - CSCI 5603</title>
     
     <!-- Database Design Presentation Styles with Theme Support -->
     <link rel="stylesheet" href="../../styles/presentation.css">
@@ -78,7 +78,7 @@
         <div class="slide active">
             <h1>SQL Data Definition</h1>
             <h2>Creating Database Structures <span class="emoji">🏗️</span></h2>
-            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 3503 - Database Design</p>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
             <p style="font-size: 1.3em;">Week 5, Lecture 10</p>
             <p style="margin-top: auto; font-style: italic;">Building the foundation of your database!</p>
         </div>
@@ -99,11 +99,31 @@
             </div>
         </div>
 
-        <!-- Slide 3: Introduction to DDL -->
+        <!-- Slide 3: Historical Context -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>Evolution of Data Definition</h2>
+
+            <div class="concept-box">
+                <h3>DDL in CODASYL (Late 1960s)</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">The concept of a Data Definition Language (DDL) was first formally introduced in the CODASYL Network Model specifications in the late 1960s. CODASYL's DDL separated schema definition (the structure of the database) from data manipulation, establishing a foundational principle still used today.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>SQL's DDL Integration</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">SQL made a practical design choice by integrating DDL commands (CREATE, ALTER, DROP) into the same language as data manipulation. Earlier systems required separate schema definition tools, but SQL's unified approach simplified database administration and made it more accessible to developers.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> The integration of DDL and DML in SQL was revolutionary—database administrators could now manage both structure and data using a single, consistent language.
+            </div>
+        </div>
+
+        <!-- Slide 4: Introduction to DDL -->
         <div class="slide">
             <h1>Data Definition Language (DDL)</h1>
             <p>SQL DDL allows database objects to be created and destroyed.</p>
-            
+
             <div class="demo-box">
                 <h3>Main DDL Statements:</h3>
                 <div class="two-column">
@@ -125,7 +145,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="tip-box">
                 <strong>Note:</strong> Many DBMSs also provide <code>CREATE/DROP INDEX</code>
             </div>
@@ -784,7 +804,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">30</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">31</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

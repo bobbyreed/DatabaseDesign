@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 12: MongoDB - CSCI 5603</title>
+
+    <!-- Database Design Presentation Styles -->
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+
+        /* MongoDB-specific code styling */
+        .code-example {
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 10px 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: var(--bg-accent);
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid var(--border-color);
+        }
+
+        .table-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+
+        .table-comparison th {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .table-comparison td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+        <!-- Timer display -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Time Remaining: 05:00</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>MongoDB</h1>
+            <h2>NoSQL Document Database & MERN Stack <span class="emoji">🍃</span></h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 7, Lecture 12</p>
+            <p style="margin-top: 60px; font-size: 1.2em;">Instructor: Bobby Reed</p>
+            <p style="margin-top: auto; font-style: italic;">Exploring the world of NoSQL!</p>
+        </div>
+
+        <!-- Slide 2: Today's Agenda -->
+        <div class="slide">
+            <h1>Today's Agenda</h1>
+            <ul style="font-size: 1.3em; line-height: 2;">
+                <li>NoSQL vs SQL Databases</li>
+                <li>MongoDB Fundamentals</li>
+                <li>Document Structure & JSON/BSON</li>
+                <li>MongoDB CRUD Operations</li>
+                <li>Aggregation Framework & $lookup</li>
+                <li>Node.js Driver & Connection</li>
+                <li>MERN Stack Overview</li>
+                <li class="highlight">Hands-on Exercises</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Historical Context -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>The Birth of MongoDB and Document Databases</h2>
+
+            <div class="concept-box">
+                <h3>10gen to MongoDB (2007-2009)</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">MongoDB's origin story began at a company called 10gen, where it was initially developed as a component for an internal platform-as-a-service (PaaS) product. When the PaaS didn't gain traction, the team recognized that their database component was solving real problems that developers faced. They made the bold decision to pivot entirely, focusing solely on the database and releasing the first version of MongoDB in 2009—a move that would reshape the NoSQL landscape.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>Document Model Design</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">The JSON-like Document Model (MongoDB's BSON format) was an intentional move away from the rigid structure of the relational model. This design choice catered to the needs of modern, rapidly changing internet applications where schemas evolve constantly, data is hierarchical and nested, and developers work primarily in object-oriented languages. MongoDB's document model allowed developers to store data in the same format they used in their application code—reducing the "impedance mismatch" between database and application.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> MongoDB's success demonstrates that sometimes the right database model isn't about replacing relational databases—it's about matching the data model to how modern applications actually work. The document model's flexibility made it ideal for agile development, where requirements change frequently and data structures need to adapt quickly.
+            </div>
+        </div>
+
+        <!-- Slide 4: NoSQL Introduction -->
+        <div class="slide">
+            <h1>NoSQL Databases</h1>
+            <h2>Why NoSQL?</h2>
+            <div class="demo-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Scalability:</strong> Horizontal scaling across servers</li>
+                    <li><strong>Flexibility:</strong> Schema-less design</li>
+                    <li><strong>Performance:</strong> Optimized for specific data models</li>
+                    <li><strong>Big Data:</strong> Handle large volumes of unstructured data</li>
+                </ul>
+            </div>
+            <div class="tip-box">
+                <strong>Note:</strong> NoSQL = "Not Only SQL" - Complements rather than replaces SQL
+            </div>
+        </div>
+
+        <!-- Slide 4: SQL vs NoSQL Comparison -->
+        <div class="slide">
+            <h1>SQL vs NoSQL</h1>
+            <table class="table-comparison">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>SQL (Relational)</th>
+                        <th>NoSQL (MongoDB)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Model</td>
+                        <td>Tables with rows</td>
+                        <td>Collections with documents</td>
+                    </tr>
+                    <tr>
+                        <td>Schema</td>
+                        <td>Fixed schema</td>
+                        <td>Flexible schema</td>
+                    </tr>
+                    <tr>
+                        <td>Relationships</td>
+                        <td>Foreign keys & JOINs</td>
+                        <td>Embedded documents & references</td>
+                    </tr>
+                    <tr>
+                        <td>Query Language</td>
+                        <td>SQL</td>
+                        <td>MongoDB Query Language</td>
+                    </tr>
+                    <tr>
+                        <td>Scaling</td>
+                        <td>Vertical (mostly)</td>
+                        <td>Horizontal (sharding)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 5: MongoDB Introduction -->
+        <div class="slide">
+            <h1>What is MongoDB?</h1>
+            <div class="demo-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Document-oriented NoSQL database</li>
+                    <li>Stores data in <strong>BSON</strong> format (Binary JSON)</li>
+                    <li>Schema-flexible collections</li>
+                    <li>Rich query capabilities</li>
+                    <li>Built-in replication and sharding</li>
+                </ul>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="font-size: 3em;">🍃</p>
+                <p style="font-size: 1.2em;">MongoDB - The leading NoSQL database</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: MongoDB Structure -->
+        <div class="slide">
+            <h1>MongoDB Structure</h1>
+            <div class="code-example">
+MongoDB Server
+  └── Database (e.g., "myapp")
+      └── Collection (e.g., "users")
+          └── Document (BSON/JSON object)
+              └── Fields (key-value pairs)
+            </div>
+            <div class="info-box">
+                <p><strong>Database:</strong> Container for collections</p>
+                <p><strong>Collection:</strong> Group of documents (like a table)</p>
+                <p><strong>Document:</strong> Individual record (like a row)</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: JSON Document Example -->
+        <div class="slide">
+            <h1>Document Structure</h1>
+            <div class="code-example">
+{
+  "_id": ObjectId("5f8a7b2b9d3b2c1a3c8b4567"),
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 28,
+  "address": {
+    "street": "123 Main St",
+    "city": "Oklahoma City",
+    "state": "OK",
+    "zip": "73102"
+  },
+  "hobbies": ["reading", "coding", "hiking"],
+  "createdAt": ISODate("2023-10-15T09:00:00Z")
+}
+            </div>
+            <div class="tip-box">
+                <strong>Key Feature:</strong> Documents can contain nested objects and arrays
+            </div>
+        </div>
+
+        <!-- Slide 8: BSON Types -->
+        <div class="slide">
+            <h1>BSON Data Types</h1>
+            <div class="demo-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><code>String</code>: UTF-8 text</li>
+                    <li><code>Number</code>: Integer (32/64-bit) or Double</li>
+                    <li><code>Boolean</code>: true/false</li>
+                    <li><code>ObjectId</code>: Unique identifier (12 bytes)</li>
+                    <li><code>Date</code>: ISODate format</li>
+                    <li><code>Array</code>: Ordered list of values</li>
+                    <li><code>Object</code>: Embedded document</li>
+                    <li><code>null</code>: Null value</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: MongoDB Connection -->
+        <div class="slide">
+            <h1>Connecting with Node.js</h1>
+            <div class="code-example">
+const { MongoClient } = require('mongodb');
+
+// Connection URI
+const uri = "mongodb://localhost:27017";
+// For MongoDB Atlas:
+// const uri = "mongodb+srv://username:password@cluster.mongodb.net";
+
+const client = new MongoClient(uri);
+
+async function connect() {
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB!");
+
+        const database = client.db('myapp');
+        const collection = database.collection('users');
+
+        // Your operations here
+
+    } finally {
+        await client.close();
+    }
+}
+
+connect().catch(console.error);
+            </div>
+        </div>
+
+        <!-- Slide 10: CRUD Operations Title -->
+        <div class="slide">
+            <h1 style="text-align: center; font-size: 3em; margin-top: 100px;">CRUD Operations</h1>
+            <h2 style="text-align: center; font-size: 2em; color: var(--ocu-true-blue);">Create, Read, Update, Delete</h2>
+        </div>
+
+        <!-- Slide 11: Create - insertOne -->
+        <div class="slide">
+            <h1>Create - Insert Documents</h1>
+            <h3>insertOne()</h3>
+            <div class="code-example">
+const result = await collection.insertOne({
+    name: "Alice Smith",
+    email: "alice@example.com",
+    age: 25,
+    role: "developer"
+});
+
+console.log(`Inserted document with _id: ${result.insertedId}`);
+            </div>
+            <div class="success-box">
+                <strong>Result:</strong> MongoDB automatically generates an <code>_id</code> field if not provided
+            </div>
+        </div>
+
+        <!-- Slide 12: Create - insertMany -->
+        <div class="slide">
+            <h1>Create - Insert Many</h1>
+            <h3>insertMany()</h3>
+            <div class="code-example">
+const documents = [
+    { name: "Bob", email: "bob@example.com", age: 30 },
+    { name: "Carol", email: "carol@example.com", age: 28 },
+    { name: "Dave", email: "dave@example.com", age: 35 }
+];
+
+const result = await collection.insertMany(documents);
+console.log(`${result.insertedCount} documents were inserted`);
+            </div>
+            <div class="tip-box">
+                <strong>Tip:</strong> insertMany() is more efficient than multiple insertOne() calls
+            </div>
+        </div>
+
+        <!-- Slide 13: Read Operations -->
+        <div class="slide">
+            <h1>Read - Find Documents</h1>
+            <h3>findOne() and find()</h3>
+            <div class="code-example">
+// Find one document
+const user = await collection.findOne({ name: "Alice Smith" });
+
+// Find all documents matching criteria
+const cursor = collection.find({ age: { $gte: 25 } });
+const users = await cursor.toArray();
+
+// Find with projection (select specific fields)
+const projection = { _id: 0, name: 1, email: 1 };
+const result = await collection.find({}, { projection }).toArray();
+            </div>
+        </div>
+
+        <!-- Slide 14: Query Operators -->
+        <div class="slide">
+            <h1>Query Operators</h1>
+            <div class="code-example">
+// Comparison operators
+{ age: { $gt: 25 } }        // greater than
+{ age: { $gte: 25 } }       // greater than or equal
+{ age: { $lt: 30 } }        // less than
+{ age: { $ne: 25 } }        // not equal
+{ name: { $in: ["Alice", "Bob"] } }  // in array
+
+// Logical operators
+{ $and: [{ age: { $gt: 25 } }, { role: "developer" }] }
+{ $or: [{ age: { $lt: 25 } }, { role: "manager" }] }
+
+// Regex pattern matching
+{ email: { $regex: /.*@example\.com$/ } }
+
+// Array queries
+{ hobbies: "coding" }                    // array contains
+{ hobbies: { $all: ["coding", "reading"] } }  // contains all
+            </div>
+        </div>
+
+        <!-- Slide 15: Update Operations -->
+        <div class="slide">
+            <h1>Update - Modify Documents</h1>
+            <h3>updateOne() and updateMany()</h3>
+            <div class="code-example">
+// Update one document
+const result = await collection.updateOne(
+    { name: "Alice Smith" },                    // filter
+    { $set: { age: 26, role: "senior developer" } }  // update
+);
+
+// Update many documents
+await collection.updateMany(
+    { age: { $lt: 30 } },
+    { $inc: { age: 1 } }  // increment age by 1
+);
+
+// Update operators
+{ $set: { field: value } }      // set field value
+{ $unset: { field: "" } }        // remove field
+{ $inc: { count: 1 } }           // increment
+{ $push: { array: value } }      // add to array
+{ $pull: { array: value } }      // remove from array
+            </div>
+        </div>
+
+        <!-- Slide 16: Delete Operations -->
+        <div class="slide">
+            <h1>Delete - Remove Documents</h1>
+            <h3>deleteOne() and deleteMany()</h3>
+            <div class="code-example">
+// Delete one document
+const result = await collection.deleteOne({ name: "Dave" });
+console.log(`${result.deletedCount} document deleted`);
+
+// Delete many documents
+const deleteResult = await collection.deleteMany({
+    age: { $lt: 25 }
+});
+console.log(`${deleteResult.deletedCount} documents deleted`);
+
+// Delete all documents in collection (use with caution!)
+await collection.deleteMany({});
+            </div>
+            <div class="warning-box">
+                <strong>Warning:</strong> deleteMany({}) with an empty filter deletes ALL documents!
+            </div>
+        </div>
+
+        <!-- Slide 17: Aggregation Framework Title -->
+        <div class="slide">
+            <h1 style="text-align: center; font-size: 3em; margin-top: 100px;">Aggregation Framework</h1>
+            <h2 style="text-align: center; font-size: 2em; color: var(--ocu-true-blue);">Data Processing Pipeline</h2>
+        </div>
+
+        <!-- Slide 18: Aggregation Pipeline -->
+        <div class="slide">
+            <h1>Aggregation Pipeline</h1>
+            <div class="code-example">
+const pipeline = [
+    // Stage 1: Filter documents
+    { $match: { age: { $gte: 25 } } },
+
+    // Stage 2: Group and calculate
+    { $group: {
+        _id: "$role",
+        avgAge: { $avg: "$age" },
+        count: { $sum: 1 }
+    }},
+
+    // Stage 3: Sort results
+    { $sort: { avgAge: -1 } },
+
+    // Stage 4: Limit results
+    { $limit: 5 }
+];
+
+const results = await collection.aggregate(pipeline).toArray();
+            </div>
+        </div>
+
+        <!-- Slide 19: $lookup - MongoDB JOINs -->
+        <div class="slide">
+            <h1>$lookup - MongoDB JOINs</h1>
+            <p>Similar to SQL JOINs, connects data from multiple collections</p>
+            <div class="code-example">
+// Orders collection with user references
+const pipeline = [
+    {
+        $lookup: {
+            from: "users",           // collection to join
+            localField: "userId",    // field from orders
+            foreignField: "_id",     // field from users
+            as: "userDetails"        // output array field
+        }
+    },
+    {
+        $unwind: "$userDetails"      // deconstruct array
+    }
+];
+
+const ordersWithUsers = await ordersCollection
+    .aggregate(pipeline)
+    .toArray();
+            </div>
+        </div>
+
+        <!-- Slide 20: Complex Aggregation Example -->
+        <div class="slide">
+            <h1>Complex Aggregation Example</h1>
+            <div class="code-example">
+// E-commerce analytics pipeline
+const salesPipeline = [
+    // Match orders from last month
+    { $match: {
+        orderDate: {
+            $gte: new Date("2024-01-01"),
+            $lt: new Date("2024-02-01")
+        }
+    }},
+
+    // Lookup product details
+    { $lookup: {
+        from: "products",
+        localField: "productId",
+        foreignField: "_id",
+        as: "product"
+    }},
+
+    // Group by product category
+    { $group: {
+        _id: "$product.category",
+        totalRevenue: { $sum: "$amount" },
+        orderCount: { $sum: 1 },
+        avgOrderValue: { $avg: "$amount" }
+    }},
+
+    // Sort by revenue
+    { $sort: { totalRevenue: -1 } }
+];
+            </div>
+        </div>
+
+        <!-- Slide 21: MERN Stack Introduction -->
+        <div class="slide">
+            <h1 style="text-align: center; font-size: 3em; margin-top: 100px;">MERN Stack</h1>
+            <h2 style="text-align: center; font-size: 2em; color: var(--ocu-true-blue);">MongoDB + Express + React + Node.js</h2>
+        </div>
+
+        <!-- Slide 22: MERN Architecture -->
+        <div class="slide">
+            <h1>MERN Stack Architecture</h1>
+            <div style="text-align: center; font-size: 1.5em; margin-top: 50px;">
+                <div class="demo-box">
+                    <p><strong>React</strong> - Frontend UI (Port 3000)</p>
+                    <p style="font-size: 2em;">↕️</p>
+                    <p><strong>Express</strong> - API Server (Port 5000)</p>
+                    <p style="font-size: 2em;">↕️</p>
+                    <p><strong>Node.js</strong> - Runtime Environment</p>
+                    <p style="font-size: 2em;">↕️</p>
+                    <p><strong>MongoDB</strong> - Database (Port 27017)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Express + MongoDB Setup -->
+        <div class="slide">
+            <h1>Express API with MongoDB</h1>
+            <div class="code-example">
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const app = express();
+
+app.use(express.json());
+
+let db;
+MongoClient.connect('mongodb://localhost:27017')
+    .then(client => {
+        db = client.db('myapp');
+        console.log('Connected to MongoDB');
+    });
+
+// GET all users
+app.get('/api/users', async (req, res) => {
+    const users = await db.collection('users').find().toArray();
+    res.json(users);
+});
+
+// POST new user
+app.post('/api/users', async (req, res) => {
+    const result = await db.collection('users').insertOne(req.body);
+    res.json({ id: result.insertedId });
+});
+
+app.listen(5000, () => console.log('Server on port 5000'));
+            </div>
+        </div>
+
+        <!-- Slide 24: React Frontend Example -->
+        <div class="slide">
+            <h1>React Frontend Connection</h1>
+            <div class="code-example">
+import { useState, useEffect } from 'react';
+
+function UserList() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        // Fetch users from Express API
+        fetch('http://localhost:5000/api/users')
+            .then(res => res.json())
+            .then(data => setUsers(data));
+    }, []);
+
+    const addUser = async (userData) => {
+        const response = await fetch('http://localhost:5000/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
+        const newUser = await response.json();
+        setUsers([...users, newUser]);
+    };
+
+    return (
+        // JSX component rendering
+    );
+}
+            </div>
+        </div>
+
+        <!-- Slide 25: Deployment Overview -->
+        <div class="slide">
+            <h1>MERN Deployment</h1>
+            <h3>Modern Deployment Strategy</h3>
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>Frontend (React)</h3>
+                    <ul>
+                        <li>Deploy to Netlify or Vercel</li>
+                        <li>Connect via GitHub</li>
+                        <li>Automatic CI/CD</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h3>Backend (Express/Node)</h3>
+                    <ul>
+                        <li>Deploy to Render or Railway</li>
+                        <li>Environment variables for config</li>
+                        <li>Auto-deploy on git push</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Database (MongoDB)</h3>
+                <ul>
+                    <li>MongoDB Atlas (cloud hosted)</li>
+                    <li>Free tier available</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 26: In-Class Exercise 1 -->
+        <div class="slide">
+            <h1>Exercise 1: MongoDB CRUD Practice</h1>
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p>Write MongoDB commands for the following:</p>
+                <ol>
+                    <li><strong>Complex Find:</strong> Find all users who are over 25 years old,
+                        live in "Oklahoma City", and have "coding" in their hobbies array.</li>
+                    <li><strong>Insert Many:</strong> Insert 3 new product documents with
+                        nested price object containing amount and currency.</li>
+                    <li><strong>Update with $set:</strong> Update a user's address.city field
+                        and add a new field "lastModified" with current timestamp.</li>
+                </ol>
+            </div>
+            <button data-timer="900">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 27: Exercise 1 Solution -->
+        <div class="slide">
+            <h1>Exercise 1 - Solution</h1>
+            <div class="code-example">
+// 1. Complex Find
+db.users.find({
+    age: { $gt: 25 },
+    "address.city": "Oklahoma City",
+    hobbies: "coding"
+});
+
+// 2. Insert Many
+db.products.insertMany([
+    {
+        name: "Laptop",
+        price: { amount: 999.99, currency: "USD" },
+        category: "Electronics"
+    },
+    {
+        name: "Mouse",
+        price: { amount: 29.99, currency: "USD" },
+        category: "Accessories"
+    },
+    {
+        name: "Keyboard",
+        price: { amount: 79.99, currency: "USD" },
+        category: "Accessories"
+    }
+]);
+
+// 3. Update with $set
+db.users.updateOne(
+    { email: "john@example.com" },
+    {
+        $set: {
+            "address.city": "Norman",
+            lastModified: new Date()
+        }
+    }
+);
+            </div>
+        </div>
+
+        <!-- Slide 28: In-Class Exercise 2 -->
+        <div class="slide">
+            <h1>Exercise 2: MERN Deployment Kickoff</h1>
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p>Deploy a minimal MERN application:</p>
+                <ol>
+                    <li>Clone the starter repo: <code>mern-starter-2024</code></li>
+                    <li>Deploy React frontend to Netlify via GitHub</li>
+                    <li>Deploy Express backend to Render via GitHub</li>
+                    <li>Update the React API endpoint to your Render URL</li>
+                    <li>Test the connection</li>
+                </ol>
+                <p style="margin-top: 20px;"><strong>Note:</strong> We'll walk through this together!</p>
+            </div>
+        </div>
+
+        <!-- Slide 29: Homework Assignments -->
+        <div class="slide">
+            <h1>Homework Assignments</h1>
+            <div class="info-box">
+                <h3>Part 1: MongoDB $lookup Query</h3>
+                <p>Write a MongoDB aggregation pipeline that:</p>
+                <ul>
+                    <li>Connects orders and products collections</li>
+                    <li>Calculates total revenue per product category</li>
+                    <li>Filters for orders from the last 30 days</li>
+                    <li>Sorts by highest revenue</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Part 2: MERN Deployment Extension</h3>
+                <ul>
+                    <li>Add a new GET route <code>/api/stats</code> to Express</li>
+                    <li>Implement MongoDB aggregation in the route</li>
+                    <li>Deploy via GitHub (auto CI/CD)</li>
+                    <li>Document your Render deployment URL</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 30: Best Practices -->
+        <div class="slide">
+            <h1>MongoDB Best Practices</h1>
+            <div class="demo-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Schema Design:</strong> Embed for 1:1 and 1:few, reference for 1:many</li>
+                    <li><strong>Indexing:</strong> Create indexes on frequently queried fields</li>
+                    <li><strong>Connection Pooling:</strong> Reuse database connections</li>
+                    <li><strong>Error Handling:</strong> Always use try-catch with async/await</li>
+                    <li><strong>Security:</strong> Use connection strings with authentication</li>
+                    <li><strong>Validation:</strong> Implement schema validation rules</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 31: Common Pitfalls -->
+        <div class="slide">
+            <h1>Common MongoDB Pitfalls</h1>
+            <div class="warning-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>❌ Not closing database connections</li>
+                    <li>❌ Forgetting to handle Promise rejections</li>
+                    <li>❌ Using synchronous operations</li>
+                    <li>❌ Storing large binary data in documents</li>
+                    <li>❌ Not using projection to limit returned fields</li>
+                    <li>❌ Creating too many indexes</li>
+                    <li>❌ Ignoring the 16MB document size limit</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 32: Resources -->
+        <div class="slide">
+            <h1>Resources</h1>
+            <div class="demo-box">
+                <h3>Documentation & Learning:</h3>
+                <ul>
+                    <li>MongoDB Documentation: <a href="https://docs.mongodb.com/">docs.mongodb.com</a></li>
+                    <li>Node.js Driver: <a href="https://mongodb.github.io/node-mongodb-native/">MongoDB Driver Docs</a></li>
+                    <li>MongoDB University: Free courses at <a href="https://university.mongodb.com/">university.mongodb.com</a></li>
+                </ul>
+                <h3>Tools:</h3>
+                <ul>
+                    <li>MongoDB Atlas: Free tier cloud hosting</li>
+                    <li>MongoDB Compass: GUI for database management</li>
+                    <li>Mongoose ODM: Object modeling for Node.js</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 33: Summary -->
+        <div class="slide">
+            <h1>Summary</h1>
+            <div class="success-box">
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li>✅ MongoDB is a flexible NoSQL document database</li>
+                    <li>✅ Documents are stored as BSON (Binary JSON)</li>
+                    <li>✅ CRUD operations: insertOne/Many, find, updateOne/Many, deleteOne/Many</li>
+                    <li>✅ Aggregation framework for complex data processing</li>
+                    <li>✅ $lookup performs JOIN-like operations</li>
+                    <li>✅ MERN stack: Popular full-stack JavaScript solution</li>
+                    <li>✅ Modern deployment: Netlify (React) + Render (Express) + Atlas (MongoDB)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 34: Questions -->
+        <div class="slide">
+            <h1 style="text-align: center;">Questions?</h1>
+            <div style="text-align: center; font-size: 5em; margin-top: 80px;">
+                🤔❓
+            </div>
+            <p style="text-align: center; font-size: 1.3em; margin-top: 60px;">
+                Ready for the exercises?
+            </p>
+            <div class="tip-box">
+                <strong>Remember:</strong> MongoDB queries return Promises - use async/await!
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="navigation">
+        <button id="prev-btn">Previous</button>
+        <span class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
+        </span>
+        <button id="next-btn">Next</button>
+        <button class="home"><a href="../../index.html" style="color: inherit; text-decoration: none;">Home</a></button>
+    </div>
+
+    <!-- JavaScript for Slide Navigation -->
+    <script>
+        let currentSlide = 1;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let timerInterval;
+
+        // Update total slides display
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            // Hide all slides
+            slides.forEach(slide => slide.classList.remove('active'));
+
+            // Wrap around if needed
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+
+            // Show current slide
+            slides[currentSlide - 1].classList.add('active');
+
+            // Update counter
+            document.getElementById('currentSlide').textContent = currentSlide;
+
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+        }
+
+        // Navigation button handlers
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            currentSlide--;
+            showSlide(currentSlide);
+        });
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentSlide++;
+            showSlide(currentSlide);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                currentSlide--;
+                showSlide(currentSlide);
+            } else if (e.key === 'ArrowRight') {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Timer functionality
+        document.querySelectorAll('[data-timer]').forEach(button => {
+            button.addEventListener('click', function() {
+                const seconds = parseInt(this.getAttribute('data-timer'));
+                startTimer(seconds);
+            });
+        });
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            const timerDisplay = document.getElementById('timer-display');
+            const timerText = document.getElementById('timer-text');
+
+            timerDisplay.classList.add('active');
+            timerDisplay.style.display = 'block';
+
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerText.textContent = `Time Remaining: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerText.textContent = 'Time\'s Up!';
+                    setTimeout(() => {
+                        timerDisplay.style.display = 'none';
+                        timerDisplay.classList.remove('active');
+                    }, 3000);
+                }
+                seconds--;
+            }, 1000);
+        }
+
+        // Theme toggle setup
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // Create theme toggle if it doesn't exist
+            if (!document.querySelector('.theme-toggle')) {
+                const themeToggle = document.createElement('div');
+                themeToggle.className = 'theme-toggle';
+                themeToggle.innerHTML = `
+                    <label class="theme-switch">
+                        <input type="checkbox" id="theme-checkbox" ${savedTheme === 'dark' ? 'checked' : ''}>
+                        <span class="theme-slider"></span>
+                    </label>
+                    <span class="theme-toggle-label">${savedTheme === 'dark' ? 'Dark' : 'Light'}</span>
+                `;
+                document.body.appendChild(themeToggle);
+
+                document.getElementById('theme-checkbox').addEventListener('change', function() {
+                    const theme = this.checked ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', theme);
+                    localStorage.setItem('theme', theme);
+                    document.querySelector('.theme-toggle-label').textContent = theme === 'dark' ? 'Dark' : 'Light';
+                });
+            }
+        }
+
+        // Initialize
+        showSlide(currentSlide);
+        initializeTheme();
+    </script>
+</body>
+</html>
