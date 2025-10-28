@@ -85,12 +85,12 @@
         <div class="slide">
             <h1>Today's Learning Objectives</h1>
             <ul style="font-size: 1.4em; line-height: 2;">
-                <li>🎯 Understand limitations of file-based systems</li>
-                <li>🎯 Master the database approach and DBMS architecture</li>
-                <li>🎯 Learn the three-level ANSI-SPARC architecture</li>
-                <li>🎯 Identify roles in database environments</li>
-                <li>🎯 Explore data models and database languages</li>
-                <li>🎯 Apply architectural principles to real-world scenarios</li>
+                <li>🎯 Master the ANSI-SPARC three-level database architecture</li>
+                <li>🎯 Understand DBMS controlled access features (security, integrity, concurrency, recovery)</li>
+                <li>🎯 Analyze three-tier application architecture components</li>
+                <li>🎯 Compare centralized vs. distributed database architectures</li>
+                <li>🎯 Explore modern cloud and microservices database patterns</li>
+                <li>🎯 Apply architectural principles to system design scenarios</li>
             </ul>
         </div>
 
@@ -114,325 +114,60 @@
             </div>
         </div>
 
-        <!-- Slide 4: File-Based Systems Overview -->
+        <!-- Slide 4: Quick Recap from Last Week -->
         <div class="slide">
-            <h1>Traditional File-Based Systems</h1>
-            <p>Collection of application programs that perform services for end users.</p>
-            
+            <h1>Quick Recap: Last Week's Foundations <span class="emoji">📚</span></h1>
+
             <div class="demo-box">
-                <h3>Key Characteristics:</h3>
-                <ul>
-                    <li>Each program defines and manages its own data</li>
-                    <li>Data stored in separate files (CSV, XML, JSON)</li>
-                    <li>No centralized control or management</li>
-                    <li>Limited data sharing capabilities</li>
+                <h3>What We Learned in Lecture 2:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>File-Based Systems:</strong> Separate programs managing their own data (CSV, XML, JSON)</li>
+                    <li><strong>Five Key Limitations:</strong> Data separation, duplication, dependence, incompatible formats, fixed queries</li>
+                    <li><strong>The Database Solution:</strong> Shared collection of logically related data + DBMS</li>
+                    <li><strong>Database Languages:</strong> DDL (define structure) and DML (manipulate data)</li>
+                    <li><strong>Database Roles:</strong> DA, DBA, Designers, Programmers, End Users</li>
                 </ul>
             </div>
 
-            <div class="tip-box">
-                <strong>Historical Context:</strong> Before databases, organizations relied on file-based systems, leading to numerous challenges we'll explore next.
+            <div class="success-box">
+                <h3>Key Takeaway:</h3>
+                <p style="font-size: 1.2em;">Databases emerged to solve file-based system problems through centralization, data independence, and controlled access.</p>
             </div>
         </div>
 
-        <!-- Slide 4: File Formats Examples -->
+        <!-- Slide 5: Today's Focus -->
         <div class="slide">
-            <h1>Common File Formats</h1>
-            <p>File-based systems use various formats for data storage:</p>
-
-            <div class="comparison-table">
-                <div class="column">
-                    <h3>CSV Example</h3>
-                    <div class="code-example">
-                        <pre>student_id,name,email,gpa
-1001,Bobby Reed,breed@okcu.edu,3.85
-1002,Sarah Johnson,sjohnson@okcu.edu,3.92
-1003,Mike Chen,mchen@okcu.edu,3.78</pre>
-                    </div>
-                </div>
-                <div class="column">
-                    <h3>Characteristics</h3>
-                    <ul>
-                        <li>Simple text format</li>
-                        <li>Comma-separated values</li>
-                        <li>Limited data types</li>
-                        <li>No relationships</li>
-                        <li>No validation rules</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5: JSON Example with Bobby Reed -->
-        <div class="slide">
-            <h1>JSON Data Format</h1>
-            <p>JavaScript Object Notation - A more structured approach:</p>
-
-            <div class="json-example">
-                <pre>[
-    {
-        <span class="json-key">"name"</span>: <span class="json-string">"Bobby Reed"</span>,
-        <span class="json-key">"id"</span>: <span class="json-number">1</span>,
-        <span class="json-key">"email"</span>: <span class="json-string">"breed@okcu.edu"</span>,
-        <span class="json-key">"years"</span>: <span class="json-number">4</span>
-    },
-    {
-        <span class="json-key">"name"</span>: <span class="json-string">"Hank Jones"</span>,
-        <span class="json-key">"id"</span>: <span class="json-number">2</span>,
-        <span class="json-key">"email"</span>: <span class="json-string">"hjones@gmail.com"</span>,
-        <span class="json-key">"years"</span>: <span class="json-number">2</span>
-    }
-]</pre>
-            </div>
-
-            <div class="tip-box">
-                <strong>Note:</strong> JSON provides better structure than CSV but still lacks database features like relationships and constraints.
-            </div>
-        </div>
-
-        <!-- Slide 6: XML Example with Bobby Reed -->
-        <div class="slide">
-            <h1>XML Data Format</h1>
-            <p>eXtensible Markup Language - Self-describing data:</p>
-
-            <div class="xml-example">
-                <pre>&lt;?xml version = "1.0"?&gt;
-&lt;<span class="xml-tag">Students</span>&gt;
-    &lt;<span class="xml-tag">Student</span> <span class="xml-attr">Id</span>=<span class="xml-value">"1234"</span>&gt;
-        &lt;<span class="xml-tag">Name</span>&gt;Bobby Reed&lt;/<span class="xml-tag">Name</span>&gt;
-        &lt;<span class="xml-tag">Email</span>&gt;breed@okcu.edu&lt;/<span class="xml-tag">Email</span>&gt;
-        &lt;<span class="xml-tag">Years</span>&gt;4&lt;/<span class="xml-tag">Years</span>&gt;
-    &lt;/<span class="xml-tag">Student</span>&gt;
-    &lt;<span class="xml-tag">Student</span> <span class="xml-attr">Id</span>=<span class="xml-value">"4567"</span>&gt;
-        &lt;<span class="xml-tag">Name</span>&gt;Hank Jones&lt;/<span class="xml-tag">Name</span>&gt;
-        &lt;<span class="xml-tag">Email</span>&gt;hjones@gmail.com&lt;/<span class="xml-tag">Email</span>&gt;
-        &lt;<span class="xml-tag">Years</span>&gt;2&lt;/<span class="xml-tag">Years</span>&gt;
-    &lt;/<span class="xml-tag">Student</span>&gt;
-&lt;/<span class="xml-tag">Students</span>&gt;</pre>
-            </div>
-        </div>
-
-        <!-- Slide 7: File-Based Processing Example -->
-        <div class="slide">
-            <h1>File-Based Processing Scenario</h1>
-            <p>Real estate company with separate departments:</p>
+            <h1>Today's Focus: Database Architecture <span class="emoji">🏗️</span></h1>
 
             <div class="demo-box">
-                <h3>Sales Department Files:</h3>
-                <ul>
-                    <li><strong>PropertyForRent:</strong> propertyNo, street, city, postcode, type, rooms, rent, ownerNo</li>
-                    <li><strong>PrivateOwner:</strong> ownerNo, fName, lName, address, telNo</li>
-                    <li><strong>Client:</strong> clientNo, fName, lName, address, telNo, prefType, maxRent</li>
-                </ul>
+                <h3>From "Why Databases?" to "How Databases Work"</h3>
+                <p style="font-size: 1.2em;">Last week we learned <strong>why</strong> databases are better than file systems. Today we'll explore <strong>how</strong> databases are actually structured and organized.</p>
             </div>
 
-            <div class="demo-box">
-                <h3>Contracts Department Files:</h3>
-                <ul>
-                    <li><strong>Lease:</strong> leaseNo, propertyNo, clientNo, rent, paymentMethod, deposit</li>
-                    <li><strong>PropertyForRent:</strong> propertyNo, street, city, postcode, rent</li>
-                    <li><strong>Client:</strong> clientNo, fName, lName, address, telNo</li>
-                </ul>
-            </div>
+            <div class="erd-diagram" style="padding: 30px;">
+                <pre style="text-align: center; font-size: 1.0em;">
+    Today's Architectural Journey:
 
-            <div class="tip-box">
-                <strong>Problem:</strong> Notice the data duplication between departments!
-            </div>
-        </div>
-
-        <!-- Slide 8: Limitations Part 1 -->
-        <div class="slide">
-            <h1>Limitations of File-Based Approach (Part 1)</h1>
-            
-            <div class="demo-box">
-                <h3>1. Separation and Isolation of Data</h3>
-                <ul>
-                    <li>Each program maintains its own set of data</li>
-                    <li>Users unaware of potentially useful data in other programs</li>
-                    <li>No unified view of organizational data</li>
-                </ul>
-            </div>
-
-            <div class="demo-box">
-                <h3>2. Duplication of Data</h3>
-                <ul>
-                    <li>Same data held by different programs</li>
-                    <li>Wasted storage space</li>
-                    <li>Potential for inconsistent values</li>
-                    <li>Different formats for the same item</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 9: Limitations Part 2 -->
-        <div class="slide">
-            <h1>Limitations of File-Based Approach (Part 2)</h1>
-            
-            <div class="demo-box">
-                <h3>3. Data Dependence</h3>
-                <ul>
-                    <li>File structure defined in program code</li>
-                    <li>Changes to file structure require program modifications</li>
-                    <li>Maintenance becomes increasingly difficult</li>
-                </ul>
-            </div>
-
-            <div class="demo-box">
-                <h3>4. Incompatible File Formats</h3>
-                <ul>
-                    <li>Programs written in different languages</li>
-                    <li>Cannot easily access each other's files</li>
-                    <li>Data exchange requires conversion programs</li>
-                </ul>
-            </div>
-
-            <div class="demo-box">
-                <h3>5. Fixed Queries/Proliferation of Programs</h3>
-                <ul>
-                    <li>Programs written for specific functions</li>
-                    <li>New requirements need new programs</li>
-                    <li>Rapid growth in number of programs</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 10: The Database Approach -->
-        <div class="slide">
-            <h1>The Database Approach</h1>
-            <p>A revolutionary solution to file-based limitations:</p>
-
-            <div class="demo-box">
-                <h3>Why It Arose:</h3>
-                <ul>
-                    <li>Data definition embedded in applications → need for separation</li>
-                    <li>No control over data access → need for centralized management</li>
-                    <li>Data redundancy and inconsistency → need for integration</li>
-                </ul>
-            </div>
-
-            <div class="demo-box">
-                <h3>The Solution:</h3>
-                <p style="font-size: 1.3em; text-align: center; margin: 20px;">
-                    <strong>Database + Database Management System (DBMS)</strong>
-                </p>
-            </div>
-
-            <div class="tip-box">
-                <strong>Key Insight:</strong> Separate data from applications, centralize control, and provide a unified interface.
-            </div>
-        </div>
-
-        <!-- Slide 11: What is a Database? -->
-        <div class="slide">
-            <h1>Database Definition</h1>
-            
-            <div class="demo-box" style="background: var(--bg-accent); padding: 30px; margin: 30px 0;">
-                <h2 style="color: var(--ocu-true-blue);">A database is:</h2>
-                <p style="font-size: 1.3em; line-height: 1.8;">
-                    A <strong>shared collection</strong> of <strong>logically related data</strong> 
-                    (and a description of this data), designed to meet the 
-                    <strong>information needs</strong> of an organization.
-                </p>
-            </div>
-
-            <div class="comparison-table">
-                <div class="column">
-                    <h3>Key Components:</h3>
-                    <ul>
-                        <li><strong>Entities:</strong> Objects of interest</li>
-                        <li><strong>Attributes:</strong> Properties of entities</li>
-                        <li><strong>Relationships:</strong> Associations between entities</li>
-                        <li><strong>Metadata:</strong> Data about data</li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h3>Characteristics:</h3>
-                    <ul>
-                        <li>Self-describing nature</li>
-                        <li>Program-data independence</li>
-                        <li>Support for multiple views</li>
-                        <li>Concurrent data sharing</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 12: DBMS Definition -->
-        <div class="slide">
-            <h1>Database Management System (DBMS)</h1>
-            
-            <div class="demo-box" style="background: var(--bg-accent); padding: 30px;">
-                <p style="font-size: 1.3em; line-height: 1.8;">
-                    A <strong>software system</strong> that enables users to 
-                    <strong>define, create, maintain, and control access</strong> 
-                    to the database.
-                </p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Database Application Programs:</h3>
-                <p>Computer programs that interact with the database by issuing appropriate requests (SQL statements) to the DBMS.</p>
-            </div>
-
-            <div class="erd-diagram">
-                <pre style="text-align: center;">
-    ┌─────────────────┐
-    │   Application   │
-    │    Programs     │
-    └────────┬────────┘
-             │ SQL Requests
-             ▼
-    ┌─────────────────┐
-    │      DBMS       │
-    └────────┬────────┘
-             │
-             ▼
-    ┌─────────────────┐
-    │    Database     │
-    └─────────────────┘
+    ┌─────────────────────────────────┐
+    │   ANSI-SPARC Three-Level Arch   │ ← How DBMS separates concerns
+    └─────────────────────────────────┘
+                  ↓
+    ┌─────────────────────────────────┐
+    │   Three-Tier Application Arch   │ ← How apps connect to databases
+    └─────────────────────────────────┘
+                  ↓
+    ┌─────────────────────────────────┐
+    │  Centralized vs. Distributed    │ ← How databases scale globally
+    └─────────────────────────────────┘
                 </pre>
             </div>
-        </div>
 
-        <!-- Slide 13: Database Languages -->
-        <div class="slide">
-            <h1>Database Languages</h1>
-            
-            <div class="demo-box">
-                <h3>Data Definition Language (DDL)</h3>
-                <ul>
-                    <li>Permits specification of data types and structures</li>
-                    <li>Defines constraints on data</li>
-                    <li>All specifications stored in the database catalog</li>
-                </ul>
-                
-                <div class="sql-example">
-                    <span class="sql-comment">-- DDL Example</span><br>
-                    <span class="sql-keyword">CREATE TABLE</span> Student (<br>
-                    &nbsp;&nbsp;student_id <span class="sql-keyword">INT PRIMARY KEY</span>,<br>
-                    &nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
-                    &nbsp;&nbsp;email <span class="sql-keyword">VARCHAR</span>(255) <span class="sql-keyword">UNIQUE</span><br>
-                    );
-                </div>
-            </div>
-
-            <div class="demo-box">
-                <h3>Data Manipulation Language (DML)</h3>
-                <ul>
-                    <li>General enquiry facility (query language)</li>
-                    <li>SQL (Structured Query Language)</li>
-                    <li>Insert, update, delete, and retrieve data</li>
-                </ul>
-                
-                <div class="sql-example">
-                    <span class="sql-comment">-- DML Example</span><br>
-                    <span class="sql-keyword">SELECT</span> name, email<br>
-                    <span class="sql-keyword">FROM</span> Student<br>
-                    <span class="sql-keyword">WHERE</span> student_id = 1001;
-                </div>
+            <div class="tip-box">
+                <strong>Learning Goal:</strong> Understand the architectural decisions that make modern database systems powerful, scalable, and secure.
             </div>
         </div>
 
-        <!-- Slide 14: Controlled Access Features -->
+        <!-- Slide 6: Controlled Access Features -->
         <div class="slide">
             <h1>Database Controlled Access</h1>
             <p>DBMS provides comprehensive control mechanisms:</p>
@@ -584,70 +319,7 @@
             </div>
         </div>
 
-        <!-- Slide 18: Roles in Database Environment -->
-        <div class="slide">
-            <h1>Roles in the Database Environment</h1>
-
-            <div class="comparison-table">
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>Data Administrator (DA)</h3>
-                        <ul>
-                            <li>Strategic planning</li>
-                            <li>Policy development</li>
-                            <li>Standards definition</li>
-                            <li>Business liaison</li>
-                        </ul>
-                    </div>
-
-                    <div class="demo-box">
-                        <h3>Database Administrator (DBA)</h3>
-                        <ul>
-                            <li>Physical implementation</li>
-                            <li>Security enforcement</li>
-                            <li>Performance tuning</li>
-                            <li>Backup and recovery</li>
-                        </ul>
-                    </div>
-
-                    <div class="demo-box">
-                        <h3>Database Designers</h3>
-                        <ul>
-                            <li><strong>Logical:</strong> Conceptual schema</li>
-                            <li><strong>Physical:</strong> Storage structures</li>
-                            <li>Data modeling</li>
-                            <li>Normalization</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>Application Programmers</h3>
-                        <ul>
-                            <li>Develop applications</li>
-                            <li>Write SQL queries</li>
-                            <li>Create user interfaces</li>
-                            <li>Implement business logic</li>
-                        </ul>
-                    </div>
-
-                    <div class="demo-box">
-                        <h3>End Users</h3>
-                        <ul>
-                            <li><strong>Naive Users:</strong></li>
-                            <li>&nbsp;&nbsp;- Use pre-built applications</li>
-                            <li>&nbsp;&nbsp;- No SQL knowledge needed</li>
-                            <li><strong>Sophisticated Users:</strong></li>
-                            <li>&nbsp;&nbsp;- Write own queries</li>
-                            <li>&nbsp;&nbsp;- Use query tools directly</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 19: History of Database Systems -->
+        <!-- Slide 18: History of Database Systems -->
         <div class="slide">
             <h1>Evolution of Database Systems</h1>
 
@@ -1384,13 +1056,13 @@ Trade-off: Minimal performance overhead (~5%), but eliminates major attack vecto
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
             <ul style="font-size: 1.2em; line-height: 1.8;">
-                <li>✅ Explain limitations of file-based systems</li>
-                <li>✅ Describe the database approach advantages</li>
-                <li>✅ Understand DBMS architecture components</li>
-                <li>✅ Apply three-level architecture principles</li>
-                <li>✅ Identify roles in database environments</li>
-                <li>✅ Design appropriate views for different users</li>
-                <li>✅ Compare different database architectures</li>
+                <li>✅ Explain the ANSI-SPARC three-level architecture and data independence</li>
+                <li>✅ Describe DBMS controlled access features (security, integrity, concurrency, recovery)</li>
+                <li>✅ Analyze three-tier application architecture components and data flow</li>
+                <li>✅ Compare centralized vs. distributed database architectures</li>
+                <li>✅ Identify trade-offs in architectural decisions</li>
+                <li>✅ Understand modern cloud and microservices database patterns</li>
+                <li>✅ Design appropriate architectural views for different stakeholders</li>
             </ul>
 
             <div class="demo-box" style="margin-top: 30px;">
@@ -1404,7 +1076,7 @@ Trade-off: Minimal performance overhead (~5%), but eliminates major attack vecto
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">39</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
