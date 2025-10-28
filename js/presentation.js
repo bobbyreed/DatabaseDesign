@@ -5,6 +5,8 @@ class PresentationController {
         this.totalSlides = this.slides.length;
         this.timerInterval = null;
         this.currentTheme = localStorage.getItem('ocuTheme') || 'light';
+        this.hideControlsTimer = null;
+        this.hideDelay = 2000; // 2 seconds of inactivity
 
         this.init();
     }
@@ -12,6 +14,9 @@ class PresentationController {
     init() {
         // Initialize theme FIRST before anything else
         this.initializeTheme();
+
+        // Create merged top controls
+        this.createTopControls();
 
         // Initialize slide counter display
         this.updateSlideCounter();
@@ -27,18 +32,44 @@ class PresentationController {
 
         // Initialize any timers if present
         this.initializeTimers();
+
+        // Set up auto-hide controls
+        this.initializeAutoHide();
     }
 
     initializeTheme() {
         // Apply saved theme immediately
         document.documentElement.setAttribute('data-theme', this.currentTheme);
+    }
 
-        // Always create theme toggle for lecture pages
-        if (!document.querySelector('.theme-toggle')) {
-            this.createThemeToggle();
-        }
+    createTopControls() {
+        // Get lecture title from timer-display if it exists
+        const timerDisplay = document.querySelector('.timer-display');
+        const lectureTitle = timerDisplay ? timerDisplay.querySelector('#timer-text')?.childNodes[0]?.textContent?.trim() || 'Lecture' : 'Lecture';
+        const homeButton = timerDisplay ? timerDisplay.querySelector('.home')?.innerHTML || '' : '';
 
-        // Wait a tick to ensure DOM is ready, then bind the toggle
+        const controlsHTML = `
+            <div class="top-controls">
+                <div class="control-tab">⚙️</div>
+                <div class="lecture-info">
+                    <span>${lectureTitle}</span>
+                    ${homeButton ? `<button class="home">${homeButton}</button>` : ''}
+                </div>
+                <div class="theme-toggle">
+                    <span class="theme-toggle-label">Light</span>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="theme-checkbox" ${this.currentTheme === 'dark' ? 'checked' : ''}>
+                        <span class="theme-slider"></span>
+                    </label>
+                    <span class="theme-toggle-label">Dark</span>
+                </div>
+            </div>
+        `;
+
+        // Insert at the beginning of body
+        document.body.insertAdjacentHTML('afterbegin', controlsHTML);
+
+        // Bind theme toggle
         setTimeout(() => {
             const themeToggle = document.querySelector('#theme-checkbox');
             if (themeToggle) {
@@ -47,22 +78,12 @@ class PresentationController {
                 themeToggle.addEventListener('change', this.handleThemeChange.bind(this));
             }
         }, 0);
-    }
 
-    createThemeToggle() {
-        const toggleHTML = `
-            <div class="theme-toggle">
-                <span class="theme-toggle-label">Light</span>
-                <label class="theme-switch">
-                    <input type="checkbox" id="theme-checkbox" ${this.currentTheme === 'dark' ? 'checked' : ''}>
-                    <span class="theme-slider"></span>
-                </label>
-                <span class="theme-toggle-label">Dark</span>
-            </div>
-        `;
-        
-        // Insert at the beginning of body
-        document.body.insertAdjacentHTML('afterbegin', toggleHTML);
+        // Add tab to navigation
+        const navigation = document.querySelector('.navigation');
+        if (navigation && !navigation.querySelector('.nav-tab')) {
+            navigation.insertAdjacentHTML('afterbegin', '<div class="nav-tab">◀▶</div>');
+        }
     }
 
     handleThemeChange(e) {
@@ -318,6 +339,76 @@ class PresentationController {
         if (slideNumber >= 0 && slideNumber < this.totalSlides) {
             this.showSlide(slideNumber);
         }
+    }
+
+    initializeAutoHide() {
+        const topControls = document.querySelector('.top-controls');
+        const navigation = document.querySelector('.navigation');
+        const controlTab = document.querySelector('.control-tab');
+        const navTab = document.querySelector('.nav-tab');
+
+        if (!topControls || !navigation) return;
+
+        // Show controls on activity
+        const showControls = () => {
+            topControls.classList.remove('controls-hidden');
+            navigation.classList.remove('controls-hidden');
+            this.resetHideTimer();
+        };
+
+        // Reset the hide timer
+        this.resetHideTimer = () => {
+            if (this.hideControlsTimer) {
+                clearTimeout(this.hideControlsTimer);
+            }
+            this.hideControlsTimer = setTimeout(() => {
+                topControls.classList.add('controls-hidden');
+                navigation.classList.add('controls-hidden');
+            }, this.hideDelay);
+        };
+
+        // Show controls on mouse movement
+        document.addEventListener('mousemove', showControls);
+
+        // Show controls on keyboard activity
+        document.addEventListener('keydown', showControls);
+
+        // Show controls when hovering over tabs
+        if (controlTab) {
+            controlTab.addEventListener('mouseenter', () => {
+                topControls.classList.remove('controls-hidden');
+            });
+        }
+
+        if (navTab) {
+            navTab.addEventListener('mouseenter', () => {
+                navigation.classList.remove('controls-hidden');
+            });
+        }
+
+        // Keep controls visible when hovering over them
+        topControls.addEventListener('mouseenter', () => {
+            if (this.hideControlsTimer) {
+                clearTimeout(this.hideControlsTimer);
+            }
+        });
+
+        topControls.addEventListener('mouseleave', () => {
+            this.resetHideTimer();
+        });
+
+        navigation.addEventListener('mouseenter', () => {
+            if (this.hideControlsTimer) {
+                clearTimeout(this.hideControlsTimer);
+            }
+        });
+
+        navigation.addEventListener('mouseleave', () => {
+            this.resetHideTimer();
+        });
+
+        // Start initial hide timer
+        this.resetHideTimer();
     }
 }
 
