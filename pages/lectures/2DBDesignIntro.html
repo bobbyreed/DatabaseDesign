@@ -611,7 +611,387 @@ Client (clientNo, fName, lName, address, telNo)
             </div>
         </div>
 
-        <!-- Slide 23: Real-World Applications -->
+        <!-- Slide 23: Implementing the Library Database -->
+        <div class="slide">
+            <h1>Implementing the Library Database <span class="emoji">🔨</span></h1>
+            <h2>Two Approaches: CLI vs GUI</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>PostgreSQL Command Line (psql)</h3>
+                        <ul style="font-size: 1.05em;">
+                            <li>Direct SQL commands</li>
+                            <li>Fast for experienced users</li>
+                            <li>Scriptable and automatable</li>
+                            <li>Great for learning SQL</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>DataGrip (GUI Tool)</h3>
+                        <ul style="font-size: 1.05em;">
+                            <li>Visual interface</li>
+                            <li>Auto-completion</li>
+                            <li>Visual schema browsing</li>
+                            <li>Great for beginners</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h3>What We'll Build:</h3>
+                <p style="font-size: 1.1em;">Three tables: <strong>Books</strong>, <strong>Members</strong>, and <strong>Borrowing</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 24: PostgreSQL CLI - Part 1: Setup -->
+        <div class="slide">
+            <h1>PostgreSQL CLI: Setup & Connection</h1>
+            <h2>Step 1: Connect to PostgreSQL</h2>
+
+            <div class="demo-box">
+                <h3>Opening psql (Command Line):</h3>
+                <div class="command-box">
+# On macOS/Linux:<br>
+psql -U postgres<br>
+<br>
+# On Windows (after PostgreSQL installation):<br>
+psql -U postgres<br>
+<br>
+# You'll be prompted for password
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Step 2: Create the Database</h3>
+                <div class="sql-example">
+<span class="sql-comment">-- Create a new database for our library</span><br>
+<span class="sql-keyword">CREATE DATABASE</span> library_db;<br>
+<br>
+<span class="sql-comment">-- Connect to the new database</span><br>
+\c library_db<br>
+<br>
+<span class="sql-comment">-- You should see: "You are now connected to database library_db"</span>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Tip:</strong> The backslash commands like <code>\c</code> are psql meta-commands, not SQL!
+            </div>
+        </div>
+
+        <!-- Slide 25: PostgreSQL CLI - Part 2: Creating Tables -->
+        <div class="slide">
+            <h1>PostgreSQL CLI: Creating Tables</h1>
+            <h2>Step 3: Define Table Structures</h2>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Table 1: Books</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Books (<br>
+&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;isbn <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">UNIQUE</span>,<br>
+&nbsp;&nbsp;available <span class="sql-keyword">BOOLEAN DEFAULT TRUE</span><br>
+);<br>
+<br>
+<span class="sql-comment">-- Table 2: Members</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Members (<br>
+&nbsp;&nbsp;member_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;email <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">UNIQUE</span>,<br>
+&nbsp;&nbsp;phone <span class="sql-keyword">VARCHAR</span>(15)<br>
+);<br>
+<br>
+<span class="sql-comment">-- Table 3: Borrowing (relates Books and Members)</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Borrowing (<br>
+&nbsp;&nbsp;borrow_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;book_id <span class="sql-keyword">INTEGER REFERENCES</span> Books(book_id),<br>
+&nbsp;&nbsp;member_id <span class="sql-keyword">INTEGER REFERENCES</span> Members(member_id),<br>
+&nbsp;&nbsp;borrow_date <span class="sql-keyword">DATE NOT NULL</span>,<br>
+&nbsp;&nbsp;return_date <span class="sql-keyword">DATE</span><br>
+);
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Concepts:</strong> SERIAL (auto-increment), PRIMARY KEY (unique identifier), REFERENCES (foreign key)
+            </div>
+        </div>
+
+        <!-- Slide 26: PostgreSQL CLI - Part 3: Inserting Data -->
+        <div class="slide">
+            <h1>PostgreSQL CLI: Inserting Sample Data</h1>
+            <h2>Step 4: Add Test Data</h2>
+
+            <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-comment">-- Insert books</span><br>
+<span class="sql-keyword">INSERT INTO</span> Books (title, author, isbn, available)<br>
+<span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(<span class="sql-string">'The Great Gatsby'</span>, <span class="sql-string">'F. Scott Fitzgerald'</span>, <span class="sql-string">'9780743273565'</span>, <span class="sql-keyword">TRUE</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'1984'</span>, <span class="sql-string">'George Orwell'</span>, <span class="sql-string">'9780451524935'</span>, <span class="sql-keyword">TRUE</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'To Kill a Mockingbird'</span>, <span class="sql-string">'Harper Lee'</span>, <span class="sql-string">'9780061120084'</span>, <span class="sql-keyword">FALSE</span>);<br>
+<br>
+<span class="sql-comment">-- Insert members</span><br>
+<span class="sql-keyword">INSERT INTO</span> Members (name, email, phone)<br>
+<span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(<span class="sql-string">'Alice Johnson'</span>, <span class="sql-string">'alice@email.com'</span>, <span class="sql-string">'555-0101'</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Bob Smith'</span>, <span class="sql-string">'bob@email.com'</span>, <span class="sql-string">'555-0102'</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Carol White'</span>, <span class="sql-string">'carol@email.com'</span>, <span class="sql-string">'555-0103'</span>);<br>
+<br>
+<span class="sql-comment">-- Insert a borrowing record (Carol borrowed "To Kill a Mockingbird")</span><br>
+<span class="sql-keyword">INSERT INTO</span> Borrowing (book_id, member_id, borrow_date, return_date)<br>
+<span class="sql-keyword">VALUES</span> (3, 3, <span class="sql-string">'2025-01-15'</span>, <span class="sql-keyword">NULL</span>);
+            </div>
+
+            <div class="success-box">
+                <strong>Success!</strong> Your database now has data. Let's query it!
+            </div>
+        </div>
+
+        <!-- Slide 27: PostgreSQL CLI - Part 4: Querying -->
+        <div class="slide">
+            <h1>PostgreSQL CLI: Querying Data</h1>
+            <h2>Step 5: Run Queries</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>View All Books</h3>
+                        <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Books;
+                        </div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>View Available Books Only</h3>
+                        <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">SELECT</span> title, author<br>
+<span class="sql-keyword">FROM</span> Books<br>
+<span class="sql-keyword">WHERE</span> available = <span class="sql-keyword">TRUE</span>;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Who Borrowed What?</h3>
+                        <div class="sql-example" style="font-size: 0.75em;">
+<span class="sql-keyword">SELECT</span> m.name, b.title, br.borrow_date<br>
+<span class="sql-keyword">FROM</span> Borrowing br<br>
+<span class="sql-keyword">JOIN</span> Members m <span class="sql-keyword">ON</span> br.member_id = m.member_id<br>
+<span class="sql-keyword">JOIN</span> Books b <span class="sql-keyword">ON</span> br.book_id = b.book_id<br>
+<span class="sql-keyword">WHERE</span> br.return_date <span class="sql-keyword">IS NULL</span>;
+                        </div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>List Tables</h3>
+                        <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- psql meta-command</span><br>
+\dt
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>CLI Benefits:</strong> Fast, precise control, great for scripting and automation
+            </div>
+        </div>
+
+        <!-- Slide 28: DataGrip - Part 1: Connection -->
+        <div class="slide">
+            <h1>DataGrip: Setup & Connection</h1>
+            <h2>Visual Database Management</h2>
+
+            <div class="demo-box">
+                <h3>Step 1: Create a New Data Source</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li>Open DataGrip</li>
+                    <li>Click the <strong>+ (Plus)</strong> icon or <strong>File → New → Data Source → PostgreSQL</strong></li>
+                    <li>Fill in connection details:
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Host:</strong> localhost</li>
+                            <li><strong>Port:</strong> 5432 (default)</li>
+                            <li><strong>User:</strong> postgres</li>
+                            <li><strong>Password:</strong> [your password]</li>
+                            <li><strong>Database:</strong> postgres (initial connection)</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>"Test Connection"</strong> to verify</li>
+                    <li>Click <strong>"OK"</strong> to save</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>First Time?</strong> DataGrip may prompt you to download PostgreSQL drivers - click "Download"
+            </div>
+        </div>
+
+        <!-- Slide 29: DataGrip - Part 2: Creating Database & Tables -->
+        <div class="slide">
+            <h1>DataGrip: Creating Database & Tables</h1>
+            <h2>Using the Visual Interface</h2>
+
+            <div class="demo-box">
+                <h3>Step 2: Create Database (GUI Method)</h3>
+                <ol style="font-size: 1.0em; line-height: 1.7;">
+                    <li>Right-click on your PostgreSQL connection in the left panel</li>
+                    <li>Select <strong>New → Database</strong></li>
+                    <li>Name it: <code>library_db</code></li>
+                    <li>Click <strong>OK</strong></li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Step 3: Create Tables (SQL Console Method)</h3>
+                <ol style="font-size: 1.0em; line-height: 1.7;">
+                    <li>Right-click on <code>library_db</code> → <strong>New → Query Console</strong></li>
+                    <li>Paste the same CREATE TABLE statements from the CLI slides</li>
+                    <li>Highlight all three CREATE TABLE statements</li>
+                    <li>Click the green <strong>"Execute"</strong> button or press <strong>Ctrl+Enter</strong></li>
+                    <li>Refresh the database view to see your new tables</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <strong>Alternative:</strong> Use <strong>New → Table</strong> for a visual table designer with form fields
+            </div>
+        </div>
+
+        <!-- Slide 30: DataGrip - Part 3: Inserting & Querying -->
+        <div class="slide">
+            <h1>DataGrip: Inserting Data & Querying</h1>
+            <h2>Visual Data Management</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Method 1: SQL Insert</h3>
+                        <ol style="font-size: 0.95em;">
+                            <li>Open Query Console</li>
+                            <li>Paste INSERT statements</li>
+                            <li>Execute with Ctrl+Enter</li>
+                        </ol>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>Method 2: Visual Insert</h3>
+                        <ol style="font-size: 0.95em;">
+                            <li>Double-click table name</li>
+                            <li>Click <strong>"+"</strong> icon at top</li>
+                            <li>Fill in row values</li>
+                            <li>Click <strong>"Submit"</strong></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Running Queries</h3>
+                        <ol style="font-size: 0.95em;">
+                            <li>Open Query Console</li>
+                            <li>Type or paste your SQL query</li>
+                            <li>Execute: Ctrl+Enter</li>
+                            <li>View results in bottom panel</li>
+                        </ol>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>Visual Query Builder</h3>
+                        <ol style="font-size: 0.95em;">
+                            <li>Right-click table</li>
+                            <li><strong>Diagrams → Show Visualization</strong></li>
+                            <li>Drag relationships</li>
+                            <li>Auto-generates SQL</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>DataGrip Benefits:</strong> Auto-completion, syntax highlighting, visual schema browsing, error detection
+            </div>
+        </div>
+
+        <!-- Slide 31: CLI vs DataGrip Comparison -->
+        <div class="slide">
+            <h1>CLI vs DataGrip: When to Use Each?</h1>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Use PostgreSQL CLI When:</h3>
+                        <ul style="font-size: 1.0em; line-height: 1.7;">
+                            <li>✓ Writing scripts or automation</li>
+                            <li>✓ Working on remote servers (SSH)</li>
+                            <li>✓ Quick one-off queries</li>
+                            <li>✓ Learning SQL syntax deeply</li>
+                            <li>✓ Minimal resource usage needed</li>
+                            <li>✓ Command-line workflow preferred</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Use DataGrip When:</h3>
+                        <ul style="font-size: 1.0em; line-height: 1.7;">
+                            <li>✓ Exploring unfamiliar databases</li>
+                            <li>✓ Visual schema design needed</li>
+                            <li>✓ Comparing multiple queries</li>
+                            <li>✓ Debugging complex SQL</li>
+                            <li>✓ Team collaboration</li>
+                            <li>✓ Multi-database management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h3>Best Practice:</h3>
+                <p style="font-size: 1.1em;">Learn both! CLI for speed and precision, DataGrip for exploration and visualization. Most professionals use both daily.</p>
+            </div>
+        </div>
+
+        <!-- Slide 32: Practice Challenge -->
+        <div class="slide">
+            <h1>Practice Challenge <span class="emoji">💪</span></h1>
+            <h2>Extend the Library Database</h2>
+
+            <div class="activity-section">
+                <h3>Your Task (Choose CLI or DataGrip):</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Add a Publishers table</strong>
+                        <ul>
+                            <li>publisher_id (primary key)</li>
+                            <li>name, country</li>
+                        </ul>
+                    </li>
+                    <li><strong>Modify Books table</strong>
+                        <ul>
+                            <li>Add publisher_id as a foreign key</li>
+                        </ul>
+                    </li>
+                    <li><strong>Insert sample publishers and update books</strong></li>
+                    <li><strong>Write a query</strong> to show all books with their publisher names</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Bonus Challenge:</h3>
+                <p style="font-size: 1.05em;">Add a <strong>due_date</strong> column to the Borrowing table and write a query to find overdue books (due_date < today and return_date IS NULL)</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Hint:</strong> Use <code>ALTER TABLE</code> to add columns, and <code>CURRENT_DATE</code> for today's date in PostgreSQL
+            </div>
+        </div>
+
+        <!-- Slide 33: Real-World Applications -->
         <div class="slide">
             <h1>Real-World Database Applications</h1>
             
@@ -1177,7 +1557,7 @@ Client (clientNo, fName, lName, address, telNo)
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">40</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
