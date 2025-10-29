@@ -719,35 +719,117 @@ psql -U postgres<br>
             <div class="tip-box">
                 <strong>Key Concepts:</strong> SERIAL (auto-increment), PRIMARY KEY (unique identifier), REFERENCES (foreign key)
             </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>🎯 Challenge: Make It Your Own!</h3>
+                <p style="font-size: 1.05em; line-height: 1.6;">Before running these CREATE TABLE statements, consider adding <strong>2 optional fields</strong> to the Books table that would make sense for a library system.</p>
+                <p style="font-size: 1.0em; margin-top: 10px;"><strong>Ideas:</strong> genre, publication_year, page_count, rating, language, etc.</p>
+                <p style="font-size: 0.95em; margin-top: 10px;"><em>Hint: Choose appropriate data types (VARCHAR, INTEGER, DATE, etc.)</em></p>
+            </div>
+        </div>
+
+        <!-- Slide 25.5: Optional Fields Solution -->
+        <div class="slide">
+            <h1>Optional Fields: Example Solution</h1>
+            <h2>Enhanced Books Table</h2>
+
+            <div class="demo-box">
+                <h3>Example: Adding Genre and Publication Year</h3>
+                <div class="sql-example" style="font-size: 0.9em;">
+<span class="sql-comment">-- Enhanced Books table with optional fields</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Books (<br>
+&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;isbn <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">UNIQUE</span>,<br>
+&nbsp;&nbsp;available <span class="sql-keyword">BOOLEAN DEFAULT TRUE</span>,<br>
+&nbsp;&nbsp;<strong style="color: var(--ocu-green);">genre <span class="sql-keyword">VARCHAR</span>(50)</strong>,<br>
+&nbsp;&nbsp;<strong style="color: var(--ocu-green);">publication_year <span class="sql-keyword">INTEGER</span></strong><br>
+);
+                </div>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="success-box">
+                        <h3>Other Good Options:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li><code>page_count INTEGER</code></li>
+                            <li><code>rating DECIMAL(3,2)</code></li>
+                            <li><code>language VARCHAR(30)</code></li>
+                            <li><code>publisher VARCHAR(100)</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="tip-box">
+                        <h3>Remember:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li>✓ Choose meaningful names</li>
+                            <li>✓ Pick appropriate types</li>
+                            <li>✓ Consider constraints</li>
+                            <li>✓ Think about queries</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box" style="margin-top: 15px;">
+                <p style="font-size: 1.05em;"><strong>Note:</strong> Your choices may differ - that's the point! There's no single "correct" answer for optional fields.</p>
+            </div>
         </div>
 
         <!-- Slide 26: PostgreSQL CLI - Part 3: Inserting Data -->
         <div class="slide">
             <h1>PostgreSQL CLI: Inserting Sample Data</h1>
-            <h2>Step 4: Add Test Data</h2>
+            <h2>Step 4: Add YOUR Test Data</h2>
 
-            <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-comment">-- Insert books</span><br>
+            <div class="demo-box">
+                <h3>INSERT Syntax Example:</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Example: Insert one book</span><br>
+<span class="sql-keyword">INSERT INTO</span> Books (title, author, isbn, available)<br>
+<span class="sql-keyword">VALUES</span> (<span class="sql-string">'The Hobbit'</span>, <span class="sql-string">'J.R.R. Tolkien'</span>, <span class="sql-string">'9780547928227'</span>, <span class="sql-keyword">TRUE</span>);<br>
+<br>
+<span class="sql-comment">-- Or insert multiple rows at once:</span><br>
 <span class="sql-keyword">INSERT INTO</span> Books (title, author, isbn, available)<br>
 <span class="sql-keyword">VALUES</span><br>
-&nbsp;&nbsp;(<span class="sql-string">'The Great Gatsby'</span>, <span class="sql-string">'F. Scott Fitzgerald'</span>, <span class="sql-string">'9780743273565'</span>, <span class="sql-keyword">TRUE</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'1984'</span>, <span class="sql-string">'George Orwell'</span>, <span class="sql-string">'9780451524935'</span>, <span class="sql-keyword">TRUE</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'To Kill a Mockingbird'</span>, <span class="sql-string">'Harper Lee'</span>, <span class="sql-string">'9780061120084'</span>, <span class="sql-keyword">FALSE</span>);<br>
-<br>
-<span class="sql-comment">-- Insert members</span><br>
-<span class="sql-keyword">INSERT INTO</span> Members (name, email, phone)<br>
-<span class="sql-keyword">VALUES</span><br>
-&nbsp;&nbsp;(<span class="sql-string">'Alice Johnson'</span>, <span class="sql-string">'alice@email.com'</span>, <span class="sql-string">'555-0101'</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'Bob Smith'</span>, <span class="sql-string">'bob@email.com'</span>, <span class="sql-string">'555-0102'</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'Carol White'</span>, <span class="sql-string">'carol@email.com'</span>, <span class="sql-string">'555-0103'</span>);<br>
-<br>
-<span class="sql-comment">-- Insert a borrowing record (Carol borrowed "To Kill a Mockingbird")</span><br>
-<span class="sql-keyword">INSERT INTO</span> Borrowing (book_id, member_id, borrow_date, return_date)<br>
-<span class="sql-keyword">VALUES</span> (3, 3, <span class="sql-string">'2025-01-15'</span>, <span class="sql-keyword">NULL</span>);
+&nbsp;&nbsp;(<span class="sql-string">'Book Title 1'</span>, <span class="sql-string">'Author Name'</span>, <span class="sql-string">'1234567890123'</span>, <span class="sql-keyword">TRUE</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Book Title 2'</span>, <span class="sql-string">'Author Name'</span>, <span class="sql-string">'9876543210987'</span>, <span class="sql-keyword">FALSE</span>);
+                </div>
             </div>
 
-            <div class="success-box">
-                <strong>Success!</strong> Your database now has data. Let's query it!
+            <div class="warning-box">
+                <h3>⚠️ Required: Create Your Own Library Data!</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Your Task:</strong> Insert data that reflects YOUR interests and preferences.</p>
+
+                <h4 style="margin-top: 15px;">Minimum Requirements:</h4>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li>📚 <strong>Books:</strong> Insert at least 5 books of YOUR choice
+                        <ul style="margin-top: 5px;">
+                            <li>Must span at least 3 different genres</li>
+                            <li>Include any optional fields you added</li>
+                        </ul>
+                    </li>
+                    <li>👥 <strong>Members:</strong> Insert at least 3 members
+                        <ul style="margin-top: 5px;">
+                            <li>Use realistic names (can be fictional characters)</li>
+                            <li>Create unique email addresses</li>
+                        </ul>
+                    </li>
+                    <li>📅 <strong>Borrowing:</strong> Create at least 2 borrowing records
+                        <ul style="margin-top: 5px;">
+                            <li>Match book_id and member_id to your data</li>
+                            <li>Mix of returned and unreturned books</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p style="font-size: 0.95em; margin-top: 15px; font-style: italic; color: var(--error-color);"><strong>Academic Integrity:</strong> Your submission must contain unique data. Do not copy examples from classmates or online sources. We will check for duplicate submissions.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> If you added optional fields like <code>genre</code>, remember to include them in your INSERT statement!
             </div>
         </div>
 
@@ -777,13 +859,10 @@ psql -U postgres<br>
 
                 <div class="column">
                     <div class="demo-box">
-                        <h3>Who Borrowed What?</h3>
-                        <div class="sql-example" style="font-size: 0.75em;">
-<span class="sql-keyword">SELECT</span> m.name, b.title, br.borrow_date<br>
-<span class="sql-keyword">FROM</span> Borrowing br<br>
-<span class="sql-keyword">JOIN</span> Members m <span class="sql-keyword">ON</span> br.member_id = m.member_id<br>
-<span class="sql-keyword">JOIN</span> Books b <span class="sql-keyword">ON</span> br.book_id = b.book_id<br>
-<span class="sql-keyword">WHERE</span> br.return_date <span class="sql-keyword">IS NULL</span>;
+                        <h3>Count Your Books</h3>
+                        <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">AS</span> total_books<br>
+<span class="sql-keyword">FROM</span> Books;
                         </div>
                     </div>
 
@@ -797,8 +876,100 @@ psql -U postgres<br>
                 </div>
             </div>
 
+            <div class="success-box">
+                <h3>Practice these simple queries with YOUR data!</h3>
+                <p style="font-size: 1.0em;">Verify your books and members are stored correctly.</p>
+            </div>
+        </div>
+
+        <!-- Slide 27.5: JOIN Query Challenge -->
+        <div class="slide">
+            <h1>🎯 Challenge: JOIN Query</h1>
+            <h2>Combine Data from Multiple Tables</h2>
+
+            <div class="warning-box">
+                <h3>Your Challenge:</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Write a query to show <strong>who borrowed what book and when</strong>. You need to combine data from three tables: <code>Borrowing</code>, <code>Members</code>, and <code>Books</code>.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Incomplete Query (Fill in the Blanks!):</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-comment">-- Goal: Show member name, book title, and borrow date for unreturned books</span><br>
+<span class="sql-keyword">SELECT</span> m.name, b.title, br.borrow_date<br>
+<span class="sql-keyword">FROM</span> Borrowing br<br>
+<span class="sql-keyword">JOIN</span> <strong style="color: var(--error-color);">_____</strong> m <span class="sql-keyword">ON</span> br.<strong style="color: var(--error-color);">_____</strong> = m.<strong style="color: var(--error-color);">_____</strong><br>
+<span class="sql-keyword">JOIN</span> <strong style="color: var(--error-color);">_____</strong> b <span class="sql-keyword">ON</span> br.<strong style="color: var(--error-color);">_____</strong> = b.<strong style="color: var(--error-color);">_____</strong><br>
+<span class="sql-keyword">WHERE</span> br.return_date <span class="sql-keyword">IS NULL</span>;
+                </div>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="tip-box">
+                        <h3>Hints:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li>First blank on line 3: Which table contains member names?</li>
+                            <li>Second JOIN: Which table has book titles?</li>
+                            <li>ON clauses: Match foreign keys to primary keys</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Think About:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li>What is the primary key in Members?</li>
+                            <li>What foreign key in Borrowing points to Members?</li>
+                            <li>Same for Books table!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="tip-box">
-                <strong>CLI Benefits:</strong> Fast, precise control, great for scripting and automation
+                <strong>Try it yourself first!</strong> The solution is on the next slide if you get stuck.
+            </div>
+        </div>
+
+        <!-- Slide 27.75: JOIN Query Solution -->
+        <div class="slide">
+            <h1>JOIN Query: Solution</h1>
+            <h2>Combining Multiple Tables</h2>
+
+            <div class="success-box">
+                <h3>Complete JOIN Query:</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-comment">-- Show member name, book title, and borrow date for unreturned books</span><br>
+<span class="sql-keyword">SELECT</span> m.name, b.title, br.borrow_date<br>
+<span class="sql-keyword">FROM</span> Borrowing br<br>
+<span class="sql-keyword">JOIN</span> <strong style="color: var(--ocu-green);">Members</strong> m <span class="sql-keyword">ON</span> br.<strong style="color: var(--ocu-green);">member_id</strong> = m.<strong style="color: var(--ocu-green);">member_id</strong><br>
+<span class="sql-keyword">JOIN</span> <strong style="color: var(--ocu-green);">Books</strong> b <span class="sql-keyword">ON</span> br.<strong style="color: var(--ocu-green);">book_id</strong> = b.<strong style="color: var(--ocu-green);">book_id</strong><br>
+<span class="sql-keyword">WHERE</span> br.return_date <span class="sql-keyword">IS NULL</span>;
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>How It Works:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Start with Borrowing table</strong> - This is our "anchor" (has foreign keys to both other tables)</li>
+                    <li><strong>JOIN Members</strong> - Match <code>br.member_id</code> with <code>m.member_id</code> to get member names</li>
+                    <li><strong>JOIN Books</strong> - Match <code>br.book_id</code> with <code>b.book_id</code> to get book titles</li>
+                    <li><strong>WHERE clause</strong> - Filter to only show books that haven't been returned yet</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <h3>Key Concepts:</h3>
+                <ul style="font-size: 1.0em;">
+                    <li><strong>JOIN:</strong> Combines rows from two tables based on a related column</li>
+                    <li><strong>Table Aliases:</strong> <code>br</code>, <code>m</code>, <code>b</code> make queries shorter and readable</li>
+                    <li><strong>Foreign Key → Primary Key:</strong> Always match the foreign key to its corresponding primary key</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <strong>Practice:</strong> Try modifying this query to show ALL borrowings (remove the WHERE clause) or add more columns!
             </div>
         </div>
 
@@ -957,37 +1128,213 @@ psql -U postgres<br>
             </div>
         </div>
 
+        <!-- Slide 31.5: Submission Requirements -->
+        <div class="slide">
+            <h1>📤 Submission Requirements</h1>
+            <h2>What to Turn In</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ Required Deliverables:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>SQL Script File</strong> (<code>.sql</code> or <code>.txt</code>)
+                        <ul style="margin-top: 8px;">
+                            <li>All CREATE TABLE statements (with your optional fields)</li>
+                            <li>All INSERT statements with YOUR unique data</li>
+                            <li>The completed JOIN query</li>
+                            <li>At least 3 additional queries demonstrating different SQL features</li>
+                        </ul>
+                    </li>
+                    <li><strong>Screenshot Evidence</strong> (PNG or JPG)
+                        <ul style="margin-top: 8px;">
+                            <li>Screenshot showing SELECT * FROM Books with YOUR books displayed</li>
+                            <li>Screenshot showing the result of your JOIN query</li>
+                            <li>Must show complete query and results in one image</li>
+                        </ul>
+                    </li>
+                    <li><strong>Data Uniqueness Proof</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Run and screenshot this query:</li>
+                        </ul>
+                        <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
+<span class="sql-keyword">SELECT</span> <br>
+&nbsp;&nbsp;(<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">FROM</span> Books) <span class="sql-keyword">AS</span> book_count,<br>
+&nbsp;&nbsp;(<span class="sql-keyword">SELECT COUNT</span>(<span class="sql-keyword">DISTINCT</span> genre) <span class="sql-keyword">FROM</span> Books) <span class="sql-keyword">AS</span> genre_count,<br>
+&nbsp;&nbsp;(<span class="sql-keyword">SELECT</span> <span class="sql-keyword">STRING_AGG</span>(title, <span class="sql-string">', '</span>) <span class="sql-keyword">FROM</span> Books) <span class="sql-keyword">AS</span> titles;
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading Rubric (100 points total):</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Component</th>
+                        <th>Points</th>
+                        <th>Criteria</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Table Creation</strong></td>
+                        <td>20</td>
+                        <td>Correct syntax + 2 creative optional fields</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Uniqueness</strong></td>
+                        <td>30</td>
+                        <td>5+ unique books, 3+ genres, realistic members</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JOIN Query</strong></td>
+                        <td>20</td>
+                        <td>Correctly combines 3 tables, proper syntax</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Additional Queries</strong></td>
+                        <td>15</td>
+                        <td>3+ queries showing WHERE, COUNT, etc.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Screenshots</strong></td>
+                        <td>10</td>
+                        <td>Clear, complete, shows your unique data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Quality</strong></td>
+                        <td>5</td>
+                        <td>Well-formatted, comments, follows best practices</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px; background: var(--error-color); color: white;">
+                <h3>🚫 Academic Integrity Reminder:</h3>
+                <p style="font-size: 1.05em; line-height: 1.6;"><strong>Copying data from classmates or online examples will result in a zero.</strong> Your book selections, member names, and query results must be unique. We use automated tools to detect duplicate submissions.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Submission Format:</strong> Combine all files into a single ZIP: <code>LastName_FirstName_LibraryDB.zip</code>
+            </div>
+        </div>
+
         <!-- Slide 32: Practice Challenge -->
         <div class="slide">
             <h1>Practice Challenge <span class="emoji">💪</span></h1>
             <h2>Extend the Library Database</h2>
 
+            <div class="warning-box">
+                <h3>🎯 Required: Add Publishers (Using YOUR Books!)</h3>
+                <p style="font-size: 1.05em; line-height: 1.6;">You must create publishers that match <strong>YOUR specific books</strong> from earlier. No generic examples!</p>
+            </div>
+
             <div class="activity-section">
-                <h3>Your Task (Choose CLI or DataGrip):</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Add a Publishers table</strong>
-                        <ul>
-                            <li>publisher_id (primary key)</li>
-                            <li>name, country</li>
-                        </ul>
-                    </li>
-                    <li><strong>Modify Books table</strong>
-                        <ul>
-                            <li>Add publisher_id as a foreign key</li>
-                        </ul>
-                    </li>
-                    <li><strong>Insert sample publishers and update books</strong></li>
-                    <li><strong>Write a query</strong> to show all books with their publisher names</li>
-                </ol>
+                <h3>Step 1: Create Publishers Table</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">CREATE TABLE</span> Publishers (<br>
+&nbsp;&nbsp;publisher_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;name <strong style="color: var(--error-color);">_____</strong>,<br>
+&nbsp;&nbsp;country <strong style="color: var(--error-color);">_____</strong><br>
+);
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px; font-style: italic;">Fill in the blanks with appropriate data types (hint: text data)</p>
+            </div>
+
+            <div class="activity-section" style="margin-top: 20px;">
+                <h3>Step 2: Connect Books to Publishers</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">ALTER TABLE</span> Books<br>
+<span class="sql-keyword">ADD COLUMN</span> publisher_id <strong style="color: var(--error-color);">_____</strong><br>
+<span class="sql-keyword">REFERENCES</span> <strong style="color: var(--error-color);">_____</strong>(<strong style="color: var(--error-color);">_____</strong>);
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px; font-style: italic;">Complete the foreign key syntax</p>
+            </div>
+
+            <div class="activity-section" style="margin-top: 20px;">
+                <h3>Step 3: Insert YOUR Publishers & Update Books</h3>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li>Research the real publishers for YOUR chosen books</li>
+                    <li>Insert at least 3 publishers</li>
+                    <li>Update each book to link to its publisher</li>
+                </ul>
             </div>
 
             <div class="demo-box">
-                <h3>Bonus Challenge:</h3>
-                <p style="font-size: 1.05em;">Add a <strong>due_date</strong> column to the Borrowing table and write a query to find overdue books (due_date < today and return_date IS NULL)</p>
+                <h3>Step 4: Required Queries (All Must Work!):</h3>
+                <ol style="font-size: 1.0em; line-height: 1.7;">
+                    <li>Show all books with their publisher names (use JOIN)</li>
+                    <li>Count how many books per publisher (use GROUP BY)</li>
+                    <li>Find all books published by a specific country</li>
+                </ol>
             </div>
 
             <div class="tip-box">
-                <strong>Hint:</strong> Use <code>ALTER TABLE</code> to add columns, and <code>CURRENT_DATE</code> for today's date in PostgreSQL
+                <strong>Stuck?</strong> Check the next slide for complete syntax and examples!
+            </div>
+        </div>
+
+        <!-- Slide 32.5: Practice Challenge Solution -->
+        <div class="slide">
+            <h1>Practice Challenge - Solution <span class="emoji">✅</span></h1>
+            <h2>Complete Syntax Reference</h2>
+
+            <div class="activity-section">
+                <h3>Step 1: Create Publishers Table (Complete)</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-keyword">CREATE TABLE</span> Publishers (<br>
+&nbsp;&nbsp;publisher_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;name <strong style="color: var(--success-color);">VARCHAR(100) NOT NULL</strong>,<br>
+&nbsp;&nbsp;country <strong style="color: var(--success-color);">VARCHAR(50)</strong><br>
+);
+                </div>
+            </div>
+
+            <div class="activity-section" style="margin-top: 15px;">
+                <h3>Step 2: Add Foreign Key (Complete)</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-keyword">ALTER TABLE</span> Books<br>
+<span class="sql-keyword">ADD COLUMN</span> publisher_id <strong style="color: var(--success-color);">INTEGER</strong><br>
+<span class="sql-keyword">REFERENCES</span> <strong style="color: var(--success-color);">Publishers</strong>(<strong style="color: var(--success-color);">publisher_id</strong>);
+                </div>
+            </div>
+
+            <div class="activity-section" style="margin-top: 15px;">
+                <h3>Step 3: Example Data (Use YOUR Books!)</h3>
+                <div class="sql-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Insert publishers matching YOUR books</span><br>
+<span class="sql-keyword">INSERT INTO</span> Publishers (name, country) <span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(<span class="sql-string">'Penguin Random House'</span>, <span class="sql-string">'USA'</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'HarperCollins'</span>, <span class="sql-string">'UK'</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Scholastic'</span>, <span class="sql-string">'USA'</span>);<br><br>
+
+<span class="sql-comment">-- Update each book with its publisher_id</span><br>
+<span class="sql-keyword">UPDATE</span> Books <span class="sql-keyword">SET</span> publisher_id = 1 <span class="sql-keyword">WHERE</span> title = <span class="sql-string">'Your Book Title'</span>;<br>
+<span class="sql-keyword">UPDATE</span> Books <span class="sql-keyword">SET</span> publisher_id = 2 <span class="sql-keyword">WHERE</span> title = <span class="sql-string">'Another Book'</span>;
+                </div>
+            </div>
+
+            <div class="activity-section" style="margin-top: 15px;">
+                <h3>Step 4: Required Queries (Solutions)</h3>
+                <div class="sql-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Query 1: Books with publisher names</span><br>
+<span class="sql-keyword">SELECT</span> b.title, p.name <span class="sql-keyword">AS</span> publisher, p.country<br>
+<span class="sql-keyword">FROM</span> Books b<br>
+<span class="sql-keyword">JOIN</span> Publishers p <span class="sql-keyword">ON</span> b.publisher_id = p.publisher_id;<br><br>
+
+<span class="sql-comment">-- Query 2: Count books per publisher</span><br>
+<span class="sql-keyword">SELECT</span> p.name, <span class="sql-keyword">COUNT</span>(b.book_id) <span class="sql-keyword">AS</span> book_count<br>
+<span class="sql-keyword">FROM</span> Publishers p<br>
+<span class="sql-keyword">LEFT JOIN</span> Books b <span class="sql-keyword">ON</span> p.publisher_id = b.publisher_id<br>
+<span class="sql-keyword">GROUP BY</span> p.name;<br><br>
+
+<span class="sql-comment">-- Query 3: Books from specific country</span><br>
+<span class="sql-keyword">SELECT</span> b.title, p.name<br>
+<span class="sql-keyword">FROM</span> Books b<br>
+<span class="sql-keyword">JOIN</span> Publishers p <span class="sql-keyword">ON</span> b.publisher_id = p.publisher_id<br>
+<span class="sql-keyword">WHERE</span> p.country = <span class="sql-string">'USA'</span>;
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Concepts:</strong> ALTER TABLE extends existing tables | GROUP BY aggregates data | LEFT JOIN includes publishers with no books
             </div>
         </div>
 
@@ -1557,7 +1904,7 @@ psql -U postgres<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">55</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
