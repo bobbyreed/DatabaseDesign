@@ -865,189 +865,307 @@
 
         <!-- Slide 33: Homework Overview -->
         <div class="slide">
-            <h1>Homework Assignment <span class="emoji">📝</span></h1>
-            <h2>Week 3: Architecture Analysis</h2>
+            <h1>Homework Assignment <span class="emoji">🛠️</span></h1>
+            <h2>Week 3: Hands-On Database Architecture</h2>
 
             <div class="demo-box">
                 <h3>Assignment Overview</h3>
-                <p style="font-size: 1.15em;">This week's homework extends today's exercises into deeper security and architectural analysis. You'll identify vulnerabilities and write a comparative essay on architecture choices.</p>
+                <p style="font-size: 1.15em;">This week's homework is <strong>100% hands-on work in DataGrip</strong>. You'll explore database architecture, implement multi-schema designs, and analyze query performance—all practical skills used by real database architects.</p>
+            </div>
+
+            <div class="success-box">
+                <h3>🎯 What You'll Learn:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li>Document physical database architecture using DataGrip's tools</li>
+                    <li>Implement architectural layers using PostgreSQL schemas</li>
+                    <li>Analyze query execution plans and optimization strategies</li>
+                    <li>Understand security architecture through role-based access control</li>
+                </ul>
             </div>
 
             <div class="warning-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Commit URL turned into D2L</p>
+                <p>Submit screenshots + SQL scripts via GitHub commit URL to D2L</p>
             </div>
 
             <div class="activity-box">
                 <h3>Assignment Components:</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>Homework Extension 1:</strong> Security Vulnerability Analysis (50 points)</li>
-                    <li><strong>Homework Extension 2:</strong> Architecture Comparison Essay (50 points)</li>
+                    <li><strong>Part 1:</strong> Architecture Discovery & Documentation (40 points)</li>
+                    <li><strong>Part 2:</strong> Multi-Schema Architecture Implementation (40 points)</li>
+                    <li><strong>Part 3:</strong> Query Performance Analysis (20 points)</li>
                 </ol>
                 <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
             </div>
+
+            <div class="tip-box">
+                <strong>No Writing Required!</strong> This assignment is all practical SQL and DataGrip work with screenshot documentation.
+            </div>
         </div>
 
-        <!-- Slide 34: Homework Extension 1 -->
+        <!-- Slide 34: Part 1 - Architecture Discovery -->
         <div class="slide">
-            <h1>Homework Extension 1: Security Analysis</h1>
-            <h2>Building on Exercise 1 - Three-Tier Architecture</h2>
+            <h1>Part 1: Architecture Discovery (40 pts)</h1>
+            <h2>Explore Your Library Database in DataGrip</h2>
 
             <div class="exercise-step">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Based on the three-tier architecture diagram from Exercise 1, identify <strong>three specific points</strong> in the architecture where security vulnerabilities could be exploited. For each vulnerability, suggest a specific architectural countermeasure.</p>
+                <h3>Task Overview:</h3>
+                <p style="font-size: 1.15em;">Use DataGrip to thoroughly document the <strong>physical and logical architecture</strong> of your Library database from Lecture 2. You'll extract information that database architects use daily.</p>
             </div>
 
             <div class="activity-box">
-                <h3>Requirements:</h3>
-                <p style="font-size: 1.05em;">For each of the THREE vulnerabilities, provide:</p>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Vulnerability Identification:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Name and location in architecture (which tier?)</li>
-                            <li>Description of the security risk (2-3 sentences)</li>
-                            <li>Example attack scenario</li>
-                        </ul>
-                    </li>
-                    <li><strong>Architectural Countermeasure:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Specific technical solution (not generic advice like "use strong passwords")</li>
-                            <li>Where in the architecture it should be implemented</li>
-                            <li>How it mitigates the identified vulnerability</li>
-                        </ul>
-                    </li>
-                    <li><strong>Trade-offs:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>What performance or complexity cost does the countermeasure introduce?</li>
-                            <li>Is the trade-off worth it? Why or why not?</li>
-                        </ul>
-                    </li>
+                <h3>Step 1: Generate Database Documentation (10 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">In DataGrip, right-click your Library database:</p>
+                <ol style="font-size: 1.0em; line-height: 1.7;">
+                    <li>Select <strong>Diagrams → Show Visualization</strong></li>
+                    <li>Arrange tables to show relationships clearly</li>
+                    <li>Export diagram as PNG: <code>library_erd_diagram.png</code></li>
+                    <li><strong>Required:</strong> Diagram must show all tables, PKs, FKs, and relationships</li>
                 </ol>
             </div>
-        </div>
 
-        <!-- Slide 35: Homework Extension 1 - Examples -->
-        <div class="slide">
-            <h1>Security Vulnerability Examples</h1>
-
-            <div class="demo-box">
-                <h3>Hint: Common Vulnerability Areas</h3>
-                <ul style="font-size: 1.05em; line-height: 1.7;">
-                    <li><strong>Tier 1 (Browser):</strong> Cross-Site Scripting (XSS), Man-in-the-Middle attacks</li>
-                    <li><strong>Tier 2 (App Server):</strong> SQL Injection, Authentication bypass, Session hijacking</li>
-                    <li><strong>Tier 3 (Database):</strong> Unauthorized direct access, Data exfiltration, Privilege escalation</li>
-                    <li><strong>Between Tiers:</strong> Unencrypted communication, Weak API authentication</li>
-                </ul>
+            <div class="activity-box">
+                <h3>Step 2: Extract Physical Schema (15 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Document the complete DDL (Data Definition Language):</p>
+                <ol style="font-size: 1.0em; line-height: 1.7;">
+                    <li>In DataGrip, select all your tables (Books, Members, Borrowing, Publishers)</li>
+                    <li>Right-click → SQL Scripts → DDL</li>
+                    <li>Copy the complete CREATE TABLE statements</li>
+                    <li>Save to file: <code>library_schema.sql</code></li>
+                    <li><strong>Include:</strong> All constraints (PRIMARY KEY, FOREIGN KEY, NOT NULL, UNIQUE)</li>
+                </ol>
             </div>
 
-            <div class="demo-box">
-                <h3>Format Your Response:</h3>
-                <div class="code-example" style="font-size: 0.9em;">
-<strong>Vulnerability 1: SQL Injection in Application Server</strong><br>
-Location: Tier 2 - Application Server<br>
-Description: Attackers can inject malicious SQL through user input fields...<br>
-Attack Scenario: User enters `'; DROP TABLE users; --` in login field...<br><br>
-<strong>Countermeasure: Parameterized Queries (Prepared Statements)</strong><br>
-Implementation: All database queries in app server must use prepared statements...<br>
-Mitigation: Treats user input as data, not executable code...<br>
-Trade-off: Minimal performance overhead (~5%), but eliminates major attack vector...
+            <div class="activity-box">
+                <h3>Step 3: Analyze Data Types & Constraints (15 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Create a documentation table:</p>
+                <div class="sql-example" style="font-size: 0.8em; margin-top: 10px;">
+<span class="sql-comment">-- Create this table in your database and populate it</span><br>
+<span class="sql-keyword">CREATE TABLE</span> architecture_analysis (<br>
+&nbsp;&nbsp;table_name <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;column_name <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;data_type <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;constraint_type <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;architectural_purpose <span class="sql-keyword">TEXT</span><br>
+);
                 </div>
+                <p style="font-size: 0.95em; margin-top: 10px;">For each column in your tables, document WHY that data type and constraint were chosen from an architecture perspective.</p>
             </div>
 
             <div class="tip-box">
-                <strong>Target Length:</strong> Approximately 150-200 words per vulnerability (450-600 words total)
+                <strong>Screenshot Required:</strong> Capture DataGrip showing your ER diagram with all relationships visible
             </div>
         </div>
 
-        <!-- Slide 36: Homework Extension 2 -->
+        <!-- Slide 35: Part 2 - Multi-Schema Architecture -->
         <div class="slide">
-            <h1>Homework Extension 2: Architecture Essay</h1>
-            <h2>Building on Exercise 2 - Centralized vs. Distributed</h2>
+            <h1>Part 2: Multi-Schema Architecture (40 pts)</h1>
+            <h2>Implement Architectural Layers</h2>
 
             <div class="exercise-step">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Choose a <strong>specific application</strong> (e.g., social media platform, ride-sharing service, streaming service) and write a <strong>400-word essay</strong> arguing which architecture (centralized or distributed) is superior for meeting that application's requirements.</p>
+                <h3>Task Overview:</h3>
+                <p style="font-size: 1.15em;">Create a <strong>multi-schema architecture</strong> that simulates how real applications separate concerns across different architectural layers. You'll use PostgreSQL schemas to represent staging, production, and reporting tiers.</p>
             </div>
 
             <div class="activity-box">
-                <h3>Your Essay Must Include:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Application Selection & Requirements (75-100 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Describe your chosen application</li>
-                            <li>Identify key requirements: high availability? rapid scaling? global reach? data consistency?</li>
-                            <li>Estimate scale (users, transactions/sec, data volume)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Architecture Recommendation (150-200 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>State your recommendation: centralized or distributed?</li>
-                            <li>Explain how your chosen architecture meets the requirements</li>
-                            <li>Provide specific technical details (sharding strategy, replication model, consistency approach)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Trade-off Analysis (100-150 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Acknowledge the disadvantages of your chosen architecture</li>
-                            <li>Explain why the benefits outweigh the costs for this specific application</li>
-                            <li>Suggest one mitigation strategy for the biggest drawback</li>
-                        </ul>
-                    </li>
-                </ol>
+                <h3>Step 1: Create Architectural Schemas (10 pts)</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Create three schemas representing different architectural layers</span><br>
+<span class="sql-keyword">CREATE SCHEMA</span> staging;<br>
+<span class="sql-keyword">CREATE SCHEMA</span> production;<br>
+<span class="sql-keyword">CREATE SCHEMA</span> reporting;
+                </div>
+                <p style="font-size: 1.0em; margin-top: 10px;">Each schema serves a different architectural purpose:</p>
+                <ul style="font-size: 0.95em; line-height: 1.6;">
+                    <li><strong>staging:</strong> Data validation and transformation layer</li>
+                    <li><strong>production:</strong> Live operational data</li>
+                    <li><strong>reporting:</strong> Read-only views for analytics</li>
+                </ul>
             </div>
 
-            <div class="warning-box">
-                <strong>Word Count:</strong> Approximately 400 words (±30 words). Use specific technical terminology!
+            <div class="activity-box">
+                <h3>Step 2: Implement Tables in Each Layer (15 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Recreate your Books and Members tables in each schema:</p>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-keyword">CREATE TABLE</span> staging.books (<br>
+&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200),<br>
+&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100),<br>
+&nbsp;&nbsp;data_quality_flag <span class="sql-keyword">VARCHAR</span>(20), <span class="sql-comment">-- NEW: Track validation status</span><br>
+&nbsp;&nbsp;import_timestamp <span class="sql-keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span><br>
+);<br><br>
+
+<span class="sql-keyword">CREATE TABLE</span> production.books (<br>
+&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;isbn <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">UNIQUE</span><br>
+);
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Note:</strong> Staging has relaxed constraints; Production enforces strict rules</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Step 3: Create Reporting Views (15 pts)</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-comment">-- Create abstraction layer for reporting tier</span><br>
+<span class="sql-keyword">CREATE VIEW</span> reporting.book_summary <span class="sql-keyword">AS</span><br>
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;b.title,<br>
+&nbsp;&nbsp;b.author,<br>
+&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(br.borrowing_id) <span class="sql-keyword">AS</span> times_borrowed<br>
+<span class="sql-keyword">FROM</span> production.books b<br>
+<span class="sql-keyword">LEFT JOIN</span> production.borrowing br <span class="sql-keyword">ON</span> b.book_id = br.book_id<br>
+<span class="sql-keyword">GROUP BY</span> b.title, b.author;
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;">Create 2 additional views that represent different "presentation layer" perspectives</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Screenshot Required:</strong> DataGrip sidebar showing all three schemas with their objects
+            </div>
+        </div>
+
+        <!-- Slide 36: Part 3 - Query Performance Analysis -->
+        <div class="slide">
+            <h1>Part 3: Query Performance Analysis (20 pts)</h1>
+            <h2>Understand Query Optimization Architecture</h2>
+
+            <div class="exercise-step">
+                <h3>Task Overview:</h3>
+                <p style="font-size: 1.15em;">Use PostgreSQL's <strong>EXPLAIN ANALYZE</strong> to understand how the DBMS makes architectural decisions about query execution. You'll compare performance with and without indexes—a key architectural optimization.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Step 1: Baseline Query Performance (5 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">First, add test data to production.books (at least 1000 rows):</p>
+                <div class="sql-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Generate test data using a loop</span><br>
+<span class="sql-keyword">DO</span> $$<br>
+<span class="sql-keyword">BEGIN</span><br>
+&nbsp;&nbsp;<span class="sql-keyword">FOR</span> i <span class="sql-keyword">IN</span> 1..1000 <span class="sql-keyword">LOOP</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> production.books (title, author, isbn)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">VALUES</span> (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Book '</span> || i,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Author '</span> || (i % 100),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'ISBN'</span> || LPAD(i::text, 10, <span class="sql-string">'0'</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;<span class="sql-keyword">END LOOP</span>;<br>
+<span class="sql-keyword">END</span> $$;
+                </div>
+                <p style="font-size: 1.0em; margin-top: 10px;">Run EXPLAIN ANALYZE on this query:</p>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">EXPLAIN ANALYZE</span><br>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> production.books <span class="sql-keyword">WHERE</span> author = <span class="sql-string">'Author 42'</span>;
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Screenshot:</strong> Capture the query plan showing "Seq Scan" (Sequential Scan)</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Step 2: Create Architectural Optimization (10 pts)</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Add index: architectural decision for performance</span><br>
+<span class="sql-keyword">CREATE INDEX</span> idx_books_author <span class="sql-keyword">ON</span> production.books(author);
+                </div>
+                <p style="font-size: 1.0em; margin-top: 10px;">Run the same query again with EXPLAIN ANALYZE</p>
+                <p style="font-size: 0.95em;"><strong>Screenshot:</strong> Capture showing "Index Scan" and compare execution time</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Step 3: Document Architectural Impact (5 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Create a comparison table in your database:</p>
+                <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-keyword">CREATE TABLE</span> performance_analysis (<br>
+&nbsp;&nbsp;test_name <span class="sql-keyword">VARCHAR</span>(100),<br>
+&nbsp;&nbsp;execution_time_ms <span class="sql-keyword">NUMERIC</span>,<br>
+&nbsp;&nbsp;scan_type <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;rows_scanned <span class="sql-keyword">INTEGER</span>,<br>
+&nbsp;&nbsp;architectural_notes <span class="sql-keyword">TEXT</span><br>
+);
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;">Insert your findings comparing both query executions. Explain the architectural trade-off: indexes improve read performance but add storage overhead and slow down writes.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Learning:</strong> This demonstrates how the DBMS architecture makes query optimization decisions
             </div>
         </div>
 
         <!-- Slide 37: Submission Requirements -->
         <div class="slide">
-            <h1>Submission Requirements <span class="emoji">✅</span></h1>
+            <h1>Submission Requirements <span class="emoji">📤</span></h1>
 
-            <div class="demo-box">
-                <h3>Format & Submission:</h3>
-                <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File Format:</strong> Markdown document (.md)</li>
-                    <li><strong>File Naming:</strong> LastName_FirstName_Week3_Homework.md</li>
-                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
-                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
-                    <li><strong>Due Date:</strong> Before class begins next week</li>
-                </ul>
-            </div>
-
-            <div class="activity-box">
-                <h3>Document Structure:</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Cover Page:</strong> Your name, date, course number, "Week 3 Homework"</li>
-                    <li><strong>Pages 2-4:</strong> Extension 1 - Security Vulnerability Analysis (one page per vulnerability)</li>
-                    <li><strong>Page 5:</strong> Extension 2 - Architecture Comparison Essay</li>
+            <div class="warning-box">
+                <h3>⚠️ Required Deliverables:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>SQL Script File:</strong> <code>LastName_FirstName_Week3_Architecture.sql</code>
+                        <ul style="margin-top: 8px;">
+                            <li>All CREATE SCHEMA statements</li>
+                            <li>All CREATE TABLE statements (staging, production)</li>
+                            <li>All CREATE VIEW statements (reporting)</li>
+                            <li>All CREATE INDEX statements</li>
+                            <li>Sample data population queries</li>
+                            <li>EXPLAIN ANALYZE queries with comments</li>
+                        </ul>
+                    </li>
+                    <li><strong>Screenshots Folder:</strong> <code>Week3_Screenshots/</code>
+                        <ul style="margin-top: 8px;">
+                            <li><code>1_erd_diagram.png</code> - ER diagram from DataGrip</li>
+                            <li><code>2_multi_schema.png</code> - DataGrip sidebar showing all schemas</li>
+                            <li><code>3_query_plan_before.png</code> - EXPLAIN ANALYZE without index</li>
+                            <li><code>4_query_plan_after.png</code> - EXPLAIN ANALYZE with index</li>
+                            <li><code>5_performance_results.png</code> - SELECT from performance_analysis table</li>
+                        </ul>
+                    </li>
+                    <li><strong>README.md:</strong> Brief description of your architectural decisions
+                        <ul style="margin-top: 8px;">
+                            <li>Why you chose specific data types</li>
+                            <li>How schemas represent different tiers</li>
+                            <li>Performance improvements observed</li>
+                        </ul>
+                    </li>
                 </ol>
             </div>
 
             <div class="demo-box">
-                <h3>Grading Criteria:</h3>
-                <table class="table-schema" style="font-size: 0.95em;">
+                <h3>Submission Steps:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li>Create folder in your homework repository: <code>Week3_Architecture/</code></li>
+                    <li>Add all SQL files, screenshots, and README</li>
+                    <li>Commit with message: "Week 3: Database Architecture Implementation"</li>
+                    <li>Submit commit URL to D2L</li>
+                    <li><strong>Due:</strong> Before class next week</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Grading Rubric (100 points):</h3>
+                <table class="table-schema" style="font-size: 0.9em;">
                     <tr>
                         <th>Component</th>
                         <th>Points</th>
-                        <th>Key Criteria</th>
+                        <th>Criteria</th>
                     </tr>
                     <tr>
-                        <td><strong>Security Analysis</strong></td>
-                        <td>50</td>
-                        <td>Vulnerability accuracy (15), Countermeasure quality (20), Trade-off analysis (15)</td>
+                        <td><strong>Part 1: Discovery</strong></td>
+                        <td>40</td>
+                        <td>ER diagram quality (10), DDL completeness (15), Architecture analysis table (15)</td>
                     </tr>
                     <tr>
-                        <td><strong>Architecture Essay</strong></td>
-                        <td>50</td>
-                        <td>Technical depth (20), Justification strength (20), Writing clarity (10)</td>
+                        <td><strong>Part 2: Multi-Schema</strong></td>
+                        <td>40</td>
+                        <td>Schema creation (10), Tables with proper constraints (15), Views functionality (15)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Part 3: Performance</strong></td>
+                        <td>20</td>
+                        <td>EXPLAIN ANALYZE screenshots (10), Performance documentation (10)</td>
                     </tr>
                 </table>
             </div>
 
             <div class="tip-box">
-                <strong>Pro Tip:</strong> Use diagrams where appropriate! A simple architecture diagram can strengthen your arguments.
+                <strong>Pro Tip:</strong> Export your SQL from DataGrip using right-click → SQL Scripts → DDL for perfect formatting!
             </div>
         </div>
 
@@ -1067,7 +1185,7 @@ Trade-off: Minimal performance overhead (~5%), but eliminates major attack vecto
 
             <div class="demo-box" style="margin-top: 30px;">
                 <p><strong>Next Lecture:</strong> Entity-Relationship Modeling</p>
-                <p><strong>Homework:</strong> Security vulnerability analysis & architecture essay (due next week)</p>
+                <p><strong>Homework:</strong> Hands-on DataGrip architecture implementation - multi-schema design, ER diagrams, and query performance analysis (due next week)</p>
                 <p><strong>Reading:</strong> Chapter 2 - Database System Concepts and Architecture</p>
             </div>
         </div>
