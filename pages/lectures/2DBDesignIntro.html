@@ -563,15 +563,15 @@ Client (clientNo, fName, lName, address, telNo)
             
             <div class="activity-section">
                 <h2>Design Exercise (15 minutes)</h2>
-                <p>Working in pairs, design a simple database structure for a library system:</p>
-                
+                <p>Working in pairs, design a simple database structure for a movie rental system:</p>
+
                 <h3>Requirements:</h3>
                 <ol>
-                    <li>Track books (title, author, ISBN, availability)</li>
+                    <li>Track movies (title, director, release year, availability)</li>
                     <li>Track members (name, ID, contact info)</li>
-                    <li>Track borrowing (who borrowed what and when)</li>
+                    <li>Track rentals (who rented what and when)</li>
                 </ol>
-                
+
                 <h3>Deliverables:</h3>
                 <ul>
                     <li>List the tables you would create</li>
@@ -611,9 +611,9 @@ Client (clientNo, fName, lName, address, telNo)
             </div>
         </div>
 
-        <!-- Slide 23: Implementing the Library Database -->
+        <!-- Slide 23: Implementing the Movie Rental Database -->
         <div class="slide">
-            <h1>Implementing the Library Database <span class="emoji">🔨</span></h1>
+            <h1>Implementing the Movie Rental Database <span class="emoji">🔨</span></h1>
             <h2>Two Approaches: CLI vs GUI</h2>
 
             <div class="comparison-table">
@@ -643,7 +643,7 @@ Client (clientNo, fName, lName, address, telNo)
 
             <div class="success-box">
                 <h3>What We'll Build:</h3>
-                <p style="font-size: 1.1em;">Three tables: <strong>Books</strong>, <strong>Members</strong>, and <strong>Borrowing</strong></p>
+                <p style="font-size: 1.1em;">Three tables: <strong>Movies</strong>, <strong>Members</strong>, and <strong>Rentals</strong></p>
             </div>
         </div>
 
@@ -668,13 +668,13 @@ psql -U postgres<br>
             <div class="demo-box">
                 <h3>Step 2: Create the Database</h3>
                 <div class="sql-example">
-<span class="sql-comment">-- Create a new database for our library</span><br>
-<span class="sql-keyword">CREATE DATABASE</span> library_db;<br>
+<span class="sql-comment">-- Create a new database for our movie rental system</span><br>
+<span class="sql-keyword">CREATE DATABASE</span> movie_rental_db;<br>
 <br>
 <span class="sql-comment">-- Connect to the new database</span><br>
-\c library_db<br>
+\c movie_rental_db<br>
 <br>
-<span class="sql-comment">-- You should see: "You are now connected to database library_db"</span>
+<span class="sql-comment">-- You should see: "You are now connected to database movie_rental_db"</span>
                 </div>
             </div>
 
@@ -689,12 +689,12 @@ psql -U postgres<br>
             <h2>Step 3: Define Table Structures</h2>
 
             <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-comment">-- Table 1: Books</span><br>
-<span class="sql-keyword">CREATE TABLE</span> Books (<br>
-&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+<span class="sql-comment">-- Table 1: Movies</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Movies (<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
-&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
-&nbsp;&nbsp;isbn <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">UNIQUE</span>,<br>
+&nbsp;&nbsp;director <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;release_year <span class="sql-keyword">INTEGER</span>,<br>
 &nbsp;&nbsp;available <span class="sql-keyword">BOOLEAN DEFAULT TRUE</span><br>
 );<br>
 <br>
@@ -706,12 +706,12 @@ psql -U postgres<br>
 &nbsp;&nbsp;phone <span class="sql-keyword">VARCHAR</span>(15)<br>
 );<br>
 <br>
-<span class="sql-comment">-- Table 3: Borrowing (relates Books and Members)</span><br>
-<span class="sql-keyword">CREATE TABLE</span> Borrowing (<br>
-&nbsp;&nbsp;borrow_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
-&nbsp;&nbsp;book_id <span class="sql-keyword">INTEGER REFERENCES</span> Books(book_id),<br>
+<span class="sql-comment">-- Table 3: Rentals (relates Movies and Members)</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Rentals (<br>
+&nbsp;&nbsp;rental_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER REFERENCES</span> Movies(movie_id),<br>
 &nbsp;&nbsp;member_id <span class="sql-keyword">INTEGER REFERENCES</span> Members(member_id),<br>
-&nbsp;&nbsp;borrow_date <span class="sql-keyword">DATE NOT NULL</span>,<br>
+&nbsp;&nbsp;rental_date <span class="sql-keyword">DATE NOT NULL</span>,<br>
 &nbsp;&nbsp;return_date <span class="sql-keyword">DATE</span><br>
 );
             </div>
@@ -722,29 +722,29 @@ psql -U postgres<br>
 
             <div class="warning-box" style="margin-top: 20px;">
                 <h3>🎯 Challenge: Make It Your Own!</h3>
-                <p style="font-size: 1.05em; line-height: 1.6;">Before running these CREATE TABLE statements, consider adding <strong>2 optional fields</strong> to the Books table that would make sense for a library system.</p>
-                <p style="font-size: 1.0em; margin-top: 10px;"><strong>Ideas:</strong> genre, publication_year, page_count, rating, language, etc.</p>
-                <p style="font-size: 0.95em; margin-top: 10px;"><em>Hint: Choose appropriate data types (VARCHAR, INTEGER, DATE, etc.)</em></p>
+                <p style="font-size: 1.05em; line-height: 1.6;">Before running these CREATE TABLE statements, consider adding <strong>2 optional fields</strong> to the Movies table that would make sense for a movie rental system.</p>
+                <p style="font-size: 1.0em; margin-top: 10px;"><strong>Ideas:</strong> genre, rating, runtime_minutes, language, format (DVD/Blu-ray), etc.</p>
+                <p style="font-size: 0.95em; margin-top: 10px;"><em>Hint: Choose appropriate data types (VARCHAR, INTEGER, DECIMAL, etc.)</em></p>
             </div>
         </div>
 
         <!-- Slide 25.5: Optional Fields Solution -->
         <div class="slide">
             <h1>Optional Fields: Example Solution</h1>
-            <h2>Enhanced Books Table</h2>
+            <h2>Enhanced Movies Table</h2>
 
             <div class="demo-box">
-                <h3>Example: Adding Genre and Publication Year</h3>
+                <h3>Example: Adding Genre and Rating</h3>
                 <div class="sql-example" style="font-size: 0.9em;">
-<span class="sql-comment">-- Enhanced Books table with optional fields</span><br>
-<span class="sql-keyword">CREATE TABLE</span> Books (<br>
-&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+<span class="sql-comment">-- Enhanced Movies table with optional fields</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Movies (<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
-&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
-&nbsp;&nbsp;isbn <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">UNIQUE</span>,<br>
+&nbsp;&nbsp;director <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;release_year <span class="sql-keyword">INTEGER</span>,<br>
 &nbsp;&nbsp;available <span class="sql-keyword">BOOLEAN DEFAULT TRUE</span>,<br>
 &nbsp;&nbsp;<strong style="color: var(--ocu-green);">genre <span class="sql-keyword">VARCHAR</span>(50)</strong>,<br>
-&nbsp;&nbsp;<strong style="color: var(--ocu-green);">publication_year <span class="sql-keyword">INTEGER</span></strong><br>
+&nbsp;&nbsp;<strong style="color: var(--ocu-green);">rating <span class="sql-keyword">VARCHAR</span>(5)</strong><br>
 );
                 </div>
             </div>
@@ -754,10 +754,10 @@ psql -U postgres<br>
                     <div class="success-box">
                         <h3>Other Good Options:</h3>
                         <ul style="font-size: 1.0em;">
-                            <li><code>page_count INTEGER</code></li>
-                            <li><code>rating DECIMAL(3,2)</code></li>
+                            <li><code>runtime_minutes INTEGER</code></li>
                             <li><code>language VARCHAR(30)</code></li>
-                            <li><code>publisher VARCHAR(100)</code></li>
+                            <li><code>format VARCHAR(20)</code> (DVD, Blu-ray, etc.)</li>
+                            <li><code>imdb_score DECIMAL(3,1)</code></li>
                         </ul>
                     </div>
                 </div>
@@ -787,25 +787,25 @@ psql -U postgres<br>
             <div class="demo-box">
                 <h3>INSERT Syntax Example:</h3>
                 <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-comment">-- Example: Insert one book</span><br>
-<span class="sql-keyword">INSERT INTO</span> Books (title, author, isbn, available)<br>
-<span class="sql-keyword">VALUES</span> (<span class="sql-string">'The Hobbit'</span>, <span class="sql-string">'J.R.R. Tolkien'</span>, <span class="sql-string">'9780547928227'</span>, <span class="sql-keyword">TRUE</span>);<br>
+<span class="sql-comment">-- Example: Insert one movie</span><br>
+<span class="sql-keyword">INSERT INTO</span> Movies (title, director, release_year, available)<br>
+<span class="sql-keyword">VALUES</span> (<span class="sql-string">'Inception'</span>, <span class="sql-string">'Christopher Nolan'</span>, 2010, <span class="sql-keyword">TRUE</span>);<br>
 <br>
 <span class="sql-comment">-- Or insert multiple rows at once:</span><br>
-<span class="sql-keyword">INSERT INTO</span> Books (title, author, isbn, available)<br>
+<span class="sql-keyword">INSERT INTO</span> Movies (title, director, release_year, available)<br>
 <span class="sql-keyword">VALUES</span><br>
-&nbsp;&nbsp;(<span class="sql-string">'Book Title 1'</span>, <span class="sql-string">'Author Name'</span>, <span class="sql-string">'1234567890123'</span>, <span class="sql-keyword">TRUE</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'Book Title 2'</span>, <span class="sql-string">'Author Name'</span>, <span class="sql-string">'9876543210987'</span>, <span class="sql-keyword">FALSE</span>);
+&nbsp;&nbsp;(<span class="sql-string">'Movie Title 1'</span>, <span class="sql-string">'Director Name'</span>, 2020, <span class="sql-keyword">TRUE</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Movie Title 2'</span>, <span class="sql-string">'Director Name'</span>, 2019, <span class="sql-keyword">FALSE</span>);
                 </div>
             </div>
 
             <div class="warning-box">
-                <h3>⚠️ Required: Create Your Own Library Data!</h3>
-                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Your Task:</strong> Insert data that reflects YOUR interests and preferences.</p>
+                <h3>⚠️ Required: Create Your Own Movie Rental Data!</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Your Task:</strong> Insert data that reflects YOUR favorite movies and preferences.</p>
 
                 <h4 style="margin-top: 15px;">Minimum Requirements:</h4>
                 <ul style="font-size: 1.0em; line-height: 1.7;">
-                    <li>📚 <strong>Books:</strong> Insert at least 5 books of YOUR choice
+                    <li>🎬 <strong>Movies:</strong> Insert at least 5 movies of YOUR choice
                         <ul style="margin-top: 5px;">
                             <li>Must span at least 3 different genres</li>
                             <li>Include any optional fields you added</li>
@@ -817,10 +817,10 @@ psql -U postgres<br>
                             <li>Create unique email addresses</li>
                         </ul>
                     </li>
-                    <li>📅 <strong>Borrowing:</strong> Create at least 2 borrowing records
+                    <li>📅 <strong>Rentals:</strong> Create at least 2 rental records
                         <ul style="margin-top: 5px;">
-                            <li>Match book_id and member_id to your data</li>
-                            <li>Mix of returned and unreturned books</li>
+                            <li>Match movie_id and member_id to your data</li>
+                            <li>Mix of returned and unreturned movies</li>
                         </ul>
                     </li>
                 </ul>
@@ -829,7 +829,7 @@ psql -U postgres<br>
             </div>
 
             <div class="tip-box">
-                <strong>Pro Tip:</strong> If you added optional fields like <code>genre</code>, remember to include them in your INSERT statement!
+                <strong>Pro Tip:</strong> If you added optional fields like <code>genre</code> or <code>rating</code>, remember to include them in your INSERT statement!
             </div>
         </div>
 
@@ -841,17 +841,17 @@ psql -U postgres<br>
             <div class="comparison-table">
                 <div class="column">
                     <div class="demo-box">
-                        <h3>View All Books</h3>
+                        <h3>View All Movies</h3>
                         <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Books;
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Movies;
                         </div>
                     </div>
 
                     <div class="demo-box">
-                        <h3>View Available Books Only</h3>
+                        <h3>View Available Movies Only</h3>
                         <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-keyword">SELECT</span> title, author<br>
-<span class="sql-keyword">FROM</span> Books<br>
+<span class="sql-keyword">SELECT</span> title, director<br>
+<span class="sql-keyword">FROM</span> Movies<br>
 <span class="sql-keyword">WHERE</span> available = <span class="sql-keyword">TRUE</span>;
                         </div>
                     </div>
@@ -859,10 +859,10 @@ psql -U postgres<br>
 
                 <div class="column">
                     <div class="demo-box">
-                        <h3>Count Your Books</h3>
+                        <h3>Count Your Movies</h3>
                         <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">AS</span> total_books<br>
-<span class="sql-keyword">FROM</span> Books;
+<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">AS</span> total_movies<br>
+<span class="sql-keyword">FROM</span> Movies;
                         </div>
                     </div>
 
@@ -878,7 +878,7 @@ psql -U postgres<br>
 
             <div class="success-box">
                 <h3>Practice these simple queries with YOUR data!</h3>
-                <p style="font-size: 1.0em;">Verify your books and members are stored correctly.</p>
+                <p style="font-size: 1.0em;">Verify your movies and members are stored correctly.</p>
             </div>
         </div>
 
@@ -889,15 +889,15 @@ psql -U postgres<br>
 
             <div class="warning-box">
                 <h3>Your Challenge:</h3>
-                <p style="font-size: 1.1em; line-height: 1.7;">Write a query to show <strong>who borrowed what book and when</strong>. You need to combine data from three tables: <code>Borrowing</code>, <code>Members</code>, and <code>Books</code>.</p>
+                <p style="font-size: 1.1em; line-height: 1.7;">Write a query to show <strong>who rented what movie and when</strong>. You need to combine data from three tables: <code>Rentals</code>, <code>Members</code>, and <code>Movies</code>.</p>
             </div>
 
             <div class="demo-box">
                 <h3>Incomplete Query (Fill in the Blanks!):</h3>
                 <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-comment">-- Goal: Show member name, book title, and borrow date for unreturned books</span><br>
-<span class="sql-keyword">SELECT</span> m.name, b.title, br.borrow_date<br>
-<span class="sql-keyword">FROM</span> Borrowing br<br>
+<span class="sql-comment">-- Goal: Show member name, movie title, and rent date for unreturned movies</span><br>
+<span class="sql-keyword">SELECT</span> m.name, b.title, br.rental_date<br>
+<span class="sql-keyword">FROM</span> Rentals br<br>
 <span class="sql-keyword">JOIN</span> <strong style="color: var(--error-color);">_____</strong> m <span class="sql-keyword">ON</span> br.<strong style="color: var(--error-color);">_____</strong> = m.<strong style="color: var(--error-color);">_____</strong><br>
 <span class="sql-keyword">JOIN</span> <strong style="color: var(--error-color);">_____</strong> b <span class="sql-keyword">ON</span> br.<strong style="color: var(--error-color);">_____</strong> = b.<strong style="color: var(--error-color);">_____</strong><br>
 <span class="sql-keyword">WHERE</span> br.return_date <span class="sql-keyword">IS NULL</span>;
@@ -910,7 +910,7 @@ psql -U postgres<br>
                         <h3>Hints:</h3>
                         <ul style="font-size: 1.0em;">
                             <li>First blank on line 3: Which table contains member names?</li>
-                            <li>Second JOIN: Which table has book titles?</li>
+                            <li>Second JOIN: Which table has movie titles?</li>
                             <li>ON clauses: Match foreign keys to primary keys</li>
                         </ul>
                     </div>
@@ -920,8 +920,8 @@ psql -U postgres<br>
                         <h3>Think About:</h3>
                         <ul style="font-size: 1.0em;">
                             <li>What is the primary key in Members?</li>
-                            <li>What foreign key in Borrowing points to Members?</li>
-                            <li>Same for Books table!</li>
+                            <li>What foreign key in Rentals points to Members?</li>
+                            <li>Same for Movies table!</li>
                         </ul>
                     </div>
                 </div>
@@ -940,11 +940,11 @@ psql -U postgres<br>
             <div class="success-box">
                 <h3>Complete JOIN Query:</h3>
                 <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-comment">-- Show member name, book title, and borrow date for unreturned books</span><br>
-<span class="sql-keyword">SELECT</span> m.name, b.title, br.borrow_date<br>
-<span class="sql-keyword">FROM</span> Borrowing br<br>
+<span class="sql-comment">-- Show member name, movie title, and rent date for unreturned movies</span><br>
+<span class="sql-keyword">SELECT</span> m.name, b.title, br.rental_date<br>
+<span class="sql-keyword">FROM</span> Rentals br<br>
 <span class="sql-keyword">JOIN</span> <strong style="color: var(--ocu-green);">Members</strong> m <span class="sql-keyword">ON</span> br.<strong style="color: var(--ocu-green);">member_id</strong> = m.<strong style="color: var(--ocu-green);">member_id</strong><br>
-<span class="sql-keyword">JOIN</span> <strong style="color: var(--ocu-green);">Books</strong> b <span class="sql-keyword">ON</span> br.<strong style="color: var(--ocu-green);">book_id</strong> = b.<strong style="color: var(--ocu-green);">book_id</strong><br>
+<span class="sql-keyword">JOIN</span> <strong style="color: var(--ocu-green);">Movies</strong> b <span class="sql-keyword">ON</span> br.<strong style="color: var(--ocu-green);">movie_id</strong> = b.<strong style="color: var(--ocu-green);">movie_id</strong><br>
 <span class="sql-keyword">WHERE</span> br.return_date <span class="sql-keyword">IS NULL</span>;
                 </div>
             </div>
@@ -952,10 +952,10 @@ psql -U postgres<br>
             <div class="demo-box">
                 <h3>How It Works:</h3>
                 <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Start with Borrowing table</strong> - This is our "anchor" (has foreign keys to both other tables)</li>
+                    <li><strong>Start with Rentals table</strong> - This is our "anchor" (has foreign keys to both other tables)</li>
                     <li><strong>JOIN Members</strong> - Match <code>br.member_id</code> with <code>m.member_id</code> to get member names</li>
-                    <li><strong>JOIN Books</strong> - Match <code>br.book_id</code> with <code>b.book_id</code> to get book titles</li>
-                    <li><strong>WHERE clause</strong> - Filter to only show books that haven't been returned yet</li>
+                    <li><strong>JOIN Movies</strong> - Match <code>br.movie_id</code> with <code>b.movie_id</code> to get movie titles</li>
+                    <li><strong>WHERE clause</strong> - Filter to only show movies that haven't been returned yet</li>
                 </ol>
             </div>
 
@@ -1012,7 +1012,7 @@ psql -U postgres<br>
                 <ol style="font-size: 1.0em; line-height: 1.7;">
                     <li>Right-click on your PostgreSQL connection in the left panel</li>
                     <li>Select <strong>New → Database</strong></li>
-                    <li>Name it: <code>library_db</code></li>
+                    <li>Name it: <code>movie_rental_db</code></li>
                     <li>Click <strong>OK</strong></li>
                 </ol>
             </div>
@@ -1020,7 +1020,7 @@ psql -U postgres<br>
             <div class="demo-box">
                 <h3>Step 3: Create Tables (SQL Console Method)</h3>
                 <ol style="font-size: 1.0em; line-height: 1.7;">
-                    <li>Right-click on <code>library_db</code> → <strong>New → Query Console</strong></li>
+                    <li>Right-click on <code>movie_rental_db</code> → <strong>New → Query Console</strong></li>
                     <li>Paste the same CREATE TABLE statements from the CLI slides</li>
                     <li>Highlight all three CREATE TABLE statements</li>
                     <li>Click the green <strong>"Execute"</strong> button or press <strong>Ctrl+Enter</strong></li>
@@ -1146,7 +1146,7 @@ psql -U postgres<br>
                     </li>
                     <li><strong>Screenshot Evidence</strong> (PNG or JPG)
                         <ul style="margin-top: 8px;">
-                            <li>Screenshot showing SELECT * FROM Books with YOUR books displayed</li>
+                            <li>Screenshot showing SELECT * FROM Movies with YOUR movies displayed</li>
                             <li>Screenshot showing the result of your JOIN query</li>
                             <li>Must show complete query and results in one image</li>
                         </ul>
@@ -1157,9 +1157,9 @@ psql -U postgres<br>
                         </ul>
                         <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
 <span class="sql-keyword">SELECT</span> <br>
-&nbsp;&nbsp;(<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">FROM</span> Books) <span class="sql-keyword">AS</span> book_count,<br>
-&nbsp;&nbsp;(<span class="sql-keyword">SELECT COUNT</span>(<span class="sql-keyword">DISTINCT</span> genre) <span class="sql-keyword">FROM</span> Books) <span class="sql-keyword">AS</span> genre_count,<br>
-&nbsp;&nbsp;(<span class="sql-keyword">SELECT</span> <span class="sql-keyword">STRING_AGG</span>(title, <span class="sql-string">', '</span>) <span class="sql-keyword">FROM</span> Books) <span class="sql-keyword">AS</span> titles;
+&nbsp;&nbsp;(<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">FROM</span> Movies) <span class="sql-keyword">AS</span> movie_count,<br>
+&nbsp;&nbsp;(<span class="sql-keyword">SELECT COUNT</span>(<span class="sql-keyword">DISTINCT</span> genre) <span class="sql-keyword">FROM</span> Movies) <span class="sql-keyword">AS</span> genre_count,<br>
+&nbsp;&nbsp;(<span class="sql-keyword">SELECT</span> <span class="sql-keyword">STRING_AGG</span>(title, <span class="sql-string">', '</span>) <span class="sql-keyword">FROM</span> Movies) <span class="sql-keyword">AS</span> titles;
                         </div>
                     </li>
                 </ol>
@@ -1181,7 +1181,7 @@ psql -U postgres<br>
                     <tr>
                         <td><strong>Data Uniqueness</strong></td>
                         <td>30</td>
-                        <td>5+ unique books, 3+ genres, realistic members</td>
+                        <td>5+ unique movies, 3+ genres, realistic members</td>
                     </tr>
                     <tr>
                         <td><strong>JOIN Query</strong></td>
@@ -1208,29 +1208,36 @@ psql -U postgres<br>
 
             <div class="warning-box" style="margin-top: 20px; background: var(--error-color); color: white;">
                 <h3>🚫 Academic Integrity Reminder:</h3>
-                <p style="font-size: 1.05em; line-height: 1.6;"><strong>Copying data from classmates or online examples will result in a zero.</strong> Your book selections, member names, and query results must be unique. We use automated tools to detect duplicate submissions.</p>
+                <p style="font-size: 1.05em; line-height: 1.6;"><strong>Copying data from classmates or online examples will result in a zero.</strong> Your movie selections, member names, and query results must be unique. We use automated tools to detect duplicate submissions.</p>
             </div>
 
             <div class="tip-box">
-                <strong>Submission Format:</strong> Combine all files into a single ZIP: <code>LastName_FirstName_LibraryDB.zip</code>
+                <strong>Submission Format:</strong>
+                <ul style="font-size: 1.0em; margin-top: 10px;">
+                    <li>Create folder in homework repository: <code>Week2_MovieRental/</code></li>
+                    <li>Add SQL script file: <code>movie_rental.sql</code></li>
+                    <li>Add README.md with screenshots embedded</li>
+                    <li>Commit and push to GitHub</li>
+                    <li>Submit commit URL via D2L text submission</li>
+                </ul>
             </div>
         </div>
 
         <!-- Slide 32: Practice Challenge -->
         <div class="slide">
             <h1>Practice Challenge <span class="emoji">💪</span></h1>
-            <h2>Extend the Library Database</h2>
+            <h2>Extend the Movie Rental Database</h2>
 
             <div class="warning-box">
-                <h3>🎯 Required: Add Publishers (Using YOUR Books!)</h3>
-                <p style="font-size: 1.05em; line-height: 1.6;">You must create publishers that match <strong>YOUR specific books</strong> from earlier. No generic examples!</p>
+                <h3>🎯 Required: Add Studios (Using YOUR Movies!)</h3>
+                <p style="font-size: 1.05em; line-height: 1.6;">You must create studios that match <strong>YOUR specific movies</strong> from earlier. No generic examples!</p>
             </div>
 
             <div class="activity-section">
-                <h3>Step 1: Create Publishers Table</h3>
+                <h3>Step 1: Create Studios Table</h3>
                 <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-keyword">CREATE TABLE</span> Publishers (<br>
-&nbsp;&nbsp;publisher_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+<span class="sql-keyword">CREATE TABLE</span> Studios (<br>
+&nbsp;&nbsp;studio_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;name <strong style="color: var(--error-color);">_____</strong>,<br>
 &nbsp;&nbsp;country <strong style="color: var(--error-color);">_____</strong><br>
 );
@@ -1239,30 +1246,30 @@ psql -U postgres<br>
             </div>
 
             <div class="activity-section" style="margin-top: 20px;">
-                <h3>Step 2: Connect Books to Publishers</h3>
+                <h3>Step 2: Connect Movies to Studios</h3>
                 <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-keyword">ALTER TABLE</span> Books<br>
-<span class="sql-keyword">ADD COLUMN</span> publisher_id <strong style="color: var(--error-color);">_____</strong><br>
+<span class="sql-keyword">ALTER TABLE</span> Movies<br>
+<span class="sql-keyword">ADD COLUMN</span> studio_id <strong style="color: var(--error-color);">_____</strong><br>
 <span class="sql-keyword">REFERENCES</span> <strong style="color: var(--error-color);">_____</strong>(<strong style="color: var(--error-color);">_____</strong>);
                 </div>
                 <p style="font-size: 0.95em; margin-top: 10px; font-style: italic;">Complete the foreign key syntax</p>
             </div>
 
             <div class="activity-section" style="margin-top: 20px;">
-                <h3>Step 3: Insert YOUR Publishers & Update Books</h3>
+                <h3>Step 3: Insert YOUR Studios & Update Movies</h3>
                 <ul style="font-size: 1.0em; line-height: 1.7;">
-                    <li>Research the real publishers for YOUR chosen books</li>
+                    <li>Research the real publishers for YOUR chosen movies</li>
                     <li>Insert at least 3 publishers</li>
-                    <li>Update each book to link to its publisher</li>
+                    <li>Update each movie to link to its studio</li>
                 </ul>
             </div>
 
             <div class="demo-box">
                 <h3>Step 4: Required Queries (All Must Work!):</h3>
                 <ol style="font-size: 1.0em; line-height: 1.7;">
-                    <li>Show all books with their publisher names (use JOIN)</li>
-                    <li>Count how many books per publisher (use GROUP BY)</li>
-                    <li>Find all books published by a specific country</li>
+                    <li>Show all movies with their studio names (use JOIN)</li>
+                    <li>Count how many movies per studio (use GROUP BY)</li>
+                    <li>Find all movies published by a specific country</li>
                 </ol>
             </div>
 
@@ -1277,10 +1284,10 @@ psql -U postgres<br>
             <h2>Complete Syntax Reference</h2>
 
             <div class="activity-section">
-                <h3>Step 1: Create Publishers Table (Complete)</h3>
+                <h3>Step 1: Create Studios Table (Complete)</h3>
                 <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-keyword">CREATE TABLE</span> Publishers (<br>
-&nbsp;&nbsp;publisher_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+<span class="sql-keyword">CREATE TABLE</span> Studios (<br>
+&nbsp;&nbsp;studio_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;name <strong style="color: var(--success-color);">VARCHAR(100) NOT NULL</strong>,<br>
 &nbsp;&nbsp;country <strong style="color: var(--success-color);">VARCHAR(50)</strong><br>
 );
@@ -1290,51 +1297,51 @@ psql -U postgres<br>
             <div class="activity-section" style="margin-top: 15px;">
                 <h3>Step 2: Add Foreign Key (Complete)</h3>
                 <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-keyword">ALTER TABLE</span> Books<br>
-<span class="sql-keyword">ADD COLUMN</span> publisher_id <strong style="color: var(--success-color);">INTEGER</strong><br>
-<span class="sql-keyword">REFERENCES</span> <strong style="color: var(--success-color);">Publishers</strong>(<strong style="color: var(--success-color);">publisher_id</strong>);
+<span class="sql-keyword">ALTER TABLE</span> Movies<br>
+<span class="sql-keyword">ADD COLUMN</span> studio_id <strong style="color: var(--success-color);">INTEGER</strong><br>
+<span class="sql-keyword">REFERENCES</span> <strong style="color: var(--success-color);">Studios</strong>(<strong style="color: var(--success-color);">studio_id</strong>);
                 </div>
             </div>
 
             <div class="activity-section" style="margin-top: 15px;">
-                <h3>Step 3: Example Data (Use YOUR Books!)</h3>
+                <h3>Step 3: Example Data (Use YOUR Movies!)</h3>
                 <div class="sql-example" style="font-size: 0.75em;">
-<span class="sql-comment">-- Insert publishers matching YOUR books</span><br>
-<span class="sql-keyword">INSERT INTO</span> Publishers (name, country) <span class="sql-keyword">VALUES</span><br>
-&nbsp;&nbsp;(<span class="sql-string">'Penguin Random House'</span>, <span class="sql-string">'USA'</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'HarperCollins'</span>, <span class="sql-string">'UK'</span>),<br>
-&nbsp;&nbsp;(<span class="sql-string">'Scholastic'</span>, <span class="sql-string">'USA'</span>);<br><br>
+<span class="sql-comment">-- Insert studios matching YOUR movies</span><br>
+<span class="sql-keyword">INSERT INTO</span> Studios (name, country) <span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(<span class="sql-string">'Warner Bros'</span>, <span class="sql-string">'USA'</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Universal Pictures'</span>, <span class="sql-string">'USA'</span>),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Paramount Pictures'</span>, <span class="sql-string">'USA'</span>);<br><br>
 
-<span class="sql-comment">-- Update each book with its publisher_id</span><br>
-<span class="sql-keyword">UPDATE</span> Books <span class="sql-keyword">SET</span> publisher_id = 1 <span class="sql-keyword">WHERE</span> title = <span class="sql-string">'Your Book Title'</span>;<br>
-<span class="sql-keyword">UPDATE</span> Books <span class="sql-keyword">SET</span> publisher_id = 2 <span class="sql-keyword">WHERE</span> title = <span class="sql-string">'Another Book'</span>;
+<span class="sql-comment">-- Update each movie with its studio_id</span><br>
+<span class="sql-keyword">UPDATE</span> Movies <span class="sql-keyword">SET</span> studio_id = 1 <span class="sql-keyword">WHERE</span> title = <span class="sql-string">'Your Movie Title'</span>;<br>
+<span class="sql-keyword">UPDATE</span> Movies <span class="sql-keyword">SET</span> studio_id = 2 <span class="sql-keyword">WHERE</span> title = <span class="sql-string">'Another Movie'</span>;
                 </div>
             </div>
 
             <div class="activity-section" style="margin-top: 15px;">
                 <h3>Step 4: Required Queries (Solutions)</h3>
                 <div class="sql-example" style="font-size: 0.75em;">
-<span class="sql-comment">-- Query 1: Books with publisher names</span><br>
-<span class="sql-keyword">SELECT</span> b.title, p.name <span class="sql-keyword">AS</span> publisher, p.country<br>
-<span class="sql-keyword">FROM</span> Books b<br>
-<span class="sql-keyword">JOIN</span> Publishers p <span class="sql-keyword">ON</span> b.publisher_id = p.publisher_id;<br><br>
+<span class="sql-comment">-- Query 1: Movies with studio names</span><br>
+<span class="sql-keyword">SELECT</span> b.title, p.name <span class="sql-keyword">AS</span> studio, p.country<br>
+<span class="sql-keyword">FROM</span> Movies b<br>
+<span class="sql-keyword">JOIN</span> Studios p <span class="sql-keyword">ON</span> b.studio_id = p.studio_id;<br><br>
 
-<span class="sql-comment">-- Query 2: Count books per publisher</span><br>
-<span class="sql-keyword">SELECT</span> p.name, <span class="sql-keyword">COUNT</span>(b.book_id) <span class="sql-keyword">AS</span> book_count<br>
-<span class="sql-keyword">FROM</span> Publishers p<br>
-<span class="sql-keyword">LEFT JOIN</span> Books b <span class="sql-keyword">ON</span> p.publisher_id = b.publisher_id<br>
+<span class="sql-comment">-- Query 2: Count movies per studio</span><br>
+<span class="sql-keyword">SELECT</span> p.name, <span class="sql-keyword">COUNT</span>(b.movie_id) <span class="sql-keyword">AS</span> movie_count<br>
+<span class="sql-keyword">FROM</span> Studios p<br>
+<span class="sql-keyword">LEFT JOIN</span> Movies b <span class="sql-keyword">ON</span> p.studio_id = b.studio_id<br>
 <span class="sql-keyword">GROUP BY</span> p.name;<br><br>
 
-<span class="sql-comment">-- Query 3: Books from specific country</span><br>
+<span class="sql-comment">-- Query 3: Movies from specific country</span><br>
 <span class="sql-keyword">SELECT</span> b.title, p.name<br>
-<span class="sql-keyword">FROM</span> Books b<br>
-<span class="sql-keyword">JOIN</span> Publishers p <span class="sql-keyword">ON</span> b.publisher_id = p.publisher_id<br>
+<span class="sql-keyword">FROM</span> Movies b<br>
+<span class="sql-keyword">JOIN</span> Studios p <span class="sql-keyword">ON</span> b.studio_id = p.studio_id<br>
 <span class="sql-keyword">WHERE</span> p.country = <span class="sql-string">'USA'</span>;
                 </div>
             </div>
 
             <div class="tip-box">
-                <strong>Key Concepts:</strong> ALTER TABLE extends existing tables | GROUP BY aggregates data | LEFT JOIN includes publishers with no books
+                <strong>Key Concepts:</strong> ALTER TABLE extends existing tables | GROUP BY aggregates data | LEFT JOIN includes studios with no movies
             </div>
         </div>
 
@@ -1569,7 +1576,7 @@ psql -U postgres<br>
 
             <div class="warning-box">
                 <h3>Your Task:</h3>
-                <p style="font-size: 1.15em;">Compare two deliberately flawed conceptual schemas for a music library database. Identify the problems and propose specific improvements for each.</p>
+                <p style="font-size: 1.15em;">Compare two deliberately flawed conceptual schemas for a music movie rental database. Identify the problems and propose specific improvements for each.</p>
             </div>
 
             <div class="exercise-step">
