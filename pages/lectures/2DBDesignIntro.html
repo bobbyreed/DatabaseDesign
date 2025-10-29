@@ -1471,43 +1471,47 @@ psql -U postgres<br>
             <div class="activity-box">
                 <h3>Instructions (Working in Groups of 3-4):</h3>
                 <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Identify Entities (5 min):</strong> List all the main entities in this system. What are the "things" we need to store data about?</li>
-                    <li><strong>Identify Relationships (10 min):</strong> Draw lines connecting entities and label each relationship. Is it one-to-one, one-to-many, or many-to-many?</li>
-                    <li><strong>Document Relationship Types (5 min):</strong> For each relationship, write a brief explanation of why you chose that cardinality</li>
+                    <li><strong>Identify Entities (5 min):</strong> List all the main entities (tables) you need. What are the "things" we need to store data about?</li>
+                    <li><strong>Draw Relationships (10 min):</strong> Draw lines connecting entities and label each relationship. Mark if it's one-to-one, one-to-many, or many-to-many</li>
+                    <li><strong>List Fields (5 min):</strong> For each entity, write down the main fields/columns you'll need</li>
                 </ol>
+            </div>
+
+            <div class="success-box">
+                <h3>Your Whiteboard Design:</h3>
+                <p style="font-size: 1.05em;">Draw boxes for entities, lines for relationships, and list the main fields. You'll build this database for homework!</p>
             </div>
         </div>
 
         <!-- Slide 28: Exercise 1 - Expected Outputs -->
         <div class="slide">
-            <h1>Exercise 1: Expected Outputs</h1>
+            <h1>Exercise 1: What You Should Have</h1>
 
             <div class="demo-box">
-                <h3>Your Group Should Produce:</h3>
-                <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>List of Entities</strong> (minimum 5):
+                <h3>Minimum Requirements:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>📦 <strong>At least 5 entities</strong> (tables):
                         <ul style="margin-top: 10px;">
-                            <li>Example: Student, Course, Professor, Enrollment, Department</li>
+                            <li>Example: Students, Courses, Professors, Enrollments, CourseOfferings</li>
                         </ul>
                     </li>
-                    <li><strong>Relationship Diagram</strong> on whiteboard/paper showing:
+                    <li>🔗 <strong>Relationships between entities</strong>:
                         <ul style="margin-top: 10px;">
-                            <li>Entities as boxes</li>
-                            <li>Relationships as lines with labels</li>
-                            <li>Cardinality notation (1:1, 1:N, M:N)</li>
+                            <li>Students enroll in Courses (many-to-many through Enrollments)</li>
+                            <li>Professors teach Courses (through CourseOfferings)</li>
+                            <li>CourseOfferings link specific professors to courses in specific semesters</li>
                         </ul>
                     </li>
-                    <li><strong>Relationship Type Justifications:</strong>
+                    <li>📝 <strong>Basic fields for each entity</strong>:
                         <ul style="margin-top: 10px;">
-                            <li>Example: "Student to Enrollment is one-to-many because one student can enroll in multiple courses"</li>
-                            <li>Example: "Course to Student is many-to-many (through Enrollment) because many students can enroll in one course, and one student can enroll in many courses"</li>
+                            <li>IDs (primary keys), names, and relevant attributes</li>
                         </ul>
                     </li>
-                </ol>
+                </ul>
             </div>
 
             <div class="tip-box">
-                <strong>Tip:</strong> Think about the questions you'd need to answer: "Which courses is student X taking?" or "Who is teaching course Y this semester?"
+                <strong>Keep your whiteboard design!</strong> You'll need it to complete your homework - building this database in DataGrip or CLI.
             </div>
         </div>
 
@@ -1678,154 +1682,163 @@ psql -U postgres<br>
 
         <!-- Slide 34: Homework Overview -->
         <div class="slide">
-            <h1>Homework Assignment <span class="emoji">📝</span></h1>
-            <h2>Week 2: Conceptual Design Extensions</h2>
+            <h1>Homework Assignment <span class="emoji">🛠️</span></h1>
+            <h2>Week 2: Build Course Registration Database</h2>
 
             <div class="demo-box">
                 <h3>Assignment Overview</h3>
-                <p style="font-size: 1.15em;">This week's homework consists of two extensions building directly on today's in-class exercises. You'll take your conceptual work to the next level by creating UML diagrams and writing critical analysis.</p>
+                <p style="font-size: 1.15em;">Take your whiteboard design from class and <strong>implement it as a working database</strong>. You'll create the tables, add data, and run queries to demonstrate your database works.</p>
             </div>
 
             <div class="warning-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Commit URL turned into D2L</p>
+                <p>Submit GitHub commit URL via D2L</p>
             </div>
 
             <div class="activity-box">
-                <h3>Assignment Components:</h3>
+                <h3>Assignment Requirements:</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>Homework Extension 1:</strong> UML Class Diagram (50 points)</li>
-                    <li><strong>Homework Extension 2:</strong> Design Justification Essay (50 points)</li>
+                    <li><strong>Create Database Schema (40 points)</strong></li>
+                    <li><strong>Insert Sample Data (30 points)</strong></li>
+                    <li><strong>Run & Document Queries (30 points)</strong></li>
                 </ol>
                 <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
             </div>
+
+            <div class="success-box">
+                <h3>Tools: Choose Your Path</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>✅ Use <strong>DataGrip</strong> (GUI interface)</li>
+                    <li>✅ Use <strong>PostgreSQL CLI</strong> (command line)</li>
+                    <li>✅ Use <strong>Both</strong> (recommended for learning!)</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Slide 34: Homework Extension 1 -->
+        <!-- Slide 34: Homework Part 1 - Create Schema -->
         <div class="slide">
-            <h1>Homework Extension 1: UML Class Diagram</h1>
-            <h2>Building on Exercise 1 - University Course Registration</h2>
+            <h1>Part 1: Create Database Schema (40 pts)</h1>
+            <h2>Implement Your Whiteboard Design</h2>
 
             <div class="exercise-step">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Convert the entities and relationships you identified in Exercise 1 (University Course Registration System) into an <strong>initial UML class diagram</strong> showing attributes and multiplicity.</p>
+                <h3>Step 1: Create Database</h3>
+                <div class="sql-example" style="font-size: 0.9em;">
+<span class="sql-keyword">CREATE DATABASE</span> course_registration_db;
+                </div>
             </div>
 
             <div class="activity-box">
-                <h3>Requirements:</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Classes:</strong> Create a UML class box for each entity you identified
-                        <ul style="margin-top: 8px;">
-                            <li>Include class name at the top</li>
-                            <li>List all relevant attributes with data types (e.g., studentID: int, name: String)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Relationships:</strong> Draw association lines between classes
-                        <ul style="margin-top: 8px;">
-                            <li>Label each relationship (e.g., "enrolls in", "teaches", "offered in")</li>
-                            <li>Show direction with arrows where appropriate</li>
-                        </ul>
-                    </li>
-                    <li><strong>Multiplicity:</strong> Indicate cardinality on both ends of each relationship
-                        <ul style="margin-top: 8px;">
-                            <li>Examples: 1, 0..1, 1..*, 0..*, or specific numbers like 3..5</li>
-                            <li>Example: Student [1..*] ——enrolls in——→ [0..*] Course</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="tip-box">
-                <strong>Tools You Can Use:</strong> Draw.io, Lucidchart, UMLet, or hand-drawn (must be legible and scanned clearly)
-            </div>
-        </div>
-
-        <!-- Slide 35: Homework Extension 2 -->
-        <div class="slide">
-            <h1>Homework Extension 2: Design Justification</h1>
-            <h2>Building on Exercise 2 - Music Library Critique</h2>
-
-            <div class="exercise-step">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Select the <strong>better</strong> of the two music library schemas (Schema A or Schema B) from Exercise 2, then write a <strong>200-word justification</strong> explaining why your proposed improvement resolves a potential data redundancy or integrity issue.</p>
-            </div>
-
-            <div class="activity-box">
-                <h3>Your Essay Must Include:</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Schema Selection (1 sentence):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>State which schema you believe is the better starting point and why</li>
-                        </ul>
-                    </li>
-                    <li><strong>Problem Identification (75-100 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Describe the specific data redundancy or integrity issue in your chosen schema</li>
-                            <li>Explain the consequences of this flaw (e.g., update anomalies, wasted storage, inconsistency risks)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Proposed Improvement (75-100 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Describe your specific design improvement (new tables, restructured relationships, etc.)</li>
-                            <li>Explain how your improvement resolves the identified issue</li>
-                            <li>Discuss any trade-offs or additional considerations</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="warning-box">
-                <strong>Word Count:</strong> Approximately 200 words (±20 words). Quality over quantity - be concise and precise!
-            </div>
-        </div>
-
-        <!-- Slide 36: Submission Requirements -->
-        <div class="slide">
-            <h1>Submission Requirements <span class="emoji">✅</span></h1>
-
-            <div class="demo-box">
-                <h3>Format & Submission:</h3>
-                <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File Format:</strong> Markdown document (.md)</li>
-                    <li><strong>File Naming:</strong> LastName_FirstName_Week2_Homework.md</li>
-                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
-                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
-                    <li><strong>Due Date:</strong> Before class begins next week</li>
+                <h3>Step 2: Create Tables (Minimum Required)</h3>
+                <p style="font-size: 1.05em; margin-bottom: 10px;">Based on your whiteboard design, create at least these tables:</p>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li>📚 <strong>Students</strong> - student_id (PK), name, email, major, year</li>
+                    <li>📖 <strong>Courses</strong> - course_id (PK), course_code, title, credits, department</li>
+                    <li>👨‍🏫 <strong>Professors</strong> - professor_id (PK), name, email, department, office</li>
+                    <li>📝 <strong>Enrollments</strong> - enrollment_id (PK), student_id (FK), course_id (FK), semester, grade</li>
+                    <li>🏫 <strong>CourseOfferings</strong> - offering_id (PK), course_id (FK), professor_id (FK), semester, year</li>
                 </ul>
             </div>
 
+            <div class="warning-box">
+                <h3>⚠️ Required Elements:</h3>
+                <ul style="font-size: 1.0em;">
+                    <li>✓ All tables must have PRIMARY KEY constraints</li>
+                    <li>✓ Use FOREIGN KEY constraints to link tables</li>
+                    <li>✓ Add NOT NULL constraints where appropriate</li>
+                    <li>✓ Consider UNIQUE constraints (e.g., email addresses)</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Bonus:</strong> Add additional fields or tables based on your group's whiteboard design!
+            </div>
+        </div>
+
+        <!-- Slide 35: Homework Part 2 - Insert Data -->
+        <div class="slide">
+            <h1>Part 2: Insert Sample Data (30 pts)</h1>
+            <h2>Populate Your Database</h2>
+
             <div class="activity-box">
-                <h3>Document Structure:</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Cover Page:</strong> Your name, date, course number, "Week 2 Homework"</li>
-                    <li><strong>Page 2:</strong> Extension 1 - UML Class Diagram (full-page diagram)</li>
-                    <li><strong>Page 3:</strong> Extension 2 - Design Justification Essay (formatted text)</li>
+                <h3>Data Requirements (Make it YOUR data!):</h3>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li>👨‍🎓 <strong>Students:</strong> Insert at least 5 students
+                        <ul style="margin-top: 5px;">
+                            <li>Use realistic names (can be fictional characters or yourself)</li>
+                            <li>Vary majors and years of study</li>
+                        </ul>
+                    </li>
+                    <li>📚 <strong>Courses:</strong> Insert at least 4 courses
+                        <ul style="margin-top: 5px;">
+                            <li>Choose real courses from your university or make up realistic ones</li>
+                            <li>Include different departments</li>
+                        </ul>
+                    </li>
+                    <li>👨‍🏫 <strong>Professors:</strong> Insert at least 3 professors</li>
+                    <li>📝 <strong>Enrollments:</strong> Create at least 6 enrollment records
+                        <ul style="margin-top: 5px;">
+                            <li>Each student should be enrolled in at least one course</li>
+                            <li>Some courses should have multiple students</li>
+                        </ul>
+                    </li>
+                    <li>🏫 <strong>CourseOfferings:</strong> Create at least 4 offerings
+                        <ul style="margin-top: 5px;">
+                            <li>Link courses to professors and semesters</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="background: var(--error-color); color: white;">
+                <h3>🚫 Academic Integrity:</h3>
+                <p style="font-size: 1.05em;">Your data must be unique. Do not copy from classmates. We will check for duplicates.</p>
+            </div>
+        </div>
+
+        <!-- Slide 36: Homework Part 3 - Queries & Submission -->
+        <div class="slide">
+            <h1>Part 3: Queries & Submission (30 pts)</h1>
+
+            <div class="activity-box">
+                <h3>Required Queries (Run and Screenshot Results):</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>List all students with their majors</strong>
+                        <div class="sql-example" style="font-size: 0.8em; margin-top: 5px;">
+<span class="sql-keyword">SELECT</span> name, major, year <span class="sql-keyword">FROM</span> Students;
+                        </div>
+                    </li>
+                    <li><strong>Show which courses each student is enrolled in</strong> (use JOIN)</li>
+                    <li><strong>Find which professor teaches which course</strong> (use JOIN with CourseOfferings)</li>
+                    <li><strong>Count how many students are in each course</strong> (use GROUP BY)</li>
+                    <li><strong>Your choice:</strong> Write one additional query demonstrating a concept from class</li>
                 </ol>
             </div>
 
             <div class="demo-box">
-                <h3>Grading Criteria:</h3>
-                <table class="table-schema" style="font-size: 0.95em;">
-                    <tr>
-                        <th>Component</th>
-                        <th>Points</th>
-                        <th>Key Criteria</th>
-                    </tr>
-                    <tr>
-                        <td><strong>UML Diagram</strong></td>
-                        <td>50</td>
-                        <td>Completeness (20), Correct multiplicity (15), Proper UML notation (10), Clarity (5)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Justification Essay</strong></td>
-                        <td>50</td>
-                        <td>Problem identification (20), Solution quality (20), Writing clarity (10)</td>
-                    </tr>
-                </table>
+                <h3>Submission Format:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li>📁 Create <code>/homework/Homework3.md</code> in your repository</li>
+                    <li>📝 Include all SQL code in markdown code blocks</li>
+                    <li>📸 Embed screenshots showing:
+                        <ul style="margin-top: 5px;">
+                            <li>CREATE TABLE statements executed</li>
+                            <li>Sample data (SELECT * from each table)</li>
+                            <li>All 5 query results</li>
+                        </ul>
+                    </li>
+                    <li>🔗 Commit and push to GitHub</li>
+                    <li>📤 Submit commit URL via D2L</li>
+                </ul>
             </div>
 
-            <div class="tip-box">
-                <strong>Pro Tip:</strong> Review your in-class exercise notes before starting. Your group work provides an excellent foundation!
+            <div class="demo-box">
+                <h3>Grading Rubric:</h3>
+                <table class="table-schema" style="font-size: 0.9em;">
+                    <tr><th>Component</th><th>Points</th><th>Criteria</th></tr>
+                    <tr><td><strong>Schema</strong></td><td>40</td><td>Correct tables with PKs/FKs, constraints</td></tr>
+                    <tr><td><strong>Data</strong></td><td>30</td><td>Realistic, unique data meeting minimum requirements</td></tr>
+                    <tr><td><strong>Queries</strong></td><td>30</td><td>All 5 queries correct with clear screenshots</td></tr>
+                </table>
             </div>
         </div>
 
