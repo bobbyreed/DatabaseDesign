@@ -333,14 +333,22 @@
 
                 return `
                     <div class="student-card ${statusClass}"
-                         onclick="toggleAttendance('${student.last_name}', '${student.first_name}', '${student.full_name}', ${student.present}, event)">
+                         data-student-id="${student.id || ''}"
+                         data-last-name="${student.last_name}"
+                         data-first-name="${student.first_name}"
+                         data-full-name="${student.full_name}"
+                         data-present="${student.present}">
                         <div class="student-info">
                             <div class="student-name">${student.full_name}</div>
                             ${timeText ? `<div class="student-time">Marked at ${timeText}</div>` : ''}
                         </div>
                         <div class="student-actions">
                             ${!student.present ?
-                                `<button class="action-btn btn-late" onclick="markLate('${student.last_name}', '${student.first_name}', '${student.full_name}', event)">Late</button>`
+                                `<button class="action-btn btn-late"
+                                         data-action="mark-late"
+                                         data-last-name="${student.last_name}"
+                                         data-first-name="${student.first_name}"
+                                         data-full-name="${student.full_name}">Late</button>`
                                 : ''
                             }
                             <span class="attendance-badge ${badgeClass}">
@@ -535,6 +543,35 @@
                 }
 
                 cardInput.value = '';
+            }
+        });
+
+        // Event delegation for student card clicks
+        document.getElementById('attendanceGrid').addEventListener('click', async (e) => {
+            // Check if Late button was clicked
+            const lateBtn = e.target.closest('[data-action="mark-late"]');
+            if (lateBtn) {
+                e.stopPropagation();
+                const lastName = lateBtn.dataset.lastName;
+                const firstName = lateBtn.dataset.firstName;
+                const fullName = lateBtn.dataset.fullName;
+                await markLate(lastName, firstName, fullName, e);
+                return;
+            }
+
+            // Check if student card was clicked
+            const card = e.target.closest('.student-card');
+            if (card) {
+                // Don't toggle if clicking on badge or button
+                if (e.target.closest('.attendance-badge') || e.target.closest('.action-btn')) {
+                    return;
+                }
+
+                const lastName = card.dataset.lastName;
+                const firstName = card.dataset.firstName;
+                const fullName = card.dataset.fullName;
+                const isPresent = card.dataset.present === 'true';
+                await toggleAttendance(lastName, firstName, fullName, isPresent, e);
             }
         });
 

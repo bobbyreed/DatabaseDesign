@@ -515,6 +515,216 @@
 }
 
 /* ============================================
+   ATTENDANCE GRID & STUDENT CARDS
+   ============================================ */
+
+.attendance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--db-space-4);
+    margin-top: var(--db-space-4);
+}
+
+.student-card {
+    background: var(--db-paper);
+    border: 3px solid var(--db-border);
+    border-radius: var(--db-radius-lg);
+    padding: var(--db-space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--db-space-3);
+    transition: all var(--db-transition);
+    cursor: pointer;
+    user-select: none;
+}
+
+.student-card:hover {
+    border-color: var(--db-entity);
+    background: var(--db-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--db-shadow-md);
+}
+
+.student-card:active {
+    transform: translateY(0);
+    box-shadow: var(--db-shadow);
+}
+
+.student-card.present {
+    border-color: var(--db-success);
+    background: var(--db-success-bg);
+    border-left-width: 6px;
+}
+
+.student-card.present:hover {
+    border-color: #059669;
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.student-card.late {
+    border-color: var(--db-warning);
+    background: var(--db-warning-bg);
+    border-left-width: 6px;
+}
+
+.student-card.late:hover {
+    border-color: #d97706;
+    background: rgba(245, 158, 11, 0.15);
+}
+
+.student-card.absent {
+    border-color: var(--db-border);
+    opacity: 0.75;
+}
+
+.student-card.absent:hover {
+    opacity: 1;
+    border-color: var(--db-nullable);
+}
+
+.student-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.student-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--db-space-2);
+    flex-shrink: 0;
+}
+
+.attendance-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--db-space-2) var(--db-space-3);
+    border-radius: var(--db-radius);
+    font-size: var(--db-text-sm);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-present {
+    background: var(--db-success);
+    color: white;
+}
+
+.badge-late {
+    background: var(--db-warning);
+    color: white;
+}
+
+.badge-absent {
+    background: var(--db-nullable);
+    color: white;
+}
+
+.action-btn {
+    background: var(--db-entity);
+    color: white;
+    border: none;
+    padding: var(--db-space-2) var(--db-space-3);
+    border-radius: var(--db-radius);
+    cursor: pointer;
+    font-size: var(--db-text-sm);
+    font-weight: 600;
+    transition: all var(--db-transition-fast);
+    white-space: nowrap;
+}
+
+.action-btn:hover {
+    background: #075985;
+    transform: translateY(-1px);
+    box-shadow: var(--db-shadow);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-late {
+    background: var(--db-warning);
+}
+
+.btn-late:hover {
+    background: #d97706;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--db-space-4);
+    flex-wrap: wrap;
+    gap: var(--db-space-3);
+}
+
+.toggle-view {
+    display: flex;
+    gap: var(--db-space-2);
+    flex-wrap: wrap;
+}
+
+.toggle-btn {
+    padding: var(--db-space-2) var(--db-space-4);
+    border: 2px solid var(--db-border);
+    background: transparent;
+    color: var(--db-text-primary);
+    border-radius: var(--db-radius);
+    cursor: pointer;
+    font-family: var(--db-font-mono);
+    font-size: var(--db-text-sm);
+    font-weight: 500;
+    transition: all var(--db-transition-fast);
+}
+
+.toggle-btn:hover {
+    background: var(--db-hover);
+    border-color: var(--db-entity);
+}
+
+.toggle-btn.active {
+    background: var(--db-entity);
+    color: white;
+    border-color: var(--db-entity);
+}
+
+.info-note {
+    background: linear-gradient(135deg,
+        rgba(59, 130, 246, 0.1) 0%,
+        rgba(139, 92, 246, 0.1) 100%);
+    border-left: 4px solid var(--db-relationship);
+    padding: var(--db-space-3) var(--db-space-4);
+    border-radius: var(--db-radius);
+    margin-bottom: var(--db-space-4);
+    color: var(--db-text-primary);
+    font-size: var(--db-text-sm);
+}
+
+.history-section {
+    margin-top: var(--db-space-6);
+    padding-top: var(--db-space-6);
+    border-top: 2px solid var(--db-divider);
+}
+
+.history-item {
+    background: var(--db-grid);
+    padding: var(--db-space-4);
+    margin-bottom: var(--db-space-3);
+    border-radius: var(--db-radius);
+    border-left: 4px solid var(--db-entity);
+    cursor: pointer;
+    transition: all var(--db-transition-fast);
+}
+
+.history-item:hover {
+    background: var(--db-hover);
+    transform: translateX(4px);
+    box-shadow: var(--db-shadow);
+}
+
+/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 
