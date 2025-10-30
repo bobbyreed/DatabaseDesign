@@ -548,6 +548,9 @@
 
         // Event delegation for student card clicks
         document.getElementById('attendanceGrid').addEventListener('click', async (e) => {
+            // Prevent default to avoid scroll issues
+            e.preventDefault();
+
             // Check if Late button was clicked
             const lateBtn = e.target.closest('[data-action="mark-late"]');
             if (lateBtn) {

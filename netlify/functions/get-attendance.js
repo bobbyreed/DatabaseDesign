@@ -38,7 +38,7 @@ exports.handler = async (event, context) => {
                 CASE
                     WHEN a.id IS NOT NULL THEN true
                     ELSE false
-                END as is_present
+                END as present
             FROM students s
             LEFT JOIN attendance a ON s.id = a.student_id AND a.attendance_date = ${date}
             ORDER BY s.last_name, s.first_name
@@ -47,9 +47,11 @@ exports.handler = async (event, context) => {
         return successResponse({
             date,
             attendance,
-            count: attendance.length,
-            present: attendance.filter(a => a.is_present).length,
-            absent: attendance.filter(a => !a.is_present).length
+            stats: {
+                total: attendance.length,
+                present: attendance.filter(a => a.present).length,
+                absent: attendance.filter(a => !a.present).length
+            }
         });
 
     } catch (error) {

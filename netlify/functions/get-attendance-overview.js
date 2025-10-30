@@ -45,9 +45,9 @@ exports.handler = async (event, context) => {
             ORDER BY last_name, first_name
         `;
 
-        // Get all attendance records
+        // Get all attendance records with timestamps
         const attendanceRecords = await sql`
-            SELECT student_id, attendance_date, is_late
+            SELECT student_id, attendance_date, is_late, timestamp
             FROM attendance
         `;
 
@@ -55,22 +55,32 @@ exports.handler = async (event, context) => {
         const attendanceMap = {};
         attendanceRecords.forEach(record => {
             const key = `${record.student_id}_${record.attendance_date}`;
-            attendanceMap[key] = record.is_late;
+            attendanceMap[key] = {
+                isLate: record.is_late,
+                timestamp: record.timestamp
+            };
         });
 
         // Build overview data for each student
         const overview = students.map(student => {
-            const attendanceArray = CLASS_DATES.map(date => {
+            const attendanceArray = CLASS_DATES.map((date, index) => {
                 const key = `${student.id}_${date}`;
+                const classNumber = index + 1;
+
                 if (attendanceMap.hasOwnProperty(key)) {
+                    const record = attendanceMap[key];
                     return {
                         date,
-                        status: attendanceMap[key] ? 'late' : 'present'
+                        classNumber,
+                        status: record.isLate ? 'late' : 'present',
+                        timestamp: record.timestamp
                     };
                 }
                 return {
                     date,
-                    status: 'absent'
+                    classNumber,
+                    status: 'absent',
+                    timestamp: null
                 };
             });
 
@@ -101,8 +111,9 @@ exports.handler = async (event, context) => {
 
         return successResponse({
             classDates: CLASS_DATES,
-            overview,
-            totalStudents: students.length
+            students: overview,
+            totalStudents: students.length,
+            totalClasses: CLASS_DATES.length
         });
 
     } catch (error) {
