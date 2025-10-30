@@ -216,28 +216,36 @@
             }
 
             const date = getCurrentDate();
+            console.log('toggleAttendance called:', {lastName, firstName, fullName, isPresent, date});
 
             try {
                 const method = isPresent ? 'DELETE' : 'POST';
+                const payload = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    date: date,
+                    isLate: false
+                };
+
+                console.log('Sending request:', method, payload);
+
                 const response = await fetch(`${API_BASE}/mark-attendance`, {
                     method: method,
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        firstName: firstName,
-                        lastName: lastName,
-                        date: date,
-                        isLate: false
-                    })
+                    body: JSON.stringify(payload)
                 });
 
+                console.log('Response status:', response.status);
                 const data = await response.json();
+                console.log('Response data:', data);
 
                 if (data.success) {
                     showStatus(data.message, true);
                     await updateUI();
                 } else {
+                    console.error('API returned error:', data.error);
                     showStatus(`Error: ${data.error}`, false);
                 }
             } catch (error) {
@@ -548,16 +556,17 @@
 
         // Event delegation for student card clicks
         document.getElementById('attendanceGrid').addEventListener('click', async (e) => {
-            // Prevent default to avoid scroll issues
+            // Prevent default and propagation to avoid scroll issues
             e.preventDefault();
+            e.stopPropagation();
 
             // Check if Late button was clicked
             const lateBtn = e.target.closest('[data-action="mark-late"]');
             if (lateBtn) {
-                e.stopPropagation();
                 const lastName = lateBtn.dataset.lastName;
                 const firstName = lateBtn.dataset.firstName;
                 const fullName = lateBtn.dataset.fullName;
+                console.log('Marking late:', fullName);
                 await markLate(lastName, firstName, fullName, e);
                 return;
             }
@@ -574,6 +583,7 @@
                 const firstName = card.dataset.firstName;
                 const fullName = card.dataset.fullName;
                 const isPresent = card.dataset.present === 'true';
+                console.log('Toggling attendance:', fullName, 'Currently present:', isPresent);
                 await toggleAttendance(lastName, firstName, fullName, isPresent, e);
             }
         });
@@ -596,7 +606,17 @@
         });
 
         // Keep focus on input, but not when interacting with UI elements
+        let lastClickTime = 0;
+        document.addEventListener('click', () => {
+            lastClickTime = Date.now();
+        });
+
         setInterval(() => {
+            // Don't refocus if user just clicked (within last 3 seconds)
+            if (Date.now() - lastClickTime < 3000) {
+                return;
+            }
+
             const activeElement = document.activeElement;
             // Only refocus if nothing else is focused or if body is focused
             if (!activeElement || activeElement === document.body) {
