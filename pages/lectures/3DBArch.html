@@ -224,72 +224,6 @@
             </div>
         </div>
 
-        <!-- Slide 15: Three-Level Architecture -->
-        <div class="slide">
-            <h1>ANSI-SPARC Three-Level Architecture</h1>
-            <p>Standard architecture for database systems:</p>
-
-            <div class="erd-diagram" style="padding: 30px;">
-                <pre style="text-align: center; font-size: 1.1em;">
-    ┌─────────────────────────┐
-    │    External Level       │ ← User Views
-    │  (Individual User Views)│
-    └────────────┬────────────┘
-                 │ External/Conceptual Mapping
-                 ▼
-    ┌─────────────────────────┐
-    │   Conceptual Level      │ ← Logical Structure
-    │  (Community User View)  │
-    └────────────┬────────────┘
-                 │ Conceptual/Internal Mapping
-                 ▼
-    ┌─────────────────────────┐
-    │    Internal Level       │ ← Physical Storage
-    │  (Storage Structure)    │
-    └─────────────────────────┘
-                </pre>
-            </div>
-
-            <div class="tip-box">
-                <strong>Key Benefit:</strong> Data independence - changes at one level don't affect other levels.
-            </div>
-        </div>
-
-        <!-- Slide 16: Architecture Levels Explained -->
-        <div class="slide">
-            <h1>Understanding Architecture Levels</h1>
-
-            <div class="demo-box">
-                <h3>1. External Level (View Level)</h3>
-                <ul>
-                    <li>Individual user views of the database</li>
-                    <li>Different views for different user groups</li>
-                    <li>Security through view restrictions</li>
-                    <li>Customized data presentation</li>
-                </ul>
-            </div>
-
-            <div class="demo-box">
-                <h3>2. Conceptual Level (Logical Level)</h3>
-                <ul>
-                    <li>Community view of entire database</li>
-                    <li>Describes what data is stored</li>
-                    <li>Relationships between data</li>
-                    <li>Constraints and security rules</li>
-                </ul>
-            </div>
-
-            <div class="demo-box">
-                <h3>3. Internal Level (Physical Level)</h3>
-                <ul>
-                    <li>Physical storage structures</li>
-                    <li>File organizations and indexes</li>
-                    <li>Storage allocation</li>
-                    <li>Data compression and encryption</li>
-                </ul>
-            </div>
-        </div>
-
         <!-- Slide 17: Database Views -->
         <div class="slide">
             <h1>Database Views</h1>
@@ -918,11 +852,11 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- ALTERNATIVE: Hands-On DBMS Exploration Exercise -->
+        <!-- Slide 30: Exercise 2 - DBMS Exploration -->
 
-        <!-- Slide 33a: Alternative Exercise - DBMS Internals -->
+        <!-- Slide 30: Exercise 2 - DBMS Internals -->
         <div class="slide">
-            <h1>Alternative Exercise: Explore DBMS Internals <span class="timer-badge">20 min</span></h1>
+            <h1>Exercise 2: Explore DBMS Internals <span class="timer-badge">20 min</span></h1>
             <h2>Individual Hands-On: See Behind the Scenes</h2>
 
             <div class="demo-box">
@@ -948,7 +882,7 @@ Stores    Stores    Stores
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
 
-        <!-- Slide 33b: Part 1 - System Catalog Exploration -->
+        <!-- Slide 30a: Part 1 - System Catalog Exploration -->
         <div class="slide">
             <h1>Part 1: System Catalog Exploration <span class="emoji">🔍</span></h1>
             <h2>How Does the DBMS Know About Your Tables?</h2>
@@ -989,7 +923,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 33c: Part 2 - Transaction Management -->
+        <!-- Slide 30b: Part 2 - Transaction Management -->
         <div class="slide">
             <h1>Part 2: Transaction Management <span class="emoji">🔄</span></h1>
             <h2>Experience ACID Properties in Action</h2>
@@ -1033,7 +967,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 33d: Part 3 - Concurrency & Locks -->
+        <!-- Slide 30c: Part 3 - Concurrency & Locks -->
         <div class="slide">
             <h1>Part 3: Concurrency & Locks <span class="emoji">🔒</span></h1>
             <h2>How Does the DBMS Handle Multiple Users?</h2>
@@ -1092,7 +1026,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 33e: Part 4 - Query Processing -->
+        <!-- Slide 30d: Part 4 - Query Processing -->
         <div class="slide">
             <h1>Part 4: Query Processing Internals <span class="emoji">⚡</span></h1>
             <h2>How Does the DBMS Execute Your Queries?</h2>
@@ -1140,7 +1074,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 33f: DBMS Exploration Summary -->
+        <!-- Slide 30e: DBMS Exploration Summary -->
         <div class="slide">
             <h1>DBMS Internals: What You Discovered <span class="emoji">🎯</span></h1>
 
