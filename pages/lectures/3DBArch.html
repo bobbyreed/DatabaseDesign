@@ -306,12 +306,12 @@
             </div>
 
             <div class="sql-example">
-                <span class="sql-comment">-- Creating a view for students</span><br>
-                <span class="sql-keyword">CREATE VIEW</span> ActiveStudents <span class="sql-keyword">AS</span><br>
-                <span class="sql-keyword">SELECT</span> student_id, name, email<br>
-                <span class="sql-keyword">FROM</span> Students<br>
-                <span class="sql-keyword">WHERE</span> status = <span class="sql-string">'Active'</span><br>
-                &nbsp;&nbsp;<span class="sql-keyword">AND</span> enrollment_date > <span class="sql-string">'2024-01-01'</span>;
+                <span class="sql-comment">-- Creating a view for available movies from movie_rental_db</span><br>
+                <span class="sql-keyword">CREATE VIEW</span> AvailableMovies <span class="sql-keyword">AS</span><br>
+                <span class="sql-keyword">SELECT</span> movie_id, title, director, genre<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">WHERE</span> available = <span class="sql-keyword">TRUE</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> release_year >= <span class="sql-string">2020</span>;
             </div>
 
             <div class="tip-box">
@@ -357,80 +357,88 @@
         <!-- Slide 20: Practice Activity 1 -->
         <div class="slide">
             <h1>Design Challenge <span class="emoji">🏗️</span></h1>
-            <h2>University Registration System</h2>
-            
+            <h2>Extend Your Movie Rental Database</h2>
+
             <div class="demo-box">
                 <h3>Scenario:</h3>
-                <p>Design a database architecture for OCU's registration system that handles:</p>
+                <p>Extend your movie_rental_db with new features to support a growing rental business:</p>
                 <ul>
-                    <li>Student enrollment in courses</li>
-                    <li>Faculty teaching assignments</li>
-                    <li>Room scheduling</li>
-                    <li>Grade management</li>
+                    <li>Add Reviews table: Members can rate and review movies</li>
+                    <li>Add Employees table: Track staff who process rentals</li>
+                    <li>Add Inventory table: Support multiple copies of each movie</li>
+                    <li>Consider: Late fees, membership tiers, reservation system</li>
                 </ul>
             </div>
 
             <div class="comparison-table">
                 <div class="column">
-                    <h3>Identify:</h3>
+                    <h3>Architectural Decisions:</h3>
                     <ul>
-                        <li>Main entities</li>
-                        <li>Key attributes</li>
-                        <li>Relationships</li>
-                        <li>User views needed</li>
+                        <li>New entities needed</li>
+                        <li>Relationships to existing tables</li>
+                        <li>Constraints and keys</li>
+                        <li>Data types for new fields</li>
                     </ul>
                 </div>
                 <div class="column">
                     <h3>Consider:</h3>
                     <ul>
-                        <li>Different user roles</li>
-                        <li>Security requirements</li>
-                        <li>Performance needs</li>
-                        <li>Scalability issues</li>
+                        <li>Different user access levels</li>
+                        <li>Rating validation (1-5 stars)</li>
+                        <li>Inventory tracking accuracy</li>
+                        <li>Query performance</li>
                     </ul>
                 </div>
             </div>
 
             <div class="tip-box">
-                <strong>Discussion:</strong> How would this differ from a file-based approach? (10 minutes)
+                <strong>Discussion:</strong> How do these extensions fit into the three-level architecture? (10 minutes)
             </div>
         </div>
 
         <!-- Slide 21: Real-World Example -->
         <div class="slide">
-            <h1>Case Study: E-Commerce Platform</h1>
-            
+            <h1>Your Movie Rental Database</h1>
+            <h2>What You Built in Lecture 2 <span class="emoji">🎬</span></h2>
+
             <div class="erd-diagram">
                 <pre>
-┌─────────────┐         ┌─────────────┐         ┌─────────────┐
-│  CUSTOMER   │         │    ORDER    │         │   PRODUCT   │
-├─────────────┤         ├─────────────┤         ├─────────────┤
-│ customer_id │◄────────│ order_id    │         │ product_id  │
-│ name        │  1:N    │ customer_id │         │ name        │
-│ email       │         │ order_date  │◄────────│ price       │
-│ address     │         │ total       │  N:M    │ stock       │
-└─────────────┘         └─────────────┘         └─────────────┘
-                               │
-                               │ 1:N
-                               ▼
-                        ┌─────────────┐
-                        │ ORDER_ITEM  │
-                        ├─────────────┤
-                        │ order_id    │
-                        │ product_id  │
-                        │ quantity    │
-                        │ price       │
-                        └─────────────┘
+┌──────────────┐         ┌──────────────┐         ┌──────────────┐
+│   STUDIOS    │         │    MOVIES    │         │   MEMBERS    │
+├──────────────┤         ├──────────────┤         ├──────────────┤
+│ studio_id PK │◄────┐   │ movie_id  PK │   ┌────►│ member_id PK │
+│ name         │     │   │ title        │   │     │ name         │
+│ country      │     │   │ director     │   │     │ email        │
+│ founded_year │     └───│ studio_id FK │   │     │ join_date    │
+└──────────────┘         │ release_year │   │     └──────────────┘
+                         │ genre        │   │
+                         │ rating       │   │
+                         │ available    │   │
+                         └──────┬───────┘   │
+                                │ 1:N       │ 1:N
+                                │           │
+                                └─────┬─────┘
+                                      │
+                                      ▼
+                               ┌──────────────┐
+                               │   RENTALS    │
+                               ├──────────────┤
+                               │ rental_id PK │
+                               │ movie_id  FK │
+                               │ member_id FK │
+                               │ rental_date  │
+                               │ return_date  │
+                               └──────────────┘
                 </pre>
             </div>
 
             <div class="demo-box">
                 <h3>Architecture Considerations:</h3>
                 <ul>
-                    <li>High transaction volume</li>
-                    <li>Real-time inventory updates</li>
-                    <li>Multiple payment gateways</li>
-                    <li>Customer data security</li>
+                    <li><strong>External Level:</strong> Different views for members, employees, managers</li>
+                    <li><strong>Conceptual Level:</strong> 4 entities with clear relationships</li>
+                    <li><strong>Internal Level:</strong> Indexed on frequently searched fields (genre, studio)</li>
+                    <li><strong>Scalability:</strong> Ready to add Reviews, Inventory, Employees</li>
                 </ul>
             </div>
         </div>
@@ -471,60 +479,60 @@
         <!-- Slide 23: Practice Activity 2 -->
         <div class="slide">
             <h1>Group Exercise: Architecture Design</h1>
-            
+
             <div class="demo-box">
                 <h3>Task: Design Views for Different Users</h3>
-                <p>For a hospital management system, create appropriate views for:</p>
+                <p>For your movie_rental_db, create appropriate views for each user role:</p>
             </div>
 
             <div class="comparison-table">
                 <div class="column">
                     <div class="demo-box">
-                        <h4>👨‍⚕️ Doctors</h4>
+                        <h4>👔 Managers</h4>
                         <ul>
-                            <li>Patient medical history</li>
-                            <li>Current prescriptions</li>
-                            <li>Lab results</li>
-                            <li>Appointment schedule</li>
+                            <li>Revenue analytics by movie/genre</li>
+                            <li>Member statistics and trends</li>
+                            <li>Inventory and availability reports</li>
+                            <li>Employee performance metrics</li>
                         </ul>
                     </div>
-                    
+
                     <div class="demo-box">
-                        <h4>👩‍⚕️ Nurses</h4>
+                        <h4>👨‍💼 Employees</h4>
                         <ul>
-                            <li>Patient vitals</li>
-                            <li>Medication schedules</li>
-                            <li>Room assignments</li>
-                            <li>Care instructions</li>
+                            <li>Current rental transactions</li>
+                            <li>Member contact information</li>
+                            <li>Movie availability status</li>
+                            <li>Overdue rentals to follow up</li>
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="column">
                     <div class="demo-box">
-                        <h4>💼 Administrators</h4>
+                        <h4>🎬 Members (Logged In)</h4>
                         <ul>
-                            <li>Billing information</li>
-                            <li>Insurance details</li>
-                            <li>Resource utilization</li>
-                            <li>Staff schedules</li>
+                            <li>Their rental history</li>
+                            <li>Available movies to rent</li>
+                            <li>Movie ratings and reviews</li>
+                            <li>Their account details</li>
                         </ul>
                     </div>
-                    
+
                     <div class="demo-box">
-                        <h4>🧑 Patients</h4>
+                        <h4>👤 Guests (Public)</h4>
                         <ul>
-                            <li>Appointment history</li>
-                            <li>Test results</li>
-                            <li>Billing statements</li>
-                            <li>Prescription refills</li>
+                            <li>Browse available movies (no prices)</li>
+                            <li>Movie titles, genres, ratings</li>
+                            <li>Studio information</li>
+                            <li>Join membership link</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="tip-box">
-                <strong>Consider:</strong> What data should be hidden from each user group? How do we ensure HIPAA compliance?
+                <strong>Consider:</strong> What data should be hidden from each user group? How do we protect member privacy and business data?
             </div>
         </div>
 
@@ -727,31 +735,79 @@
             </div>
         </div>
 
+        <!-- Slide 29b: Real-World Three-Tier Examples -->
+        <div class="slide">
+            <h1>Real-World Example: Movie Rental Web App <span class="emoji">🌐</span></h1>
+            <h2>Three-Tier Architecture in Action</h2>
+
+            <div class="demo-box">
+                <h3>Tier 1: Presentation Layer (Browser)</h3>
+                <div class="code-example" style="font-size: 0.85em; margin-top: 10px;">
+<span class="sql-comment">// React component displaying available movies</span><br>
+function MovieCatalog() {<br>
+&nbsp;&nbsp;const [movies, setMovies] = useState([]);<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;// Fetch data from application server<br>
+&nbsp;&nbsp;fetch('/api/movies/available')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.then(response => response.json())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.then(data => setMovies(data));<br>
+}
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Tier 2: Application Server (Node.js/Express)</h3>
+                <div class="code-example" style="font-size: 0.85em; margin-top: 10px;">
+<span class="sql-comment">// API endpoint with business logic</span><br>
+app.get('/api/movies/available', async (req, res) => {<br>
+&nbsp;&nbsp;// Validate user session<br>
+&nbsp;&nbsp;if (!req.session.userId) return res.status(401);<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;// Query database<br>
+&nbsp;&nbsp;const movies = await db.query(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'SELECT * FROM Movies WHERE available = TRUE'<br>
+&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;res.json(movies);<br>
+});
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Tier 3: Database (PostgreSQL)</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>DBMS parses</strong> the SQL query</li>
+                    <li><strong>Query optimizer</strong> decides to use index on 'available' column</li>
+                    <li><strong>Execution engine</strong> retrieves rows from physical storage</li>
+                    <li><strong>Returns result set</strong> to application server</li>
+                </ul>
+            </div>
+        </div>
+
         <!-- Slide 30: Exercise 2 - Centralized vs Distributed Debate -->
         <div class="slide">
             <h1>Exercise 2: Architecture Debate <span class="timer-badge">20 min</span></h1>
-            <h2>Group Exercise: Centralized vs. Distributed Databases</h2>
+            <h2>Group Exercise: Scaling Your Movie Rental Database</h2>
 
             <div class="warning-box">
                 <h3>Your Assignment:</h3>
-                <p style="font-size: 1.15em;">Your group will be assigned either <strong>Centralized Architecture</strong> or <strong>Distributed Architecture</strong>. You must defend your assigned architecture for a <strong>global banking system</strong>.</p>
+                <p style="font-size: 1.15em;">Your group will be assigned either <strong>Centralized Architecture</strong> or <strong>Distributed Architecture</strong>. You must defend your assigned architecture for scaling <strong>movie_rental_db nationwide</strong>.</p>
             </div>
 
             <div class="comparison-table">
                 <div class="column">
                     <div class="demo-box">
                         <h3>🏢 Centralized Architecture</h3>
-                        <p><strong>Definition:</strong> Single database instance serving all users, typically hosted in one primary data center</p>
+                        <p><strong>Definition:</strong> Single movie_rental_db instance serving all rental locations, hosted in one data center</p>
                         <div class="erd-diagram" style="font-size: 0.8em; padding: 15px;">
                             <pre>
-        All Users
-           │││
-           ▼▼▼
-    ┌──────────────┐
-    │   Single     │
-    │   Database   │
-    │   Server     │
-    └──────────────┘
+   All Stores
+     │││
+     ▼▼▼
+┌──────────────┐
+│   Single     │
+│ movie_rental │
+│   _db        │
+└──────────────┘
                             </pre>
                         </div>
                     </div>
@@ -759,15 +815,16 @@
                 <div class="column">
                     <div class="demo-box">
                         <h3>🌐 Distributed Architecture</h3>
-                        <p><strong>Definition:</strong> Multiple database instances across geographic locations, data partitioned or replicated</p>
+                        <p><strong>Definition:</strong> Multiple movie_rental_db instances across regions, data partitioned or replicated</p>
                         <div class="erd-diagram" style="font-size: 0.8em; padding: 15px;">
                             <pre>
-  Users    Users    Users
-   │││      │││      │││
-   ▼▼▼      ▼▼▼      ▼▼▼
+  West     Central    East
+Stores    Stores    Stores
+  │││      │││      │││
+  ▼▼▼      ▼▼▼      ▼▼▼
 ┌──────┐ ┌──────┐ ┌──────┐
 │ DB1  │ │ DB2  │ │ DB3  │
-│ US   │ │ EU   │ │ Asia │
+│ West │ │Central│ │ East │
 └───┬──┘ └──┬───┘ └──┬───┘
     └────┬─────┬──────┘
        Sync/Replication
@@ -778,7 +835,7 @@
             </div>
 
             <div class="tip-box">
-                <strong>Context:</strong> The bank handles millions of transactions daily across 50 countries. Consider performance AND maintenance!
+                <strong>Context:</strong> Your movie rental chain is expanding from 5 local stores to 200+ stores nationwide. Consider rental transactions, inventory tracking, member accounts across locations!
             </div>
         </div>
 
@@ -793,7 +850,7 @@
                         <ul style="margin-top: 10px;">
                             <li>Focus on performance benefits (response time, throughput, scalability)</li>
                             <li>Focus on maintenance advantages (updates, backups, consistency)</li>
-                            <li>Provide specific examples for the banking scenario</li>
+                            <li>Provide specific examples for the movie rental expansion</li>
                         </ul>
                     </li>
                     <li><strong>Identify THREE CONS of your assigned architecture (8 min):</strong>
@@ -813,7 +870,7 @@
             </div>
 
             <div class="tip-box">
-                <strong>Pro Tip:</strong> Think about real banking scenarios - international wire transfers, ATM withdrawals, fraud detection systems.
+                <strong>Pro Tip:</strong> Think about real movie rental scenarios - member renting at different locations, inventory transfers between stores, checking movie availability across regions, analyzing rental trends.
             </div>
         </div>
 
@@ -826,15 +883,15 @@
                     <div class="demo-box">
                         <h3>✅ Centralized Pros:</h3>
                         <ul style="font-size: 0.95em;">
-                            <li><strong>Data Consistency:</strong> Single source of truth, no sync issues</li>
-                            <li><strong>Simpler Maintenance:</strong> One system to update/patch/backup</li>
-                            <li><strong>Lower Cost:</strong> Single infrastructure to manage</li>
+                            <li><strong>Data Consistency:</strong> Real-time inventory across all stores</li>
+                            <li><strong>Simpler Maintenance:</strong> One database to update/backup</li>
+                            <li><strong>Lower Cost:</strong> Single infrastructure, easier management</li>
                         </ul>
                         <h3>❌ Centralized Cons:</h3>
                         <ul style="font-size: 0.95em;">
-                            <li><strong>Single Point of Failure:</strong> Outage affects all users globally</li>
-                            <li><strong>Latency Issues:</strong> Users far from server experience delays</li>
-                            <li><strong>Scaling Limits:</strong> Vertical scaling eventually hits ceiling</li>
+                            <li><strong>Single Point of Failure:</strong> Outage shuts down all stores</li>
+                            <li><strong>Latency Issues:</strong> East coast stores slow if server is west</li>
+                            <li><strong>Scaling Limits:</strong> Peak hours (Friday night) may overwhelm</li>
                         </ul>
                     </div>
                 </div>
@@ -842,22 +899,295 @@
                     <div class="demo-box">
                         <h3>✅ Distributed Pros:</h3>
                         <ul style="font-size: 0.95em;">
-                            <li><strong>High Availability:</strong> Regional failures don't kill system</li>
-                            <li><strong>Low Latency:</strong> Users connect to nearest server</li>
-                            <li><strong>Horizontal Scaling:</strong> Add more nodes as needed</li>
+                            <li><strong>High Availability:</strong> West coast outage doesn't affect East</li>
+                            <li><strong>Low Latency:</strong> Each region has local database access</li>
+                            <li><strong>Horizontal Scaling:</strong> Add regional nodes for new stores</li>
                         </ul>
                         <h3>❌ Distributed Cons:</h3>
                         <ul style="font-size: 0.95em;">
-                            <li><strong>Consistency Challenges:</strong> CAP theorem - can't have it all</li>
-                            <li><strong>Complex Maintenance:</strong> Multiple systems, sync protocols</li>
-                            <li><strong>Higher Cost:</strong> Infrastructure across multiple regions</li>
+                            <li><strong>Inventory Sync Issues:</strong> Member rents same movie twice?</li>
+                            <li><strong>Complex Maintenance:</strong> Updates across multiple databases</li>
+                            <li><strong>Higher Cost:</strong> Multiple servers and sync infrastructure</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="tip-box">
-                <strong>Real-World Insight:</strong> Most large banks use a hybrid approach - centralized for critical transactions, distributed for read-heavy operations like account inquiries.
+                <strong>Real-World Insight:</strong> Netflix uses a hybrid approach - centralized user profiles for consistency, distributed content delivery (CDN) for low-latency streaming.
+            </div>
+        </div>
+
+        <!-- ALTERNATIVE: Hands-On DBMS Exploration Exercise -->
+
+        <!-- Slide 33a: Alternative Exercise - DBMS Internals -->
+        <div class="slide">
+            <h1>Alternative Exercise: Explore DBMS Internals <span class="timer-badge">20 min</span></h1>
+            <h2>Individual Hands-On: See Behind the Scenes</h2>
+
+            <div class="demo-box">
+                <h3>Why This Exercise?</h3>
+                <p style="font-size: 1.1em;">Instead of debating theoretical concepts, let's <strong>directly interact</strong> with the DBMS to see how it actually works under the hood. You'll explore the mechanisms that make database architecture possible.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>What You'll Discover:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.8;">
+                    <li>🔍 <strong>System Catalog:</strong> How the DBMS stores metadata about your database</li>
+                    <li>🔒 <strong>Locks & Concurrency:</strong> How the DBMS prevents data conflicts</li>
+                    <li>📊 <strong>Transaction Management:</strong> How ACID properties work in practice</li>
+                    <li>⚡ <strong>Query Execution:</strong> How the DBMS processes your queries internally</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>Tools Needed:</h3>
+                <p>DataGrip connected to your movie_rental_db, or PostgreSQL CLI (psql)</p>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Slide 33b: Part 1 - System Catalog Exploration -->
+        <div class="slide">
+            <h1>Part 1: System Catalog Exploration <span class="emoji">🔍</span></h1>
+            <h2>How Does the DBMS Know About Your Tables?</h2>
+
+            <div class="demo-box">
+                <h3>The System Catalog</h3>
+                <p style="font-size: 1.05em;">Every DBMS maintains internal tables (metadata) describing your database structure. PostgreSQL stores this in the <code>pg_catalog</code> schema.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Task 1: Explore Your Database Metadata (5 minutes)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Run these queries to see what the DBMS knows about your movie_rental_db:</p>
+
+                <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
+<span class="sql-comment">-- Query 1: List all tables in your database</span><br>
+<span class="sql-keyword">SELECT</span> tablename, schemaname<br>
+<span class="sql-keyword">FROM</span> pg_tables<br>
+<span class="sql-keyword">WHERE</span> schemaname = <span class="sql-string">'public'</span>;
+                </div>
+
+                <div class="sql-example" style="font-size: 0.85em; margin-top: 15px;">
+<span class="sql-comment">-- Query 2: View columns for Movies table</span><br>
+<span class="sql-keyword">SELECT</span> column_name, data_type, is_nullable, column_default<br>
+<span class="sql-keyword">FROM</span> information_schema.columns<br>
+<span class="sql-keyword">WHERE</span> table_name = <span class="sql-string">'movies'</span>;
+                </div>
+
+                <div class="sql-example" style="font-size: 0.85em; margin-top: 15px;">
+<span class="sql-comment">-- Query 3: List all indexes on your tables</span><br>
+<span class="sql-keyword">SELECT</span> tablename, indexname, indexdef<br>
+<span class="sql-keyword">FROM</span> pg_indexes<br>
+<span class="sql-keyword">WHERE</span> schemaname = <span class="sql-string">'public'</span>;
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> The DBMS stores metadata about YOUR data! This is how it enforces constraints and optimizes queries.
+            </div>
+        </div>
+
+        <!-- Slide 33c: Part 2 - Transaction Management -->
+        <div class="slide">
+            <h1>Part 2: Transaction Management <span class="emoji">🔄</span></h1>
+            <h2>Experience ACID Properties in Action</h2>
+
+            <div class="demo-box">
+                <h3>What is a Transaction?</h3>
+                <p style="font-size: 1.05em;">A transaction is a logical unit of work that must be completed entirely or not at all (Atomicity). Let's see this in action!</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Task 2: Test Transaction Rollback (5 minutes)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Simulate a failed rental transaction:</p>
+
+                <div class="sql-example" style="font-size: 0.8em; margin-top: 10px;">
+<span class="sql-comment">-- Start a transaction block</span><br>
+<span class="sql-keyword">BEGIN</span>;<br><br>
+
+<span class="sql-comment">-- Attempt to rent a movie (update inventory)</span><br>
+<span class="sql-keyword">UPDATE</span> Movies<br>
+<span class="sql-keyword">SET</span> available = <span class="sql-keyword">FALSE</span><br>
+<span class="sql-keyword">WHERE</span> movie_id = <span class="sql-string">1</span>;<br><br>
+
+<span class="sql-comment">-- Check current state (movie should be unavailable)</span><br>
+<span class="sql-keyword">SELECT</span> movie_id, title, available<br>
+<span class="sql-keyword">FROM</span> Movies<br>
+<span class="sql-keyword">WHERE</span> movie_id = <span class="sql-string">1</span>;<br><br>
+
+<span class="sql-comment">-- Oops! Customer's credit card declined - ROLLBACK</span><br>
+<span class="sql-keyword">ROLLBACK</span>;<br><br>
+
+<span class="sql-comment">-- Check state again (movie should be available again!)</span><br>
+<span class="sql-keyword">SELECT</span> movie_id, title, available<br>
+<span class="sql-keyword">FROM</span> Movies<br>
+<span class="sql-keyword">WHERE</span> movie_id = <span class="sql-string">1</span>;
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h3>What Happened?</h3>
+                <p style="font-size: 1.0em;">The DBMS <strong>undid</strong> your changes! This is the "Atomicity" in ACID - all or nothing.</p>
+            </div>
+        </div>
+
+        <!-- Slide 33d: Part 3 - Concurrency & Locks -->
+        <div class="slide">
+            <h1>Part 3: Concurrency & Locks <span class="emoji">🔒</span></h1>
+            <h2>How Does the DBMS Handle Multiple Users?</h2>
+
+            <div class="demo-box">
+                <h3>The Concurrency Challenge</h3>
+                <p style="font-size: 1.05em;">When two customers try to rent the last copy of a movie simultaneously, how does the DBMS prevent conflicts?</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Task 3: View Active Locks (5 minutes)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Open TWO DataGrip console windows (or two psql sessions):</p>
+
+                <div class="comparison-table">
+                    <div class="column">
+                        <div class="demo-box">
+                            <h4>Session 1 (Window 1):</h4>
+                            <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Start transaction</span><br>
+<span class="sql-keyword">BEGIN</span>;<br><br>
+
+<span class="sql-comment">-- Update a movie</span><br>
+<span class="sql-keyword">UPDATE</span> Movies<br>
+<span class="sql-keyword">SET</span> available = <span class="sql-keyword">FALSE</span><br>
+<span class="sql-keyword">WHERE</span> movie_id = <span class="sql-string">1</span>;<br><br>
+
+<span class="sql-comment">-- DON'T COMMIT YET!</span><br>
+<span class="sql-comment">-- Leave transaction open</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="demo-box">
+                            <h4>Session 2 (Window 2):</h4>
+                            <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- View current locks</span><br>
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;locktype,<br>
+&nbsp;&nbsp;relation::regclass,<br>
+&nbsp;&nbsp;mode,<br>
+&nbsp;&nbsp;granted<br>
+<span class="sql-keyword">FROM</span> pg_locks<br>
+<span class="sql-keyword">WHERE</span> relation::regclass::text<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span class="sql-string">'movies'</span>;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="font-size: 0.95em; margin-top: 15px;"><strong>What you'll see:</strong> Session 1 holds a lock on the Movies table! This prevents other transactions from interfering.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Remember:</strong> Run COMMIT or ROLLBACK in Session 1 to release the lock when done!
+            </div>
+        </div>
+
+        <!-- Slide 33e: Part 4 - Query Processing -->
+        <div class="slide">
+            <h1>Part 4: Query Processing Internals <span class="emoji">⚡</span></h1>
+            <h2>How Does the DBMS Execute Your Queries?</h2>
+
+            <div class="demo-box">
+                <h3>Behind Every Query</h3>
+                <p style="font-size: 1.05em;">When you run a SQL query, the DBMS performs multiple steps: parsing, planning, optimization, and execution.</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Task 4: View Query Execution Statistics (5 minutes)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">PostgreSQL tracks statistics about query execution:</p>
+
+                <div class="sql-example" style="font-size: 0.8em; margin-top: 10px;">
+<span class="sql-comment">-- View query statistics for Movies table</span><br>
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;schemaname,<br>
+&nbsp;&nbsp;tablename,<br>
+&nbsp;&nbsp;seq_scan <span class="sql-keyword">AS</span> sequential_scans,<br>
+&nbsp;&nbsp;seq_tup_read <span class="sql-keyword">AS</span> rows_read_seq,<br>
+&nbsp;&nbsp;idx_scan <span class="sql-keyword">AS</span> index_scans,<br>
+&nbsp;&nbsp;idx_tup_fetch <span class="sql-keyword">AS</span> rows_fetched_idx,<br>
+&nbsp;&nbsp;n_tup_ins <span class="sql-keyword">AS</span> inserts,<br>
+&nbsp;&nbsp;n_tup_upd <span class="sql-keyword">AS</span> updates,<br>
+&nbsp;&nbsp;n_tup_del <span class="sql-keyword">AS</span> deletes<br>
+<span class="sql-keyword">FROM</span> pg_stat_user_tables<br>
+<span class="sql-keyword">WHERE</span> tablename = <span class="sql-string">'movies'</span>;
+                </div>
+
+                <div class="sql-example" style="font-size: 0.8em; margin-top: 15px;">
+<span class="sql-comment">-- See how many times each index has been used</span><br>
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;indexrelname <span class="sql-keyword">AS</span> index_name,<br>
+&nbsp;&nbsp;idx_scan <span class="sql-keyword">AS</span> times_used,<br>
+&nbsp;&nbsp;idx_tup_read <span class="sql-keyword">AS</span> tuples_read,<br>
+&nbsp;&nbsp;idx_tup_fetch <span class="sql-keyword">AS</span> tuples_fetched<br>
+<span class="sql-keyword">FROM</span> pg_stat_user_indexes<br>
+<span class="sql-keyword">WHERE</span> schemaname = <span class="sql-string">'public'</span>;
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h3>Key Insight:</h3>
+                <p style="font-size: 1.0em;">The DBMS tracks EVERY operation! This data helps it optimize future queries and helps DBAs tune performance.</p>
+            </div>
+        </div>
+
+        <!-- Slide 33f: DBMS Exploration Summary -->
+        <div class="slide">
+            <h1>DBMS Internals: What You Discovered <span class="emoji">🎯</span></h1>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>System Catalog</h3>
+                        <ul style="font-size: 0.95em; line-height: 1.6;">
+                            <li>DBMS stores metadata about tables, columns, indexes</li>
+                            <li>You can query this metadata like any other data</li>
+                            <li>This enables dynamic schema inspection</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>Transactions</h3>
+                        <ul style="font-size: 0.95em; line-height: 1.6;">
+                            <li>BEGIN, COMMIT, ROLLBACK control transaction boundaries</li>
+                            <li>Atomicity ensures all-or-nothing execution</li>
+                            <li>Protects data integrity during failures</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Concurrency Control</h3>
+                        <ul style="font-size: 0.95em; line-height: 1.6;">
+                            <li>DBMS uses locks to prevent conflicts</li>
+                            <li>You can view active locks in pg_locks</li>
+                            <li>Isolation ensures transactions don't interfere</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>Query Processing</h3>
+                        <ul style="font-size: 0.95em; line-height: 1.6;">
+                            <li>DBMS tracks execution statistics</li>
+                            <li>Helps optimize query performance</li>
+                            <li>Shows which indexes are actually used</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Architecture Connection:</strong> These mechanisms implement the DBMS controlled access features we discussed earlier - security, integrity, concurrency, and recovery!
             </div>
         </div>
 
@@ -906,20 +1236,20 @@
         <!-- Slide 34: Part 1 - Architecture Discovery -->
         <div class="slide">
             <h1>Part 1: Architecture Discovery (40 pts)</h1>
-            <h2>Explore Your Library Database in DataGrip</h2>
+            <h2>Explore Your Movie Rental Database in DataGrip</h2>
 
             <div class="exercise-step">
                 <h3>Task Overview:</h3>
-                <p style="font-size: 1.15em;">Use DataGrip to thoroughly document the <strong>physical and logical architecture</strong> of your Library database from Lecture 2. You'll extract information that database architects use daily.</p>
+                <p style="font-size: 1.15em;">Use DataGrip to thoroughly document the <strong>physical and logical architecture</strong> of your movie_rental_db from Lecture 2. You'll extract information that database architects use daily.</p>
             </div>
 
             <div class="activity-box">
                 <h3>Step 1: Generate Database Documentation (10 pts)</h3>
-                <p style="font-size: 1.0em; margin-bottom: 10px;">In DataGrip, right-click your Library database:</p>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">In DataGrip, right-click your movie_rental_db database:</p>
                 <ol style="font-size: 1.0em; line-height: 1.7;">
                     <li>Select <strong>Diagrams → Show Visualization</strong></li>
                     <li>Arrange tables to show relationships clearly</li>
-                    <li>Export diagram as PNG: <code>library_erd_diagram.png</code></li>
+                    <li>Export diagram as PNG: <code>movie_rental_erd_diagram.png</code></li>
                     <li><strong>Required:</strong> Diagram must show all tables, PKs, FKs, and relationships</li>
                 </ol>
             </div>
@@ -928,10 +1258,10 @@
                 <h3>Step 2: Extract Physical Schema (15 pts)</h3>
                 <p style="font-size: 1.0em; margin-bottom: 10px;">Document the complete DDL (Data Definition Language):</p>
                 <ol style="font-size: 1.0em; line-height: 1.7;">
-                    <li>In DataGrip, select all your tables (Books, Members, Borrowing, Publishers)</li>
+                    <li>In DataGrip, select all your tables (Movies, Members, Rentals, Studios)</li>
                     <li>Right-click → SQL Scripts → DDL</li>
                     <li>Copy the complete CREATE TABLE statements</li>
-                    <li>Save to file: <code>library_schema.sql</code></li>
+                    <li>Save to file: <code>movie_rental_schema.sql</code></li>
                     <li><strong>Include:</strong> All constraints (PRIMARY KEY, FOREIGN KEY, NOT NULL, UNIQUE)</li>
                 </ol>
             </div>
@@ -985,21 +1315,21 @@
 
             <div class="activity-box">
                 <h3>Step 2: Implement Tables in Each Layer (15 pts)</h3>
-                <p style="font-size: 1.0em; margin-bottom: 10px;">Recreate your Books and Members tables in each schema:</p>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Recreate your Movies and Members tables in each schema:</p>
                 <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-keyword">CREATE TABLE</span> staging.books (<br>
-&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+<span class="sql-keyword">CREATE TABLE</span> staging.movies (<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200),<br>
-&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100),<br>
+&nbsp;&nbsp;director <span class="sql-keyword">VARCHAR</span>(100),<br>
 &nbsp;&nbsp;data_quality_flag <span class="sql-keyword">VARCHAR</span>(20), <span class="sql-comment">-- NEW: Track validation status</span><br>
 &nbsp;&nbsp;import_timestamp <span class="sql-keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span><br>
 );<br><br>
 
-<span class="sql-keyword">CREATE TABLE</span> production.books (<br>
-&nbsp;&nbsp;book_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+<span class="sql-keyword">CREATE TABLE</span> production.movies (<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
-&nbsp;&nbsp;author <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
-&nbsp;&nbsp;isbn <span class="sql-keyword">VARCHAR</span>(13) <span class="sql-keyword">UNIQUE</span><br>
+&nbsp;&nbsp;director <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;genre <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span><br>
 );
                 </div>
                 <p style="font-size: 0.95em; margin-top: 10px;"><strong>Note:</strong> Staging has relaxed constraints; Production enforces strict rules</p>
@@ -1009,14 +1339,14 @@
                 <h3>Step 3: Create Reporting Views (15 pts)</h3>
                 <div class="sql-example" style="font-size: 0.8em;">
 <span class="sql-comment">-- Create abstraction layer for reporting tier</span><br>
-<span class="sql-keyword">CREATE VIEW</span> reporting.book_summary <span class="sql-keyword">AS</span><br>
+<span class="sql-keyword">CREATE VIEW</span> reporting.movie_summary <span class="sql-keyword">AS</span><br>
 <span class="sql-keyword">SELECT</span><br>
-&nbsp;&nbsp;b.title,<br>
-&nbsp;&nbsp;b.author,<br>
-&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(br.borrowing_id) <span class="sql-keyword">AS</span> times_borrowed<br>
-<span class="sql-keyword">FROM</span> production.books b<br>
-<span class="sql-keyword">LEFT JOIN</span> production.borrowing br <span class="sql-keyword">ON</span> b.book_id = br.book_id<br>
-<span class="sql-keyword">GROUP BY</span> b.title, b.author;
+&nbsp;&nbsp;m.title,<br>
+&nbsp;&nbsp;m.director,<br>
+&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(r.rental_id) <span class="sql-keyword">AS</span> times_rented<br>
+<span class="sql-keyword">FROM</span> production.movies m<br>
+<span class="sql-keyword">LEFT JOIN</span> production.rentals r <span class="sql-keyword">ON</span> m.movie_id = r.movie_id<br>
+<span class="sql-keyword">GROUP BY</span> m.title, m.director;
                 </div>
                 <p style="font-size: 0.95em; margin-top: 10px;">Create 2 additional views that represent different "presentation layer" perspectives</p>
             </div>
@@ -1038,17 +1368,17 @@
 
             <div class="activity-box">
                 <h3>Step 1: Baseline Query Performance (5 pts)</h3>
-                <p style="font-size: 1.0em; margin-bottom: 10px;">First, add test data to production.books (at least 1000 rows):</p>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">First, add test data to production.movies (at least 1000 rows):</p>
                 <div class="sql-example" style="font-size: 0.75em;">
 <span class="sql-comment">-- Generate test data using a loop</span><br>
 <span class="sql-keyword">DO</span> $$<br>
 <span class="sql-keyword">BEGIN</span><br>
 &nbsp;&nbsp;<span class="sql-keyword">FOR</span> i <span class="sql-keyword">IN</span> 1..1000 <span class="sql-keyword">LOOP</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> production.books (title, author, isbn)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> production.movies (title, director, genre)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">VALUES</span> (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Book '</span> || i,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Author '</span> || (i % 100),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'ISBN'</span> || LPAD(i::text, 10, <span class="sql-string">'0'</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Movie '</span> || i,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Director '</span> || (i % 100),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Genre '</span> || (i % 10)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;);<br>
 &nbsp;&nbsp;<span class="sql-keyword">END LOOP</span>;<br>
 <span class="sql-keyword">END</span> $$;
@@ -1056,7 +1386,7 @@
                 <p style="font-size: 1.0em; margin-top: 10px;">Run EXPLAIN ANALYZE on this query:</p>
                 <div class="sql-example" style="font-size: 0.85em;">
 <span class="sql-keyword">EXPLAIN ANALYZE</span><br>
-<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> production.books <span class="sql-keyword">WHERE</span> author = <span class="sql-string">'Author 42'</span>;
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> production.movies <span class="sql-keyword">WHERE</span> director = <span class="sql-string">'Director 42'</span>;
                 </div>
                 <p style="font-size: 0.95em; margin-top: 10px;"><strong>Screenshot:</strong> Capture the query plan showing "Seq Scan" (Sequential Scan)</p>
             </div>
@@ -1065,7 +1395,7 @@
                 <h3>Step 2: Create Architectural Optimization (10 pts)</h3>
                 <div class="sql-example" style="font-size: 0.85em;">
 <span class="sql-comment">-- Add index: architectural decision for performance</span><br>
-<span class="sql-keyword">CREATE INDEX</span> idx_books_author <span class="sql-keyword">ON</span> production.books(author);
+<span class="sql-keyword">CREATE INDEX</span> idx_movies_director <span class="sql-keyword">ON</span> production.movies(director);
                 </div>
                 <p style="font-size: 1.0em; margin-top: 10px;">Run the same query again with EXPLAIN ANALYZE</p>
                 <p style="font-size: 0.95em;"><strong>Screenshot:</strong> Capture showing "Index Scan" and compare execution time</p>
@@ -1110,7 +1440,7 @@
                     </li>
                     <li><strong>Screenshots Folder:</strong> <code>Week3_Screenshots/</code>
                         <ul style="margin-top: 8px;">
-                            <li><code>1_erd_diagram.png</code> - ER diagram from DataGrip</li>
+                            <li><code>1_movie_rental_erd_diagram.png</code> - ER diagram from DataGrip</li>
                             <li><code>2_multi_schema.png</code> - DataGrip sidebar showing all schemas</li>
                             <li><code>3_query_plan_before.png</code> - EXPLAIN ANALYZE without index</li>
                             <li><code>4_query_plan_after.png</code> - EXPLAIN ANALYZE with index</li>

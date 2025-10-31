@@ -426,24 +426,254 @@
             </div>
         </div>
 
-        <!-- Slide 11: Activity - Identifying Relations -->
+        <!-- Slide 11a: Car Rental Database Challenge -->
         <div class="slide">
-            <h1>Activity: Design Your First Relations <span class="emoji">💻</span></h1>
-            <div class="activity-box">
-                <h3>10-Minute Exercise</h3>
-                <p>Design relations for a university course registration system:</p>
-                <ol>
-                    <li>Identify the main entities (Students, Courses, Instructors)</li>
-                    <li>Define attributes for each entity</li>
-                    <li>Determine the primary key for each relation</li>
-                    <li>Identify potential foreign key relationships</li>
-                </ol>
+            <h1>Skills Check: Build car_rental_db <span class="emoji">🚗</span></h1>
+            <h2>30-Minute Database Challenge</h2>
 
-                <div class="tip-box" style="margin-top: 20px;">
-                    <strong>Think about:</strong> What makes each tuple unique? What attributes are required vs. optional?
+            <div class="warning-box">
+                <h3>Your Mission:</h3>
+                <p style="font-size: 1.15em;">Create a <strong>complete working database</strong> from scratch for a car rental company. Design the schema, create tables with relationships, populate with data, and run queries—all in 30 minutes!</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>What You'll Build:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.8;">
+                    <li>🚗 <strong>Vehicles:</strong> Track rental cars (make, model, year, VIN, category, daily rate)</li>
+                    <li>👤 <strong>Customers:</strong> Manage customer information (name, license number, contact info)</li>
+                    <li>📋 <strong>Rentals:</strong> Record rental transactions (dates, pickup/return locations, total cost)</li>
+                    <li>📍 <strong>Locations:</strong> Rental branch offices (address, phone, manager)</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>🎯 Goals:</h3>
+                <p>By the end of 30 minutes, you'll demonstrate mastery of relational model concepts: entities, attributes, keys, relationships, integrity constraints, and SQL DDL/DML.</p>
+            </div>
+
+            <button data-timer="30">Start 30-Minute Timer</button>
+        </div>
+
+        <!-- Slide 11b: SQL Syntax Cheat Sheet -->
+        <div class="slide">
+            <h1>SQL Syntax Cheat Sheet <span class="emoji">📋</span></h1>
+            <h2>Keep This Slide Up During The Exercise!</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.8em;">
+                <div class="demo-box">
+                    <h3>CREATE TABLE</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">CREATE TABLE</span> Vehicles (<br>
+&nbsp;&nbsp;vehicle_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;make <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,<br>
+&nbsp;&nbsp;model <span class="sql-keyword">VARCHAR</span>(50),<br>
+&nbsp;&nbsp;year <span class="sql-keyword">INTEGER</span>,<br>
+&nbsp;&nbsp;daily_rate <span class="sql-keyword">DECIMAL</span>(6,2),<br>
+&nbsp;&nbsp;location_id <span class="sql-keyword">INTEGER</span>,<br>
+&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (location_id)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Locations(location_id)<br>
+);
+                    </div>
+                </div>
+
+                <div class="demo-box">
+                    <h3>INSERT DATA</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">INSERT INTO</span> Vehicles<br>
+&nbsp;&nbsp;(make, model, year, daily_rate)<br>
+<span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(<span class="sql-string">'Toyota'</span>, <span class="sql-string">'Camry'</span>, 2023, 45.00),<br>
+&nbsp;&nbsp;(<span class="sql-string">'Honda'</span>, <span class="sql-string">'Civic'</span>, 2022, 40.00);
+                    </div>
+                </div>
+
+                <div class="demo-box">
+                    <h3>SELECT with JOIN</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">SELECT</span> v.make, v.model, r.rental_date<br>
+<span class="sql-keyword">FROM</span> Vehicles v<br>
+<span class="sql-keyword">JOIN</span> Rentals r<br>
+&nbsp;&nbsp;<span class="sql-keyword">ON</span> v.vehicle_id = r.vehicle_id<br>
+<span class="sql-keyword">WHERE</span> r.return_date <span class="sql-keyword">IS NULL</span>;
+                    </div>
+                </div>
+
+                <div class="demo-box">
+                    <h3>ALTER TABLE</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Add column</span><br>
+<span class="sql-keyword">ALTER TABLE</span> Vehicles<br>
+<span class="sql-keyword">ADD COLUMN</span> mileage <span class="sql-keyword">INTEGER</span>;<br><br>
+
+<span class="sql-comment">-- Add constraint</span><br>
+<span class="sql-keyword">ALTER TABLE</span> Rentals<br>
+<span class="sql-keyword">ADD CONSTRAINT</span> fk_customer<br>
+<span class="sql-keyword">FOREIGN KEY</span> (customer_id)<br>
+<span class="sql-keyword">REFERENCES</span> Customers(customer_id);
+                    </div>
+                </div>
+
+                <div class="demo-box">
+                    <h3>AGGREGATE Functions</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total_rentals,<br>
+&nbsp;&nbsp;<span class="sql-keyword">SUM</span>(total_cost) <span class="sql-keyword">AS</span> revenue,<br>
+&nbsp;&nbsp;<span class="sql-keyword">AVG</span>(daily_rate) <span class="sql-keyword">AS</span> avg_rate<br>
+<span class="sql-keyword">FROM</span> Rentals r<br>
+<span class="sql-keyword">JOIN</span> Vehicles v<br>
+&nbsp;&nbsp;<span class="sql-keyword">ON</span> r.vehicle_id = v.vehicle_id;
+                    </div>
+                </div>
+
+                <div class="demo-box">
+                    <h3>UPDATE & DELETE</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Update</span><br>
+<span class="sql-keyword">UPDATE</span> Vehicles<br>
+<span class="sql-keyword">SET</span> daily_rate = 50.00<br>
+<span class="sql-keyword">WHERE</span> make = <span class="sql-string">'Toyota'</span>;<br><br>
+
+<span class="sql-comment">-- Delete</span><br>
+<span class="sql-keyword">DELETE FROM</span> Rentals<br>
+<span class="sql-keyword">WHERE</span> return_date < <span class="sql-string">'2020-01-01'</span>;
+                    </div>
                 </div>
             </div>
-            <button data-timer="10">Start 10-Minute Timer</button>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Create parent tables (Locations, Customers, Vehicles) BEFORE child tables (Rentals) to avoid foreign key errors!
+            </div>
+        </div>
+
+        <!-- Slide 11c: Challenge Requirements -->
+        <div class="slide">
+            <h1>Challenge Requirements & Tasks</h1>
+
+            <div class="activity-box">
+                <h3>Phase 1: Design & Create (15 minutes)</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Create the Database:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Open DataGrip, create new database: <code>car_rental_db</code></li>
+                            <li>Connect to your new database</li>
+                        </ul>
+                    </li>
+                    <li><strong>Design 4 Tables with Relationships:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li><strong>Locations</strong> - Rental branch offices</li>
+                            <li><strong>Vehicles</strong> - Cars available for rent</li>
+                            <li><strong>Customers</strong> - People renting cars</li>
+                            <li><strong>Rentals</strong> - Transaction records linking customers to vehicles</li>
+                        </ul>
+                    </li>
+                    <li><strong>Implement Keys & Constraints:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>PRIMARY KEY on each table (use SERIAL for auto-increment)</li>
+                            <li>FOREIGN KEYS: Vehicles→Locations, Rentals→Vehicles, Rentals→Customers</li>
+                            <li>NOT NULL on critical fields (names, dates, license numbers)</li>
+                            <li>At least ONE CHECK constraint (e.g., daily_rate > 0, rental_date < return_date)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 11d: Data & Queries -->
+        <div class="slide">
+            <h1>Challenge Requirements & Tasks (cont.)</h1>
+
+            <div class="activity-box">
+                <h3>Phase 2: Populate & Query (10 minutes)</h3>
+                <ol start="4" style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Insert Sample Data:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>At least 3 Locations</li>
+                            <li>At least 6 Vehicles (mix of makes/models, distributed across locations)</li>
+                            <li>At least 4 Customers</li>
+                            <li>At least 5 Rentals (some completed with return dates, some still active)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Write & Run 3 Queries:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li><strong>Query 1 (SIMPLE):</strong> List all available vehicles at a specific location</li>
+                            <li><strong>Query 2 (JOIN):</strong> Show all active rentals with customer name and vehicle details</li>
+                            <li><strong>Query 3 (AGGREGATE):</strong> Calculate total revenue per location</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="activity-box">
+                <h3>Phase 3: Present Your ER Diagram (5 minutes)</h3>
+                <ol start="6" style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Generate ER Diagram in DataGrip:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Right-click your database → Diagrams → Show Visualization</li>
+                            <li>Arrange tables to clearly show relationships</li>
+                            <li>Be ready to share your screen and explain your design!</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 11e: Design Hints -->
+        <div class="slide">
+            <h1>Design Hints & Suggestions</h1>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Suggested Attributes</h3>
+                        <p style="font-size: 0.9em;"><strong>Locations:</strong></p>
+                        <ul style="font-size: 0.85em;">
+                            <li>location_id (PK)</li>
+                            <li>name, address, city, state</li>
+                            <li>phone, manager_name</li>
+                        </ul>
+
+                        <p style="font-size: 0.9em; margin-top: 15px;"><strong>Vehicles:</strong></p>
+                        <ul style="font-size: 0.85em;">
+                            <li>vehicle_id (PK)</li>
+                            <li>vin, make, model, year</li>
+                            <li>category (economy/luxury/SUV)</li>
+                            <li>daily_rate, location_id (FK)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>&nbsp;</h3>
+                        <p style="font-size: 0.9em;"><strong>Customers:</strong></p>
+                        <ul style="font-size: 0.85em;">
+                            <li>customer_id (PK)</li>
+                            <li>first_name, last_name</li>
+                            <li>license_number, phone, email</li>
+                        </ul>
+
+                        <p style="font-size: 0.9em; margin-top: 15px;"><strong>Rentals:</strong></p>
+                        <ul style="font-size: 0.85em;">
+                            <li>rental_id (PK)</li>
+                            <li>vehicle_id (FK), customer_id (FK)</li>
+                            <li>rental_date, return_date</li>
+                            <li>pickup_location_id, return_location_id</li>
+                            <li>total_cost</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Common Mistakes to Avoid:</h3>
+                <ul style="font-size: 1.0em;">
+                    <li>🚫 Creating child tables before parent tables (causes FK errors)</li>
+                    <li>🚫 Forgetting NOT NULL on important fields like names and dates</li>
+                    <li>🚫 Using the same data type for all columns (dates are DATE, prices are DECIMAL!)</li>
+                    <li>🚫 Not testing your foreign key relationships with INSERT statements</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Slide 12: Types of Keys Overview -->
