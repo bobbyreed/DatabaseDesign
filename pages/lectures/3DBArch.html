@@ -424,6 +424,41 @@
                 <span class="sql-keyword">ADD FOREIGN KEY</span> (processed_by) <span class="sql-keyword">REFERENCES</span> Employees(employee_id);
             </div>
 
+            <div class="activity-box" style="margin-top: 20px;">
+                <h3>🎯 Challenge: Insert Employee Data</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Before we can query employee data, we need to populate the table! Create INSERT statements to add at least 5 employees to your database.</p>
+
+                <div class="comparison-table" style="margin-top: 15px;">
+                    <div class="column">
+                        <h4>Requirements:</h4>
+                        <ul style="font-size: 1.0em; line-height: 1.6;">
+                            <li>Include a mix of roles (clerk, manager, admin)</li>
+                            <li>Make sure each has a unique email</li>
+                            <li>Include at least one inactive employee</li>
+                            <li>Use realistic names and contact info</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Your Choice of Tool:</h4>
+                        <ul style="font-size: 1.0em; line-height: 1.6;">
+                            <li><strong>DataGrip:</strong> Write INSERT statements in console</li>
+                            <li><strong>CLI (psql):</strong> Connect and execute commands</li>
+                            <li><strong>Either way:</strong> Practice your INSERT syntax!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tip-box" style="margin-top: 15px;">
+                    <strong>Hint:</strong> Remember that hire_date and active have DEFAULT values, so you can omit them from your INSERT if you want to use the defaults!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Querying Employee Data -->
+        <div class="slide">
+            <h1>Querying Employee Data <span class="emoji">📊</span></h1>
+            <h2>Analyzing Employee Performance Metrics</h2>
+
             <div class="comparison-table">
                 <div class="column">
                     <div class="demo-box">
@@ -465,7 +500,7 @@
             </div>
         </div>
 
-        <!-- Slide 12: Implementation - Inventories Table -->
+        <!-- Slide 13: Implementation - Inventories Table -->
         <div class="slide">
             <h1>Implementation: Inventories Table <span class="emoji">📀</span></h1>
             <h2>Supporting Multiple Copies of Each Movie</h2>
@@ -1577,7 +1612,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">32</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">33</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
