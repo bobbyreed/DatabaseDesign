@@ -224,7 +224,7 @@
             </div>
         </div>
 
-        <!-- Slide 17: Database Views -->
+        <!-- Slide 7: Database Views -->
         <div class="slide">
             <h1>Database Views</h1>
             <p>Virtual tables based on database queries:</p>
@@ -253,7 +253,7 @@
             </div>
         </div>
 
-        <!-- Slide 18: History of Database Systems -->
+        <!-- Slide 8: History of Database Systems -->
         <div class="slide">
             <h1>Evolution of Database Systems</h1>
 
@@ -288,7 +288,7 @@
             </div>
         </div>
 
-        <!-- Slide 20: Practice Activity 1 -->
+        <!-- Slide 9: Practice Activity 1 -->
         <div class="slide">
             <h1>Design Challenge <span class="emoji">🏗️</span></h1>
             <h2>Extend Your Movie Rental Database</h2>
@@ -605,7 +605,7 @@
             </div>
         </div>
 
-        <!-- Slide 21: Real-World Example -->
+        <!-- Slide 14: Real-World Example -->
         <div class="slide">
             <h1>Your Movie Rental Database</h1>
             <h2>What You Built in Lecture 2 <span class="emoji">🎬</span></h2>
@@ -652,7 +652,7 @@
             </div>
         </div>
 
-        <!-- Slide 22: DBMS Components -->
+        <!-- Slide 15: DBMS Components -->
         <div class="slide">
             <h1>Major DBMS Components</h1>
 
@@ -685,7 +685,7 @@
             </div>
         </div>
 
-        <!-- Slide 23: Practice Activity 2 -->
+        <!-- Slide 16: Practice Activity 2 -->
         <div class="slide">
             <h1>Group Exercise: Architecture Design</h1>
 
@@ -745,7 +745,7 @@
             </div>
         </div>
 
-        <!-- Slide 24: Modern Database Architectures -->
+        <!-- Slide 17: Modern Database Architectures -->
         <div class="slide">
             <h1>Modern Database Architectures</h1>
 
@@ -781,7 +781,7 @@
 
         <!-- IN-CLASS EXERCISES SECTION -->
 
-        <!-- Slide 26: Exercise Overview -->
+        <!-- Slide 18: Exercise Overview -->
         <div class="slide">
             <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
             <h2>Architecture Mapping & Debate <span class="timer-badge">40 minutes</span></h2>
@@ -805,7 +805,7 @@
             <button data-timer="40">Start 40-Minute Timer</button>
         </div>
 
-        <!-- Slide 27: Exercise 1 - System Component Mapping -->
+        <!-- Slide 19: Exercise 1 - System Component Mapping -->
         <div class="slide">
             <h1>Exercise 1: System Component Mapping <span class="timer-badge">20 min</span></h1>
             <h2>Individual Exercise: Three-Tier Architecture</h2>
@@ -861,37 +861,7 @@
             </div>
         </div>
 
-        <!-- Slide 28: Exercise 1 - Instructions -->
-        <div class="slide">
-            <h1>Exercise 1: Labeling Instructions</h1>
-
-            <div class="activity-box">
-                <h3>Your Task (20 minutes):</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Label Each Component (10 min):</strong>
-                        <ul style="margin-top: 10px;">
-                            <li><strong>Label A:</strong> What happens in the browser related to data?</li>
-                            <li><strong>Label B:</strong> What key component sits in the application server?</li>
-                            <li><strong>Label C:</strong> What processing occurs before sending queries to the database?</li>
-                            <li><strong>Label D:</strong> What is the core function of the DBMS?</li>
-                            <li><strong>Label E:</strong> What exactly is stored in physical database files?</li>
-                        </ul>
-                    </li>
-                    <li><strong>Explain the DBMS Role (10 min):</strong>
-                        <ul style="margin-top: 10px;">
-                            <li>Write 2-3 sentences explaining how the DBMS acts as an intermediary between the application server and the physical data</li>
-                            <li>Describe at least two specific functions the DBMS performs (e.g., query optimization, concurrency control)</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="tip-box">
-                <strong>Hint:</strong> Think about data flow - how does a user's request transform as it moves from browser to database and back?
-            </div>
-        </div>
-
-        <!-- Slide 29: Understanding Exercise 1 -->
+        <!-- Slide 20: Understanding Exercise 1 -->
         <div class="slide">
             <h1>Understanding: Three-Tier Architecture <span class="emoji">🔍</span></h1>
 
@@ -944,7 +914,7 @@
             </div>
         </div>
 
-        <!-- Slide 29b: Real-World Three-Tier Examples -->
+        <!-- Slide 21: Real-World Three-Tier Examples -->
         <div class="slide">
             <h1>Real-World Example: Movie Rental Web App <span class="emoji">🌐</span></h1>
             <h2>Three-Tier Architecture in Action</h2>
@@ -992,146 +962,9 @@ app.get('/api/movies/available', async (req, res) => {<br>
             </div>
         </div>
 
-        <!-- Slide 30: Exercise 2 - Centralized vs Distributed Debate -->
+        <!-- Slide 22: Exercise 2 - DBMS Internals -->
         <div class="slide">
-            <h1>Exercise 2: Architecture Debate <span class="timer-badge">20 min</span></h1>
-            <h2>Group Exercise: Scaling Your Movie Rental Database</h2>
-
-            <div class="warning-box">
-                <h3>Your Assignment:</h3>
-                <p style="font-size: 1.15em;">Your group will be assigned either <strong>Centralized Architecture</strong> or <strong>Distributed Architecture</strong>. You must defend your assigned architecture for scaling <strong>movie_rental_db nationwide</strong>.</p>
-            </div>
-
-            <div class="comparison-table">
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>🏢 Centralized Architecture</h3>
-                        <p><strong>Definition:</strong> Single movie_rental_db instance serving all rental locations, hosted in one data center</p>
-                        <div class="erd-diagram" style="font-size: 0.8em; padding: 15px;">
-                            <pre>
-   All Stores
-     │││
-     ▼▼▼
-┌──────────────┐
-│   Single     │
-│ movie_rental │
-│   _db        │
-└──────────────┘
-                            </pre>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>🌐 Distributed Architecture</h3>
-                        <p><strong>Definition:</strong> Multiple movie_rental_db instances across regions, data partitioned or replicated</p>
-                        <div class="erd-diagram" style="font-size: 0.8em; padding: 15px;">
-                            <pre>
-  West     Central    East
-Stores    Stores    Stores
-  │││      │││      │││
-  ▼▼▼      ▼▼▼      ▼▼▼
-┌──────┐ ┌──────┐ ┌──────┐
-│ DB1  │ │ DB2  │ │ DB3  │
-│ West │ │Central│ │ East │
-└───┬──┘ └──┬───┘ └──┬───┘
-    └────┬─────┬──────┘
-       Sync/Replication
-                            </pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <strong>Context:</strong> Your movie rental chain is expanding from 5 local stores to 200+ stores nationwide. Consider rental transactions, inventory tracking, member accounts across locations!
-            </div>
-        </div>
-
-        <!-- Slide 31: Exercise 2 - Debate Instructions -->
-        <div class="slide">
-            <h1>Exercise 2: Debate Preparation</h1>
-
-            <div class="activity-box">
-                <h3>Your Task (20 minutes):</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Identify THREE PROS of your assigned architecture (8 min):</strong>
-                        <ul style="margin-top: 10px;">
-                            <li>Focus on performance benefits (response time, throughput, scalability)</li>
-                            <li>Focus on maintenance advantages (updates, backups, consistency)</li>
-                            <li>Provide specific examples for the movie rental expansion</li>
-                        </ul>
-                    </li>
-                    <li><strong>Identify THREE CONS of your assigned architecture (8 min):</strong>
-                        <ul style="margin-top: 10px;">
-                            <li>Be honest about performance limitations</li>
-                            <li>Acknowledge maintenance challenges</li>
-                            <li>Consider cost implications</li>
-                        </ul>
-                    </li>
-                    <li><strong>Justify Your Position (4 min):</strong>
-                        <ul style="margin-top: 10px;">
-                            <li>Despite the cons, why is your architecture still the better choice?</li>
-                            <li>What mitigation strategies can address the drawbacks?</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-
-            <div class="tip-box">
-                <strong>Pro Tip:</strong> Think about real movie rental scenarios - member renting at different locations, inventory transfers between stores, checking movie availability across regions, analyzing rental trends.
-            </div>
-        </div>
-
-        <!-- Slide 32: Understanding Exercise 2 -->
-        <div class="slide">
-            <h1>Understanding: Architecture Trade-offs <span class="emoji">🔍</span></h1>
-
-            <div class="comparison-table">
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>✅ Centralized Pros:</h3>
-                        <ul style="font-size: 0.95em;">
-                            <li><strong>Data Consistency:</strong> Real-time inventory across all stores</li>
-                            <li><strong>Simpler Maintenance:</strong> One database to update/backup</li>
-                            <li><strong>Lower Cost:</strong> Single infrastructure, easier management</li>
-                        </ul>
-                        <h3>❌ Centralized Cons:</h3>
-                        <ul style="font-size: 0.95em;">
-                            <li><strong>Single Point of Failure:</strong> Outage shuts down all stores</li>
-                            <li><strong>Latency Issues:</strong> East coast stores slow if server is west</li>
-                            <li><strong>Scaling Limits:</strong> Peak hours (Friday night) may overwhelm</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>✅ Distributed Pros:</h3>
-                        <ul style="font-size: 0.95em;">
-                            <li><strong>High Availability:</strong> West coast outage doesn't affect East</li>
-                            <li><strong>Low Latency:</strong> Each region has local database access</li>
-                            <li><strong>Horizontal Scaling:</strong> Add regional nodes for new stores</li>
-                        </ul>
-                        <h3>❌ Distributed Cons:</h3>
-                        <ul style="font-size: 0.95em;">
-                            <li><strong>Inventory Sync Issues:</strong> Member rents same movie twice?</li>
-                            <li><strong>Complex Maintenance:</strong> Updates across multiple databases</li>
-                            <li><strong>Higher Cost:</strong> Multiple servers and sync infrastructure</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <strong>Real-World Insight:</strong> Netflix uses a hybrid approach - centralized user profiles for consistency, distributed content delivery (CDN) for low-latency streaming.
-            </div>
-        </div>
-
-        <!-- Slide 30: Exercise 2 - DBMS Exploration -->
-
-        <!-- Slide 30: Exercise 2 - DBMS Internals -->
-        <div class="slide">
-            <h1>Exercise 2: Explore DBMS Internals <span class="timer-badge">20 min</span></h1>
+            <h1>Exercise: Explore DBMS Internals <span class="timer-badge">20 min</span></h1>
             <h2>Individual Hands-On: See Behind the Scenes</h2>
 
             <div class="demo-box">
@@ -1157,7 +990,7 @@ Stores    Stores    Stores
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
 
-        <!-- Slide 30a: Part 1 - System Catalog Exploration -->
+        <!-- Slide 23: Part 1 - System Catalog Exploration -->
         <div class="slide">
             <h1>Part 1: System Catalog Exploration <span class="emoji">🔍</span></h1>
             <h2>How Does the DBMS Know About Your Tables?</h2>
@@ -1198,7 +1031,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 30b: Part 2 - Transaction Management -->
+        <!-- Slide 24: Part 2 - Transaction Management -->
         <div class="slide">
             <h1>Part 2: Transaction Management <span class="emoji">🔄</span></h1>
             <h2>Experience ACID Properties in Action</h2>
@@ -1242,7 +1075,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 30c: Part 3 - Concurrency & Locks -->
+        <!-- Slide 25: Part 3 - Concurrency & Locks -->
         <div class="slide">
             <h1>Part 3: Concurrency & Locks <span class="emoji">🔒</span></h1>
             <h2>How Does the DBMS Handle Multiple Users?</h2>
@@ -1301,7 +1134,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 30d: Part 4 - Query Processing -->
+        <!-- Slide 26: Part 4 - Query Processing -->
         <div class="slide">
             <h1>Part 4: Query Processing Internals <span class="emoji">⚡</span></h1>
             <h2>How Does the DBMS Execute Your Queries?</h2>
@@ -1349,7 +1182,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 30e: DBMS Exploration Summary -->
+        <!-- Slide 26: DBMS Exploration Summary -->
         <div class="slide">
             <h1>DBMS Internals: What You Discovered <span class="emoji">🎯</span></h1>
 
@@ -1402,7 +1235,7 @@ Stores    Stores    Stores
 
         <!-- HOMEWORK SECTION -->
 
-        <!-- Slide 33: Homework Overview -->
+        <!-- Slide 27: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">🛠️</span></h1>
             <h2>Week 3: Hands-On Database Architecture</h2>
@@ -1442,7 +1275,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 34: Part 1 - Architecture Discovery -->
+        <!-- Slide 28: Part 1 - Architecture Discovery -->
         <div class="slide">
             <h1>Part 1: Architecture Discovery (40 pts)</h1>
             <h2>Explore Your Movie Rental Database in DataGrip</h2>
@@ -1496,7 +1329,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 35: Part 2 - Multi-Schema Architecture -->
+        <!-- Slide 29: Part 2 - Multi-Schema Architecture -->
         <div class="slide">
             <h1>Part 2: Multi-Schema Architecture (40 pts)</h1>
             <h2>Implement Architectural Layers</h2>
@@ -1565,7 +1398,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 36: Part 3 - Query Performance Analysis -->
+        <!-- Slide 30: Part 3 - Query Performance Analysis -->
         <div class="slide">
             <h1>Part 3: Query Performance Analysis (20 pts)</h1>
             <h2>Understand Query Optimization Architecture</h2>
@@ -1630,7 +1463,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 37: Submission Requirements -->
+        <!-- Slide 31: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">📤</span></h1>
 
@@ -1708,7 +1541,7 @@ Stores    Stores    Stores
             </div>
         </div>
 
-        <!-- Slide 38: Summary -->
+        <!-- Slide 32: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
