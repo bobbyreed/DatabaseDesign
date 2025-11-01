@@ -1516,7 +1516,84 @@ app.get('/api/movies/available', async (req, res) => {<br>
             </div>
         </div>
 
-        <!-- Slide 29: Part 2 - Multi-Schema Architecture -->
+        <!-- Slide 29: Schema Review -->
+        <div class="slide">
+            <h1>Schema Review <span class="emoji">📚</span></h1>
+            <h2>Understanding PostgreSQL Schemas</h2>
+
+            <div class="demo-box">
+                <h3>What Are Schemas?</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">A <strong>schema</strong> is a namespace that contains database objects like tables, views, and functions. Think of it as a folder or directory for organizing your database objects.</p>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Logical separation:</strong> Group related tables together (e.g., staging vs. production)</li>
+                    <li><strong>Avoid naming conflicts:</strong> Have a "users" table in both "staging" and "production" schemas</li>
+                    <li><strong>Access control:</strong> Grant permissions at the schema level</li>
+                    <li><strong>Default schema:</strong> PostgreSQL uses "public" schema by default</li>
+                </ul>
+            </div>
+
+            <div class="comparison-table" style="margin-top: 20px;">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Creating & Using Schemas (CLI)</h3>
+                        <div class="sql-example" style="font-size: 0.8em; margin-top: 10px;">
+<span class="sql-comment">-- Create a new schema</span><br>
+<span class="sql-keyword">CREATE SCHEMA</span> staging;<br><br>
+
+<span class="sql-comment">-- Create table in specific schema</span><br>
+<span class="sql-keyword">CREATE TABLE</span> staging.movies (<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200)<br>
+);<br><br>
+
+<span class="sql-comment">-- Query table in specific schema</span><br>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> staging.movies;<br><br>
+
+<span class="sql-comment">-- View all schemas</span><br>
+<span class="sql-keyword">SELECT</span> schema_name<br>
+<span class="sql-keyword">FROM</span> information_schema.schemata;<br><br>
+
+<span class="sql-comment">-- View tables in a schema</span><br>
+<span class="sql-keyword">SELECT</span> table_name<br>
+<span class="sql-keyword">FROM</span> information_schema.tables<br>
+<span class="sql-keyword">WHERE</span> table_schema = <span class="sql-string">'staging'</span>;<br><br>
+
+<span class="sql-comment">-- Delete a schema (and all objects)</span><br>
+<span class="sql-keyword">DROP SCHEMA</span> staging <span class="sql-keyword">CASCADE</span>;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Working with Schemas in DataGrip</h3>
+                        <ul style="font-size: 1.0em; line-height: 1.7;">
+                            <li><strong>View schemas:</strong> Expand your database in the sidebar → see "schemas" folder with public, staging, etc.</li>
+                            <li><strong>Create schema:</strong> Right-click "schemas" → New → Schema → Enter name</li>
+                            <li><strong>Create table in schema:</strong> Right-click schema → New → Table</li>
+                            <li><strong>Switch schemas:</strong> In console, select schema from dropdown at top</li>
+                            <li><strong>Drag & drop:</strong> Drag table from one schema to another to copy/move</li>
+                            <li><strong>Delete schema:</strong> Right-click schema → Drop Schema (choose CASCADE to delete all objects)</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box" style="margin-top: 15px;">
+                        <h4>⚠️ Important Notes:</h4>
+                        <ul style="font-size: 0.95em; line-height: 1.5;">
+                            <li><strong>Always use schema.table:</strong> Write <code>staging.movies</code> not just <code>movies</code> for clarity</li>
+                            <li><strong>CASCADE is dangerous:</strong> <code>DROP SCHEMA ... CASCADE</code> deletes ALL objects in that schema!</li>
+                            <li><strong>Check current schema:</strong> Run <code>SELECT current_schema();</code> to see which schema you're in</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Pro Tip:</strong> For homework, you'll create staging, production, and reporting schemas. Use DataGrip's sidebar to visualize all three schemas and their objects side-by-side!
+            </div>
+        </div>
+
+        <!-- Slide 30: Part 2 - Multi-Schema Architecture -->
         <div class="slide">
             <h1>Part 2: Multi-Schema Architecture (40 pts)</h1>
             <h2>Implement Architectural Layers</h2>
@@ -1753,7 +1830,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">38</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">39</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
