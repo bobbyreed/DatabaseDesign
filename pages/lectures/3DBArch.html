@@ -612,94 +612,144 @@
             </div>
         </div>
 
-        <!-- Slide 15: Implementation - Additional Considerations -->
+        <!-- Slide 15: Late Fees System -->
         <div class="slide">
-            <h1>Additional Considerations <span class="emoji">💡</span></h1>
-            <h2>Late Fees, Membership Tiers, and Reservations</h2>
+            <h1>Late Fees System <span class="emoji">💰</span></h1>
+            <h2>Tracking and Calculating Overdue Charges</h2>
 
-            <div class="comparison-table">
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>💰 Late Fees System</h3>
-                        <p style="font-size: 0.95em; margin-bottom: 10px;">Calculate fees based on days overdue:</p>
-                        <div class="code-example" style="font-size: 0.75em;">
-<span class="sql-comment">-- Add late fee tracking</span><br>
-<span class="sql-keyword">ALTER TABLE</span> Rentals<br>
-<span class="sql-keyword">ADD COLUMN</span> due_date <span class="sql-keyword">DATE</span>,<br>
-<span class="sql-keyword">ADD COLUMN</span> late_fee <span class="sql-keyword">NUMERIC</span>(6,2) <span class="sql-keyword">DEFAULT</span> 0.00;<br><br>
-
-<span class="sql-comment">-- Calculate late fees (e.g., $2/day)</span><br>
-<span class="sql-keyword">UPDATE</span> Rentals<br>
-<span class="sql-keyword">SET</span> late_fee = <br>
-&nbsp;&nbsp;<span class="sql-keyword">GREATEST</span>(0, <span class="sql-keyword">CURRENT_DATE</span> - due_date) * 2.00<br>
-<span class="sql-keyword">WHERE</span> return_date <span class="sql-keyword">IS NULL</span><br>
-&nbsp;&nbsp;<span class="sql-keyword">AND</span> due_date < <span class="sql-keyword">CURRENT_DATE</span>;
-                        </div>
-                    </div>
-
-                    <div class="demo-box">
-                        <h3>🎟️ Membership Tiers</h3>
-                        <p style="font-size: 0.95em; margin-bottom: 10px;">Different membership levels with benefits:</p>
-                        <div class="code-example" style="font-size: 0.75em;">
-<span class="sql-comment">-- Add membership tier to Members</span><br>
-<span class="sql-keyword">ALTER TABLE</span> Members<br>
-<span class="sql-keyword">ADD COLUMN</span> membership_tier <span class="sql-keyword">VARCHAR</span>(20)<br>
-&nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> <span class="sql-string">'basic'</span><br>
-&nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (membership_tier <span class="sql-keyword">IN</span> (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'basic'</span>, <span class="sql-string">'premium'</span>, <span class="sql-string">'vip'</span><br>
-&nbsp;&nbsp;)),<br>
-<span class="sql-keyword">ADD COLUMN</span> max_rentals <span class="sql-keyword">INTEGER DEFAULT</span> 3;<br><br>
-
-<span class="sql-comment">-- Tier benefits:</span><br>
-<span class="sql-comment">-- basic: 3 movies, $2/day late fee</span><br>
-<span class="sql-comment">-- premium: 5 movies, $1/day late fee</span><br>
-<span class="sql-comment">-- vip: unlimited, no late fees</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>📅 Reservation System</h3>
-                        <p style="font-size: 0.95em; margin-bottom: 10px;">Let members reserve movies that are currently rented:</p>
-                        <div class="code-example" style="font-size: 0.75em;">
-<span class="sql-comment">-- Create Reservations table</span><br>
-<span class="sql-keyword">CREATE TABLE</span> Reservations (<br>
-&nbsp;&nbsp;reservation_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
-&nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
-&nbsp;&nbsp;member_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
-&nbsp;&nbsp;reservation_date <span class="sql-keyword">TIMESTAMP</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DEFAULT CURRENT_TIMESTAMP</span>,<br>
-&nbsp;&nbsp;status <span class="sql-keyword">VARCHAR</span>(20)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> <span class="sql-string">'pending'</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (status <span class="sql-keyword">IN</span> (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'pending'</span>, <span class="sql-string">'ready'</span>, <span class="sql-string">'fulfilled'</span>, <span class="sql-string">'cancelled'</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;)),<br>
-&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (movie_id)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Movies(movie_id),<br>
-&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (member_id)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Members(member_id)<br>
-);
-                        </div>
-                    </div>
-
-                    <div class="warning-box">
-                        <h4>Implementation Notes:</h4>
-                        <ul style="font-size: 0.9em; line-height: 1.5;">
-                            <li>Use triggers to auto-notify when reserved movie returned</li>
-                            <li>Implement queue system (FIFO) for multiple reservations</li>
-                            <li>Set expiration time for "ready" reservations (e.g., 48 hours)</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="demo-box">
+                <h3>Business Scenario:</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Members must return movies by a due date. If they return late (or don't return at all), we need to calculate and charge late fees automatically.</p>
             </div>
 
-            <div class="tip-box">
-                <strong>Design Challenge:</strong> How would you handle members upgrading/downgrading membership tiers mid-month? What business rules should apply?
+            <div class="sql-example" style="margin-top: 20px;">
+                <span class="sql-comment">-- Add late fee tracking to existing Rentals table</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Rentals<br>
+                <span class="sql-keyword">ADD COLUMN</span> due_date <span class="sql-keyword">DATE</span>,<br>
+                <span class="sql-keyword">ADD COLUMN</span> late_fee <span class="sql-keyword">NUMERIC</span>(6,2) <span class="sql-keyword">DEFAULT</span> 0.00;<br><br>
+
+                <span class="sql-comment">-- Calculate late fees (e.g., $2/day)</span><br>
+                <span class="sql-keyword">UPDATE</span> Rentals<br>
+                <span class="sql-keyword">SET</span> late_fee = <br>
+                &nbsp;&nbsp;<span class="sql-keyword">GREATEST</span>(0, <span class="sql-keyword">CURRENT_DATE</span> - due_date) * 2.00<br>
+                <span class="sql-keyword">WHERE</span> return_date <span class="sql-keyword">IS NULL</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> due_date < <span class="sql-keyword">CURRENT_DATE</span>;
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>📖 Understanding the New SQL Concepts:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.8;">
+                    <li><strong>ALTER TABLE:</strong> Modifies an existing table structure without deleting data. We're adding new columns to the Rentals table that already has data in it.</li>
+                    <li><strong>NUMERIC(6,2):</strong> A data type for storing decimal numbers. The (6,2) means 6 total digits with 2 after the decimal point. Perfect for money: $9999.99 maximum.</li>
+                    <li><strong>DEFAULT 0.00:</strong> Sets an initial value for the column. All existing and new rows will start with late_fee = 0.00 unless specified otherwise.</li>
+                    <li><strong>UPDATE:</strong> Changes data in existing rows (unlike INSERT which creates new rows).</li>
+                    <li><strong>CURRENT_DATE:</strong> A built-in function that returns today's date.</li>
+                    <li><strong>Date Arithmetic:</strong> <code>CURRENT_DATE - due_date</code> calculates how many days overdue. If due_date was 5 days ago, this returns 5.</li>
+                    <li><strong>GREATEST(0, ...):</strong> Returns the larger of two values. Prevents negative fees if the movie isn't overdue yet (e.g., GREATEST(0, -3) = 0).</li>
+                    <li><strong>IS NULL:</strong> Checks if a value is NULL (empty). <code>return_date IS NULL</code> means the movie hasn't been returned yet.</li>
+                </ul>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Real-World Usage:</strong> This UPDATE query would run automatically every night (scheduled job) to update late fees for all unreturned rentals.
             </div>
         </div>
 
-        <!-- Slide 14: Real-World Example -->
+        <!-- Slide 16: Membership Tiers -->
+        <div class="slide">
+            <h1>Membership Tiers <span class="emoji">🎟️</span></h1>
+            <h2>Different Membership Levels with Benefits</h2>
+
+            <div class="demo-box">
+                <h3>Business Scenario:</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Offer different membership levels (basic, premium, VIP) with varying benefits: more rentals allowed, lower late fees, etc. This encourages members to upgrade!</p>
+            </div>
+
+            <div class="sql-example" style="margin-top: 20px;">
+                <span class="sql-comment">-- Add membership tier columns to Members table</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Members<br>
+                <span class="sql-keyword">ADD COLUMN</span> membership_tier <span class="sql-keyword">VARCHAR</span>(20)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> <span class="sql-string">'basic'</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (membership_tier <span class="sql-keyword">IN</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'basic'</span>, <span class="sql-string">'premium'</span>, <span class="sql-string">'vip'</span><br>
+                &nbsp;&nbsp;)),<br>
+                <span class="sql-keyword">ADD COLUMN</span> max_rentals <span class="sql-keyword">INTEGER DEFAULT</span> 3;<br><br>
+
+                <span class="sql-comment">-- Tier benefits:</span><br>
+                <span class="sql-comment">-- basic: 3 movies, $2/day late fee</span><br>
+                <span class="sql-comment">-- premium: 5 movies, $1/day late fee</span><br>
+                <span class="sql-comment">-- vip: unlimited, no late fees</span>
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>📖 Understanding the New SQL Concepts:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.8;">
+                    <li><strong>Multiple ADD COLUMN:</strong> You can add multiple columns in a single ALTER TABLE statement by separating them with commas. More efficient than running ALTER TABLE twice.</li>
+                    <li><strong>DEFAULT with CHECK:</strong> You can combine DEFAULT and CHECK constraints on the same column. New members default to 'basic', but the value must be one of the three allowed tiers.</li>
+                    <li><strong>CHECK (column IN (...)):</strong> The IN operator checks if a value is in a list. This ensures members can only have tier values of 'basic', 'premium', or 'vip' - nothing else will be accepted.</li>
+                    <li><strong>Multi-line formatting:</strong> We can split the CHECK constraint across multiple lines for readability. PostgreSQL doesn't care about whitespace or line breaks inside SQL statements.</li>
+                    <li><strong>Business logic in database:</strong> By storing max_rentals in the database, we can enforce rental limits at the database level, not just in application code.</li>
+                </ul>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Design Challenge:</strong> How would you handle members upgrading/downgrading membership tiers mid-month? What business rules should apply to their current rentals?
+            </div>
+        </div>
+
+        <!-- Slide 17: Reservation System -->
+        <div class="slide">
+            <h1>Reservation System <span class="emoji">📅</span></h1>
+            <h2>Allowing Members to Reserve Unavailable Movies</h2>
+
+            <div class="demo-box">
+                <h3>Business Scenario:</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">All copies of a popular movie are rented out. Instead of turning members away, let them reserve it! When someone returns the movie, notify the first person in the reservation queue.</p>
+            </div>
+
+            <div class="sql-example" style="margin-top: 20px;">
+                <span class="sql-comment">-- Create Reservations table</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Reservations (<br>
+                &nbsp;&nbsp;reservation_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                &nbsp;&nbsp;member_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                &nbsp;&nbsp;reservation_date <span class="sql-keyword">TIMESTAMP</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DEFAULT CURRENT_TIMESTAMP</span>,<br>
+                &nbsp;&nbsp;status <span class="sql-keyword">VARCHAR</span>(20)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> <span class="sql-string">'pending'</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (status <span class="sql-keyword">IN</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'pending'</span>, <span class="sql-string">'ready'</span>, <span class="sql-string">'fulfilled'</span>, <span class="sql-string">'cancelled'</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;)),<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (movie_id)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Movies(movie_id),<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (member_id)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Members(member_id)<br>
+                );
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>📖 Understanding the New SQL Concepts:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.8;">
+                    <li><strong>TIMESTAMP:</strong> Stores both date AND time (e.g., "2024-03-15 14:30:00"). Unlike DATE which only stores the date, TIMESTAMP includes hours, minutes, and seconds.</li>
+                    <li><strong>CURRENT_TIMESTAMP:</strong> Built-in function that returns the current date and time. Automatically records exactly when the reservation was made.</li>
+                    <li><strong>Status workflow:</strong> Reservations move through states: 'pending' (waiting) → 'ready' (movie available) → 'fulfilled' (member picked it up) or 'cancelled' (member changed mind).</li>
+                    <li><strong>Multi-line CHECK constraint:</strong> We can split the allowed values across multiple lines. Same as <code>CHECK (status IN ('pending', 'ready', 'fulfilled', 'cancelled'))</code> but easier to read.</li>
+                    <li><strong>Two FOREIGN KEY constraints:</strong> This table links to both Movies (which movie is reserved) and Members (who made the reservation). This creates relationships between three tables.</li>
+                    <li><strong>Multi-line FOREIGN KEY:</strong> Each FOREIGN KEY is split across two lines for readability - same constraint, just formatted nicely.</li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>Advanced Implementation Notes:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.6;">
+                    <li><strong>Triggers:</strong> Database triggers can automatically change status to 'ready' and send notifications when a reserved movie is returned.</li>
+                    <li><strong>Queue system (FIFO):</strong> Use ORDER BY reservation_date to process reservations in first-in, first-out order - fair for all members!</li>
+                    <li><strong>Expiration:</strong> If status is 'ready' for more than 48 hours, automatically set to 'cancelled' and offer to next person in queue.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 18: Real-World Example -->
         <div class="slide">
             <h1>Your Movie Rental Database</h1>
             <h2>What You Built in Lecture 2 <span class="emoji">🎬</span></h2>
@@ -1660,7 +1710,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
