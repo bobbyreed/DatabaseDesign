@@ -1269,7 +1269,59 @@ app.get('/api/movies/available', async (req, res) => {<br>
             </div>
         </div>
 
-        <!-- Slide 26: Part 4 - Query Processing -->
+        <!-- Slide 26: Understanding Locks Syntax -->
+        <div class="slide">
+            <h1>Understanding the Locks Syntax <span class="emoji">📖</span></h1>
+            <h2>Explaining Session 2's PostgreSQL Commands</h2>
+
+            <div class="demo-box">
+                <h3>Let's Break Down the Session 2 Query:</h3>
+                <div class="sql-example" style="font-size: 0.85em; margin-top: 15px;">
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;locktype,<br>
+&nbsp;&nbsp;relation::regclass,<br>
+&nbsp;&nbsp;mode,<br>
+&nbsp;&nbsp;granted<br>
+<span class="sql-keyword">FROM</span> pg_locks<br>
+<span class="sql-keyword">WHERE</span> relation::regclass::text = <span class="sql-string">'movies'</span>;
+                </div>
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>🔍 New Syntax Explained:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.8;">
+                    <li><strong>pg_locks:</strong> A PostgreSQL <em>system table</em> that shows information about all current locks held by active transactions. Think of it as a special built-in table the DBMS maintains automatically.</li>
+
+                    <li><strong>::regclass:</strong> This is <em>type casting</em> syntax in PostgreSQL. The <code>::</code> operator converts (casts) a value from one data type to another. <code>relation::regclass</code> converts the internal relation identifier number to a human-readable table name.</li>
+
+                    <li><strong>::text:</strong> Another type cast that converts the regclass value to plain text so we can compare it with the string 'movies'. Without this, we'd be comparing different data types which wouldn't work.</li>
+
+                    <li><strong>locktype:</strong> Column showing what kind of lock it is (relation lock, row lock, etc.)</li>
+
+                    <li><strong>relation:</strong> The database object (usually a table) that is locked. Stored as an internal ID number.</li>
+
+                    <li><strong>mode:</strong> Column showing the lock mode or strength (e.g., "RowExclusiveLock", "AccessShareLock")</li>
+
+                    <li><strong>granted:</strong> Boolean column (TRUE/FALSE) showing whether the lock was successfully granted or if the transaction is waiting</li>
+                </ul>
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>💡 Transaction Commands Review:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li><strong>BEGIN:</strong> Starts a new transaction block. All commands after BEGIN are part of one atomic unit of work.</li>
+                    <li><strong>COMMIT:</strong> Saves all changes made in the transaction permanently to the database.</li>
+                    <li><strong>ROLLBACK:</strong> Cancels the transaction and undoes all changes made since BEGIN.</li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>⚠️ Important Concept:</h3>
+                <p style="font-size: 1.05em;">When a transaction holds a lock (after BEGIN), other transactions trying to modify the same data must <strong>wait</strong> until the lock is released (via COMMIT or ROLLBACK). This prevents conflicts and ensures data consistency!</p>
+            </div>
+        </div>
+
+        <!-- Slide 27: Part 4 - Query Processing -->
         <div class="slide">
             <h1>Part 4: Query Processing Internals <span class="emoji">⚡</span></h1>
             <h2>How Does the DBMS Execute Your Queries?</h2>
@@ -1701,7 +1753,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">38</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
