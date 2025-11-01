@@ -1621,8 +1621,9 @@ app.get('/api/movies/available', async (req, res) => {<br>
 
             <div class="activity-box">
                 <h3>Step 2: Implement Tables in Each Layer (15 pts)</h3>
-                <p style="font-size: 1.0em; margin-bottom: 10px;">Recreate your Movies and Members tables in each schema:</p>
+                <p style="font-size: 1.0em; margin-bottom: 10px;"><strong>Important:</strong> Recreate ALL your core tables (Movies, Members, Rentals) in the production schema. Here's an example showing the different approaches for staging vs. production:</p>
                 <div class="sql-example" style="font-size: 0.8em;">
+<span class="sql-comment">-- Staging schema: relaxed constraints for data import/validation</span><br>
 <span class="sql-keyword">CREATE TABLE</span> staging.movies (<br>
 &nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200),<br>
@@ -1631,30 +1632,35 @@ app.get('/api/movies/available', async (req, res) => {<br>
 &nbsp;&nbsp;import_timestamp <span class="sql-keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span><br>
 );<br><br>
 
+<span class="sql-comment">-- Production schema: strict constraints for live data</span><br>
 <span class="sql-keyword">CREATE TABLE</span> production.movies (<br>
 &nbsp;&nbsp;movie_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
 &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(200) <span class="sql-keyword">NOT NULL</span>,<br>
 &nbsp;&nbsp;director <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">NOT NULL</span>,<br>
 &nbsp;&nbsp;genre <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span><br>
-);
+);<br><br>
+
+<span class="sql-comment">-- Also create production.members and production.rentals</span><br>
+<span class="sql-comment">-- (You'll need these for the reporting views in Step 3)</span>
                 </div>
-                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Note:</strong> Staging has relaxed constraints; Production enforces strict rules</p>
+                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Note:</strong> You only need detailed tables in production schema. Staging can have simplified versions for testing.</p>
             </div>
 
             <div class="activity-box">
                 <h3>Step 3: Create Reporting Views (15 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">Create views in the reporting schema that query production data. Here's a simple example:</p>
                 <div class="sql-example" style="font-size: 0.8em;">
-<span class="sql-comment">-- Create abstraction layer for reporting tier</span><br>
-<span class="sql-keyword">CREATE VIEW</span> reporting.movie_summary <span class="sql-keyword">AS</span><br>
+<span class="sql-comment">-- Simple view: list all movies with director info</span><br>
+<span class="sql-keyword">CREATE VIEW</span> reporting.movie_catalog <span class="sql-keyword">AS</span><br>
 <span class="sql-keyword">SELECT</span><br>
-&nbsp;&nbsp;m.title,<br>
-&nbsp;&nbsp;m.director,<br>
-&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(r.rental_id) <span class="sql-keyword">AS</span> times_rented<br>
-<span class="sql-keyword">FROM</span> production.movies m<br>
-<span class="sql-keyword">LEFT JOIN</span> production.rentals r <span class="sql-keyword">ON</span> m.movie_id = r.movie_id<br>
-<span class="sql-keyword">GROUP BY</span> m.title, m.director;
+&nbsp;&nbsp;movie_id,<br>
+&nbsp;&nbsp;title,<br>
+&nbsp;&nbsp;director,<br>
+&nbsp;&nbsp;genre<br>
+<span class="sql-keyword">FROM</span> production.movies<br>
+<span class="sql-keyword">ORDER BY</span> title;
                 </div>
-                <p style="font-size: 0.95em; margin-top: 10px;">Create 2 additional views that represent different "presentation layer" perspectives</p>
+                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Your task:</strong> Create 3 total views in the reporting schema that represent different analytical perspectives (e.g., movie catalog, member activity, rental statistics). You can use JOINs if you've created multiple tables in production.</p>
             </div>
 
             <div class="tip-box">
