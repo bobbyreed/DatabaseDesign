@@ -368,6 +368,7 @@
                             <li><strong>CHECK constraint:</strong> Ensures ratings are 1-5</li>
                             <li><strong>UNIQUE constraint:</strong> One review per member/movie</li>
                             <li><strong>CASCADE delete:</strong> Remove reviews if movie/member deleted</li>
+                            <li><strong>LEFT JOIN:</strong> Shows all movies even if they have no reviews yet (returns NULL for movies without ratings)</li>
                         </ul>
                     </div>
                 </div>
