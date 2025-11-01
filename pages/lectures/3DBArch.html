@@ -330,6 +330,281 @@
             </div>
         </div>
 
+        <!-- Slide 10: Implementation - Reviews Table -->
+        <div class="slide">
+            <h1>Implementation: Reviews Table <span class="emoji">⭐</span></h1>
+            <h2>Adding Customer Feedback to Your Database</h2>
+
+            <div class="demo-box">
+                <h3>Business Requirements:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.7;">
+                    <li>Members can rate movies after renting (1-5 stars)</li>
+                    <li>Members can write text reviews</li>
+                    <li>Track when reviews were posted</li>
+                    <li>Prevent duplicate reviews (one per member per movie)</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create Reviews table with constraints</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Reviews (<br>
+                &nbsp;&nbsp;review_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                &nbsp;&nbsp;member_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                &nbsp;&nbsp;rating <span class="sql-keyword">INTEGER NOT NULL CHECK</span> (rating >= 1 <span class="sql-keyword">AND</span> rating <= 5),<br>
+                &nbsp;&nbsp;review_text <span class="sql-keyword">TEXT</span>,<br>
+                &nbsp;&nbsp;review_date <span class="sql-keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (movie_id) <span class="sql-keyword">REFERENCES</span> Movies(movie_id) <span class="sql-keyword">ON DELETE CASCADE</span>,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (member_id) <span class="sql-keyword">REFERENCES</span> Members(member_id) <span class="sql-keyword">ON DELETE CASCADE</span>,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">UNIQUE</span>(movie_id, member_id) <span class="sql-comment">-- Prevent duplicate reviews</span><br>
+                );
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Design Decisions:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li><strong>CHECK constraint:</strong> Ensures ratings are 1-5</li>
+                            <li><strong>UNIQUE constraint:</strong> One review per member/movie</li>
+                            <li><strong>CASCADE delete:</strong> Remove reviews if movie/member deleted</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Example Query:</h3>
+                        <div class="code-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Get average rating per movie</span><br>
+<span class="sql-keyword">SELECT</span> m.title,<br>
+&nbsp;&nbsp;<span class="sql-keyword">AVG</span>(r.rating) <span class="sql-keyword">AS</span> avg_rating,<br>
+&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(r.review_id) <span class="sql-keyword">AS</span> num_reviews<br>
+<span class="sql-keyword">FROM</span> Movies m<br>
+<span class="sql-keyword">LEFT JOIN</span> Reviews r<br>
+&nbsp;&nbsp;<span class="sql-keyword">ON</span> m.movie_id = r.movie_id<br>
+<span class="sql-keyword">GROUP BY</span> m.title;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Implementation - Employees Table -->
+        <div class="slide">
+            <h1>Implementation: Employees Table <span class="emoji">👨‍💼</span></h1>
+            <h2>Tracking Staff Who Process Rentals</h2>
+
+            <div class="demo-box">
+                <h3>Business Requirements:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.7;">
+                    <li>Store employee information (name, contact, hire date)</li>
+                    <li>Track which employee processed each rental</li>
+                    <li>Support different employee roles (clerk, manager, admin)</li>
+                    <li>Enable employee performance analysis</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create Employees table</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Employees (<br>
+                &nbsp;&nbsp;employee_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;first_name <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;last_name <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;email <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">UNIQUE NOT NULL</span>,<br>
+                &nbsp;&nbsp;phone <span class="sql-keyword">VARCHAR</span>(20),<br>
+                &nbsp;&nbsp;role <span class="sql-keyword">VARCHAR</span>(20) <span class="sql-keyword">CHECK</span> (role <span class="sql-keyword">IN</span> (<span class="sql-string">'clerk'</span>, <span class="sql-string">'manager'</span>, <span class="sql-string">'admin'</span>)),<br>
+                &nbsp;&nbsp;hire_date <span class="sql-keyword">DATE DEFAULT CURRENT_DATE</span>,<br>
+                &nbsp;&nbsp;active <span class="sql-keyword">BOOLEAN DEFAULT TRUE</span><br>
+                );<br><br>
+
+                <span class="sql-comment">-- Update Rentals table to track employee</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Rentals<br>
+                <span class="sql-keyword">ADD COLUMN</span> processed_by <span class="sql-keyword">INTEGER</span>,<br>
+                <span class="sql-keyword">ADD FOREIGN KEY</span> (processed_by) <span class="sql-keyword">REFERENCES</span> Employees(employee_id);
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Design Decisions:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li><strong>Role constraint:</strong> Limit to valid roles</li>
+                            <li><strong>Active flag:</strong> Soft delete for terminated employees</li>
+                            <li><strong>Email unique:</strong> Prevent duplicate accounts</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Example Query:</h3>
+                        <div class="code-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Employee performance metrics</span><br>
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;e.first_name || <span class="sql-string">' '</span> || e.last_name <span class="sql-keyword">AS</span> employee,<br>
+&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(r.rental_id) <span class="sql-keyword">AS</span> rentals_processed<br>
+<span class="sql-keyword">FROM</span> Employees e<br>
+<span class="sql-keyword">LEFT JOIN</span> Rentals r<br>
+&nbsp;&nbsp;<span class="sql-keyword">ON</span> e.employee_id = r.processed_by<br>
+<span class="sql-keyword">WHERE</span> e.active = <span class="sql-keyword">TRUE</span><br>
+<span class="sql-keyword">GROUP BY</span> e.employee_id<br>
+<span class="sql-keyword">ORDER BY</span> rentals_processed <span class="sql-keyword">DESC</span>;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Implementation - Inventories Table -->
+        <div class="slide">
+            <h1>Implementation: Inventories Table <span class="emoji">📀</span></h1>
+            <h2>Supporting Multiple Copies of Each Movie</h2>
+
+            <div class="demo-box">
+                <h3>Business Requirements:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.7;">
+                    <li>Track multiple physical copies of popular movies</li>
+                    <li>Each copy has a unique barcode/serial number</li>
+                    <li>Monitor condition status (new, good, damaged)</li>
+                    <li>Know which specific copy is rented to whom</li>
+                </ul>
+            </div>
+
+            <div class="sql-example">
+                <span class="sql-comment">-- Create Inventories table for physical copies</span><br>
+                <span class="sql-keyword">CREATE TABLE</span> Inventories (<br>
+                &nbsp;&nbsp;copy_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                &nbsp;&nbsp;barcode <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">UNIQUE NOT NULL</span>,<br>
+                &nbsp;&nbsp;condition <span class="sql-keyword">VARCHAR</span>(20) <span class="sql-keyword">CHECK</span> (condition <span class="sql-keyword">IN</span> (<span class="sql-string">'new'</span>, <span class="sql-string">'good'</span>, <span class="sql-string">'fair'</span>, <span class="sql-string">'damaged'</span>)),<br>
+                &nbsp;&nbsp;acquisition_date <span class="sql-keyword">DATE DEFAULT CURRENT_DATE</span>,<br>
+                &nbsp;&nbsp;available <span class="sql-keyword">BOOLEAN DEFAULT TRUE</span>,<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (movie_id) <span class="sql-keyword">REFERENCES</span> Movies(movie_id) <span class="sql-keyword">ON DELETE CASCADE</span><br>
+                );<br><br>
+
+                <span class="sql-comment">-- Update Rentals to track specific copy</span><br>
+                <span class="sql-keyword">ALTER TABLE</span> Rentals<br>
+                <span class="sql-keyword">ADD COLUMN</span> copy_id <span class="sql-keyword">INTEGER</span>,<br>
+                <span class="sql-keyword">ADD FOREIGN KEY</span> (copy_id) <span class="sql-keyword">REFERENCES</span> Inventories(copy_id);
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Design Decisions:</h3>
+                        <ul style="font-size: 1.0em;">
+                            <li><strong>Barcode unique:</strong> Each physical copy identified</li>
+                            <li><strong>Condition tracking:</strong> Manage wear and tear</li>
+                            <li><strong>Availability flag:</strong> Quick lookup for rentable copies</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Example Query:</h3>
+                        <div class="code-example" style="font-size: 0.85em;">
+<span class="sql-comment">-- Available copies per movie</span><br>
+<span class="sql-keyword">SELECT</span><br>
+&nbsp;&nbsp;m.title,<br>
+&nbsp;&nbsp;<span class="sql-keyword">COUNT</span>(i.copy_id) <span class="sql-keyword">AS</span> total_copies,<br>
+&nbsp;&nbsp;<span class="sql-keyword">SUM</span>(<span class="sql-keyword">CASE WHEN</span> i.available<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">THEN</span> 1 <span class="sql-keyword">ELSE</span> 0 <span class="sql-keyword">END</span>) <span class="sql-keyword">AS</span> available_copies<br>
+<span class="sql-keyword">FROM</span> Movies m<br>
+<span class="sql-keyword">LEFT JOIN</span> Inventories i<br>
+&nbsp;&nbsp;<span class="sql-keyword">ON</span> m.movie_id = i.movie_id<br>
+<span class="sql-keyword">GROUP BY</span> m.movie_id, m.title;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Implementation - Additional Considerations -->
+        <div class="slide">
+            <h1>Additional Considerations <span class="emoji">💡</span></h1>
+            <h2>Late Fees, Membership Tiers, and Reservations</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>💰 Late Fees System</h3>
+                        <p style="font-size: 0.95em; margin-bottom: 10px;">Calculate fees based on days overdue:</p>
+                        <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Add late fee tracking</span><br>
+<span class="sql-keyword">ALTER TABLE</span> Rentals<br>
+<span class="sql-keyword">ADD COLUMN</span> due_date <span class="sql-keyword">DATE</span>,<br>
+<span class="sql-keyword">ADD COLUMN</span> late_fee <span class="sql-keyword">NUMERIC</span>(6,2) <span class="sql-keyword">DEFAULT</span> 0.00;<br><br>
+
+<span class="sql-comment">-- Calculate late fees (e.g., $2/day)</span><br>
+<span class="sql-keyword">UPDATE</span> Rentals<br>
+<span class="sql-keyword">SET</span> late_fee = <br>
+&nbsp;&nbsp;<span class="sql-keyword">GREATEST</span>(0, <span class="sql-keyword">CURRENT_DATE</span> - due_date) * 2.00<br>
+<span class="sql-keyword">WHERE</span> return_date <span class="sql-keyword">IS NULL</span><br>
+&nbsp;&nbsp;<span class="sql-keyword">AND</span> due_date < <span class="sql-keyword">CURRENT_DATE</span>;
+                        </div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>🎟️ Membership Tiers</h3>
+                        <p style="font-size: 0.95em; margin-bottom: 10px;">Different membership levels with benefits:</p>
+                        <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Add membership tier to Members</span><br>
+<span class="sql-keyword">ALTER TABLE</span> Members<br>
+<span class="sql-keyword">ADD COLUMN</span> membership_tier <span class="sql-keyword">VARCHAR</span>(20)<br>
+&nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> <span class="sql-string">'basic'</span><br>
+&nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (membership_tier <span class="sql-keyword">IN</span> (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'basic'</span>, <span class="sql-string">'premium'</span>, <span class="sql-string">'vip'</span><br>
+&nbsp;&nbsp;)),<br>
+<span class="sql-keyword">ADD COLUMN</span> max_rentals <span class="sql-keyword">INTEGER DEFAULT</span> 3;<br><br>
+
+<span class="sql-comment">-- Tier benefits:</span><br>
+<span class="sql-comment">-- basic: 3 movies, $2/day late fee</span><br>
+<span class="sql-comment">-- premium: 5 movies, $1/day late fee</span><br>
+<span class="sql-comment">-- vip: unlimited, no late fees</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>📅 Reservation System</h3>
+                        <p style="font-size: 0.95em; margin-bottom: 10px;">Let members reserve movies that are currently rented:</p>
+                        <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-comment">-- Create Reservations table</span><br>
+<span class="sql-keyword">CREATE TABLE</span> Reservations (<br>
+&nbsp;&nbsp;reservation_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+&nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+&nbsp;&nbsp;member_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+&nbsp;&nbsp;reservation_date <span class="sql-keyword">TIMESTAMP</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DEFAULT CURRENT_TIMESTAMP</span>,<br>
+&nbsp;&nbsp;status <span class="sql-keyword">VARCHAR</span>(20)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DEFAULT</span> <span class="sql-string">'pending'</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">CHECK</span> (status <span class="sql-keyword">IN</span> (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'pending'</span>, <span class="sql-string">'ready'</span>, <span class="sql-string">'fulfilled'</span>, <span class="sql-string">'cancelled'</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;)),<br>
+&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (movie_id)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Movies(movie_id),<br>
+&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (member_id)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Members(member_id)<br>
+);
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Implementation Notes:</h4>
+                        <ul style="font-size: 0.9em; line-height: 1.5;">
+                            <li>Use triggers to auto-notify when reserved movie returned</li>
+                            <li>Implement queue system (FIFO) for multiple reservations</li>
+                            <li>Set expiration time for "ready" reservations (e.g., 48 hours)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Design Challenge:</strong> How would you handle members upgrading/downgrading membership tiers mid-month? What business rules should apply?
+            </div>
+        </div>
+
         <!-- Slide 21: Real-World Example -->
         <div class="slide">
             <h1>Your Movie Rental Database</h1>
@@ -1458,7 +1733,7 @@ Stores    Stores    Stores
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">32</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
