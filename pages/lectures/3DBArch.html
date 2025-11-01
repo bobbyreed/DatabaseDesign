@@ -453,6 +453,16 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <h3>🔍 Understanding the Query:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li><strong>String Concatenation (||):</strong> The <code>||</code> operator combines strings together. <code>e.first_name || ' ' || e.last_name</code> joins the first name, a space, and the last name into one string (e.g., "John" + " " + "Doe" = "John Doe")</li>
+                    <li><strong>Why concatenate?</strong> Instead of displaying two separate columns for first_name and last_name, we create a single, readable "employee" column for reports</li>
+                    <li><strong>AS keyword:</strong> Creates an alias (column name) for the result. The concatenated string appears as "employee" in the output</li>
+                    <li><strong>GROUP BY requirement:</strong> When using aggregate functions like COUNT(), we must group by the employee_id to calculate rentals per employee</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Slide 12: Implementation - Inventories Table -->
