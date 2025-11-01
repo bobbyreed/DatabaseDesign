@@ -360,6 +360,44 @@
                 );
             </div>
 
+            <div class="activity-box" style="margin-top: 20px;">
+                <h3>🎯 Challenge: Insert Review Data</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Create movie reviews from your members! Write INSERT statements to add at least 8 reviews to your database.</p>
+
+                <div class="comparison-table" style="margin-top: 15px;">
+                    <div class="column">
+                        <h4>Requirements:</h4>
+                        <ul style="font-size: 1.0em; line-height: 1.6;">
+                            <li>Include a variety of ratings (1-5 stars)</li>
+                            <li>Write thoughtful review_text for each</li>
+                            <li>Use valid movie_id and member_id values</li>
+                            <li>Try inserting duplicate review - see the constraint work!</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Example INSERT:</h4>
+                        <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-keyword">INSERT INTO</span> Reviews<br>
+&nbsp;&nbsp;(movie_id, member_id, rating, review_text)<br>
+<span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(1, 1, 5, <span class="sql-string">'Amazing film!'</span>),<br>
+&nbsp;&nbsp;(2, 1, 4, <span class="sql-string">'Great story.'</span>),<br>
+&nbsp;&nbsp;(1, 2, 3, <span class="sql-string">'It was okay.'</span>);
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box" style="margin-top: 15px;">
+                    <strong>Note:</strong> The review_date will be set automatically to the current timestamp! You can omit it from your INSERT or specify a custom date if you want.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Querying Review Data -->
+        <div class="slide">
+            <h1>Querying Review Data <span class="emoji">📊</span></h1>
+            <h2>Analyzing Movie Ratings and Reviews</h2>
+
             <div class="comparison-table">
                 <div class="column">
                     <div class="demo-box">
@@ -388,9 +426,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <h3>🔍 Understanding the Query:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li><strong>AVG(r.rating):</strong> Aggregate function that calculates the average (mean) of all rating values for each movie. If a movie has ratings of 5, 4, and 3, AVG returns 4.0.</li>
+                    <li><strong>COUNT(r.review_id):</strong> Counts how many review records exist for each movie. Returns 0 for movies with no reviews (because of LEFT JOIN).</li>
+                    <li><strong>LEFT JOIN:</strong> Includes ALL movies from the left table (Movies), even if they have no matching reviews. Movies without reviews will show NULL for review columns.</li>
+                    <li><strong>GROUP BY m.title:</strong> Groups all rows with the same movie title together so AVG and COUNT calculate per-movie statistics instead of across all movies.</li>
+                    <li><strong>Aggregate functions:</strong> AVG() and COUNT() are aggregate functions that compute a single result from multiple rows. They only work with GROUP BY or on the entire dataset.</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Slide 11: Implementation - Employees Table -->
+        <!-- Slide 12: Implementation - Employees Table -->
         <div class="slide">
             <h1>Implementation: Employees Table <span class="emoji">👨‍💼</span></h1>
             <h2>Tracking Staff Who Process Rentals</h2>
@@ -1676,7 +1725,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">37</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
