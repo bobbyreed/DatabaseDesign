@@ -1339,7 +1339,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
 <span class="sql-comment">-- View query statistics for Movies table</span><br>
 <span class="sql-keyword">SELECT</span><br>
 &nbsp;&nbsp;schemaname,<br>
-&nbsp;&nbsp;tablename,<br>
+&nbsp;&nbsp;relname <span class="sql-keyword">AS</span> tablename,<br>
 &nbsp;&nbsp;seq_scan <span class="sql-keyword">AS</span> sequential_scans,<br>
 &nbsp;&nbsp;seq_tup_read <span class="sql-keyword">AS</span> rows_read_seq,<br>
 &nbsp;&nbsp;idx_scan <span class="sql-keyword">AS</span> index_scans,<br>
@@ -1348,7 +1348,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
 &nbsp;&nbsp;n_tup_upd <span class="sql-keyword">AS</span> updates,<br>
 &nbsp;&nbsp;n_tup_del <span class="sql-keyword">AS</span> deletes<br>
 <span class="sql-keyword">FROM</span> pg_stat_user_tables<br>
-<span class="sql-keyword">WHERE</span> tablename = <span class="sql-string">'movies'</span>;
+<span class="sql-keyword">WHERE</span> relname = <span class="sql-string">'movies'</span>;
                 </div>
 
                 <div class="sql-example" style="font-size: 0.8em; margin-top: 15px;">
