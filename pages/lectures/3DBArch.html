@@ -533,6 +533,44 @@
                 <span class="sql-keyword">ADD FOREIGN KEY</span> (copy_id) <span class="sql-keyword">REFERENCES</span> Inventories(copy_id);
             </div>
 
+            <div class="activity-box" style="margin-top: 20px;">
+                <h3>🎯 Challenge: Insert Inventory Data</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Create multiple physical copies of your movies! Write INSERT statements to add at least 10 inventory items (copies) to your database.</p>
+
+                <div class="comparison-table" style="margin-top: 15px;">
+                    <div class="column">
+                        <h4>Requirements:</h4>
+                        <ul style="font-size: 1.0em; line-height: 1.6;">
+                            <li>Create multiple copies of popular movies (2-3 copies each)</li>
+                            <li>Use unique barcodes (e.g., "DVD-001", "DVD-002")</li>
+                            <li>Include various conditions (new, good, fair, damaged)</li>
+                            <li>Mark some copies as currently unavailable</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>Example INSERT:</h4>
+                        <div class="code-example" style="font-size: 0.75em;">
+<span class="sql-keyword">INSERT INTO</span> Inventories<br>
+&nbsp;&nbsp;(movie_id, barcode, condition)<br>
+<span class="sql-keyword">VALUES</span><br>
+&nbsp;&nbsp;(1, <span class="sql-string">'DVD-001'</span>, <span class="sql-string">'new'</span>),<br>
+&nbsp;&nbsp;(1, <span class="sql-string">'DVD-002'</span>, <span class="sql-string">'good'</span>),<br>
+&nbsp;&nbsp;(2, <span class="sql-string">'DVD-003'</span>, <span class="sql-string">'new'</span>);
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box" style="margin-top: 15px;">
+                    <strong>Tip:</strong> You need to know the movie_id values from your Movies table. Run <code>SELECT movie_id, title FROM Movies;</code> first to see what IDs to use!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Querying Inventory Data -->
+        <div class="slide">
+            <h1>Querying Inventory Data <span class="emoji">📊</span></h1>
+            <h2>Analyzing Movie Copies and Availability</h2>
+
             <div class="comparison-table">
                 <div class="column">
                     <div class="demo-box">
@@ -562,9 +600,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <h3>🔍 Understanding the Query:</h3>
+                <ul style="font-size: 1.0em; line-height: 1.7;">
+                    <li><strong>COUNT(i.copy_id):</strong> Counts total inventory records for each movie</li>
+                    <li><strong>CASE WHEN:</strong> Conditional logic that returns 1 if available is TRUE, otherwise 0</li>
+                    <li><strong>SUM(CASE WHEN...):</strong> Adds up all the 1s to count how many copies are available</li>
+                    <li><strong>LEFT JOIN:</strong> Shows all movies even if they have no inventory records (returns 0 for counts)</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Slide 13: Implementation - Additional Considerations -->
+        <!-- Slide 15: Implementation - Additional Considerations -->
         <div class="slide">
             <h1>Additional Considerations <span class="emoji">💡</span></h1>
             <h2>Late Fees, Membership Tiers, and Reservations</h2>
@@ -1612,7 +1660,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">33</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
