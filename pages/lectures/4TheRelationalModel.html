@@ -340,45 +340,143 @@
         <!-- Slide 8: Basic Terminology Part 1 -->
         <div class="slide">
             <h1>Relational Model Terminology (Part 1)</h1>
-            
-            <div class="concept-box">
-                <h3>📊 Relation</h3>
-                <p>A table with columns and rows. Only applies to the logical structure, not physical storage.</p>
-            </div>
 
-            <div class="concept-box">
-                <h3>📝 Attribute</h3>
-                <p>A named column of a relation (e.g., StudentID, Name, Email).</p>
-            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="column">
+                    <div class="concept-box">
+                        <h3>📊 Relation</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">A table with columns and rows. Only applies to the logical structure, not physical storage.</p>
+                    </div>
 
-            <div class="concept-box">
-                <h3>🎯 Domain</h3>
-                <p>The set of allowable values for one or more attributes (e.g., integers, strings, dates).</p>
+                    <div class="concept-box">
+                        <h3>📝 Attribute</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">A named column of a relation (e.g., StudentID, Name, Email).</p>
+                    </div>
+
+                    <div class="concept-box">
+                        <h3>🎯 Domain</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">The set of allowable values for one or more attributes (e.g., integers, strings, dates).</p>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Real-World Example: movie_rental_db</h3>
+                        <div style="margin-top: 15px;">
+                            <h4 style="color: var(--ocu-true-blue); margin-bottom: 10px;">📊 Relation: Movies</h4>
+                            <table class="relation-table" style="font-size: 0.85em;">
+                                <thead>
+                                    <tr>
+                                        <th>movie_id</th>
+                                        <th>title</th>
+                                        <th>director</th>
+                                        <th>genre</th>
+                                        <th>release_year</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>The Shawshank Redemption</td>
+                                        <td>Frank Darabont</td>
+                                        <td>Drama</td>
+                                        <td>1994</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>The Godfather</td>
+                                        <td>Francis Ford Coppola</td>
+                                        <td>Crime</td>
+                                        <td>1972</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="margin-top: 15px; font-size: 0.95em; line-height: 1.6;">
+                                <p><strong>📝 Attributes:</strong> movie_id, title, director, genre, release_year</p>
+                                <p style="margin-top: 8px;"><strong>🎯 Domains:</strong></p>
+                                <ul style="font-size: 0.9em; margin-left: 20px;">
+                                    <li>movie_id: INTEGER (positive numbers)</li>
+                                    <li>title: VARCHAR(200) (strings up to 200 chars)</li>
+                                    <li>director: VARCHAR(100) (strings)</li>
+                                    <li>genre: VARCHAR(50) (strings)</li>
+                                    <li>release_year: INTEGER (1888-present)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Slide 9: Basic Terminology Part 2 -->
         <div class="slide">
             <h1>Relational Model Terminology (Part 2)</h1>
-            
-            <div class="concept-box">
-                <h3>📋 Tuple</h3>
-                <p>A row of a relation representing a single entity instance.</p>
-            </div>
 
-            <div class="concept-box">
-                <h3>🔢 Degree</h3>
-                <p>The number of attributes in a relation (number of columns).</p>
-            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="column">
+                    <div class="concept-box">
+                        <h3>📋 Tuple</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">A row of a relation representing a single entity instance.</p>
+                    </div>
 
-            <div class="concept-box">
-                <h3>📈 Cardinality</h3>
-                <p>The number of tuples in a relation (number of rows).</p>
-            </div>
+                    <div class="concept-box">
+                        <h3>🔢 Degree</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">The number of attributes in a relation (number of columns).</p>
+                    </div>
 
-            <div class="concept-box">
-                <h3>🗄️ Relational Database</h3>
-                <p>A collection of normalized relations with distinct relation names.</p>
+                    <div class="concept-box">
+                        <h3>📈 Cardinality</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">The number of tuples in a relation (number of rows).</p>
+                    </div>
+
+                    <div class="concept-box">
+                        <h3>🗄️ Relational Database</h3>
+                        <p style="font-size: 1.05em; line-height: 1.7;">A collection of normalized relations with distinct relation names.</p>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="demo-box">
+                        <h3>Real-World Example: movie_rental_db</h3>
+                        <div style="margin-top: 15px;">
+                            <h4 style="color: var(--ocu-true-blue); margin-bottom: 10px;">📋 Tuple (Single Movie)</h4>
+                            <table class="relation-table" style="font-size: 0.85em; margin-bottom: 15px;">
+                                <thead>
+                                    <tr>
+                                        <th>movie_id</th>
+                                        <th>title</th>
+                                        <th>director</th>
+                                        <th>genre</th>
+                                        <th>release_year</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: var(--ocu-yellow) !important;">
+                                        <td><strong>1</strong></td>
+                                        <td><strong>The Shawshank Redemption</strong></td>
+                                        <td><strong>Frank Darabont</strong></td>
+                                        <td><strong>Drama</strong></td>
+                                        <td><strong>1994</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p style="font-size: 0.9em; margin-bottom: 15px;">↑ This highlighted row is <strong>one tuple</strong></p>
+
+                            <div style="font-size: 0.95em; line-height: 1.7;">
+                                <p><strong>🔢 Degree of Movies:</strong> 5 attributes (columns)</p>
+                                <p style="margin-top: 5px;"><strong>📈 Cardinality of Movies:</strong> Let's say 150 tuples (rows)</p>
+                                <p style="margin-top: 10px;"><strong>🗄️ Relational Database:</strong> movie_rental_db contains multiple relations:</p>
+                                <ul style="font-size: 0.9em; margin-left: 20px; margin-top: 5px;">
+                                    <li><strong>Movies</strong> (movie_id, title, director, genre, release_year)</li>
+                                    <li><strong>Members</strong> (member_id, name, email, join_date)</li>
+                                    <li><strong>Rentals</strong> (rental_id, movie_id, member_id, rental_date)</li>
+                                    <li><strong>Studios</strong> (studio_id, name, country)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
