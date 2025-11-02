@@ -1708,12 +1708,17 @@ app.get('/api/movies/available', async (req, res) => {<br>
 
             <div class="activity-box">
                 <h3>Step 2: Create Architectural Optimization (10 pts)</h3>
+                <p style="font-size: 1.0em; margin-bottom: 10px;">First, create an index on the director column:</p>
                 <div class="sql-example" style="font-size: 0.85em;">
 <span class="sql-comment">-- Add index: architectural decision for performance</span><br>
 <span class="sql-keyword">CREATE INDEX</span> idx_movies_director <span class="sql-keyword">ON</span> production.movies(director);
                 </div>
-                <p style="font-size: 1.0em; margin-top: 10px;">Run the same query again with EXPLAIN ANALYZE</p>
-                <p style="font-size: 0.95em;"><strong>Screenshot:</strong> Capture showing "Index Scan" and compare execution time</p>
+                <p style="font-size: 1.0em; margin-top: 10px;">Now run the <strong>same query from Step 1</strong> again with EXPLAIN ANALYZE:</p>
+                <div class="sql-example" style="font-size: 0.85em;">
+<span class="sql-keyword">EXPLAIN ANALYZE</span><br>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> production.movies <span class="sql-keyword">WHERE</span> director = <span class="sql-string">'Director 42'</span>;
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Screenshot:</strong> Capture showing "Index Scan" instead of "Seq Scan", and compare execution times between Step 1 and Step 2</p>
             </div>
 
             <div class="activity-box">
