@@ -1695,6 +1695,9 @@ app.get('/api/movies/available', async (req, res) => {<br>
 &nbsp;&nbsp;<span class="sql-keyword">END LOOP</span>;<br>
 <span class="sql-keyword">END</span> $$;
                 </div>
+                <div class="tip-box" style="margin-top: 10px; font-size: 0.9em;">
+                    <strong>📝 Note about this code:</strong> This is a <strong>PL/pgSQL anonymous block</strong>—PostgreSQL's procedural language for writing stored procedures and functions. The <code>DO $$...END $$;</code> syntax creates a temporary code block that executes once. Inside, the FOR loop iterates 1000 times, inserting a new movie each time. <strong>For now, just copy and run this code as-is.</strong> We'll dive deeper into PL/pgSQL, stored procedures, and how loops work in a later lecture on advanced database programming.
+                </div>
                 <p style="font-size: 1.0em; margin-top: 10px;">Run EXPLAIN ANALYZE on this query:</p>
                 <div class="sql-example" style="font-size: 0.85em;">
 <span class="sql-keyword">EXPLAIN ANALYZE</span><br>
