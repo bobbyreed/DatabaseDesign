@@ -517,134 +517,128 @@
             </div>
         </div>
 
-        <!-- Slide 11: Example Relations - Branch -->
+        <!-- Slide 11: Example Relations - Movies -->
         <div class="slide">
-            <h1>Example: Branch Relation</h1>
-            <p>Let's examine a concrete example of a relation:</p>
+            <h1>Example: Movies Relation</h1>
+            <p>Let's examine a concrete example of a relation from movie_rental_db:</p>
 
             <div class="relation-example">
                 <table class="relation-table">
                     <thead>
                         <tr>
-                            <th class="key-highlight">branchNo</th>
-                            <th>street</th>
-                            <th>city</th>
-                            <th>postcode</th>
+                            <th class="key-highlight">movie_id</th>
+                            <th>title</th>
+                            <th>director</th>
+                            <th>genre</th>
+                            <th>release_year</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="key-highlight">B005</td>
-                            <td>22 Deer Rd</td>
-                            <td>London</td>
-                            <td>SW1 4EH</td>
+                            <td class="key-highlight">1</td>
+                            <td>The Shawshank Redemption</td>
+                            <td>Frank Darabont</td>
+                            <td>Drama</td>
+                            <td>1994</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">B007</td>
-                            <td>16 Argyll St</td>
-                            <td>Aberdeen</td>
-                            <td>AB2 3SU</td>
+                            <td class="key-highlight">2</td>
+                            <td>The Godfather</td>
+                            <td>Francis Ford Coppola</td>
+                            <td>Crime</td>
+                            <td>1972</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">B003</td>
-                            <td>163 Main St</td>
-                            <td>Glasgow</td>
-                            <td>G11 9QX</td>
+                            <td class="key-highlight">3</td>
+                            <td>The Dark Knight</td>
+                            <td>Christopher Nolan</td>
+                            <td>Action</td>
+                            <td>2008</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">B004</td>
-                            <td>32 Manse Rd</td>
-                            <td>Bristol</td>
-                            <td>BS99 1NZ</td>
+                            <td class="key-highlight">4</td>
+                            <td>Pulp Fiction</td>
+                            <td>Quentin Tarantino</td>
+                            <td>Crime</td>
+                            <td>1994</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">B002</td>
-                            <td>56 Clover Dr</td>
-                            <td>London</td>
-                            <td>NW10 6EU</td>
+                            <td class="key-highlight">5</td>
+                            <td>Forrest Gump</td>
+                            <td>Robert Zemeckis</td>
+                            <td>Drama</td>
+                            <td>1994</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <p><strong>Degree:</strong> 4 (four attributes) | <strong>Cardinality:</strong> 5 (five tuples)</p>
+            <p><strong>Degree:</strong> 5 (five attributes) | <strong>Cardinality:</strong> 5 (five tuples)</p>
         </div>
 
-        <!-- Slide 12: Example Relations - Staff -->
+        <!-- Slide 12: Example Relations - Rentals -->
         <div class="slide">
-            <h1>Example: Staff Relation</h1>
-            <p>A more complex relation with a foreign key reference:</p>
+            <h1>Example: Rentals Relation</h1>
+            <p>A more complex relation with multiple foreign key references:</p>
 
             <div class="relation-example" style="font-size: 0.85em;">
                 <table class="relation-table">
                     <thead>
                         <tr>
-                            <th class="key-highlight">staffNo</th>
-                            <th>fName</th>
-                            <th>lName</th>
-                            <th>position</th>
-                            <th>sex</th>
-                            <th>DOB</th>
-                            <th>salary</th>
-                            <th class="foreign-key-highlight">branchNo</th>
+                            <th class="key-highlight">rental_id</th>
+                            <th class="foreign-key-highlight">movie_id</th>
+                            <th class="foreign-key-highlight">member_id</th>
+                            <th>rental_date</th>
+                            <th>return_date</th>
+                            <th>rental_price</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="key-highlight">SL21</td>
-                            <td>John</td>
-                            <td>White</td>
-                            <td>Manager</td>
-                            <td>M</td>
-                            <td>1-Oct-45</td>
-                            <td>30000</td>
-                            <td class="foreign-key-highlight">B005</td>
+                            <td class="key-highlight">1</td>
+                            <td class="foreign-key-highlight">1</td>
+                            <td class="foreign-key-highlight">101</td>
+                            <td>2024-01-15</td>
+                            <td>2024-01-20</td>
+                            <td>3.99</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">SG37</td>
-                            <td>Ann</td>
-                            <td>Beech</td>
-                            <td>Assistant</td>
-                            <td>F</td>
-                            <td>10-Nov-60</td>
-                            <td>12000</td>
-                            <td class="foreign-key-highlight">B003</td>
+                            <td class="key-highlight">2</td>
+                            <td class="foreign-key-highlight">3</td>
+                            <td class="foreign-key-highlight">102</td>
+                            <td>2024-01-16</td>
+                            <td>2024-01-21</td>
+                            <td>4.99</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">SG14</td>
-                            <td>David</td>
-                            <td>Ford</td>
-                            <td>Supervisor</td>
-                            <td>M</td>
-                            <td>24-Mar-58</td>
-                            <td>18000</td>
-                            <td class="foreign-key-highlight">B003</td>
+                            <td class="key-highlight">3</td>
+                            <td class="foreign-key-highlight">2</td>
+                            <td class="foreign-key-highlight">101</td>
+                            <td>2024-01-18</td>
+                            <td>NULL</td>
+                            <td>3.99</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">SA9</td>
-                            <td>Mary</td>
-                            <td>Howe</td>
-                            <td>Assistant</td>
-                            <td>F</td>
-                            <td>19-Feb-70</td>
-                            <td>9000</td>
-                            <td class="foreign-key-highlight">B007</td>
+                            <td class="key-highlight">4</td>
+                            <td class="foreign-key-highlight">5</td>
+                            <td class="foreign-key-highlight">103</td>
+                            <td>2024-01-20</td>
+                            <td>2024-01-25</td>
+                            <td>3.99</td>
                         </tr>
                         <tr>
-                            <td class="key-highlight">SG5</td>
-                            <td>Susan</td>
-                            <td>Brand</td>
-                            <td>Manager</td>
-                            <td>F</td>
-                            <td>3-Jun-40</td>
-                            <td>24000</td>
-                            <td class="foreign-key-highlight">B003</td>
+                            <td class="key-highlight">5</td>
+                            <td class="foreign-key-highlight">4</td>
+                            <td class="foreign-key-highlight">102</td>
+                            <td>2024-01-22</td>
+                            <td>NULL</td>
+                            <td>4.99</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <p>🔑 <strong>Primary Key:</strong> staffNo | 🔗 <strong>Foreign Key:</strong> branchNo (references Branch relation)</p>
+            <p>🔑 <strong>Primary Key:</strong> rental_id | 🔗 <strong>Foreign Keys:</strong> movie_id (references Movies), member_id (references Members)</p>
         </div>
 
         <!-- Slide 13: Properties of Relations -->
