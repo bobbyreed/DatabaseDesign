@@ -1318,7 +1318,7 @@
             </div>
         </div>
 
-        <!-- Slide 38: Homework Extension 1 -->
+        <!-- Slide 38: Homework Extension 1 - Why This Matters -->
         <div class="slide">
             <h1>Homework Extension 1: SQL Implementation</h1>
             <h2>Building on Exercise 1 - Online Bookstore Schema</h2>
@@ -1327,6 +1327,30 @@
                 <h3>Task:</h3>
                 <p style="font-size: 1.15em;">Convert the <strong>relational schema</strong> you created in Exercise 1 (Online Bookstore) into complete <strong>SQL CREATE TABLE statements</strong>.</p>
             </div>
+
+            <div class="demo-box">
+                <h3>Why This Matters <span class="emoji">🎯</span></h3>
+                <p style="font-size: 1.05em; line-height: 1.7;">
+                    In industry, database design happens in phases: <strong>database architects</strong> create conceptual and logical schemas (ERDs, relational schemas), then <strong>developers and DBAs</strong> translate these designs into actual SQL tables. This translation skill is essential for several reasons:
+                </p>
+                <ul style="font-size: 1.05em; line-height: 1.7; margin-top: 10px;">
+                    <li><strong>🏢 Industry Practice:</strong> Most companies separate design from implementation—you need to read schema documentation and implement it correctly</li>
+                    <li><strong>💭 Design to Reality:</strong> Theory alone isn't enough; you must understand how abstract concepts (keys, relationships) become concrete SQL syntax (PRIMARY KEY, FOREIGN KEY)</li>
+                    <li><strong>🔍 Data Type Decisions:</strong> You'll make critical choices about VARCHAR lengths, DECIMAL precision, and constraint enforcement that affect performance and data quality</li>
+                    <li><strong>📊 Career Foundation:</strong> Every database developer, backend engineer, and data engineer must master schema-to-SQL translation</li>
+                    <li><strong>🎓 Deeper Understanding:</strong> Implementing schemas yourself solidifies your grasp of the relational model's principles</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Real-World Scenario:</strong> You join a startup as a junior backend developer. The lead architect hands you an ERD for a new feature. Your job? Turn it into CREATE TABLE statements, choose data types, add constraints, and deploy it to the staging database. This homework prepares you for exactly that moment.
+            </div>
+        </div>
+
+        <!-- Slide 39: Homework Extension 1 - Requirements -->
+        <div class="slide">
+            <h1>Homework Extension 1: Requirements</h1>
+            <h2>SQL Implementation Specifications</h2>
 
             <div class="activity-box">
                 <h3>Requirements:</h3>
@@ -1359,9 +1383,14 @@
                     </li>
                 </ol>
             </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Order Matters!</h3>
+                <p style="font-size: 1.05em;">Create parent tables (Publisher, Author) BEFORE child tables (Book, Book_Author) to avoid foreign key reference errors.</p>
+            </div>
         </div>
 
-        <!-- Slide 39: Homework Extension 1 - Example Format -->
+        <!-- Slide 40: Homework Extension 1 - Example Format -->
         <div class="slide">
             <h1>SQL CREATE TABLE Example</h1>
 
@@ -1393,7 +1422,7 @@
             </div>
         </div>
 
-        <!-- Slide 40: Homework Extension 2 -->
+        <!-- Slide 41: Homework Extension 2 -->
         <div class="slide">
             <h1>Homework Extension 2: Fixing Violations</h1>
             <h2>Building on Exercise 2 - Department/Employee Schema</h2>
@@ -1431,7 +1460,7 @@
             </div>
         </div>
 
-        <!-- Slide 41: Homework Extension 2 - Example -->
+        <!-- Slide 42: Homework Extension 2 - Example -->
         <div class="slide">
             <h1>Constraint Correction Example</h1>
 
@@ -1462,7 +1491,7 @@
             </div>
         </div>
 
-        <!-- Slide 42: Submission Requirements -->
+        <!-- Slide 43: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
@@ -1508,7 +1537,7 @@
             </div>
         </div>
 
-        <!-- Slide 43: Summary -->
+        <!-- Slide 44: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -1532,7 +1561,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">43</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">44</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
