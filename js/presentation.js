@@ -258,22 +258,51 @@ class PresentationController {
 
         if (!timerDisplay || !timerText) return;
 
-        timerDisplay.style.display = 'block';
-        let timeLeft = minutes * 60;
-
         // Clear existing timer if any
         if (this.timerInterval) {
             clearInterval(this.timerInterval);
         }
 
+        // Clear any existing stop button
+        const existingBtn = timerDisplay.querySelector('.timer-stop-btn');
+        if (existingBtn) {
+            existingBtn.remove();
+        }
+
+        // Create stop button
+        const stopBtn = document.createElement('button');
+        stopBtn.className = 'timer-stop-btn';
+        stopBtn.textContent = 'Stop Timer';
+        stopBtn.onclick = () => this.stopTimer();
+        timerDisplay.appendChild(stopBtn);
+
+        timerDisplay.style.display = 'block';
+        let timeLeft = minutes * 60;
+        const totalTime = minutes * 60;
+
+        // Remove any existing warning classes
+        timerText.classList.remove('time-warning', 'time-critical');
+
         this.timerInterval = setInterval(() => {
             const mins = Math.floor(timeLeft / 60);
             const secs = timeLeft % 60;
-            timerText.textContent = `Time: ${mins}:${secs.toString().padStart(2, '0')}`;
+            timerText.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+            // Add visual warnings
+            const percentLeft = timeLeft / totalTime;
+            timerText.classList.remove('time-warning', 'time-critical');
+
+            if (percentLeft <= 0.1) { // Last 10%
+                timerText.classList.add('time-critical');
+            } else if (percentLeft <= 0.25) { // Last 25%
+                timerText.classList.add('time-warning');
+            }
 
             if (timeLeft <= 0) {
                 clearInterval(this.timerInterval);
-                timerText.textContent = "Time's up!";
+                timerText.textContent = "Time's Up!";
+                timerText.classList.remove('time-warning');
+                timerText.classList.add('time-critical');
                 this.playTimerSound();
             }
 
@@ -288,8 +317,20 @@ class PresentationController {
         }
 
         const timerDisplay = document.getElementById('timer-display');
+        const timerText = document.getElementById('timer-text');
+
         if (timerDisplay) {
             timerDisplay.style.display = 'none';
+
+            // Remove stop button
+            const stopBtn = timerDisplay.querySelector('.timer-stop-btn');
+            if (stopBtn) {
+                stopBtn.remove();
+            }
+        }
+
+        if (timerText) {
+            timerText.classList.remove('time-warning', 'time-critical');
         }
     }
 

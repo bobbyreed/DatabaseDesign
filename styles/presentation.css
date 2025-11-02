@@ -662,8 +662,111 @@ li {
 }
 
 /* Legacy timer styles - kept for compatibility but hidden */
+/* Timer Display - Enhanced Card-like Container */
 .timer, .timer-display {
     display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    z-index: 10000;
+    background: var(--bg-primary);
+    border: 4px solid var(--ocu-true-blue);
+    border-radius: 20px;
+    padding: 40px 60px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1000px rgba(0, 0, 0, 0.5);
+    animation: timerAppear 0.3s ease-out forwards;
+    min-width: 400px;
+    text-align: center;
+}
+
+@keyframes timerAppear {
+    to {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.timer-display[style*="display: block"],
+.timer[style*="display: block"] {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#timer-text {
+    font-size: 3.5em;
+    font-weight: 700;
+    color: var(--ocu-true-blue);
+    font-family: 'IBM Plex Mono', 'Courier Prime', monospace;
+    letter-spacing: 0.05em;
+    text-shadow: 2px 2px 4px rgba(0, 102, 155, 0.2);
+    margin: 0;
+    line-height: 1.2;
+}
+
+#timer-text.time-warning {
+    color: var(--ocu-yellow);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+#timer-text.time-critical {
+    color: #d32f2f;
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.timer-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.timer-stop-btn {
+    background: var(--ocu-true-blue);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Courier Prime', monospace;
+}
+
+.timer-stop-btn:hover {
+    background: var(--ocu-dark-blue);
+    transform: scale(1.05);
+}
+
+/* Dark mode support for timer */
+[data-theme="dark"] .timer-display,
+[data-theme="dark"] .timer {
+    background: var(--bg-secondary);
+    border-color: var(--ocu-cyan);
+}
+
+[data-theme="dark"] #timer-text {
+    color: var(--ocu-cyan);
+    text-shadow: 2px 2px 4px rgba(0, 158, 219, 0.3);
+}
+
+[data-theme="dark"] #timer-text.time-warning {
+    color: var(--ocu-yellow);
+}
+
+[data-theme="dark"] .timer-stop-btn {
+    background: var(--ocu-cyan);
+}
+
+[data-theme="dark"] .timer-stop-btn:hover {
+    background: var(--ocu-true-blue);
 }
 
 /* Buttons */
