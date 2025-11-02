@@ -1516,10 +1516,10 @@ app.get('/api/movies/available', async (req, res) => {<br>
             </div>
         </div>
 
-        <!-- Slide 29: Schema Review -->
+        <!-- Slide 29: Schema Review - Part 1 (CLI) -->
         <div class="slide">
-            <h1>Schema Review <span class="emoji">📚</span></h1>
-            <h2>Understanding PostgreSQL Schemas</h2>
+            <h1>Schema Review: Part 1 <span class="emoji">📚</span></h1>
+            <h2>Understanding PostgreSQL Schemas (CLI)</h2>
 
             <div class="demo-box">
                 <h3>What Are Schemas?</h3>
@@ -1532,11 +1532,9 @@ app.get('/api/movies/available', async (req, res) => {<br>
                 </ul>
             </div>
 
-            <div class="comparison-table" style="margin-top: 20px;">
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>Creating & Using Schemas (CLI)</h3>
-                        <div class="sql-example" style="font-size: 0.8em; margin-top: 10px;">
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>Creating & Using Schemas (CLI Commands)</h3>
+                <div class="sql-example" style="font-size: 0.8em; margin-top: 10px;">
 <span class="sql-comment">-- Create a new schema</span><br>
 <span class="sql-keyword">CREATE SCHEMA</span> staging;<br><br>
 
@@ -1556,44 +1554,77 @@ app.get('/api/movies/available', async (req, res) => {<br>
 <span class="sql-comment">-- View tables in a schema</span><br>
 <span class="sql-keyword">SELECT</span> table_name<br>
 <span class="sql-keyword">FROM</span> information_schema.tables<br>
-<span class="sql-keyword">WHERE</span> table_schema = <span class="sql-string">'staging'</span>;<br><br>
-
-<span class="sql-comment">-- Delete a schema (and all objects)</span><br>
-<span class="sql-keyword">DROP SCHEMA</span> staging <span class="sql-keyword">CASCADE</span>;
-                        </div>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="demo-box">
-                        <h3>Working with Schemas in DataGrip</h3>
-                        <ul style="font-size: 1.0em; line-height: 1.7;">
-                            <li><strong>View schemas:</strong> Expand your database in the sidebar → see "schemas" folder with public, staging, etc.</li>
-                            <li><strong>Create schema:</strong> Right-click "schemas" → New → Schema → Enter name</li>
-                            <li><strong>Create table in schema:</strong> Right-click schema → New → Table</li>
-                            <li><strong>Switch schemas:</strong> In console, select schema from dropdown at top</li>
-                            <li><strong>Drag & drop:</strong> Drag table from one schema to another to copy/move</li>
-                            <li><strong>Delete schema:</strong> Right-click schema → Drop Schema (choose CASCADE to delete all objects)</li>
-                        </ul>
-                    </div>
-
-                    <div class="warning-box" style="margin-top: 15px;">
-                        <h4>⚠️ Important Notes:</h4>
-                        <ul style="font-size: 0.95em; line-height: 1.5;">
-                            <li><strong>Always use schema.table:</strong> Write <code>staging.movies</code> not just <code>movies</code> for clarity</li>
-                            <li><strong>CASCADE is dangerous:</strong> <code>DROP SCHEMA ... CASCADE</code> deletes ALL objects in that schema!</li>
-                            <li><strong>Check current schema:</strong> Run <code>SELECT current_schema();</code> to see which schema you're in</li>
-                        </ul>
-                    </div>
+<span class="sql-keyword">WHERE</span> table_schema = <span class="sql-string">'staging'</span>;
                 </div>
             </div>
 
-            <div class="tip-box" style="margin-top: 20px;">
-                <strong>Pro Tip:</strong> For homework, you'll create staging, production, and reporting schemas. Use DataGrip's sidebar to visualize all three schemas and their objects side-by-side!
+            <div class="warning-box" style="margin-top: 15px;">
+                <h4>⚠️ Important Notes:</h4>
+                <ul style="font-size: 1.0em; line-height: 1.5;">
+                    <li><strong>Always use schema.table:</strong> Write <code>staging.movies</code> not just <code>movies</code> for clarity</li>
+                    <li><strong>CASCADE is dangerous:</strong> <code>DROP SCHEMA staging CASCADE;</code> deletes ALL objects in that schema!</li>
+                    <li><strong>Check current schema:</strong> Run <code>SELECT current_schema();</code> to see which schema you're in</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 30: Part 2 - Multi-Schema Architecture -->
+        <!-- Slide 30: Schema Review - Part 2 (DataGrip) -->
+        <div class="slide">
+            <h1>Schema Review: Part 2 <span class="emoji">🔍</span></h1>
+            <h2>Viewing Schemas in DataGrip (Critical!)</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ Common Issue: "I created schemas in CLI but don't see them in DataGrip!"</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">By default, DataGrip only shows the <code>public</code> schema. You need to manually enable visibility for schemas created via CLI. Follow these steps:</p>
+            </div>
+
+            <div class="activity-box" style="margin-top: 20px;">
+                <h3>Step-by-Step: Making Your Schemas Visible</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Click the Eye Icon (View Options)</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Look at the top of the Database Explorer panel (left sidebar)</li>
+                            <li>Find the eye icon (👁️) or "View Options" button</li>
+                            <li>Click it to open the view configuration menu</li>
+                        </ul>
+                    </li>
+                    <li><strong>Select "All Namespaces"</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>In the dropdown menu, find "Show Elements" section</li>
+                            <li>Click on <strong>"All Namespaces"</strong> (or "All Schemas")</li>
+                            <li>This reveals ALL schemas in your database, not just <code>public</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Activate Each Schema</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Your <code>staging</code>, <code>production</code>, and <code>reporting</code> schemas will now appear in the list</li>
+                            <li><strong>They will be greyed out at first</strong> (inactive)</li>
+                            <li><strong>Click each schema to highlight it</strong></li>
+                            <li>With the schema highlighted, <strong>click the Refresh button</strong> (↻ icon)</li>
+                            <li>The schema will become active and show its tables</li>
+                        </ul>
+                    </li>
+                    <li><strong>Repeat for All Schemas</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Highlight <code>staging</code> → Refresh</li>
+                            <li>Highlight <code>production</code> → Refresh</li>
+                            <li>Highlight <code>reporting</code> → Refresh</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="success-box" style="margin-top: 15px;">
+                <h4>✅ Success!</h4>
+                <p style="font-size: 1.0em;">Once activated, you'll see all three schemas in your database tree with their tables, views, and other objects fully visible and explorable!</p>
+            </div>
+
+            <div class="tip-box" style="margin-top: 15px;">
+                <strong>Pro Tip:</strong> You only need to do this once per database. DataGrip will remember your schema visibility settings for future sessions.
+            </div>
+        </div>
+
+        <!-- Slide 31: Part 2 - Multi-Schema Architecture -->
         <div class="slide">
             <h1>Part 2: Multi-Schema Architecture (40 pts)</h1>
             <h2>Implement Architectural Layers</h2>
@@ -1844,7 +1875,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">39</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">40</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
