@@ -1369,6 +1369,78 @@ app.get('/api/movies/available', async (req, res) => {<br>
             </div>
         </div>
 
+        <!-- Slide 30: Introduction to ACID Properties -->
+        <div class="slide">
+            <h1>ACID Properties <span class="emoji">🔒</span></h1>
+            <h2>Foundation of Transaction Management</h2>
+
+            <div class="demo-box">
+                <h3>What is ACID?</h3>
+                <p style="font-size: 1.1em;">ACID is a set of properties that guarantee reliable transaction processing in database systems. These properties ensure data integrity even in the face of errors, power failures, and concurrent access.</p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="success-box">
+                        <h3><strong>A</strong>tomicity</h3>
+                        <p style="font-size: 1.0em; line-height: 1.6;">All operations in a transaction succeed or none do. No partial updates.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;"><em>Example: Bank transfer - both debit and credit must complete together.</em></p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3><strong>C</strong>onsistency</h3>
+                        <p style="font-size: 1.0em; line-height: 1.6;">Transactions move the database from one valid state to another, maintaining all rules and constraints.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;"><em>Example: Foreign key relationships remain intact after transaction.</em></p>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="success-box">
+                        <h3><strong>I</strong>solation</h3>
+                        <p style="font-size: 1.0em; line-height: 1.6;">Concurrent transactions don't interfere with each other. Each transaction executes as if it's the only one.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;"><em>Example: Two users updating inventory won't corrupt the count.</em></p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3><strong>D</strong>urability</h3>
+                        <p style="font-size: 1.0em; line-height: 1.6;">Once committed, changes persist even if the system crashes immediately after.</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;"><em>Example: Your order confirmation won't be lost due to server failure.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Connection to Architecture:</strong> ACID properties are implemented through various DBMS components - transaction manager, lock manager, recovery manager, and buffer manager working together!
+            </div>
+        </div>
+
+        <!-- Slide 31: ACID Properties Video -->
+        <div class="slide">
+            <h1>ACID Properties in Action <span class="emoji">🎬</span></h1>
+            <h2>Visual Explanation</h2>
+
+            <div class="demo-box">
+                <p style="font-size: 1.1em;">Watch this video for a clear explanation of how ACID properties work in real database systems:</p>
+            </div>
+
+            <div style="margin: 40px auto; max-width: 900px;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <iframe
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                        src="https://www.youtube.com/embed/GAe5oB742dw"
+                        title="ACID Properties Explained"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <strong>Key Takeaway:</strong> ACID properties are not just theoretical concepts - they're actively enforced by the DBMS components we explored today (transactions, locks, recovery mechanisms).
+            </div>
+        </div>
+
         <!-- Slide 26: DBMS Exploration Summary -->
         <div class="slide">
             <h1>DBMS Internals: What You Discovered <span class="emoji">🎯</span></h1>
@@ -1875,7 +1947,7 @@ app.get('/api/movies/available', async (req, res) => {<br>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">40</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">42</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
