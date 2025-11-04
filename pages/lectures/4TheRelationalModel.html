@@ -423,32 +423,7 @@
 
         <!-- ==================== PART 1: FOUNDATIONS ==================== -->
 
-        <!-- Slide 7: Historical Context & What is Relational Model -->
-        <div class="slide">
-            <h1>Historical Context & The Relational Model <span class="emoji">📜</span></h1>
-            <h2>The Relational Revolution</h2>
-
-            <div class="concept-box">
-                <h3>What is the Relational Model?</h3>
-                <p style="font-size: 1.15em; line-height: 1.7;">Proposed by E.F. Codd in 1970, the relational model revolutionized database management. All data is represented as mathematical <strong>relations</strong> - essentially tables with rows and columns.</p>
-            </div>
-
-            <div class="concept-box">
-                <h3>IBM's System R (1970s)</h3>
-                <p style="font-size: 1.15em; line-height: 1.7;">IBM researchers, including Don Chamberlin and Raymond Boyce, built System R—an experimental prototype that demonstrated the feasibility of E.F. Codd's relational model. This groundbreaking project not only validated the theoretical concepts but also led to the development of SQL, which would become the standard query language for relational databases.</p>
-            </div>
-
-            <div class="concept-box">
-                <h3>The "Relational Wars" (Early 1980s)</h3>
-                <p style="font-size: 1.15em; line-height: 1.7;">The relational model faced initial resistance from companies heavily invested in older hierarchical and network systems. Oracle, founded in 1977 and shipping Version 2 in 1979, was one of the first to commercially embrace the relational model—and succeeded spectacularly, helping to establish relational databases as the industry standard.</p>
-            </div>
-
-            <div class="tip-box">
-                <strong>Key Insight:</strong> The relational model provides a mathematical foundation for databases, enabling formal reasoning about data operations and integrity.
-            </div>
-        </div>
-
-        <!-- Slide 8: Basic Terminology Part 1 -->
+        <!-- Slide 7: Basic Terminology Part 1 -->
         <div class="slide">
             <h1>Relational Model Terminology (Part 1)</h1>
 
@@ -520,7 +495,7 @@
             </div>
         </div>
 
-        <!-- Slide 9: Basic Terminology Part 2 -->
+        <!-- Slide 8: Basic Terminology Part 2 -->
         <div class="slide">
             <h1>Relational Model Terminology (Part 2)</h1>
 
@@ -591,7 +566,7 @@
             </div>
         </div>
 
-        <!-- Slide 10: Alternative Terminology -->
+        <!-- Slide 9: Alternative Terminology -->
         <div class="slide">
             <h1>Alternative Terminology</h1>
             <p>Different communities use different terms for the same concepts:</p>
@@ -628,7 +603,7 @@
             </div>
         </div>
 
-        <!-- Slide 11: Example Relations - Movies -->
+        <!-- Slide 10: Example Relations - Movies -->
         <div class="slide">
             <h1>Example: Movies Relation</h1>
             <p>Let's examine a concrete example of a relation from movie_rental_db:</p>
@@ -687,7 +662,7 @@
             <p><strong>Degree:</strong> 5 (five attributes) | <strong>Cardinality:</strong> 5 (five tuples)</p>
         </div>
 
-        <!-- Slide 12: Example Relations - Rentals -->
+        <!-- Slide 11: Example Relations - Rentals -->
         <div class="slide">
             <h1>Example: Rentals Relation</h1>
             <p>A more complex relation with multiple foreign key references:</p>
@@ -752,7 +727,7 @@
             <p>🔑 <strong>Primary Key:</strong> rental_id | 🔗 <strong>Foreign Keys:</strong> movie_id (references Movies), member_id (references Members)</p>
         </div>
 
-        <!-- Slide 13: Properties of Relations -->
+        <!-- Slide 12: Properties of Relations -->
         <div class="slide">
             <h1>Properties of Relations</h1>
             <p>Relations have specific properties that distinguish them from general tables:</p>
@@ -771,7 +746,7 @@
             </div>
         </div>
 
-        <!-- Slide 14: Mathematical Foundation -->
+        <!-- Slide 13: Mathematical Foundation -->
         <div class="slide">
             <h1>Mathematical Definition of Relations</h1>
             <p>Relations are based on the mathematical concept of Cartesian products:</p>
@@ -795,7 +770,7 @@
 
         <!-- ==================== PART 2: KEYS & INTEGRITY ==================== -->
 
-        <!-- Slide 15: Types of Keys Overview -->
+        <!-- Slide 14: Types of Keys Overview -->
         <div class="slide">
             <h1>Understanding Relational Keys</h1>
             <p>Keys are fundamental to maintaining data integrity and establishing relationships:</p>
@@ -818,7 +793,7 @@
             </div>
         </div>
 
-        <!-- Slide 16: Superkeys and Candidate Keys -->
+        <!-- Slide 15: Superkeys and Candidate Keys -->
         <div class="slide">
             <h1>Superkeys and Candidate Keys</h1>
 
@@ -839,7 +814,7 @@
             </div>
         </div>
 
-        <!-- Slide 17: Primary and Foreign Keys -->
+        <!-- Slide 16: Primary and Foreign Keys -->
         <div class="slide">
             <h1>Primary and Foreign Keys</h1>
 
@@ -863,7 +838,7 @@
             </div>
         </div>
 
-        <!-- Slide 18: Practice with Keys -->
+        <!-- Slide 17: Practice with Keys -->
         <div class="slide">
             <h1>Activity: Identifying Keys <span class="emoji">🔍</span></h1>
             <div class="activity-box">
@@ -894,7 +869,7 @@
             <button data-timer="15">Start 15-Minute Timer</button>
         </div>
 
-        <!-- Slide 19: Integrity Constraints -->
+        <!-- Slide 18: Integrity Constraints -->
         <div class="slide">
             <h1>Integrity Constraints</h1>
             <p>Rules that ensure data quality and consistency:</p>
@@ -920,7 +895,7 @@
             </div>
         </div>
 
-        <!-- Slide 20: NULL Values -->
+        <!-- Slide 19: NULL Values -->
         <div class="slide">
             <h1>Understanding NULL Values</h1>
 
@@ -951,7 +926,7 @@
             </div>
         </div>
 
-        <!-- Slide 21: Relations vs. Files / Data Formats -->
+        <!-- Slide 20: Relations vs. Files / Data Formats -->
         <div class="slide">
             <h1>Relations vs. Files & Modern Data Formats</h1>
             <p>Why use relations instead of flat files, and how they compare to modern formats:</p>
@@ -1008,7 +983,7 @@
 
         <!-- ==================== PART 3: SQL IMPLEMENTATION ==================== -->
 
-        <!-- Slide 22: Creating Relations in SQL -->
+        <!-- Slide 21: Creating Relations in SQL -->
         <div class="slide">
             <h1>Creating Relations with SQL</h1>
             <p>Let's see how to implement our conceptual model in SQL:</p>
@@ -1037,7 +1012,7 @@
             </div>
         </div>
 
-        <!-- Slide 23: General Constraints -->
+        <!-- Slide 22: General Constraints -->
         <div class="slide">
             <h1>Business Rules as General Constraints</h1>
             <p>Beyond basic integrity, we often need business-specific rules:</p>
@@ -1069,7 +1044,7 @@
             </div>
         </div>
 
-        <!-- Slide 24: SQL Syntax Cheat Sheet -->
+        <!-- Slide 23: SQL Syntax Cheat Sheet -->
         <div class="slide">
             <h1>SQL Syntax Cheat Sheet <span class="emoji">📋</span></h1>
             <h2>Keep This Slide Up During The Exercise!</h2>
@@ -1163,7 +1138,7 @@
 
         <!-- ==================== PART 4: CAR RENTAL CHALLENGE ==================== -->
 
-        <!-- Slide 25: Challenge Overview -->
+        <!-- Slide 24: Challenge Overview -->
         <div class="slide">
             <h1>Skills Check: Build car_rental_db <span class="emoji">🚗</span></h1>
             <h2>30-Minute Database Challenge</h2>
@@ -1191,7 +1166,7 @@
             <button data-timer="30">Start 30-Minute Timer</button>
         </div>
 
-        <!-- Slide 26: Phase 1: Design & Create -->
+        <!-- Slide 25: Phase 1: Design & Create -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks</h1>
 
@@ -1224,7 +1199,7 @@
             </div>
         </div>
 
-        <!-- Slide 27: Phase 2: Populate & Query -->
+        <!-- Slide 26: Phase 2: Populate & Query -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks (cont.)</h1>
 
@@ -1250,7 +1225,7 @@
             </div>
         </div>
 
-        <!-- Slide 28: Phase 3: ER Diagram -->
+        <!-- Slide 27: Phase 3: ER Diagram -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks (cont.)</h1>
 
@@ -1278,7 +1253,7 @@
             </div>
         </div>
 
-        <!-- Slide 29: Design Hints -->
+        <!-- Slide 28: Design Hints -->
         <div class="slide">
             <h1>Design Hints & Suggestions</h1>
 
@@ -1336,7 +1311,7 @@
             </div>
         </div>
 
-        <!-- Slide 30: Video - Relational Model Overview -->
+        <!-- Slide 29: Video - Relational Model Overview -->
         <div class="slide">
             <h1>Video: Relational Model in Practice</h1>
 
@@ -1356,7 +1331,7 @@
 
         <!-- ==================== PART 5: IN-CLASS EXERCISES ==================== -->
 
-        <!-- Slide 31: Exercise Overview -->
+        <!-- Slide 30: Exercise Overview -->
         <div class="slide">
             <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
             <h2>Extending car_rental_db <span class="timer-badge">40 minutes</span></h2>
@@ -1382,7 +1357,7 @@
 
         <!-- ==================== PART 6: HOMEWORK ==================== -->
 
-        <!-- Slide 32: Homework Overview -->
+        <!-- Slide 31: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
             <h2>Week 4: Complete car_rental_db Implementation</h2>
@@ -1407,7 +1382,7 @@
             </div>
         </div>
 
-        <!-- Slide 33: Submission Requirements -->
+        <!-- Slide 32: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
@@ -1463,7 +1438,7 @@
             </div>
         </div>
 
-        <!-- Slide 34: Summary -->
+        <!-- Slide 33: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -1487,7 +1462,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">37</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
@@ -1503,7 +1478,7 @@
             console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
             
             // Highlight code examples when shown
-            if (e.detail.currentSlide === 19) { // SQL creation slide
+            if (e.detail.currentSlide === 20) { // SQL creation slide (Slide 21: Creating Relations in SQL)
                 const codeBlocks = document.querySelectorAll('.sql-example');
                 codeBlocks.forEach(block => {
                     block.style.animation = 'slideIn 0.5s ease-in-out';
