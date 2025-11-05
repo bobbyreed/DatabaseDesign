@@ -1698,6 +1698,179 @@
             <button data-timer="40">Start 40-Minute Timer</button>
         </div>
 
+        <!-- Slide 41: CREATE TABLE - Locations -->
+        <div class="slide">
+            <h1>CREATE TABLE: Locations</h1>
+            <h2>Building the Parent Table for Rental Locations</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="sql-example" style="font-size: 0.9em;">
+                        <span class="sql-keyword">CREATE TABLE</span> Locations (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;location_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">100</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;address <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">200</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;city <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">50</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;state <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">2</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;phone <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">20</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;manager_name <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">100</span>)<br>
+                        );
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="concept-box">
+                        <h3>Table Explanation</h3>
+                        <ul style="font-size: 0.95em; line-height: 1.7;">
+                            <li><strong>location_id:</strong> Auto-incrementing primary key using SERIAL</li>
+                            <li><strong>name, address, city, state:</strong> Required fields marked with NOT NULL constraint</li>
+                            <li><strong>state:</strong> Limited to 2 characters for state abbreviations (CA, TX, etc.)</li>
+                            <li><strong>phone, manager_name:</strong> Optional fields (can be NULL)</li>
+                            <li><strong>Purpose:</strong> Stores rental office locations where vehicles are stationed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <p><strong>Key Concept:</strong> This is a parent table with no foreign keys. It must be created first before tables that reference it.</p>
+            </div>
+        </div>
+
+        <!-- Slide 42: CREATE TABLE - Vehicles -->
+        <div class="slide">
+            <h1>CREATE TABLE: Vehicles</h1>
+            <h2>Creating the Vehicle Inventory with Foreign Key</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        <span class="sql-keyword">CREATE TABLE</span> Vehicles (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;vehicle_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;vin <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">17</span>) <span class="sql-keyword">UNIQUE NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;make <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">50</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;model <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">50</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;year <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;category <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">20</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;daily_rate <span class="sql-keyword">DECIMAL</span>(<span class="sql-number">8,2</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;location_id <span class="sql-keyword">INTEGER</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (location_id)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Locations(location_id)<br>
+                        );
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="concept-box">
+                        <h3>Table Explanation</h3>
+                        <ul style="font-size: 0.9em; line-height: 1.6;">
+                            <li><strong>vehicle_id:</strong> Auto-incrementing primary key</li>
+                            <li><strong>vin:</strong> Vehicle Identification Number, must be unique (17 chars)</li>
+                            <li><strong>make, model, year:</strong> Required vehicle details</li>
+                            <li><strong>category:</strong> Type like "economy", "luxury", "SUV"</li>
+                            <li><strong>daily_rate:</strong> Price per day (DECIMAL for money)</li>
+                            <li><strong>location_id:</strong> Foreign key to Locations table - shows where vehicle is stationed</li>
+                            <li><strong>Referential Integrity:</strong> Can only reference existing location_id values</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>⚠️ Important:</strong> Locations table must exist before creating Vehicles due to the foreign key constraint!</p>
+            </div>
+        </div>
+
+        <!-- Slide 43: CREATE TABLE - Customers -->
+        <div class="slide">
+            <h1>CREATE TABLE: Customers</h1>
+            <h2>Storing Customer Information</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="sql-example" style="font-size: 0.9em;">
+                        <span class="sql-keyword">CREATE TABLE</span> Customers (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;customer_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;first_name <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">50</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;last_name <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">50</span>) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;license_number <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">20</span>) <span class="sql-keyword">UNIQUE NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;phone <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">20</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;email <span class="sql-keyword">VARCHAR</span>(<span class="sql-number">100</span>) <span class="sql-keyword">UNIQUE</span><br>
+                        );
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="concept-box">
+                        <h3>Table Explanation</h3>
+                        <ul style="font-size: 0.95em; line-height: 1.7;">
+                            <li><strong>customer_id:</strong> Auto-incrementing primary key for each customer</li>
+                            <li><strong>first_name, last_name:</strong> Required name fields</li>
+                            <li><strong>license_number:</strong> Driver's license number - must be unique and NOT NULL (required to rent)</li>
+                            <li><strong>phone:</strong> Optional contact phone</li>
+                            <li><strong>email:</strong> Optional but must be unique if provided</li>
+                            <li><strong>Purpose:</strong> Independent parent table storing customer details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <p><strong>Key Concept:</strong> Customers table has no foreign keys, making it another parent table. It can be created in any order relative to Locations and Vehicles.</p>
+            </div>
+        </div>
+
+        <!-- Slide 44: CREATE TABLE - Rentals -->
+        <div class="slide">
+            <h1>CREATE TABLE: Rentals</h1>
+            <h2>The Junction Table with Multiple Foreign Keys</h2>
+
+            <div class="comparison-table">
+                <div class="column">
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        <span class="sql-keyword">CREATE TABLE</span> Rentals (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;rental_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;vehicle_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;customer_id <span class="sql-keyword">INTEGER NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;rental_date <span class="sql-keyword">DATE NOT NULL</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return_date <span class="sql-keyword">DATE</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;pickup_location_id <span class="sql-keyword">INTEGER</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return_location_id <span class="sql-keyword">INTEGER</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;total_cost <span class="sql-keyword">DECIMAL</span>(<span class="sql-number">10,2</span>),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (vehicle_id)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Vehicles(vehicle_id),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (customer_id)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Customers(customer_id),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (pickup_location_id)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Locations(location_id),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (return_location_id)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">REFERENCES</span> Locations(location_id)<br>
+                        );
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="concept-box">
+                        <h3>Table Explanation</h3>
+                        <ul style="font-size: 0.85em; line-height: 1.5;">
+                            <li><strong>rental_id:</strong> Primary key for each rental transaction</li>
+                            <li><strong>vehicle_id:</strong> FK to Vehicles - which car was rented</li>
+                            <li><strong>customer_id:</strong> FK to Customers - who rented it</li>
+                            <li><strong>rental_date:</strong> When rental started (required)</li>
+                            <li><strong>return_date:</strong> When returned (NULL if still out)</li>
+                            <li><strong>pickup_location_id:</strong> FK to Locations - where picked up</li>
+                            <li><strong>return_location_id:</strong> FK to Locations - where returned (supports one-way rentals)</li>
+                            <li><strong>total_cost:</strong> Final rental cost</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <p><strong>⚠️ Critical:</strong> Rentals must be created LAST because it depends on all three parent tables. All foreign key references must point to existing tables!</p>
+            </div>
+        </div>
+
         <!-- ==================== PART 6: HOMEWORK ==================== -->
 
         <!-- Slide 41: Homework Overview -->
@@ -1789,7 +1962,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">45</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">49</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
