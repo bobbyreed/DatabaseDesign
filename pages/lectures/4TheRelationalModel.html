@@ -971,9 +971,109 @@
                 <strong>Industry Practice:</strong> DBAs and data engineers always use bulk loading tools (COPY, LOAD DATA, BULK INSERT) for large datasets. This is how production systems ingest millions of records daily.
             </div>
         </div>
+
+        <!-- Slide 20: Troubleshooting COPY Command -->
+        <div class="slide">
+            <h1>Troubleshooting: File Not Found <span class="emoji">🔧</span></h1>
+            <h2>Common Issues and Solutions</h2>
+
+            <div class="warning-box">
+                <h3>❌ Error: "No such file or directory"</h3>
+                <p style="font-size: 1.1em;">This is the most common error! Here's how to fix it:</p>
+            </div>
+
+            <div class="activity-box">
+                <h3>Solution 1: Verify Your File Path</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Open File Explorer</strong> and navigate to your movies.csv file</li>
+                    <li><strong>Right-click the file</strong> → Properties (Windows) or Get Info (Mac)</li>
+                    <li><strong>Copy the exact path</strong> - look for "Location" field</li>
+                    <li><strong>Common mistake:</strong> Double folder nesting like <code>ml-32m/ml-32m/</code> - check if you have this!</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Solution 2: Use Forward Slashes (Even on Windows!)</h3>
+                <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
+                    <span class="sql-comment">-- ✅ CORRECT: Forward slashes work on all platforms</span><br>
+                    \<span class="sql-keyword">COPY</span> movies(movie_id, title, genres)<br>
+                    <span class="sql-keyword">FROM</span> <span class="sql-string">'C:/Users/YourName/Downloads/ml-32m/movies.csv'</span><br>
+                    <span class="sql-keyword">DELIMITER</span> <span class="sql-string">','</span> <span class="sql-keyword">CSV HEADER</span>;<br><br>
+
+                    <span class="sql-comment">-- ❌ WRONG: Backslashes need escaping in PostgreSQL</span><br>
+                    <span class="sql-comment">-- C:\Users\YourName\... will NOT work</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: DataGrip Import Alternative -->
+        <div class="slide">
+            <h1>Alternative: DataGrip Import Tool <span class="emoji">🛠️</span></h1>
+            <h2>GUI Method (Easier for Beginners)</h2>
+
+            <div class="success-box">
+                <h3>If COPY command gives you trouble, use DataGrip's built-in importer:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Right-click your <code>movies</code> table</strong> in DataGrip</li>
+                    <li><strong>Select:</strong> Import Data from File</li>
+                    <li><strong>Browse to:</strong> ml-32m/movies.csv</li>
+                    <li><strong>DataGrip will show preview:</strong>
+                        <ul style="font-size: 0.9em; margin-top: 8px;">
+                            <li>Check "First row is header" ✓</li>
+                            <li>Verify column mappings (movie_id → movie_id, title → title, etc.)</li>
+                            <li>Click "Import"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Wait for progress bar</strong> - should take 5-15 seconds</li>
+                    <li><strong>Verify:</strong> <code>SELECT COUNT(*) FROM movies;</code> should show ~86,000</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> DataGrip's importer handles file paths automatically - no need to worry about forward/backward slashes!
+            </div>
+        </div>
+
+        <!-- Slide 22: Verification and Next Steps -->
+        <div class="slide">
+            <h1>Verify Your Import Worked <span class="emoji">✅</span></h1>
+
+            <div class="demo-box">
+                <h3>Run These Queries to Confirm Success:</h3>
+                <div class="sql-example" style="font-size: 0.9em; margin-top: 15px;">
+                    <span class="sql-comment">-- 1. Check row count (should be ~86,000)</span><br>
+                    <span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">FROM</span> movies;<br><br>
+
+                    <span class="sql-comment">-- 2. See first 10 movies</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> movies <span class="sql-keyword">LIMIT</span> 10;<br><br>
+
+                    <span class="sql-comment">-- 3. Find a specific movie</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> movies <br>
+                    <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Toy Story%'</span>;<br><br>
+
+                    <span class="sql-comment">-- 4. Count movies by genre (note: genres are pipe-separated)</span><br>
+                    <span class="sql-keyword">SELECT</span> genres, <span class="sql-keyword">COUNT</span>(*) <br>
+                    <span class="sql-keyword">FROM</span> movies <br>
+                    <span class="sql-keyword">WHERE</span> genres <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Action%'</span><br>
+                    <span class="sql-keyword">GROUP BY</span> genres<br>
+                    <span class="sql-keyword">ORDER BY COUNT</span>(*) <span class="sql-keyword">DESC</span><br>
+                    <span class="sql-keyword">LIMIT</span> 5;
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <h3>🎉 Success Indicators:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.7;">
+                    <li>COUNT(*) returns approximately <strong>86,585 rows</strong></li>
+                    <li>You can see movies like "Toy Story (1995)", "Jumanji (1995)", etc.</li>
+                    <li>Genres are pipe-separated: "Adventure|Animation|Children|Comedy|Fantasy"</li>
+                </ul>
+            </div>
+        </div>
+
         <!-- ==================== PART 2: KEYS & INTEGRITY ==================== -->
 
-        <!-- Slide 19: Video - Database Keys -->
+        <!-- Slide 23: Video - Database Keys -->
         <div class="slide">
             <h1>Video: Understanding Database Keys</h1>
 
@@ -991,7 +1091,7 @@
             </div>
         </div>
 
-        <!-- Slide 20: Types of Keys Overview -->
+        <!-- Slide 24: Types of Keys Overview -->
         <div class="slide">
             <h1>Understanding Relational Keys</h1>
             <p>Keys are fundamental to maintaining data integrity and establishing relationships:</p>
@@ -1014,7 +1114,7 @@
             </div>
         </div>
 
-        <!-- Slide 21: Superkeys and Candidate Keys -->
+        <!-- Slide 25: Superkeys and Candidate Keys -->
         <div class="slide">
             <h1>Superkeys and Candidate Keys</h1>
 
@@ -1035,7 +1135,7 @@
             </div>
         </div>
 
-        <!-- Slide 22: Primary and Foreign Keys -->
+        <!-- Slide 26: Primary and Foreign Keys -->
         <div class="slide">
             <h1>Primary and Foreign Keys</h1>
 
@@ -1059,7 +1159,7 @@
             </div>
         </div>
 
-        <!-- Slide 23: Practice with Keys -->
+        <!-- Slide 27: Practice with Keys -->
         <div class="slide">
             <h1>Activity: Identifying Keys <span class="emoji">🔍</span></h1>
             <div class="activity-box">
@@ -1090,7 +1190,7 @@
             <button data-timer="15">Start 15-Minute Timer</button>
         </div>
 
-        <!-- Slide 24: Integrity Constraints -->
+        <!-- Slide 28: Integrity Constraints -->
         <div class="slide">
             <h1>Integrity Constraints</h1>
             <p>Rules that ensure data quality and consistency:</p>
@@ -1116,7 +1216,7 @@
             </div>
         </div>
 
-        <!-- Slide 25: NULL Values -->
+        <!-- Slide 29: NULL Values -->
         <div class="slide">
             <h1>Understanding NULL Values</h1>
 
@@ -1147,7 +1247,7 @@
             </div>
         </div>
 
-        <!-- Slide 26: Relations vs. Files / Data Formats -->
+        <!-- Slide 30: Relations vs. Files / Data Formats -->
         <div class="slide">
             <h1>Relations vs. Files & Modern Data Formats</h1>
             <p>Why use relations instead of flat files, and how they compare to modern formats:</p>
@@ -1204,7 +1304,7 @@
 
         <!-- ==================== PART 3: SQL IMPLEMENTATION ==================== -->
 
-        <!-- Slide 27: Creating Relations in SQL -->
+        <!-- Slide 31: Creating Relations in SQL -->
         <div class="slide">
             <h1>Creating Relations with SQL</h1>
             <p>Let's see how to implement our conceptual model in SQL:</p>
@@ -1233,7 +1333,7 @@
             </div>
         </div>
 
-        <!-- Slide 28: General Constraints -->
+        <!-- Slide 32: General Constraints -->
         <div class="slide">
             <h1>Business Rules as General Constraints</h1>
             <p>Beyond basic integrity, we often need business-specific rules:</p>
@@ -1287,7 +1387,7 @@
             </div>
         </div>
 
-        <!-- Slide 29: SQL Syntax Cheat Sheet -->
+        <!-- Slide 33: SQL Syntax Cheat Sheet -->
         <div class="slide">
             <h1>SQL Syntax Cheat Sheet <span class="emoji">📋</span></h1>
             <h2>Keep This Slide Up During The Exercise!</h2>
@@ -1381,7 +1481,7 @@
 
         <!-- ==================== PART 4: CAR RENTAL CHALLENGE ==================== -->
 
-        <!-- Slide 30: Challenge Overview -->
+        <!-- Slide 34: Challenge Overview -->
         <div class="slide">
             <h1>Skills Check: Build car_rental_db <span class="emoji">🚗</span></h1>
             <h2>30-Minute Database Challenge</h2>
@@ -1409,7 +1509,7 @@
             <button data-timer="30">Start 30-Minute Timer</button>
         </div>
 
-        <!-- Slide 31: Phase 1: Design & Create -->
+        <!-- Slide 35: Phase 1: Design & Create -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks</h1>
 
@@ -1442,7 +1542,7 @@
             </div>
         </div>
 
-        <!-- Slide 32: Phase 2: Populate & Query -->
+        <!-- Slide 36: Phase 2: Populate & Query -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks (cont.)</h1>
 
@@ -1468,7 +1568,7 @@
             </div>
         </div>
 
-        <!-- Slide 33: Phase 3: ER Diagram -->
+        <!-- Slide 37: Phase 3: ER Diagram -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks (cont.)</h1>
 
@@ -1496,7 +1596,7 @@
             </div>
         </div>
 
-        <!-- Slide 34: Design Hints -->
+        <!-- Slide 38: Design Hints -->
         <div class="slide">
             <h1>Design Hints & Suggestions</h1>
 
@@ -1554,7 +1654,7 @@
             </div>
         </div>
 
-        <!-- Slide 35: Video - Relational Model Overview -->
+        <!-- Slide 39: Video - Relational Model Overview -->
         <div class="slide">
             <h1>Video: Relational Model in Practice</h1>
 
@@ -1574,7 +1674,7 @@
 
         <!-- ==================== PART 5: IN-CLASS EXERCISES ==================== -->
 
-        <!-- Slide 36: Exercise Overview -->
+        <!-- Slide 40: Exercise Overview -->
         <div class="slide">
             <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
             <h2>Extending car_rental_db <span class="timer-badge">40 minutes</span></h2>
@@ -1600,7 +1700,7 @@
 
         <!-- ==================== PART 6: HOMEWORK ==================== -->
 
-        <!-- Slide 37: Homework Overview -->
+        <!-- Slide 41: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
             <h2>Week 4: Complete car_rental_db Implementation</h2>
@@ -1630,7 +1730,7 @@
             </div>
         </div>
 
-        <!-- Slide 38: Submission Requirements -->
+        <!-- Slide 42: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
@@ -1666,7 +1766,7 @@
             </div>
         </div>
 
-        <!-- Slide 39: Summary -->
+        <!-- Slide 43: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -1689,7 +1789,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">42</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">45</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
@@ -1705,7 +1805,7 @@
             console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
             
             // Highlight code examples when shown
-            if (e.detail.currentSlide === 26) { // SQL creation slide (Slide 27: Creating Relations in SQL)
+            if (e.detail.currentSlide === 30) { // SQL creation slide (Slide 31: Creating Relations in SQL)
                 const codeBlocks = document.querySelectorAll('.sql-example');
                 codeBlocks.forEach(block => {
                     block.style.animation = 'slideIn 0.5s ease-in-out';
