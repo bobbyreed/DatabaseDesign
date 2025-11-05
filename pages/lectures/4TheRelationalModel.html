@@ -1045,20 +1045,42 @@
                 </ul>
             </div>
 
-            <div class="sql-example">
-                <span class="sql-comment">-- Implementing a business rule with a trigger</span><br>
-                <span class="sql-keyword">CREATE TRIGGER</span> check_branch_capacity<br>
-                <span class="sql-keyword">BEFORE INSERT ON</span> Staff<br>
-                <span class="sql-keyword">FOR EACH ROW</span><br>
-                <span class="sql-keyword">BEGIN</span><br>
-                &nbsp;&nbsp;<span class="sql-keyword">DECLARE</span> staff_count <span class="sql-keyword">INT</span>;<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">INTO</span> staff_count<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff <span class="sql-keyword">WHERE</span> branchNo = NEW.branchNo;<br>
-                &nbsp;&nbsp;<span class="sql-keyword">IF</span> staff_count >= 20 <span class="sql-keyword">THEN</span><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SIGNAL SQLSTATE</span> '45000'<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SET MESSAGE_TEXT</span> = 'Branch capacity exceeded';<br>
-                &nbsp;&nbsp;<span class="sql-keyword">END IF</span>;<br>
-                <span class="sql-keyword">END</span>;
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="sql-example">
+                    <span class="sql-comment">-- Implementing a business rule with a trigger</span><br>
+                    <span class="sql-keyword">CREATE TRIGGER</span> check_branch_capacity<br>
+                    <span class="sql-keyword">BEFORE INSERT ON</span> Staff<br>
+                    <span class="sql-keyword">FOR EACH ROW</span><br>
+                    <span class="sql-keyword">BEGIN</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">DECLARE</span> staff_count <span class="sql-keyword">INT</span>;<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">SELECT COUNT</span>(*) <span class="sql-keyword">INTO</span> staff_count<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff <span class="sql-keyword">WHERE</span> branchNo = NEW.branchNo;<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">IF</span> staff_count >= 20 <span class="sql-keyword">THEN</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SIGNAL SQLSTATE</span> '45000'<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SET MESSAGE_TEXT</span> = 'Branch capacity exceeded';<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">END IF</span>;<br>
+                    <span class="sql-keyword">END</span>;
+                </div>
+
+                <div class="demo-box">
+                    <h3>Understanding Trigger Syntax</h3>
+                    <div style="font-size: 0.95em; line-height: 1.7;">
+                        <p><strong>NEW.branchNo</strong></p>
+                        <ul style="font-size: 0.9em; margin-left: 20px; margin-bottom: 15px;">
+                            <li><code>NEW</code> is a special reference to the row being inserted</li>
+                            <li><code>NEW.branchNo</code> accesses the branchNo value from the new row</li>
+                            <li>Use <code>OLD</code> for UPDATE/DELETE triggers to reference previous values</li>
+                        </ul>
+
+                        <p><strong>SIGNAL SQLSTATE '45000'</strong></p>
+                        <ul style="font-size: 0.9em; margin-left: 20px;">
+                            <li>Raises a custom error to abort the operation</li>
+                            <li><code>'45000'</code> is the standard code for user-defined exceptions</li>
+                            <li><code>MESSAGE_TEXT</code> provides a human-readable error message</li>
+                            <li>The INSERT will be rolled back when this error is raised</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
