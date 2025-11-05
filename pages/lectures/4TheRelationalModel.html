@@ -788,7 +788,211 @@
             </div>
         </div>
 
-        <!-- Slide 15: Types of Keys Overview -->
+        <!-- ==================== MOVIELENS DATASET IMPORT ==================== -->
+
+        <!-- Slide 15: Introduction to Real-World Data -->
+        <div class="slide">
+            <h1>Working with Real-World Data <span class="emoji">🎬</span></h1>
+            <h2>The MovieLens Dataset</h2>
+
+            <div class="concept-box">
+                <h3>Why Real Data Matters</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">So far, we've been using dummy data with simple loops. While this is great for learning, real databases work with actual datasets. Let's upgrade from toy data to a professional, industry-standard dataset!</p>
+            </div>
+
+            <div class="success-box">
+                <h3>📊 About MovieLens</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">MovieLens is a research dataset from the GroupLens Research lab at the University of Minnesota. It contains:</p>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Millions of movie ratings</strong> from real users</li>
+                    <li><strong>Movie metadata</strong> including titles, genres, and release years</li>
+                    <li><strong>Used by researchers worldwide</strong> for recommendation systems and data science</li>
+                    <li><strong>Free and open-source</strong> for educational use</li>
+                </ul>
+            </div>
+
+            <div class="demo-box">
+                <h3>What We'll Do</h3>
+                <p style="font-size: 1.1em;">Replace your current <code>movie_rental_db.movies</code> table with real movie data from MovieLens, then learn professional bulk-loading techniques.</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Download Instructions -->
+        <div class="slide">
+            <h1>Step 1: Download the Dataset <span class="emoji">⬇️</span></h1>
+
+            <div class="activity-box">
+                <h3>Download Instructions</h3>
+                <ol style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Visit the GroupLens website:</strong>
+                        <p style="margin: 10px 0; font-size: 0.9em;">
+                            <a href="https://files.grouplens.org/datasets/movielens/ml-32m.zip" target="_blank" style="color: var(--ocu-true-blue);">
+                                https://files.grouplens.org/datasets/movielens/ml-32m.zip
+                            </a>
+                        </p>
+                    </li>
+                    <li><strong>Download the ZIP file:</strong>
+                        <ul style="font-size: 0.9em; margin-top: 8px;">
+                            <li>File name: <code>ml-32m.zip</code></li>
+                            <li>Size: ~265 MB (may take a few minutes)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Extract the contents:</strong>
+                        <ul style="font-size: 0.9em; margin-top: 8px;">
+                            <li>Right-click → Extract All (Windows)</li>
+                            <li>Or double-click to unzip (Mac/Linux)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Locate the <code>movies.csv</code> file:</strong>
+                        <ul style="font-size: 0.9em; margin-top: 8px;">
+                            <li>Inside the extracted folder: <code>ml-32m/movies.csv</code></li>
+                            <li>This file contains all the movie metadata we need!</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Note the full path to your <code>movies.csv</code> file. You'll need it in the next step!
+            </div>
+        </div>
+
+        <!-- Slide 17: Database Table Preparation -->
+        <div class="slide">
+            <h1>Step 2: Prepare Your Database Table <span class="emoji">🗄️</span></h1>
+
+            <div class="concept-box">
+                <h3>Understanding the Data Structure</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">The MovieLens <code>movies.csv</code> file has this format:</p>
+                <div class="code-example" style="font-size: 0.9em; margin-top: 10px;">
+                    movieId,title,genres<br>
+                    1,Toy Story (1995),Adventure|Animation|Children|Comedy|Fantasy<br>
+                    2,Jumanji (1995),Adventure|Children|Fantasy<br>
+                    3,Grumpier Old Men (1995),Comedy|Romance
+                </div>
+            </div>
+
+            <div class="sql-example" style="margin-top: 20px;">
+                <span class="sql-comment">-- Drop your old table and create a new one matching the CSV structure</span><br>
+                <span class="sql-keyword">DROP TABLE IF EXISTS</span> movies <span class="sql-keyword">CASCADE</span>;<br><br>
+
+                <span class="sql-keyword">CREATE TABLE</span> movies (<br>
+                &nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER PRIMARY KEY</span>,<br>
+                &nbsp;&nbsp;title <span class="sql-keyword">VARCHAR</span>(500) <span class="sql-keyword">NOT NULL</span>,<br>
+                &nbsp;&nbsp;genres <span class="sql-keyword">VARCHAR</span>(200)<br>
+                );
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>⚠️ Important:</strong> The <code>CASCADE</code> keyword will drop any tables that depend on the movies table (like rentals with foreign keys). Make sure you're okay with this, or adjust your schema accordingly!
+            </div>
+        </div>
+
+        <!-- Slide 18: COPY Command Import -->
+        <div class="slide">
+            <h1>Step 3: Bulk Import with COPY <span class="emoji">⚡</span></h1>
+
+            <div class="demo-box">
+                <h3>The Professional Way to Load Data</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Instead of INSERT loops, PostgreSQL has a powerful <code>COPY</code> command designed for high-speed bulk imports.</p>
+            </div>
+
+            <div class="sql-example" style="margin-top: 20px;">
+                <span class="sql-comment">-- Import the entire CSV in ONE command!</span><br>
+                <span class="sql-keyword">COPY</span> movies(movie_id, title, genres)<br>
+                <span class="sql-keyword">FROM</span> <span class="sql-string">'/path/to/your/ml-32m/movies.csv'</span><br>
+                <span class="sql-keyword">DELIMITER</span> <span class="sql-string">','</span><br>
+                <span class="sql-keyword">CSV HEADER</span>;
+            </div>
+
+            <div class="activity-box" style="margin-top: 20px;">
+                <h3>Step-by-Step Execution:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li>Replace <code>/path/to/your/ml-32m/movies.csv</code> with your actual file path:
+                        <ul style="font-size: 0.9em; margin-top: 8px;">
+                            <li><strong>Windows:</strong> <code>'C:/Users/YourName/Downloads/ml-32m/movies.csv'</code></li>
+                            <li><strong>Mac:</strong> <code>'/Users/YourName/Downloads/ml-32m/movies.csv'</code></li>
+                            <li><strong>Linux:</strong> <code>'/home/yourname/Downloads/ml-32m/movies.csv'</code></li>
+                        </ul>
+                    </li>
+                    <li>Run the command in DataGrip</li>
+                    <li>Watch as <strong>86,000+ movies</strong> load in seconds!</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> If you get a permission error, you may need to use <code>\COPY</code> instead of <code>COPY</code>, or ensure PostgreSQL has file access permissions.
+            </div>
+        </div>
+
+        <!-- Slide 19: Why COPY is Better -->
+        <div class="slide">
+            <h1>Why COPY is Superior to INSERT Loops <span class="emoji">🚀</span></h1>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="comparison-card bad">
+                    <h3>❌ DO $$ Loop Approach</h3>
+                    <ul style="font-size: 0.95em; line-height: 1.6;">
+                        <li><strong>1,000 separate transactions</strong> (one per INSERT)</li>
+                        <li>Procedural code interpreted line-by-line</li>
+                        <li>Each INSERT has full ACID overhead</li>
+                        <li>Indexes updated after every row</li>
+                        <li><strong>Time:</strong> Seconds to minutes for large datasets</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card good">
+                    <h3>✅ COPY Command</h3>
+                    <ul style="font-size: 0.95em; line-height: 1.6;">
+                        <li><strong>One single bulk operation</strong></li>
+                        <li>Direct file-to-table data streaming</li>
+                        <li>Minimal transaction overhead</li>
+                        <li>Indexes built efficiently after load</li>
+                        <li><strong>Time:</strong> Milliseconds to seconds</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <h3>Real-World Performance Comparison</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>DO $$ Loop</th>
+                            <th>COPY Command</th>
+                            <th>Speedup</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1,000 rows</td>
+                            <td>~2 seconds</td>
+                            <td>~0.05 seconds</td>
+                            <td><strong>40x faster</strong></td>
+                        </tr>
+                        <tr>
+                            <td>86,000 rows (MovieLens)</td>
+                            <td>~3 minutes</td>
+                            <td>~2 seconds</td>
+                            <td><strong>90x faster</strong></td>
+                        </tr>
+                        <tr>
+                            <td>1,000,000 rows</td>
+                            <td>~30 minutes</td>
+                            <td>~15 seconds</td>
+                            <td><strong>120x faster</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Industry Practice:</strong> DBAs and data engineers always use bulk loading tools (COPY, LOAD DATA, BULK INSERT) for large datasets. This is how production systems ingest millions of records daily.
+            </div>
+        </div>
+
+        <!-- Slide 20: Types of Keys Overview -->
         <div class="slide">
             <h1>Understanding Relational Keys</h1>
             <p>Keys are fundamental to maintaining data integrity and establishing relationships:</p>
@@ -811,7 +1015,7 @@
             </div>
         </div>
 
-        <!-- Slide 16: Superkeys and Candidate Keys -->
+        <!-- Slide 21: Superkeys and Candidate Keys -->
         <div class="slide">
             <h1>Superkeys and Candidate Keys</h1>
 
@@ -832,7 +1036,7 @@
             </div>
         </div>
 
-        <!-- Slide 17: Primary and Foreign Keys -->
+        <!-- Slide 22: Primary and Foreign Keys -->
         <div class="slide">
             <h1>Primary and Foreign Keys</h1>
 
@@ -856,7 +1060,7 @@
             </div>
         </div>
 
-        <!-- Slide 18: Practice with Keys -->
+        <!-- Slide 23: Practice with Keys -->
         <div class="slide">
             <h1>Activity: Identifying Keys <span class="emoji">🔍</span></h1>
             <div class="activity-box">
@@ -887,7 +1091,7 @@
             <button data-timer="15">Start 15-Minute Timer</button>
         </div>
 
-        <!-- Slide 19: Integrity Constraints -->
+        <!-- Slide 24: Integrity Constraints -->
         <div class="slide">
             <h1>Integrity Constraints</h1>
             <p>Rules that ensure data quality and consistency:</p>
@@ -913,7 +1117,7 @@
             </div>
         </div>
 
-        <!-- Slide 20: NULL Values -->
+        <!-- Slide 25: NULL Values -->
         <div class="slide">
             <h1>Understanding NULL Values</h1>
 
@@ -944,7 +1148,7 @@
             </div>
         </div>
 
-        <!-- Slide 21: Relations vs. Files / Data Formats -->
+        <!-- Slide 26: Relations vs. Files / Data Formats -->
         <div class="slide">
             <h1>Relations vs. Files & Modern Data Formats</h1>
             <p>Why use relations instead of flat files, and how they compare to modern formats:</p>
@@ -1001,7 +1205,7 @@
 
         <!-- ==================== PART 3: SQL IMPLEMENTATION ==================== -->
 
-        <!-- Slide 22: Creating Relations in SQL -->
+        <!-- Slide 27: Creating Relations in SQL -->
         <div class="slide">
             <h1>Creating Relations with SQL</h1>
             <p>Let's see how to implement our conceptual model in SQL:</p>
@@ -1030,7 +1234,7 @@
             </div>
         </div>
 
-        <!-- Slide 23: General Constraints -->
+        <!-- Slide 28: General Constraints -->
         <div class="slide">
             <h1>Business Rules as General Constraints</h1>
             <p>Beyond basic integrity, we often need business-specific rules:</p>
@@ -1084,7 +1288,7 @@
             </div>
         </div>
 
-        <!-- Slide 24: SQL Syntax Cheat Sheet -->
+        <!-- Slide 29: SQL Syntax Cheat Sheet -->
         <div class="slide">
             <h1>SQL Syntax Cheat Sheet <span class="emoji">📋</span></h1>
             <h2>Keep This Slide Up During The Exercise!</h2>
@@ -1178,7 +1382,7 @@
 
         <!-- ==================== PART 4: CAR RENTAL CHALLENGE ==================== -->
 
-        <!-- Slide 25: Challenge Overview -->
+        <!-- Slide 30: Challenge Overview -->
         <div class="slide">
             <h1>Skills Check: Build car_rental_db <span class="emoji">🚗</span></h1>
             <h2>30-Minute Database Challenge</h2>
@@ -1206,7 +1410,7 @@
             <button data-timer="30">Start 30-Minute Timer</button>
         </div>
 
-        <!-- Slide 26: Phase 1: Design & Create -->
+        <!-- Slide 31: Phase 1: Design & Create -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks</h1>
 
@@ -1239,7 +1443,7 @@
             </div>
         </div>
 
-        <!-- Slide 27: Phase 2: Populate & Query -->
+        <!-- Slide 32: Phase 2: Populate & Query -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks (cont.)</h1>
 
@@ -1265,7 +1469,7 @@
             </div>
         </div>
 
-        <!-- Slide 28: Phase 3: ER Diagram -->
+        <!-- Slide 33: Phase 3: ER Diagram -->
         <div class="slide">
             <h1>Challenge Requirements & Tasks (cont.)</h1>
 
@@ -1293,7 +1497,7 @@
             </div>
         </div>
 
-        <!-- Slide 29: Design Hints -->
+        <!-- Slide 34: Design Hints -->
         <div class="slide">
             <h1>Design Hints & Suggestions</h1>
 
@@ -1351,7 +1555,7 @@
             </div>
         </div>
 
-        <!-- Slide 30: Video - Relational Model Overview -->
+        <!-- Slide 35: Video - Relational Model Overview -->
         <div class="slide">
             <h1>Video: Relational Model in Practice</h1>
 
@@ -1371,7 +1575,7 @@
 
         <!-- ==================== PART 5: IN-CLASS EXERCISES ==================== -->
 
-        <!-- Slide 31: Exercise Overview -->
+        <!-- Slide 36: Exercise Overview -->
         <div class="slide">
             <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
             <h2>Extending car_rental_db <span class="timer-badge">40 minutes</span></h2>
@@ -1397,7 +1601,7 @@
 
         <!-- ==================== PART 6: HOMEWORK ==================== -->
 
-        <!-- Slide 32: Homework Overview -->
+        <!-- Slide 37: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
             <h2>Week 4: Complete car_rental_db Implementation</h2>
@@ -1427,7 +1631,7 @@
             </div>
         </div>
 
-        <!-- Slide 33: Submission Requirements -->
+        <!-- Slide 38: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
@@ -1463,7 +1667,7 @@
             </div>
         </div>
 
-        <!-- Slide 34: Summary -->
+        <!-- Slide 39: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -1479,7 +1683,6 @@
             <div class="demo-box" style="margin-top: 30px;">
                 <p><strong>Next Lecture:</strong> Relational Algebra - Query Operations</p>
                 <p><strong>Homework:</strong> Complete car_rental_db implementation (due next week)</p>
-                <p><strong>Reading:</strong> Chapter 4 - The Relational Model (Pages 89-132)</p>
             </div>
         </div>
 
@@ -1487,7 +1690,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">37</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">42</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
@@ -1503,7 +1706,7 @@
             console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
             
             // Highlight code examples when shown
-            if (e.detail.currentSlide === 21) { // SQL creation slide (Slide 22: Creating Relations in SQL)
+            if (e.detail.currentSlide === 26) { // SQL creation slide (Slide 27: Creating Relations in SQL)
                 const codeBlocks = document.querySelectorAll('.sql-example');
                 codeBlocks.forEach(block => {
                     block.style.animation = 'slideIn 0.5s ease-in-out';
