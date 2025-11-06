@@ -158,7 +158,206 @@
             </div>
         </div>
 
-        <!-- Slide 3: Historical Context -->
+        <!-- ==================== INTELLIGENT KEY EXERCISE ==================== -->
+
+        <!-- Slide 3: What Are Intelligent Keys? -->
+        <div class="slide">
+            <h1>Refresh: Intelligent (Natural) Keys <span class="emoji">🔑</span></h1>
+            <h2>Keys with Built-In Business Meaning</h2>
+
+            <div class="example-box">
+                <h3>What is an Intelligent Key?</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">An <strong>intelligent key</strong> (also called a <strong>natural key</strong> or <strong>smart key</strong>) is a primary key that has <em>business meaning</em> encoded directly into its value. Instead of using arbitrary numbers, the key itself conveys information about the record.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="demo-box">
+                    <h3>❌ Surrogate Key (No Meaning)</h3>
+                    <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
+                        vehicle_id: 1<br>
+                        vehicle_id: 2<br>
+                        vehicle_id: 3
+                    </div>
+                    <p style="font-size: 0.95em; margin-top: 10px;">These numbers tell you <strong>nothing</strong> about the vehicles. You must query the table to learn anything.</p>
+                </div>
+
+                <div class="success-box">
+                    <h3>✅ Intelligent Key (Has Meaning)</h3>
+                    <div class="sql-example" style="font-size: 0.85em; margin-top: 10px;">
+                        vehicle_id: DFW-SUV-001<br>
+                        vehicle_id: LAX-SEDAN-042<br>
+                        vehicle_id: ORD-TRUCK-015
+                    </div>
+                    <p style="font-size: 0.95em; margin-top: 10px;"><strong>Instant information:</strong> Location, vehicle type, and sequence number—all from the key!</p>
+                </div>
+            </div>
+
+            <div class="concept-box" style="margin-top: 20px;">
+                <h3>Structure of an Intelligent Key</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Intelligent keys typically combine multiple pieces of information with separators:</p>
+                <ul style="font-size: 1.05em; line-height: 1.6; margin-top: 10px;">
+                    <li><strong>Location Code</strong> (e.g., DFW = Dallas, LAX = Los Angeles)</li>
+                    <li><strong>Category/Type</strong> (e.g., SUV, SEDAN, TRUCK)</li>
+                    <li><strong>Sequential Number</strong> (e.g., 001, 042, 015)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Exercise Setup -->
+        <div class="slide">
+            <h1>In-Class Exercise: Add Intelligent Keys <span class="emoji">💻</span></h1>
+            <h2>Enhancing car_rental_db from Lecture 4</h2>
+
+            <div class="activity-box">
+                <h3>Your Mission</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">We're going to add an intelligent key system to the <code>Vehicles</code> table from your car_rental_db. Currently, vehicles just have a numeric <code>vehicle_id</code>. We'll add a human-readable identifier that tells us location and vehicle type at a glance!</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>What We'll Build</h3>
+                <p style="font-size: 1.1em;">A new column called <code>vehicle_code</code> with this format:</p>
+                <div class="sql-example" style="font-size: 0.95em; margin-top: 10px;">
+                    <strong>Format:</strong> [LOCATION]-[CATEGORY]-[NUMBER]<br><br>
+                    <strong>Examples:</strong><br>
+                    DFW-SUV-001 → Dallas SUV #1<br>
+                    LAX-SEDAN-023 → Los Angeles Sedan #23<br>
+                    NYC-TRUCK-007 → New York Truck #7
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>Before You Start:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li>✅ Make sure you have your <code>car_rental_db</code> from Lecture 4</li>
+                    <li>✅ You should have tables: Locations, Vehicles, Customers, Rentals</li>
+                    <li>✅ If not, quickly recreate the Vehicles and Locations tables</li>
+                </ul>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Exercise Timer</button>
+        </div>
+
+        <!-- Slide 5: Full Implementation with Explanation -->
+        <div class="slide">
+            <h1>Solution: Intelligent Key Implementation <span class="emoji">🔧</span></h1>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="sql-example" style="font-size: 0.75em;">
+                    <span class="sql-comment">-- Step 1: Add the new column</span><br>
+                    <span class="sql-keyword">ALTER TABLE</span> Vehicles<br>
+                    <span class="sql-keyword">ADD COLUMN</span> vehicle_code <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">UNIQUE</span>;<br><br>
+
+                    <span class="sql-comment">-- Step 2: Create a function to generate codes</span><br>
+                    <span class="sql-keyword">CREATE OR REPLACE FUNCTION</span> generate_vehicle_code(<br>
+                    &nbsp;&nbsp;loc_code <span class="sql-keyword">VARCHAR</span>,<br>
+                    &nbsp;&nbsp;category <span class="sql-keyword">VARCHAR</span><br>
+                    ) <span class="sql-keyword">RETURNS VARCHAR AS</span> $$<br>
+                    <span class="sql-keyword">DECLARE</span><br>
+                    &nbsp;&nbsp;next_num <span class="sql-keyword">INTEGER</span>;<br>
+                    <span class="sql-keyword">BEGIN</span><br>
+                    &nbsp;&nbsp;<span class="sql-comment">-- Find highest number for this combo</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">SELECT COALESCE</span>(<span class="sql-keyword">MAX</span>(<span class="sql-keyword">CAST</span>(<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SUBSTRING</span>(vehicle_code <span class="sql-keyword">FROM</span> <span class="sql-string">'\d+$'</span>) <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">AS INTEGER</span>)), 0) + 1<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">INTO</span> next_num<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Vehicles<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> vehicle_code <span class="sql-keyword">LIKE</span> loc_code || <span class="sql-string">'-'</span> || category || <span class="sql-string">'-%'</span>;<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-comment">-- Return formatted code</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">RETURN</span> loc_code || <span class="sql-string">'-'</span> || category || <span class="sql-string">'-'</span> || <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">LPAD</span>(next_num::<span class="sql-keyword">TEXT</span>, 3, <span class="sql-string">'0'</span>);<br>
+                    <span class="sql-keyword">END</span>;<br>
+                    $$ <span class="sql-keyword">LANGUAGE</span> plpgsql;
+                </div>
+
+                <div class="demo-box">
+                    <h3>Code Explanation</h3>
+                    <ul style="font-size: 0.9em; line-height: 1.6;">
+                        <li><strong>ALTER TABLE:</strong> Adds new UNIQUE column to store codes</li>
+                        <li><strong>COALESCE:</strong> Returns 0 if no matches found (first vehicle)</li>
+                        <li><strong>SUBSTRING + REGEX:</strong> Extracts the number part from existing codes</li>
+                        <li><strong>LPAD:</strong> Pads numbers to 3 digits (001, 002, etc.)</li>
+                        <li><strong>|| operator:</strong> String concatenation in PostgreSQL</li>
+                    </ul>
+
+                    <h3 style="margin-top: 15px;">Using the Function</h3>
+                    <div class="sql-example" style="font-size: 0.75em; margin-top: 8px;">
+                        <span class="sql-comment">-- Generate code when inserting</span><br>
+                        <span class="sql-keyword">INSERT INTO</span> Vehicles (vehicle_code, make, model, category, location_id)<br>
+                        <span class="sql-keyword">VALUES</span> (<br>
+                        &nbsp;&nbsp;generate_vehicle_code(<span class="sql-string">'DFW'</span>, <span class="sql-string">'SUV'</span>),<br>
+                        &nbsp;&nbsp;<span class="sql-string">'Toyota'</span>, <span class="sql-string">'RAV4'</span>, <span class="sql-string">'SUV'</span>, 1<br>
+                        );
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 15px;">
+                <h3>Result:</h3>
+                <p style="font-size: 1.05em;">Each vehicle now has a code like <code>DFW-SUV-001</code> that's unique, human-readable, and carries business meaning!</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Real-World Examples -->
+        <div class="slide">
+            <h1>Real-World Use Cases for Intelligent Keys <span class="emoji">🌍</span></h1>
+
+            <div class="example-box">
+                <h3>1. Airlines: Flight Numbers</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Example:</strong> AA2315</p>
+                <ul style="font-size: 0.95em; margin-left: 20px;">
+                    <li><strong>AA</strong> = American Airlines (carrier code)</li>
+                    <li><strong>2315</strong> = Flight number (often indicates route/schedule)</li>
+                    <li><strong>Why useful:</strong> Passengers and staff instantly know the airline. Gate agents can sort flights by carrier.</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>2. Retail: Product SKUs</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Example:</strong> ELEC-LAPT-15IN-HP-001</p>
+                <ul style="font-size: 0.95em; margin-left: 20px;">
+                    <li><strong>ELEC</strong> = Electronics department</li>
+                    <li><strong>LAPT</strong> = Laptop category</li>
+                    <li><strong>15IN</strong> = 15-inch screen size</li>
+                    <li><strong>HP</strong> = Brand (Hewlett-Packard)</li>
+                    <li><strong>001</strong> = Sequential inventory number</li>
+                    <li><strong>Why useful:</strong> Warehouse workers can route items to correct areas. Inventory reports group logically.</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>3. Healthcare: Patient Medical Record Numbers</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Example:</strong> 2024-CARDIO-012345</p>
+                <ul style="font-size: 0.95em; margin-left: 20px;">
+                    <li><strong>2024</strong> = Year of first visit</li>
+                    <li><strong>CARDIO</strong> = Primary department/specialty</li>
+                    <li><strong>012345</strong> = Patient sequence number</li>
+                    <li><strong>Why useful:</strong> Medical staff can quickly identify department and approximate patient history length.</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>4. Government: License Plate Numbers</h3>
+                <p style="font-size: 1.05em; line-height: 1.7;"><strong>Example:</strong> TX-ABC-1234</p>
+                <ul style="font-size: 0.95em; margin-left: 20px;">
+                    <li><strong>TX</strong> = Texas (state code)</li>
+                    <li><strong>ABC-1234</strong> = Unique identifier within state</li>
+                    <li><strong>Why useful:</strong> Law enforcement instantly knows jurisdiction. DMV systems partition by state.</li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>⚠️ When NOT to Use Intelligent Keys</h3>
+                <ul style="font-size: 1.0em; line-height: 1.6;">
+                    <li><strong>Frequently changing data:</strong> If business rules change (e.g., reorg departments), keys become outdated</li>
+                    <li><strong>High-volume systems:</strong> Generating complex keys can slow inserts in high-transaction environments</li>
+                    <li><strong>Privacy concerns:</strong> Keys that reveal too much information can be a security risk</li>
+                    <li><strong>Simple applications:</strong> For small systems, surrogate keys (just integers) are simpler and faster</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Historical Context -->
         <div class="slide">
             <h1>Historical Context <span class="emoji">📜</span></h1>
             <h2>Codd's Mathematical Foundation</h2>
@@ -173,7 +372,7 @@
             </div>
         </div>
 
-        <!-- Slide 4: Introduction to Relational Algebra -->
+        <!-- Slide 8: Introduction to Relational Algebra -->
         <div class="slide">
             <h1>What is Relational Algebra?</h1>
             <p>A theoretical language with operations that work on one or more relations to define another relation without changing the original relations.</p>
@@ -193,7 +392,7 @@
             </div>
         </div>
 
-        <!-- Slide 4: Five Basic Operations -->
+        <!-- Slide 9: Five Basic Operations -->
         <div class="slide">
             <h1>The Five Basic Operations</h1>
             
@@ -222,7 +421,7 @@
             </div>
         </div>
 
-        <!-- Slide 5: Selection Operation -->
+        <!-- Slide 10: Selection Operation -->
         <div class="slide">
             <h1>Selection Operation (σ)</h1>
             <p>Works on a single relation R and defines a relation that contains only those tuples of R that satisfy the specified condition (predicate).</p>
@@ -257,7 +456,7 @@
             </table>
         </div>
 
-        <!-- Slide 6: Projection Operation -->
+        <!-- Slide 11: Projection Operation -->
         <div class="slide">
             <h1>Projection Operation (∏)</h1>
             <p>Works on a single relation R and defines a relation that contains a vertical subset of R, extracting the values of specified attributes and eliminating duplicates.</p>
@@ -282,7 +481,7 @@
             </div>
         </div>
 
-        <!-- Slide 7: Combining Selection and Projection -->
+        <!-- Slide 12: Combining Selection and Projection -->
         <div class="slide">
             <h1>Combining Operations</h1>
             <p>We can combine selection and projection for more complex queries!</p>
@@ -305,7 +504,7 @@
             </div>
         </div>
 
-        <!-- Slide 8: Union Operation -->
+        <!-- Slide 13: Union Operation -->
         <div class="slide">
             <h1>Union Operation (∪)</h1>
             <p>Union of two relations R and S defines a relation containing all tuples of R, or S, or both, with duplicates eliminated.</p>
@@ -330,7 +529,7 @@
             </div>
         </div>
 
-        <!-- Slide 9: Set Difference Operation -->
+        <!-- Slide 14: Set Difference Operation -->
         <div class="slide">
             <h1>Set Difference Operation (−)</h1>
             <p>Defines a relation consisting of tuples in relation R but not in S.</p>
@@ -356,7 +555,7 @@
             </div>
         </div>
 
-        <!-- Slide 10: Intersection Operation -->
+        <!-- Slide 15: Intersection Operation -->
         <div class="slide">
             <h1>Intersection Operation (∩)</h1>
             <p>Defines a relation consisting of tuples that are in both R and S.</p>
@@ -378,7 +577,7 @@
             </div>
         </div>
 
-        <!-- Slide 11: Cartesian Product -->
+        <!-- Slide 16: Cartesian Product -->
         <div class="slide">
             <h1>Cartesian Product (×)</h1>
             <p>Defines a relation that is the concatenation of every tuple of relation R with every tuple of relation S.</p>
@@ -416,7 +615,7 @@
             </div>
         </div>
 
-        <!-- Slide 12: Introduction to Joins -->
+        <!-- Slide 17: Introduction to Joins -->
         <div class="slide">
             <h1>Join Operations Overview</h1>
             <p>Join is a derivative of Cartesian product - it's more useful!</p>
@@ -437,7 +636,7 @@
             </div>
         </div>
 
-        <!-- Slide 13: Theta Join -->
+        <!-- Slide 18: Theta Join -->
         <div class="slide">
             <h1>Theta Join (θ-Join)</h1>
             <p>Defines a relation containing tuples satisfying a predicate F from the Cartesian product of R and S.</p>
@@ -466,7 +665,7 @@
             </table>
         </div>
 
-        <!-- Slide 14: Natural Join -->
+        <!-- Slide 19: Natural Join -->
         <div class="slide">
             <h1>Natural Join (⋈)</h1>
             <p>An Equijoin over all common attributes, with one occurrence of each common attribute eliminated.</p>
@@ -497,7 +696,7 @@
             </div>
         </div>
 
-        <!-- Slide 15: Outer Joins -->
+        <!-- Slide 20: Outer Joins -->
         <div class="slide">
             <h1>Outer Join Operations</h1>
             <p>Preserves tuples that would be lost in a regular join</p>
@@ -530,7 +729,7 @@
             </div>
         </div>
 
-        <!-- Slide 16: Semijoin -->
+        <!-- Slide 21: Semijoin -->
         <div class="slide">
             <h1>Semijoin (⋉)</h1>
             <p>Returns tuples from R that participate in the join with S</p>
@@ -556,7 +755,7 @@
             </div>
         </div>
 
-        <!-- Slide 17: Division Operation -->
+        <!-- Slide 22: Division Operation -->
         <div class="slide">
             <h1>Division Operation (÷)</h1>
             <p>Defines a relation over attributes C that consists of tuples from R that match every tuple in S.</p>
@@ -582,7 +781,7 @@
             </div>
         </div>
 
-        <!-- Slide 18: Complex Query Example -->
+        <!-- Slide 23: Complex Query Example -->
         <div class="slide">
             <h1>Complex Query Example</h1>
             <p><strong>Query:</strong> "Find the names of staff who work in London branches and manage properties with rent > 500"</p>
@@ -603,7 +802,7 @@
             </div>
         </div>
 
-        <!-- Slide 19: Hands-On Practice -->
+        <!-- Slide 24: Hands-On Practice -->
         <div class="slide">
             <h1>Practice Problems</h1>
             
@@ -629,7 +828,7 @@
             </div>
         </div>
 
-        <!-- Slide 20: Connecting to SQL -->
+        <!-- Slide 25: Connecting to SQL -->
         <div class="slide">
             <h1>Relational Algebra → SQL Mapping</h1>
             
@@ -669,7 +868,7 @@
             </table>
         </div>
 
-        <!-- Slide 21: Query Optimization Preview -->
+        <!-- Slide 26: Query Optimization Preview -->
         <div class="slide">
             <h1>Query Optimization Basics</h1>
             <p>Multiple algebraic expressions can produce the same result!</p>
@@ -697,7 +896,7 @@
             </div>
         </div>
 
-        <!-- Slide 22: Real-World Application -->
+        <!-- Slide 27: Real-World Application -->
         <div class="slide">
             <h1>Real-World Database Example</h1>
             
@@ -721,7 +920,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 23: Advanced Topics -->
+        <!-- Slide 28: Advanced Topics -->
         <div class="slide">
             <h1>Advanced Relational Algebra Topics</h1>
             
@@ -752,7 +951,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 24: Common Pitfalls -->
+        <!-- Slide 29: Common Pitfalls -->
         <div class="slide">
             <h1>Common Mistakes to Avoid</h1>
             
@@ -781,7 +980,7 @@ Registration (clientNo, branchNo, staffNo)
 
         <!-- IN-CLASS EXERCISES SECTION -->
 
-        <!-- Slide 26: Exercise Overview -->
+        <!-- Slide 30: Exercise Overview -->
         <div class="slide">
             <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
             <h2>Operator Matching & Evaluation</h2>
@@ -807,7 +1006,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 27: Exercise 1 - Operator Matching -->
+        <!-- Slide 31: Exercise 1 - Operator Matching -->
         <div class="slide">
             <h1>Exercise 1: Operator Matching</h1>
             <h2>Individual Exercise: Query Translation</h2>
@@ -828,7 +1027,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 28: Exercise 1 - Five Queries -->
+        <!-- Slide 32: Exercise 1 - Five Queries -->
         <div class="slide">
             <h1>Exercise 1: The Five Queries</h1>
 
@@ -862,7 +1061,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 29: Understanding Exercise 1 -->
+        <!-- Slide 33: Understanding Exercise 1 -->
         <div class="slide">
             <h1>Understanding: Operator Matching Solutions</h1>
 
@@ -894,7 +1093,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 30: Understanding Exercise 1 (continued) -->
+        <!-- Slide 34: Understanding Exercise 1 (continued) -->
         <div class="slide">
             <h1>Understanding: Complex Queries</h1>
 
@@ -924,7 +1123,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 31: Exercise 2 - Expression Evaluation -->
+        <!-- Slide 35: Exercise 2 - Expression Evaluation -->
         <div class="slide">
             <h1>Exercise 2: Step-by-Step Evaluation</h1>
             <h2>Individual Exercise: Decomposing Complex Expressions</h2>
@@ -951,7 +1150,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 32: Exercise 2 - Instructions -->
+        <!-- Slide 36: Exercise 2 - Instructions -->
         <div class="slide">
             <h1>Exercise 2: Decomposition Instructions</h1>
 
@@ -985,7 +1184,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 33: Understanding Exercise 2 -->
+        <!-- Slide 37: Understanding Exercise 2 -->
         <div class="slide">
             <h1>Understanding: Step-by-Step Evaluation</h1>
 
@@ -1006,7 +1205,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 34: Understanding Exercise 2 (continued) -->
+        <!-- Slide 38: Understanding Exercise 2 (continued) -->
         <div class="slide">
             <h1>Understanding: Join Operations</h1>
 
@@ -1037,7 +1236,7 @@ Registration (clientNo, branchNo, staffNo)
 
         <!-- HOMEWORK SECTION -->
 
-        <!-- Slide 35: Homework Overview -->
+        <!-- Slide 39: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
             <h2>Week 5: Procedural Implementation & Fundamental Operators</h2>
@@ -1062,7 +1261,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 36: Homework Extension 1 -->
+        <!-- Slide 40: Homework Extension 1 -->
         <div class="slide">
             <h1>Homework Extension 1: Procedural Implementation</h1>
             <h2>Building on Exercise 1 - Operator Matching</h2>
@@ -1100,7 +1299,7 @@ Registration (clientNo, branchNo, staffNo)
             </div>
         </div>
 
-        <!-- Slide 37: Homework Extension 1 - Example -->
+        <!-- Slide 41: Homework Extension 1 - Example -->
         <div class="slide">
             <h1>Pseudocode Example Format</h1>
 
@@ -1137,7 +1336,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
             </div>
         </div>
 
-        <!-- Slide 38: Homework Extension 2 -->
+        <!-- Slide 42: Homework Extension 2 -->
         <div class="slide">
             <h1>Homework Extension 2: Fundamental Operators</h1>
             <h2>Building on Exercise 2 - Expression Evaluation</h2>
@@ -1165,7 +1364,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
             </div>
         </div>
 
-        <!-- Slide 39: Homework Extension 2 - Hints -->
+        <!-- Slide 43: Homework Extension 2 - Hints -->
         <div class="slide">
             <h1>Rewriting Joins with Fundamentals</h1>
 
@@ -1198,7 +1397,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
             </div>
         </div>
 
-        <!-- Slide 40: Submission Requirements -->
+        <!-- Slide 44: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
@@ -1245,7 +1444,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
             </div>
         </div>
 
-        <!-- Slide 41: Summary -->
+        <!-- Slide 45: Summary -->
         <div class="slide">
             <h1>Key Takeaways</h1>
 
@@ -1266,7 +1465,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
             </div>
         </div>
 
-        <!-- Slide 42: Homework & Resources -->
+        <!-- Slide 46: Homework & Resources -->
         <div class="slide">
             <h1>Homework & Resources</h1>
             
