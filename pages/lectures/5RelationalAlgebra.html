@@ -139,7 +139,7 @@
             <h2>Relational Algebra <span class="emoji">🔄</span></h2>
             <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
             <p style="font-size: 1.3em;">Week 3, Lecture 5</p>
-            <p style="font-size: 1.1em; margin-top: 20px;">Dr. Bobby Reed</p>
+            <p style="font-size: 1.1em; margin-top: 20px;">bobby reed</p>
             <p style="margin-top: auto; font-style: italic;">Mastering the mathematical foundation of database queries!</p>
         </div>
 
@@ -162,12 +162,12 @@
 
         <!-- Slide 3: What Are Intelligent Keys? -->
         <div class="slide">
-            <h1>Refresh: Intelligent (Natural) Keys <span class="emoji">🔑</span></h1>
+            <h1>Refresh: Intelligent Keys <span class="emoji">🔑</span></h1>
             <h2>Keys with Built-In Business Meaning</h2>
 
             <div class="example-box">
                 <h3>What is an Intelligent Key?</h3>
-                <p style="font-size: 1.15em; line-height: 1.7;">An <strong>intelligent key</strong> (also called a <strong>natural key</strong> or <strong>smart key</strong>) is a primary key that has <em>business meaning</em> encoded directly into its value. Instead of using arbitrary numbers, the key itself conveys information about the record.</p>
+                <p style="font-size: 1.15em; line-height: 1.7;">An <strong>intelligent key</strong> is a primary key that has <em>business meaning</em> encoded directly into its value. Instead of using arbitrary numbers, the key itself conveys information about the record. An <strong>intelligent key</strong> is always a natural key, but is derived from multiple attributes.</p>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
@@ -1239,11 +1239,11 @@ Registration (clientNo, branchNo, staffNo)
         <!-- Slide 39: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
-            <h2>Week 5: Procedural Implementation & Fundamental Operators</h2>
+            <h2>Week 5: Personalized Relational Algebra Queries</h2>
 
             <div class="example-box">
                 <h3>Assignment Overview</h3>
-                <p style="font-size: 1.15em;">This week's homework extends the in-class exercises into practical implementation and deeper theoretical understanding. You'll translate algebra to code and rewrite expressions using only fundamental operators.</p>
+                <p style="font-size: 1.15em;">This week's homework uses personalized data to ensure authentic, individual work. You'll write relational algebra expressions to extract information from YOUR unique student record in the class dataset.</p>
             </div>
 
             <div class="tip-box">
@@ -1254,146 +1254,216 @@ Registration (clientNo, branchNo, staffNo)
             <div class="activity-box">
                 <h3>Assignment Components:</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>Homework Extension 1:</strong> Procedural Implementation (50 points)</li>
-                    <li><strong>Homework Extension 2:</strong> Fundamental Operator Rewrite (50 points)</li>
+                    <li><strong>Part 1:</strong> Word Extraction & Basic Queries (40 points)</li>
+                    <li><strong>Part 2:</strong> Advanced Set Operations & Comparisons (60 points)</li>
                 </ol>
                 <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total Points: 100</strong></p>
+                <p style="margin-top: 10px; font-size: 1.0em; font-style: italic;">⚠️ Each student has unique data - copying will be detected!</p>
             </div>
         </div>
 
         <!-- Slide 40: Homework Extension 1 -->
         <div class="slide">
-            <h1>Homework Extension 1: Procedural Implementation</h1>
-            <h2>Building on Exercise 1 - Operator Matching</h2>
+            <h1>Homework: Personalized Data Queries</h1>
+            <h2>Working with YOUR Student Record</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ Important: Each Student Has Unique Data!</h3>
+                <p style="font-size: 1.1em;">You will work with YOUR specific row from the student_data.csv file. Your queries and results will be unique to you, making collaboration and copying detectable.</p>
+            </div>
 
             <div class="activity-box">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Select the <strong>two most complex</strong> relational algebra expressions from Exercise 1 (Query 3 and Query 5) and implement them in <strong>Python pseudocode</strong> to show how the result set is built step-by-step.</p>
+                <h3>Step 1: Download Your Data</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Download:</strong> Get student_data.csv from the course GitHub repository
+                        <ul style="margin-top: 8px;">
+                            <li>Path: <code>/data/student_data.csv</code></li>
+                            <li>Contains 105 student records with personalized data</li>
+                        </ul>
+                    </li>
+                    <li><strong>Find Your Record:</strong> Locate the row with YOUR name
+                        <ul style="margin-top: 8px;">
+                            <li>Columns: student_id, studentName, favoriteNumber, randomParagraph</li>
+                            <li>Each record is unique to prevent copying</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>CSV Structure Example:</h3>
+                <div style="font-family: monospace; font-size: 0.85em; background: var(--code-bg); padding: 10px; border-radius: 5px;">
+                    student_id,studentName,favoriteNumber,randomParagraph<br>
+                    S001,Geethika,42,"The quick brown fox jumps..."<br>
+                    S002,Suman,7,"Mountains rise majestically..."<br>
+                    S003,Hanumantha,23,"Database systems organize..."
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 41: Part 1 - Word Extraction Queries -->
+        <div class="slide">
+            <h1>Part 1: Extract Specific Words (40 points)</h1>
+            <h2>Using Selection and Projection</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <p style="font-size: 1.1em;">Write relational algebra expressions to extract specific information from YOUR randomParagraph field.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Note on Word Extraction:</strong> Pure relational algebra doesn't have string manipulation functions. For queries asking you to "extract the 3rd word," first identify what your 3rd word IS, then describe conceptually how you would use extended relational algebra with a hypothetical string function. Example: "Using π<sub>WORD(randomParagraph, 3)</sub> where WORD extracts the nth word from a string."
             </div>
 
             <div class="example-box">
-                <h3>Requirements:</h3>
+                <h3>Required Queries (5 points each):</h3>
                 <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Choose the Two Complex Queries:</strong>
+                    <li><strong>Query 1:</strong> Find YOUR student record
                         <ul style="margin-top: 8px;">
-                            <li>Query 3: Products ordered by a specific customer (uses σ, ⋈, π)</li>
-                            <li>Query 5: Customers who ordered from every category (uses ⋈, π, ÷)</li>
+                            <li>Expression: σ<sub>studentName = 'YourName'</sub>(StudentData)</li>
+                            <li>Result: Your complete row with all 4 columns</li>
                         </ul>
                     </li>
-                    <li><strong>Write Python-Like Pseudocode:</strong>
+                    <li><strong>Query 2:</strong> Extract the 3rd word from YOUR randomParagraph
                         <ul style="margin-top: 8px;">
-                            <li>Represent relations as lists of dictionaries or sets of tuples</li>
-                            <li>Implement each operator as a function or loop</li>
-                            <li>Show intermediate variables clearly</li>
-                            <li>Use comments to explain each step</li>
+                            <li>Use selection to get your record, then describe projection to extract 3rd word</li>
+                            <li>Example: If paragraph is "The quick brown fox...", result is "brown"</li>
                         </ul>
                     </li>
-                    <li><strong>Demonstrate with Sample Data:</strong>
+                    <li><strong>Query 3:</strong> Extract the 7th word from YOUR randomParagraph
                         <ul style="margin-top: 8px;">
-                            <li>Provide small sample input (3-5 tuples per relation)</li>
-                            <li>Trace through your code showing intermediate results</li>
-                            <li>Show the final output</li>
+                            <li>Similar approach to Query 2</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 4:</strong> Find all students whose favoriteNumber is GREATER than yours
+                        <ul style="margin-top: 8px;">
+                            <li>Expression: σ<sub>favoriteNumber > YourNumber</sub>(StudentData)</li>
+                            <li>Result: All students with higher favorite numbers</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 5:</strong> Find all students whose favoriteNumber is LESS than yours
+                        <ul style="margin-top: 8px;">
+                            <li>Expression: σ<sub>favoriteNumber < YourNumber</sub>(StudentData)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 6:</strong> Find students whose randomParagraph contains the same 3rd word as yours
+                        <ul style="margin-top: 8px;">
+                            <li>Use selection with string matching condition</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 7:</strong> Project only studentName and favoriteNumber for students with favoriteNumber between 20 and 50
+                        <ul style="margin-top: 8px;">
+                            <li>Combine selection and projection</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 8:</strong> Find YOUR favoriteNumber using only your student_id
+                        <ul style="margin-top: 8px;">
+                            <li>Expression: ∏<sub>favoriteNumber</sub>(σ<sub>student_id = 'YourID'</sub>(StudentData))</li>
                         </ul>
                     </li>
                 </ol>
             </div>
         </div>
 
-        <!-- Slide 41: Homework Extension 1 - Example -->
+        <!-- Slide 42: Part 2 - Set Operations & Comparisons -->
         <div class="slide">
-            <h1>Pseudocode Example Format</h1>
+            <h1>Part 2: Advanced Queries (60 points)</h1>
+            <h2>Set Operations and Multi-Record Comparisons</h2>
+
+            <div class="activity-box">
+                <h3>Required Queries (10 points each):</h3>
+                <ol style="font-size: 1.0em; line-height: 1.7;">
+                    <li><strong>Query 9:</strong> Union of two groups (10 pts)
+                        <ul style="margin-top: 8px; font-size: 0.95em;">
+                            <li>Find all students where (favoriteNumber > 50) OR (favoriteNumber < 10)</li>
+                            <li>Use: σ<sub>favoriteNumber > 50</sub>(StudentData) ∪ σ<sub>favoriteNumber < 10</sub>(StudentData)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 10:</strong> Set difference (10 pts)
+                        <ul style="margin-top: 8px; font-size: 0.95em;">
+                            <li>Find all students EXCEPT those with favoriteNumber between 20 and 80</li>
+                            <li>Use difference operator: AllStudents − StudentsInRange</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 11:</strong> Intersection (10 pts)
+                        <ul style="margin-top: 8px; font-size: 0.95em;">
+                            <li>Find students whose favoriteNumber is BOTH > 30 AND < 70</li>
+                            <li>Use: σ<sub>favoriteNumber > 30</sub>(StudentData) ∩ σ<sub>favoriteNumber < 70</sub>(StudentData)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 12:</strong> Complex projection (10 pts)
+                        <ul style="margin-top: 8px; font-size: 0.95em;">
+                            <li>Project only student_id and studentName for students with even favoriteNumbers</li>
+                            <li>Combine selection (favoriteNumber % 2 = 0) with projection</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 13:</strong> Multi-condition selection (10 pts)
+                        <ul style="margin-top: 8px; font-size: 0.95em;">
+                            <li>Find students whose favoriteNumber equals YOUR favoriteNumber AND are NOT you</li>
+                            <li>Use: σ<sub>(favoriteNumber = YourNum) AND (studentName ≠ 'YourName')</sub>(StudentData)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Query 14:</strong> Comprehensive query (10 pts)
+                        <ul style="margin-top: 8px; font-size: 0.95em;">
+                            <li>Find count of students with favoriteNumber within ±10 of YOUR favoriteNumber</li>
+                            <li>Expression: σ<sub>(favoriteNumber ≥ YourNum-10) AND (favoriteNumber ≤ YourNum+10)</sub>(StudentData)</li>
+                            <li>Then count the resulting tuples</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 43: Submission Format & Tips -->
+        <div class="slide">
+            <h1>Submission Format & Important Tips</h1>
 
             <div class="example-box">
-                <h3>Example Pseudocode Structure (Simplified Query):</h3>
+                <h3>How to Submit (Markdown Document):</h3>
                 <div style="font-family: monospace; font-size: 0.85em; background: var(--code-bg); padding: 15px; border-radius: 8px;">
-# Query: Find customers with creditLimit > 10000<br>
-# Expression: σ<sub>creditLimit > 10000</sub>(Customer)<br>
+# Week 5 Homework: Personalized Relational Algebra<br>
+**Student:** [Your Name]<br>
+**Student ID:** [Your ID from CSV]<br>
+**Favorite Number:** [Your Number]<br>
 <br>
-# Sample input data<br>
-Customer = [<br>
-&nbsp;&nbsp;{'customerID': 'C001', 'name': 'Alice', 'creditLimit': 15000},<br>
-&nbsp;&nbsp;{'customerID': 'C002', 'name': 'Bob', 'creditLimit': 5000},<br>
-&nbsp;&nbsp;{'customerID': 'C003', 'name': 'Carol', 'creditLimit': 20000}<br>
-]<br>
+## My Data Record<br>
+```<br>
+[Paste your complete CSV row here]<br>
+```<br>
 <br>
-# Selection operation<br>
-def selection(relation, condition):<br>
-&nbsp;&nbsp;result = []<br>
-&nbsp;&nbsp;for tuple in relation:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;if condition(tuple):<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(tuple)<br>
-&nbsp;&nbsp;return result<br>
+## Part 1: Word Extraction Queries (40 points)<br>
 <br>
-# Apply selection<br>
-result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
+### Query 1: Find My Record<br>
+**Expression:** σ<sub>studentName = 'YourName'</sub>(StudentData)<br>
+**Result:** [Describe the result]<br>
 <br>
-# Output: [{'customerID': 'C001', ...}, {'customerID': 'C003', ...}]
+### Query 2: Extract 3rd Word<br>
+**My 3rd word:** [word]<br>
+**Expression:** [Your expression]<br>
+**Explanation:** [How you would extract it]<br>
+<br>
+[Continue for all 14 queries...]
                 </div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Anti-Cheating Measures:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Your data is unique</strong> - Your answers will differ from other students</li>
+                    <li><strong>Copied answers are detectable</strong> - If you submit someone else's data</li>
+                    <li><strong>You must find your name</strong> - Real student names are scattered through rows 25-105</li>
+                    <li><strong>Show your work</strong> - Explain each expression clearly</li>
+                </ul>
             </div>
 
             <div class="tip-box">
-                <strong>Your pseudocode should be this detailed for BOTH complex queries!</strong>
-            </div>
-        </div>
-
-        <!-- Slide 42: Homework Extension 2 -->
-        <div class="slide">
-            <h1>Homework Extension 2: Fundamental Operators</h1>
-            <h2>Building on Exercise 2 - Expression Evaluation</h2>
-
-            <div class="activity-box">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Rewrite the complex expression from Exercise 2 using <strong>ONLY the five fundamental operators</strong>: σ (selection), π (projection), ∪ (union), − (difference), × (Cartesian product). <strong>No joins allowed!</strong></p>
-            </div>
-
-            <div class="example-box">
-                <h3>Original Expression:</h3>
-                <div class="algebra-notation" style="font-size: 0.85em;">
-                    ∏<sub>customerID, name</sub>((σ<sub>totalAmount > 1000</sub>(Order)) ⋈ Customer ⋈ (σ<sub>city = 'Boston'</sub>(Customer)))
-                </div>
-            </div>
-
-            <div class="example-box">
-                <h3>Your Rewritten Expression Must:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li>Use <strong>only σ, π, ∪, −, ×</strong> (no ⋈, no derived operators)</li>
-                    <li>Be semantically equivalent (produce the same result)</li>
-                    <li>Show all intermediate steps clearly</li>
-                    <li>Explain why each fundamental operator is used</li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- Slide 43: Homework Extension 2 - Hints -->
-        <div class="slide">
-            <h1>Rewriting Joins with Fundamentals</h1>
-
-            <div class="tip-box">
-                <h3>Key Insight: Join = Cartesian Product + Selection</h3>
-                <p style="font-size: 1.1em;">Remember that:</p>
-                <div class="algebra-notation" style="font-size: 0.9em;">
-                    R ⋈<sub>condition</sub> S = σ<sub>condition</sub>(R × S)
-                </div>
-                <p style="margin-top: 15px;">And for natural join:</p>
-                <div class="algebra-notation" style="font-size: 0.9em;">
-                    R ⋈ S = σ<sub>R.A = S.A</sub>(R × S)
-                </div>
-                <p style="font-size: 0.95em; margin-top: 10px;">where A is the common attribute</p>
-            </div>
-
-            <div class="example-box">
-                <h3>Your Deliverable (150-200 words):</h3>
-                <ol style="font-size: 1.05em;">
-                    <li><strong>Rewritten Expression:</strong> The full expression using only fundamental operators</li>
-                    <li><strong>Step-by-Step Breakdown:</strong> Label each operation (Step 1, Step 2, ...)</li>
-                    <li><strong>Explanation:</strong> For each step, explain:
-                        <ul style="margin-top: 8px;">
-                            <li>What fundamental operator you used</li>
-                            <li>Why it's equivalent to the original operation</li>
-                            <li>What the intermediate result contains</li>
-                        </ul>
-                    </li>
-                </ol>
+                <h3>Success Strategy:</h3>
+                <ul style="font-size: 1.0em;">
+                    <li>Download the CSV and find your exact row first</li>
+                    <li>Count words carefully in your randomParagraph</li>
+                    <li>Test your expressions logically before writing</li>
+                    <li>For word extraction, describe how you'd use string operations with projection</li>
+                </ul>
             </div>
         </div>
 
@@ -1412,13 +1482,24 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
                 </ul>
             </div>
 
+            <div class="demo-box">
+                <h3>Include in Your Submission:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Your complete CSV row</strong> at the top of your document</li>
+                    <li><strong>All 14 relational algebra expressions</strong> clearly labeled</li>
+                    <li><strong>Your actual results</strong> for each query (the specific words, numbers, counts)</li>
+                    <li><strong>Brief explanations</strong> for complex queries (especially word extraction)</li>
+                </ol>
+            </div>
+
             <div class="activity-box">
                 <h3>Markdown Document Structure:</h3>
                 <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Header:</strong> Name, date, course, "Week 5 Homework"</li>
-                    <li><strong>Section 1:</strong> Extension 1 - Pseudocode for Query 3</li>
-                    <li><strong>Section 2:</strong> Extension 1 - Pseudocode for Query 5 (with division)</li>
-                    <li><strong>Section 3:</strong> Extension 2 - Fundamental operator rewrite with explanation</li>
+                    <li><strong>Header:</strong> Name, Student ID, Favorite Number from CSV</li>
+                    <li><strong>Section 1:</strong> Your complete CSV row data</li>
+                    <li><strong>Section 2:</strong> Part 1 - All 8 word extraction queries with results</li>
+                    <li><strong>Section 3:</strong> Part 2 - All 6 advanced queries with results</li>
+                    <li><strong>Conclusion:</strong> Brief reflection on the assignment</li>
                 </ol>
             </div>
 
@@ -1431,14 +1512,14 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
                         <th>Key Criteria</th>
                     </tr>
                     <tr>
-                        <td><strong>Pseudocode</strong></td>
-                        <td>50</td>
-                        <td>Correctness (25), Code clarity (15), Sample data trace (10)</td>
+                        <td><strong>Part 1 Queries (8 queries)</strong></td>
+                        <td>40</td>
+                        <td>Correctness (25), Proper notation (10), Clear explanations (5)</td>
                     </tr>
                     <tr>
-                        <td><strong>Fundamental Rewrite</strong></td>
-                        <td>50</td>
-                        <td>Correctness (30), Explanation quality (15), Equivalence proof (5)</td>
+                        <td><strong>Part 2 Queries (6 queries)</strong></td>
+                        <td>60</td>
+                        <td>Correctness (40), Proper notation (12), Clear explanations (8)</td>
                     </tr>
                 </table>
             </div>
@@ -1501,7 +1582,7 @@ result = selection(Customer, lambda t: t['creditLimit'] > 10000)<br>
     <!-- Navigation -->
     <div class="navigation">
         <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
-        <span id="slideInfo">Slide 1 of 43</span>
+        <span id="slideInfo">Slide 1 of 46</span>
         <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
     </div>
 
