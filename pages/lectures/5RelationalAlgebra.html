@@ -114,17 +114,7 @@
     </style>
 </head>
 <body>
-    <!-- Theme Toggle -->
-    <div class="theme-toggle">
-        <span class="theme-toggle-label">Theme</span>
-        <div class="theme-switch">
-            <input type="checkbox" id="theme-checkbox">
-            <label class="theme-slider" for="theme-checkbox"></label>
-        </div>
-    </div>
-
-    <!-- Timer Display -->
-    <div class="timer" id="timer">00:00:00</div>
+    <!-- Theme toggle will be automatically added by JavaScript -->
 
     <!-- Presentation Container -->
     <div class="presentation-container">
@@ -1574,101 +1564,26 @@ Registration (clientNo, branchNo, staffNo)
                 Questions? Let's discuss! 🤔
             </p>
         </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">46</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
     </div>
 
-    <!-- Navigation -->
-    <div class="navigation">
-        <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
-        <span id="slideInfo">Slide 1 of 46</span>
-        <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
-    </div>
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
 
-    <!-- JavaScript for Functionality -->
+    <!-- Lecture-Specific JavaScript -->
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        let startTime = Date.now();
-        let timerInterval;
-
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            document.getElementById('slideInfo').textContent = `Slide ${currentSlide + 1} of ${totalSlides}`;
-            
-            // Update button states
-            document.getElementById('prevBtn').disabled = currentSlide === 0;
-            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-        }
-
-        function changeSlide(direction) {
-            showSlide(currentSlide + direction);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-            if (e.key === 'ArrowRight') changeSlide(1);
-            if (e.key === 'Home') showSlide(0);
-            if (e.key === 'End') showSlide(totalSlides - 1);
-            
-            // Number keys for quick navigation
-            if (e.key >= '1' && e.key <= '9') {
-                const slideNum = parseInt(e.key) - 1;
-                if (slideNum < totalSlides) showSlide(slideNum);
-            }
+        // Relational Algebra specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
         });
-
-        // Timer functionality
-        function updateTimer() {
-            const elapsed = Date.now() - startTime;
-            const seconds = Math.floor(elapsed / 1000) % 60;
-            const minutes = Math.floor(elapsed / 60000) % 60;
-            const hours = Math.floor(elapsed / 3600000);
-            
-            document.getElementById('timer').textContent = 
-                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        // Start timer
-        timerInterval = setInterval(updateTimer, 1000);
-
-        // Theme toggle
-        const themeCheckbox = document.getElementById('theme-checkbox');
-        const currentTheme = localStorage.getItem('dbTheme') || 'light';
-        
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeCheckbox.checked = true;
-        }
-        
-        themeCheckbox.addEventListener('change', (e) => {
-            const theme = e.target.checked ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('dbTheme', theme);
-        });
-
-        // Touch support for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) changeSlide(1);  // Swipe left
-            if (touchEndX > touchStartX + 50) changeSlide(-1); // Swipe right
-        }
-
-        // Initialize
-        showSlide(0);
     </script>
 </body>
 </html>
