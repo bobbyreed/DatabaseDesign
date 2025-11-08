@@ -745,192 +745,43 @@
             </div>
         </div>
 
-        <!-- HOMEWORK SECTION -->
+        <!-- FOCUS ON FINAL PROJECT -->
 
-        <!-- Slide 29: Homework Overview -->
+        <!-- Slide 29: Focus on Your Final Project -->
         <div class="slide">
-            <h1>Homework Assignment <span class="emoji">📝</span></h1>
-            <h2>Week 6: Declarative vs Procedural & DRC Conversion</h2>
+            <h1>Focus on Your Final Project <span class="emoji">🚀</span></h1>
+            <h2>Database Design Project - Final Presentations Week 8</h2>
 
             <div class="demo-box">
-                <h3>Assignment Overview</h3>
-                <p style="font-size: 1.15em;">This week's homework deepens your understanding of the declarative nature of relational calculus and extends your translation skills to domain relational calculus.</p>
-            </div>
-
-            <div class="tip-box">
-                <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Commit URL turned into D2L</p>
+                <h3>No Additional Homework This Week!</h3>
+                <p style="font-size: 1.3em; line-height: 1.8;">Instead of homework, use this week to make progress on your semester-long database design project that you'll present during the final week of class.</p>
             </div>
 
             <div class="activity-box">
-                <h3>Components:</h3>
+                <h3>What You Should Be Working On:</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>Homework Extension 1:</strong> Declarative vs Procedural Essay (50 points)</li>
-                    <li><strong>Homework Extension 2:</strong> TRC to DRC Conversion (50 points)</li>
-                </ol>
-                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total: 100 points</strong></p>
-            </div>
-        </div>
-
-        <!-- Slide 30: Homework Extension 1 -->
-        <div class="slide">
-            <h1>Homework Extension 1: Declarative Essay</h1>
-            <h2>Building on Exercise 1</h2>
-
-            <div class="activity-box">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Write a <strong>150-word paragraph</strong> explaining why Relational Calculus is considered a <strong>declarative language</strong>, while Relational Algebra is <strong>procedural</strong>. Use the translation from Exercise 1 as a concrete example.</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Your Essay Must Address:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Define Declarative vs Procedural (40-50 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>What makes a language declarative?</li>
-                            <li>What makes a language procedural?</li>
-                        </ul>
-                    </li>
-                    <li><strong>Apply to Exercise 1 Example (60-70 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>How does the RA expression show "how" to get data?</li>
-                            <li>How does the TRC expression show "what" data is wanted?</li>
-                            <li>Reference specific operators/syntax from both</li>
-                        </ul>
-                    </li>
-                    <li><strong>Implications (40-50 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Why does this distinction matter?</li>
-                            <li>Which is easier for users? For optimizers?</li>
-                        </ul>
-                    </li>
+                    <li><strong>Refine Your Schema:</strong> Apply what you've learned about relational model, keys, and integrity constraints</li>
+                    <li><strong>Implement Your Database:</strong> Create tables, establish relationships, populate with data</li>
+                    <li><strong>Write Complex Queries:</strong> Practice using joins, aggregations, and subqueries</li>
+                    <li><strong>Test & Optimize:</strong> Ensure data integrity, test edge cases, consider performance</li>
+                    <li><strong>Prepare Your Presentation:</strong> Document your design decisions and demonstrate functionality</li>
                 </ol>
             </div>
-        </div>
 
-        <!-- Slide 31: Homework Extension 2 -->
-        <div class="slide">
-            <h1>Homework Extension 2: TRC to DRC</h1>
-            <h2>Building on Exercise 2</h2>
-
-            <div class="activity-box">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Convert the complex TRC predicate from Exercise 2 into an equivalent <strong>Domain Relational Calculus (DRC)</strong> expression.</p>
-            </div>
-
-            <div class="calculus-example">
-                <h3>Original TRC Expression:</h3>
-                <p style="font-size: 0.95em;">
-                    {S.supplierNo, S.name | Supplier(S) ∧ (∀P)(¬Part(P) ∨ (∃SP)(Supplies(SP) ∧ SP.supplierNo = S.supplierNo ∧ SP.partNo = P.partNo))}
+            <div class="success-box">
+                <h3>Final Presentation (Week 8):</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">
+                    You'll give a <strong>5-10 minute presentation</strong> demonstrating your database, explaining your design choices, and showing queries in action. This is your opportunity to showcase what you've learned throughout the semester!
                 </p>
             </div>
 
-            <div class="demo-box">
-                <h3>Requirements:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Write DRC Expression:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Use domain variables instead of tuple variables</li>
-                            <li>List all domain variables explicitly</li>
-                            <li>Maintain logical equivalence</li>
-                        </ul>
-                    </li>
-                    <li><strong>Explain Your Conversion (100-150 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>How did you map tuple variables to domain variables?</li>
-                            <li>How did quantifiers change (if at all)?</li>
-                            <li>Why is the DRC expression equivalent?</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- Slide 32: DRC Conversion Hints -->
-        <div class="slide">
-            <h1>DRC Conversion Guidance</h1>
-
             <div class="tip-box">
-                <h3>Key Differences to Remember:</h3>
-                <table class="table-schema" style="font-size: 0.95em;">
-                    <tr>
-                        <th>Aspect</th>
-                        <th>TRC</th>
-                        <th>DRC</th>
-                    </tr>
-                    <tr>
-                        <td>Variables</td>
-                        <td>Range over tuples</td>
-                        <td>Range over attribute values</td>
-                    </tr>
-                    <tr>
-                        <td>Notation</td>
-                        <td>{t | P(t)}</td>
-                        <td>{d1, d2, ..., dn | P(d1, ..., dn)}</td>
-                    </tr>
-                    <tr>
-                        <td>Attribute Access</td>
-                        <td>S.name</td>
-                        <td>Individual domain variable</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="calculus-example">
-                <h3>Simple Example:</h3>
-                <strong>TRC:</strong> {S | Staff(S) ∧ S.salary > 30000}<br><br>
-                <strong>DRC:</strong> {sN, fN, lN, pos, sex, dob, sal, bN | Staff(sN, fN, lN, pos, sex, dob, sal, bN) ∧ sal > 30000}
+                <h3>💡 Use Office Hours!</h3>
+                <p style="font-size: 1.1em;">If you have questions about your project or need design feedback, come to office hours or ask in class. This is the perfect time to get help!</p>
             </div>
         </div>
 
-        <!-- Slide 33: Submission Requirements -->
-        <div class="slide">
-            <h1>Submission Requirements <span class="emoji">✅</span></h1>
-
-            <div class="demo-box">
-                <h3>Format & Submission:</h3>
-                <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File Format:</strong> Markdown document (.md)</li>
-                    <li><strong>File Naming:</strong> LastName_FirstName_Week6_Homework.md</li>
-                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
-                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
-                    <li><strong>Due:</strong> Before next class</li>
-                </ul>
-            </div>
-
-            <div class="activity-box">
-                <h3>Markdown Document Structure:</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Header:</strong> Name, date, "Week 6 Homework"</li>
-                    <li><strong>Section 1:</strong> Extension 1 - Declarative vs Procedural Essay (150 words)</li>
-                    <li><strong>Section 2:</strong> Extension 2 - DRC Expression</li>
-                    <li><strong>Section 3:</strong> Extension 2 - Conversion Explanation</li>
-                </ol>
-            </div>
-
-            <div class="demo-box">
-                <h3>Grading:</h3>
-                <table class="table-schema" style="font-size: 0.95em;">
-                    <tr>
-                        <th>Component</th>
-                        <th>Points</th>
-                        <th>Criteria</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Essay</strong></td>
-                        <td>50</td>
-                        <td>Clarity (20), Example use (20), Depth (10)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>DRC Conversion</strong></td>
-                        <td>50</td>
-                        <td>Correctness (30), Explanation (20)</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- Slide 34: Summary and Takeaways -->
+        <!-- Slide 30: Summary and Takeaways -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
@@ -946,7 +797,7 @@
 
             <div class="demo-box">
                 <p><strong>Next Lecture:</strong> SQL - The Standard Query Language</p>
-                <p><strong>Homework:</strong> Declarative essay & DRC conversion (due next week)</p>
+                <p><strong>This Week:</strong> Work on your final database project!</p>
                 <p><strong>Reading:</strong> Chapter 5 - Relational Calculus</p>
             </div>
         </div>
@@ -955,7 +806,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">31</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
