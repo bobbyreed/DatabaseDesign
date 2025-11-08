@@ -238,7 +238,7 @@
         <div class="home-header">
             <h1>Database Design</h1>
             <p class="subtitle">CSCI 5603 - Graduate Course</p>
-            <p class="meta-info">Spring 2025 | 8-Week Intensive</p>
+            <p class="meta-info">Fall 2024 | 8-Week Intensive | Mon/Wed 10:30 AM</p>
         </div>
         
         <div class="info-section">
@@ -264,73 +264,79 @@
         </div>
         
         <footer>
-            <p>© 2025 Database Design Course</p>
+            <p>© 2024 Database Design Course</p>
         </footer>
     </div>
 
     <script>
         // Lecture data for 8-week course (2 lectures per week)
+        // Schedule: Mondays & Wednesdays at 10:30 AM
         const lectures = [
-            // Week 1
-            { number: 1, week: 1, title: 'Course Overview and Introduction', link: '1CourseOverview.html', description: 'Database fundamentals, DBMS architecture, and the role of databases in modern applications.', status: 'ready' },
-            { number: 2, week: 1, title: 'Relational Model', link: '2DBDesignIntro.html', description: 'Relations, attributes, tuples, domains, and the mathematical foundation of relational databases.', status: 'ready' },
-            
-            // Week 2
-            { number: 3, week: 2, title: 'Entity-Relationship Modeling', link: '3DBArch.html', description: 'Conceptual design using ER diagrams, entities, relationships, and cardinality constraints.', status: 'ready' },
-            { number: 4, week: 2, title: 'Enhanced ER & UML', link: '4TheRelationalModel.html', description: 'Advanced modeling concepts: weak entities, inheritance, aggregation, and UML for databases.', status: 'ready' },
-            
-            // Week 3
-            { number: 5, week: 3, title: 'Normalization Theory', link: '5RelationalAlgebra.html', description: 'Functional dependencies, normal forms (1NF, 2NF, 3NF), and the normalization process.', status: 'ready' },
-            { number: 6, week: 3, title: 'Advanced Normalization', link: '6RelationalCalculus.html', description: 'BCNF, 4NF, 5NF, denormalization strategies, and practical design trade-offs.', status: 'ready' },
-            
-            // Week 4
-            { number: 7, week: 4, title: 'Physical Database Design', link: '6RelationalCalculus.html', description: 'Storage structures, indexing, B-trees, hashing, and physical optimization techniques.', status: 'ready' },
-            { number: 8, week: 4, title: 'Constraints & Integrity', link: '7SQL1.html', description: 'Keys, referential integrity, check constraints, assertions, and triggers.', status: 'ready' },
-            
-            // Week 5
-            { number: 9, week: 5, title: 'SQL Fundamentals', link: '8SQL2.html', description: 'DDL, DML, basic queries, filtering, sorting, and aggregate functions.', status: 'ready' },
-            { number: 10, week: 5, title: 'Advanced SQL', link: '9SQL3.html', description: 'Complex joins, subqueries, views, CTEs, and window functions.', status: 'ready' },
-            
-            // Week 6
-            { number: 11, week: 6, title: 'Stored Procedures & Functions', description: 'Procedural SQL, stored procedures, user-defined functions, and cursors.', status: 'coming' },
-            { number: 12, week: 6, title: 'Transactions & Concurrency', description: 'ACID properties, isolation levels, locking, deadlocks, and recovery mechanisms.', status: 'coming' },
-            
-            // Week 7
-            { number: 13, week: 7, title: 'NoSQL Databases', description: 'Document stores, key-value stores, graph databases, and CAP theorem.', status: 'coming' },
-            { number: 14, week: 7, title: 'Database Security', description: 'Access control, encryption, SQL injection prevention, and audit trails.', status: 'coming' },
-            
-            // Week 8
-            { number: 15, week: 8, title: 'Performance & Optimization', description: 'Query optimization, execution plans, indexing strategies, and performance monitoring.', status: 'coming' },
-            { number: 16, week: 8, title: 'Final Project Presentations', description: 'Present your database design projects and peer review sessions.', status: 'coming' }
+            // Week 1 (Oct 20-24)
+            { number: 1, week: 1, date: 'Oct 21', title: 'No Class - Fall Break', link: null, description: 'Enjoy your fall break! Classes begin on Wednesday, October 23rd.', status: 'break' },
+            { number: 2, week: 1, date: 'Oct 23', title: 'Course Overview and Introduction', link: '1CourseOverview.html', description: 'Database fundamentals, DBMS architecture, course structure, and introduction to designing databases.', status: 'ready' },
+
+            // Week 2 (Oct 27-31)
+            { number: 3, week: 2, date: 'Oct 28', title: 'Introduction to Designing Databases', link: '2DBDesignIntro.html', description: 'File-based systems vs DBMS, building movie_rental_db hands-on, and database design fundamentals.', status: 'ready' },
+            { number: 4, week: 2, date: 'Oct 30', title: 'Database Architecture', link: '3DBArch.html', description: 'ANSI-SPARC three-level architecture, three-tier application architecture, and multi-schema implementations.', status: 'ready' },
+
+            // Week 3 (Nov 3-7)
+            { number: 5, week: 3, date: 'Nov 4', title: 'The Relational Model', link: '4TheRelationalModel.html', description: 'Relations, attributes, tuples, domains, keys, integrity constraints, and building car_rental_db.', status: 'ready' },
+            { number: 6, week: 3, date: 'Nov 6', title: 'Relational Algebra', link: '5RelationalAlgebra.html', description: 'Selection, projection, join operations, set operations, and query optimization with relational algebra.', status: 'ready' },
+
+            // Week 4 (Nov 10-14)
+            { number: 7, week: 4, date: 'Nov 11', title: 'Relational Calculus & Presentations', link: '6RelationalCalculus.html', description: 'Tuple and domain relational calculus, declarative queries, and Database Design Proposal presentations.', status: 'ready' },
+            { number: 8, week: 4, date: 'Nov 13', title: 'Introduction to SQL', link: '7SQL1.html', description: 'SQL basics, DDL and DML, creating tables, inserting data, and simple queries.', status: 'ready' },
+
+            // Week 5 (Nov 17-21)
+            { number: 9, week: 5, date: 'Nov 18', title: 'SQL', link: '8SQL2.html', description: 'JOINs, subqueries, aggregations, GROUP BY, HAVING, and intermediate SQL techniques.', status: 'ready' },
+            { number: 10, week: 5, date: 'Nov 20', title: 'Advanced SQL', link: '9SQL3.html', description: 'Complex joins, CTEs, window functions, views, and advanced query patterns.', status: 'ready' },
+
+            // Week 6 (Nov 24-28)
+            { number: 11, week: 6, date: 'Nov 25', title: 'Data Definitions', link: '10DataDefinitions.html', description: 'CREATE, ALTER, DROP statements, constraints, indexes, and database schema management.', status: 'ready' },
+            { number: 12, week: 6, date: 'Nov 27', title: 'No Class - Thanksgiving Break', link: null, description: 'Happy Thanksgiving! Enjoy time with family and friends.', status: 'break' },
+
+            // Week 7 (Dec 1-5)
+            { number: 13, week: 7, date: 'Dec 2', title: 'Views & Document Databases', link: '11aDataDefinitionsViews.html', description: 'Database views, materialized views, introduction to document databases and NoSQL concepts.', status: 'ready' },
+            { number: 14, week: 7, date: 'Dec 4', title: 'MongoDB', link: '12MongoDB.html', description: 'MongoDB fundamentals, document structure, CRUD operations, and NoSQL database design patterns.', status: 'ready' },
+
+            // Week 8 (Dec 8-12)
+            { number: 15, week: 8, date: 'Dec 9', title: 'MERN Stack', link: '13MERNStack.html', description: 'Full-stack development with MongoDB, Express, React, and Node.js for modern web applications.', status: 'ready' },
+            { number: 16, week: 8, date: 'Dec 11', title: 'Portfolio Item Presentations & Final Exam', link: '14Presentations.html', description: 'Present your database design projects and complete the final examination.', status: 'ready' }
         ];
 
         // Render lectures
         function renderLectures() {
             const container = document.getElementById('lectures-container');
             container.innerHTML = '';
-            
+
             lectures.forEach(lecture => {
                 const card = document.createElement('div');
                 card.className = 'lecture-card';
-                
+
                 let statusBadge = '';
                 if (lecture.status === 'ready') {
                     statusBadge = '<span class="status-badge status-ready">Available</span>';
+                } else if (lecture.status === 'break') {
+                    statusBadge = '<span class="status-badge" style="background: var(--db-warning); color: var(--db-text-primary);">No Class</span>';
                 } else {
                     statusBadge = '<span class="status-badge status-coming">Coming Soon</span>';
                 }
-                
+
+                const dateDisplay = lecture.date ? `${lecture.date} (Week ${lecture.week})` : `Week ${lecture.week}`;
+
                 card.innerHTML = `
-                    <span class="lecture-number">Lecture ${lecture.number}</span>
-                    <span class="lecture-date">Week ${lecture.week}</span>
+                    <span class="lecture-number">Class ${lecture.number}</span>
+                    <span class="lecture-date">${dateDisplay}</span>
                     <h3>${lecture.title}</h3>
                     <p>${lecture.description}</p>
-                    ${lecture.status === 'ready' ? 
-                        `<a href="pages/lectures/${lecture.link}">View Lecture</a>` : 
+                    ${lecture.status === 'ready' ?
+                        `<a href="pages/lectures/${lecture.link}">View Lecture</a>` :
+                        lecture.status === 'break' ? '' :
                         '<a href="#" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>'}
                     ${statusBadge}
                 `;
-                
+
                 container.appendChild(card);
             });
         }
