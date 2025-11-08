@@ -18,15 +18,15 @@
         }
         ol {
             list-style-type: none;
-            counter-reset: lecture-counter;
+            counter-reset: class-counter 1;
             padding-left: 0;
         }
         ol li {
-            counter-increment: lecture-counter;
+            counter-increment: class-counter;
             margin-bottom: 10px;
         }
         ol li::before {
-            content: "Lecture " counter(lecture-counter) ": ";
+            content: "Class " counter(class-counter) ": ";
             font-weight: bold;
             color: var(--ocu-green);
         }
@@ -47,23 +47,23 @@
 <body>
     <h1>CSCI 5603 - Database Design</h1>
     <h2>Quick Access to All Lectures</h2>
+    <p style="color: var(--text-muted); margin-bottom: 20px;">Fall 2024 | Mon/Wed 10:30 AM</p>
 
     <ol>
-        <li><button class="home"><a href="./lectures/1CourseOverview.html">Course Overview</a></button></li>
-        <li><button class="home"><a href="./lectures/2DBDesignIntro.html">Introduction to Databases</a></button></li>
+        <li><button class="home"><a href="./lectures/1CourseOverview.html">Course Overview and Introduction</a></button></li>
+        <li><button class="home"><a href="./lectures/2DBDesignIntro.html">Introduction to Designing Databases</a></button></li>
         <li><button class="home"><a href="./lectures/3DBArch.html">Database Architecture</a></button></li>
         <li><button class="home"><a href="./lectures/4TheRelationalModel.html">The Relational Model</a></button></li>
         <li><button class="home"><a href="./lectures/5RelationalAlgebra.html">Relational Algebra</a></button></li>
         <li><button class="home"><a href="./lectures/6RelationalCalculus.html">Relational Calculus</a></button></li>
-        <li><button class="home"><a href="./lectures/7SQL1.html">SQL Part 1 - Data Manipulation</a></button></li>
-        <li><button class="home"><a href="./lectures/8SQL2.html">SQL Part 2 - Advanced Queries</a></button></li>
-        <li><button class="home"><a href="./lectures/9SQL3.html">SQL Part 3 - Multi-Table Operations</a></button></li>
-        <li><button class="home"><a href="./lectures/10DataDefinitions.html">SQL Data Definitions</a></button></li>
-        <li><button class="home"><a href="./lectures/11aDataDefinitionsViews.html">Data Definitions & Views</a></button></li>
-        <li><button class="home"><a href="./lectures/11bDocumentDB.html">Document Databases</a></button></li>
+        <li><button class="home"><a href="./lectures/7SQL1.html">Introduction to SQL</a></button></li>
+        <li><button class="home"><a href="./lectures/8SQL2.html">SQL</a></button></li>
+        <li><button class="home"><a href="./lectures/9SQL3.html">Advanced SQL</a></button></li>
+        <li><button class="home"><a href="./lectures/10DataDefinitions.html">Data Definitions</a></button></li>
+        <li><button class="home"><a href="./lectures/11aDataDefinitionsViews.html">Views & Document Databases</a></button></li>
         <li><button class="home"><a href="./lectures/12MongoDB.html">MongoDB</a></button></li>
         <li><button class="home"><a href="./lectures/13MERNStack.html">MERN Stack</a></button></li>
-        <li><button class="home"><a href="./lectures/14Presentations.html">Final Presentations</a></button></li>
+        <li><button class="home"><a href="./lectures/14Presentations.html">Portfolio Item Presentations & Final Exam</a></button></li>
     </ol>
 
     <div class="nav-section">
