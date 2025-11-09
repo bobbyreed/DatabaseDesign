@@ -1675,40 +1675,17 @@ psql -U postgres<br>
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Database-specific interactions
+        // Lecture-specific: Activity section pulse animation
         document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-            
-            // Add any slide-specific animations or interactions here
             const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
-            
+
             // Animate elements on certain slides
             if (currentSlideElement.querySelector('.activity-section')) {
                 currentSlideElement.querySelector('.activity-section').style.animation = 'pulse 2s ease-in-out';
             }
         });
-        
-        // Optional: Add timer for activities
-        let activityTimer = null;
-        
-        function startActivityTimer(minutes) {
-            let seconds = minutes * 60;
-            const timerDisplay = document.getElementById('timer-text');
-            
-            if (activityTimer) clearInterval(activityTimer);
-            
-            activityTimer = setInterval(() => {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                const display = `Activity Time: ${mins}:${secs.toString().padStart(2, '0')}`;
-                
-                if (seconds <= 0) {
-                    clearInterval(activityTimer);
-                    alert('Activity time is up!');
-                }
-                seconds--;
-            }, 1000);
-        }
+
+        // Note: Timer functionality now handled by presentation.js
     </script>
 </body>
 </html>

@@ -1959,30 +1959,8 @@ app.get('/api/movies/available', async (req, res) => {<br>
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Database architecture specific interactions
-        document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-            
-            // Add any architecture-specific animations or interactions here
-            const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
-            
-            // Animate diagrams when they appear
-            const diagrams = currentSlideElement.querySelectorAll('.erd-diagram pre');
-            diagrams.forEach((diagram, index) => {
-                setTimeout(() => {
-                    diagram.style.opacity = '0';
-                    diagram.style.transform = 'translateY(20px)';
-                    diagram.style.transition = 'all 0.5s ease';
-                    
-                    setTimeout(() => {
-                        diagram.style.opacity = '1';
-                        diagram.style.transform = 'translateY(0)';
-                    }, 100);
-                }, index * 200);
-            });
-        });
-
-        // Add keyboard navigation hints
+        // Note: ERD diagram animations now handled by presentation.js
+        // Lecture-specific: Keyboard navigation hints
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Lecture 03: Database Architecture loaded');
             console.log('Use arrow keys or buttons to navigate');

@@ -999,21 +999,8 @@
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Database-specific interactions
-        document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-        });
-        
-        // Add syntax highlighting for SQL examples if needed
-        document.querySelectorAll('.sql-example').forEach(block => {
-            block.addEventListener('click', function() {
-                // Optional: Add copy-to-clipboard functionality
-                const text = this.innerText;
-                navigator.clipboard.writeText(text).then(() => {
-                    console.log('SQL copied to clipboard');
-                });
-            });
-        });
+        // Clipboard copy functionality now handled by presentation.js
+        // Click any .sql-example or .code-example to copy
     </script>
 </body>
 </html>

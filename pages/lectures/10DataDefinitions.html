@@ -815,39 +815,8 @@
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Database-specific interactions can go here
-        document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-        });
-        
-        // Timer functionality for activities
-        document.querySelectorAll('[data-timer]').forEach(button => {
-            button.addEventListener('click', function() {
-                const seconds = parseInt(this.dataset.timer);
-                startTimer(seconds);
-            });
-        });
-        
-        function startTimer(seconds) {
-            const display = document.getElementById('timer-display');
-            const text = document.getElementById('timer-text');
-            display.classList.add('active');
-            
-            const interval = setInterval(() => {
-                const minutes = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                text.textContent = `Time Remaining: ${minutes}:${secs.toString().padStart(2, '0')}`;
-                
-                if (seconds <= 0) {
-                    clearInterval(interval);
-                    text.textContent = 'Time\'s Up!';
-                    setTimeout(() => {
-                        display.classList.remove('active');
-                    }, 3000);
-                }
-                seconds--;
-            }, 1000);
-        }
+        // Timer functionality now handled by presentation.js
+        // [data-timer] buttons automatically work
     </script>
 </body>
 </html>

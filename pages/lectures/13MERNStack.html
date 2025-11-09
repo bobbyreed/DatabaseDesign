@@ -1679,28 +1679,9 @@ db.tasks.find({<br>
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // MERN deployment specific interactions
-        document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
+        // Note: Code example animations now handled by presentation.js
 
-            const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
-
-            // Animate code examples when they appear
-            const codeExamples = currentSlideElement.querySelectorAll('.sql-example, .code-example, .command-box');
-            codeExamples.forEach((code, index) => {
-                setTimeout(() => {
-                    code.style.opacity = '0';
-                    code.style.transform = 'translateX(-20px)';
-                    code.style.transition = 'all 0.5s ease';
-
-                    setTimeout(() => {
-                        code.style.opacity = '1';
-                        code.style.transform = 'translateX(0)';
-                    }, 100);
-                }, index * 150);
-            });
-        });
-
+        // Lecture-specific: Console hints
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Lecture 13: MERN Stack Deployment loaded');
             console.log('Use arrow keys or buttons to navigate');

@@ -817,19 +817,13 @@
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Handle special symbols and formulas
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add animation to formula appearances
-            const formulas = document.querySelectorAll('.formula-box, .calculus-example');
-            formulas.forEach(formula => {
-                formula.style.transition = 'all 0.3s ease';
-            });
+        // Note: Formula animations now handled by presentation.js
+        // Note: Timer functionality now handled by presentation.js
 
-            // Enhanced slide change logging
+        // Lecture-specific: QBE table animations for slides 15-16
+        document.addEventListener('DOMContentLoaded', function() {
             document.addEventListener('slidechange', (e) => {
-                console.log(`Relational Calculus - Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-                
-                // Special handling for QBE table slides
+                // Special handling for QBE table slides (slides 15-16)
                 if (e.detail.currentSlide === 14 || e.detail.currentSlide === 15) {
                     const tables = document.querySelectorAll('.qbe-table');
                     tables.forEach((table, index) => {
@@ -841,7 +835,7 @@
                 }
             });
 
-            // Initialize QBE tables with animation
+            // Initialize QBE tables with hidden state
             const qbeTables = document.querySelectorAll('.qbe-table');
             qbeTables.forEach(table => {
                 table.style.opacity = '0';
@@ -849,43 +843,6 @@
                 table.style.transition = 'all 0.5s ease';
             });
         });
-
-        // Timer functionality for activities
-        let timerInterval;
-        
-        document.querySelectorAll('[data-timer]').forEach(button => {
-            button.addEventListener('click', function() {
-                const minutes = parseInt(this.dataset.timer);
-                startTimer(minutes);
-                this.disabled = true;
-                this.textContent = 'Timer Running...';
-            });
-        });
-
-        function startTimer(minutes) {
-            let seconds = minutes * 60;
-            const display = document.getElementById('timer-text');
-            const originalText = display.textContent;
-            
-            if (timerInterval) clearInterval(timerInterval);
-            
-            timerInterval = setInterval(() => {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                display.textContent = `Time Remaining: ${mins}:${secs.toString().padStart(2, '0')}`;
-                
-                if (seconds <= 0) {
-                    clearInterval(timerInterval);
-                    display.textContent = originalText;
-                    alert('Time\'s up! Let\'s review your work.');
-                    document.querySelectorAll('[data-timer]').forEach(btn => {
-                        btn.disabled = false;
-                        btn.textContent = btn.textContent.replace('Timer Running...', `Start ${btn.dataset.timer}-Minute Timer`);
-                    });
-                }
-                seconds--;
-            }, 1000);
-        }
     </script>
 </body>
 </html>

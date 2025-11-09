@@ -1972,12 +1972,9 @@
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Add any specific interactions for this lecture
+        // Lecture-specific: Special animation on slide 31 (SQL creation)
         document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-            
-            // Highlight code examples when shown
-            if (e.detail.currentSlide === 30) { // SQL creation slide (Slide 31: Creating Relations in SQL)
+            if (e.detail.currentSlide === 30) { // Slide 31: Creating Relations in SQL
                 const codeBlocks = document.querySelectorAll('.sql-example');
                 codeBlocks.forEach(block => {
                     block.style.animation = 'slideIn 0.5s ease-in-out';
@@ -1985,7 +1982,7 @@
             }
         });
 
-        // Add keyboard shortcuts info
+        // Lecture-specific: Keyboard shortcuts help dialog
         document.addEventListener('keydown', (e) => {
             if (e.key === '?' && e.shiftKey) {
                 alert('Keyboard Shortcuts:\n\n' +

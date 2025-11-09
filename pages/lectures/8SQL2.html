@@ -1198,21 +1198,9 @@
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Advanced SQL specific interactions
-        document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-            
-            // Add any SQL-specific animations or interactions here
-            const currentSlideElement = document.querySelectorAll('.slide')[e.detail.currentSlide];
-            
-            // Animate SQL examples on slide entry
-            const sqlExamples = currentSlideElement.querySelectorAll('.sql-example');
-            sqlExamples.forEach((example, index) => {
-                example.style.animation = `fadeIn 0.5s ease-in-out ${index * 0.2}s forwards`;
-            });
-        });
-        
-        // Add keyboard shortcuts for common SQL keywords
+        // Note: SQL example animations now handled by presentation.js
+
+        // Lecture-specific: SQL keyword reference shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey) {
                 switch(e.key) {

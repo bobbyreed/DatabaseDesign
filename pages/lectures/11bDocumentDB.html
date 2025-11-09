@@ -1037,41 +1037,8 @@ Need transactions → Reference
 
     <!-- Lecture-Specific JavaScript -->
     <script>
-        // Timer functionality for exercises
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle timer buttons
-            const timerButtons = document.querySelectorAll('[data-timer]');
-            timerButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const minutes = parseInt(this.dataset.timer);
-                    startTimer(minutes);
-                });
-            });
-            
-            function startTimer(minutes) {
-                let seconds = minutes * 60;
-                const display = document.getElementById('timer-text');
-                const originalText = display.innerHTML;
-                
-                const interval = setInterval(function() {
-                    const mins = Math.floor(seconds / 60);
-                    const secs = seconds % 60;
-                    display.innerHTML = `Time Remaining: ${mins}:${secs.toString().padStart(2, '0')}`;
-                    
-                    if (seconds <= 0) {
-                        clearInterval(interval);
-                        display.innerHTML = originalText;
-                        alert('Time\'s up! Let\'s discuss your solutions.');
-                    }
-                    seconds--;
-                }, 1000);
-            }
-        });
-        
-        // Log slide changes
-        document.addEventListener('slidechange', (e) => {
-            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
-        });
+        // Timer functionality now handled by presentation.js
+        // [data-timer] buttons automatically work
     </script>
 </body>
 </html>

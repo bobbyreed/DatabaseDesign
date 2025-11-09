@@ -35,6 +35,9 @@ class PresentationController {
 
         // Set up auto-hide controls
         this.initializeAutoHide();
+
+        // Initialize clipboard copy functionality
+        this.initializeClipboardCopy();
     }
 
     initializeTheme() {
@@ -365,6 +368,103 @@ class PresentationController {
             }
         });
         document.dispatchEvent(event);
+
+        // Built-in logging (can be disabled via data attribute)
+        if (!document.body.dataset.disableLogging) {
+            console.log(`Slide ${this.currentSlide + 1} of ${this.totalSlides}`);
+        }
+
+        // Auto-animate elements on slide change
+        this.animateSlideElements();
+    }
+
+    animateSlideElements() {
+        const currentSlideElement = this.slides[this.currentSlide];
+        if (!currentSlideElement) return;
+
+        // Animate formula boxes and calculus examples
+        const formulas = currentSlideElement.querySelectorAll('.formula-box, .calculus-example');
+        formulas.forEach((formula, index) => {
+            formula.style.transition = 'all 0.3s ease';
+            formula.style.opacity = '0';
+            formula.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                formula.style.opacity = '1';
+                formula.style.transform = 'translateY(0)';
+            }, index * 100 + 100);
+        });
+
+        // Animate ERD diagrams
+        const diagrams = currentSlideElement.querySelectorAll('.erd-diagram pre');
+        diagrams.forEach((diagram, index) => {
+            diagram.style.transition = 'all 0.5s ease';
+            diagram.style.opacity = '0';
+            diagram.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                diagram.style.opacity = '1';
+                diagram.style.transform = 'translateY(0)';
+            }, index * 200 + 100);
+        });
+
+        // Animate SQL examples
+        const sqlExamples = currentSlideElement.querySelectorAll('.sql-example');
+        sqlExamples.forEach((example, index) => {
+            example.style.transition = 'all 0.5s ease';
+            example.style.opacity = '0';
+            example.style.transform = 'translateX(-10px)';
+
+            setTimeout(() => {
+                example.style.opacity = '1';
+                example.style.transform = 'translateX(0)';
+            }, index * 150 + 100);
+        });
+
+        // Animate code examples
+        const codeExamples = currentSlideElement.querySelectorAll('.code-example, .command-box');
+        codeExamples.forEach((code, index) => {
+            code.style.transition = 'all 0.5s ease';
+            code.style.opacity = '0';
+            code.style.transform = 'translateX(-20px)';
+
+            setTimeout(() => {
+                code.style.opacity = '1';
+                code.style.transform = 'translateX(0)';
+            }, index * 150 + 100);
+        });
+    }
+
+    // Copy to clipboard functionality for code blocks
+    initializeClipboardCopy() {
+        const codeBlocks = document.querySelectorAll('.sql-example, .code-example');
+        codeBlocks.forEach(block => {
+            // Only add if not already added
+            if (block.dataset.clipboardInitialized) return;
+
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy';
+
+            block.addEventListener('click', function() {
+                const text = this.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    // Show feedback
+                    const originalBg = this.style.backgroundColor;
+                    this.style.backgroundColor = 'var(--ocu-green, #28a745)';
+                    this.style.transition = 'background-color 0.3s ease';
+
+                    setTimeout(() => {
+                        this.style.backgroundColor = originalBg;
+                    }, 500);
+
+                    console.log('Code copied to clipboard');
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+
+            block.dataset.clipboardInitialized = 'true';
+        });
     }
 
     // Public methods for external use
