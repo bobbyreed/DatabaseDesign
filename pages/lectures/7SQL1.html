@@ -1196,107 +1196,25 @@
             </div>
         </div>
 
-        <!-- Navigation -->
+        <!-- Navigation Controls -->
         <div class="navigation">
-            <button id="prevBtn" onclick="changeSlide(-1)">◄ Previous</button>
-            <span id="slideNumber">1 / 39</span>
-            <button id="nextBtn" onclick="changeSlide(1)">Next ►</button>
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">38</span>
+            </span>
+            <button id="nextBtn">Next</button>
         </div>
     </div>
 
-    <!-- Timer for activities -->
-    <div class="activity-timer" id="activityTimer">
-        <span id="timerMinutes">00</span>:<span id="timerSeconds">00</span>
-    </div>
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
 
+    <!-- Lecture-Specific JavaScript -->
     <script>
-        let currentSlide = 1;
-        const totalSlides = document.querySelectorAll('.slide').length;
-        let timerInterval;
-
-        function showSlide(n) {
-            const slides = document.querySelectorAll('.slide');
-            if (n > totalSlides) currentSlide = 1;
-            if (n < 1) currentSlide = totalSlides;
-            
-            slides.forEach(slide => slide.classList.remove('active'));
-            slides[currentSlide - 1].classList.add('active');
-            
-            document.getElementById('slideNumber').textContent = `${currentSlide} / ${totalSlides}`;
-            
-            // Update navigation buttons
-            document.getElementById('prevBtn').disabled = currentSlide === 1;
-            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
-        }
-
-        function changeSlide(n) {
-            currentSlide += n;
-            showSlide(currentSlide);
-        }
-
-        function startTimer(minutes) {
-            const timerDisplay = document.getElementById('activityTimer');
-            timerDisplay.style.display = 'block';
-            
-            let totalSeconds = minutes * 60;
-            
-            if (timerInterval) clearInterval(timerInterval);
-            
-            timerInterval = setInterval(() => {
-                const mins = Math.floor(totalSeconds / 60);
-                const secs = totalSeconds % 60;
-                
-                document.getElementById('timerMinutes').textContent = 
-                    mins.toString().padStart(2, '0');
-                document.getElementById('timerSeconds').textContent = 
-                    secs.toString().padStart(2, '0');
-                
-                if (totalSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    alert('Time\'s up!');
-                    timerDisplay.style.display = 'none';
-                }
-                totalSeconds--;
-            }, 1000);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-            if (e.key === 'ArrowRight') changeSlide(1);
-            if (e.key === 'Escape') {
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    document.getElementById('activityTimer').style.display = 'none';
-                }
-            }
+        // SQL Part 1 specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
         });
-
-        // Theme toggle
-        function addThemeToggle() {
-            const toggle = document.createElement('button');
-            toggle.className = 'theme-toggle';
-            toggle.innerHTML = '🌙 Dark Mode';
-            toggle.onclick = function() {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                toggle.innerHTML = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-                localStorage.setItem('theme', newTheme);
-            };
-            document.body.appendChild(toggle);
-
-            // Load saved theme
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            if (savedTheme === 'dark') {
-                toggle.innerHTML = '☀️ Light Mode';
-            }
-        }
-
-        // Initialize
-        showSlide(1);
-        addThemeToggle();
     </script>
 </body>
 </html>

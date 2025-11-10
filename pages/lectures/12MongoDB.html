@@ -822,132 +822,25 @@ db.users.updateOne(
             </div>
         </div>
 
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
     </div>
 
-    <!-- Navigation Controls -->
-    <div class="navigation">
-        <button id="prev-btn">Previous</button>
-        <span class="slide-counter">
-            <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
-        </span>
-        <button id="next-btn">Next</button>
-        <button class="home"><a href="../../index.html" style="color: inherit; text-decoration: none;">Home</a></button>
-    </div>
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
 
-    <!-- JavaScript for Slide Navigation -->
+    <!-- Lecture-Specific JavaScript -->
     <script>
-        let currentSlide = 1;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        let timerInterval;
-
-        // Update total slides display
-        document.getElementById('totalSlides').textContent = totalSlides;
-
-        function showSlide(n) {
-            // Hide all slides
-            slides.forEach(slide => slide.classList.remove('active'));
-
-            // Wrap around if needed
-            if (n > totalSlides) currentSlide = 1;
-            if (n < 1) currentSlide = totalSlides;
-
-            // Show current slide
-            slides[currentSlide - 1].classList.add('active');
-
-            // Update counter
-            document.getElementById('currentSlide').textContent = currentSlide;
-
-            // Update button states
-            document.getElementById('prev-btn').disabled = currentSlide === 1;
-            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
-        }
-
-        // Navigation button handlers
-        document.getElementById('prev-btn').addEventListener('click', () => {
-            currentSlide--;
-            showSlide(currentSlide);
+        // MongoDB specific interactions
+        document.addEventListener('slidechange', (e) => {
+            console.log(`Slide ${e.detail.currentSlide + 1} of ${e.detail.totalSlides}`);
         });
-
-        document.getElementById('next-btn').addEventListener('click', () => {
-            currentSlide++;
-            showSlide(currentSlide);
-        });
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                currentSlide--;
-                showSlide(currentSlide);
-            } else if (e.key === 'ArrowRight') {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        });
-
-        // Timer functionality
-        document.querySelectorAll('[data-timer]').forEach(button => {
-            button.addEventListener('click', function() {
-                const seconds = parseInt(this.getAttribute('data-timer'));
-                startTimer(seconds);
-            });
-        });
-
-        function startTimer(seconds) {
-            clearInterval(timerInterval);
-            const timerDisplay = document.getElementById('timer-display');
-            const timerText = document.getElementById('timer-text');
-
-            timerDisplay.classList.add('active');
-            timerDisplay.style.display = 'block';
-
-            timerInterval = setInterval(() => {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = seconds % 60;
-                timerText.textContent = `Time Remaining: ${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-
-                if (seconds <= 0) {
-                    clearInterval(timerInterval);
-                    timerText.textContent = 'Time\'s Up!';
-                    setTimeout(() => {
-                        timerDisplay.style.display = 'none';
-                        timerDisplay.classList.remove('active');
-                    }, 3000);
-                }
-                seconds--;
-            }, 1000);
-        }
-
-        // Theme toggle setup
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-
-            // Create theme toggle if it doesn't exist
-            if (!document.querySelector('.theme-toggle')) {
-                const themeToggle = document.createElement('div');
-                themeToggle.className = 'theme-toggle';
-                themeToggle.innerHTML = `
-                    <label class="theme-switch">
-                        <input type="checkbox" id="theme-checkbox" ${savedTheme === 'dark' ? 'checked' : ''}>
-                        <span class="theme-slider"></span>
-                    </label>
-                    <span class="theme-toggle-label">${savedTheme === 'dark' ? 'Dark' : 'Light'}</span>
-                `;
-                document.body.appendChild(themeToggle);
-
-                document.getElementById('theme-checkbox').addEventListener('change', function() {
-                    const theme = this.checked ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', theme);
-                    localStorage.setItem('theme', theme);
-                    document.querySelector('.theme-toggle-label').textContent = theme === 'dark' ? 'Dark' : 'Light';
-                });
-            }
-        }
-
-        // Initialize
-        showSlide(currentSlide);
-        initializeTheme();
     </script>
 </body>
 </html>
