@@ -243,8 +243,8 @@
 
                     <span class="sql-comment">-- Step 2: Create a function to generate codes</span><br>
                     <span class="sql-keyword">CREATE OR REPLACE FUNCTION</span> generate_vehicle_code(<br>
-                    &nbsp;&nbsp;loc_code <span class="sql-keyword">VARCHAR</span>,<br>
-                    &nbsp;&nbsp;category <span class="sql-keyword">VARCHAR</span><br>
+                    &nbsp;&nbsp;p_loc_code <span class="sql-keyword">VARCHAR</span>,<br>
+                    &nbsp;&nbsp;p_category <span class="sql-keyword">VARCHAR</span><br>
                     ) <span class="sql-keyword">RETURNS VARCHAR AS</span> $$<br>
                     <span class="sql-keyword">DECLARE</span><br>
                     &nbsp;&nbsp;next_num <span class="sql-keyword">INTEGER</span>;<br>
@@ -255,10 +255,10 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">AS INTEGER</span>)), 0) + 1<br>
                     &nbsp;&nbsp;<span class="sql-keyword">INTO</span> next_num<br>
                     &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Vehicles<br>
-                    &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> vehicle_code <span class="sql-keyword">LIKE</span> loc_code || <span class="sql-string">'-'</span> || category || <span class="sql-string">'-%'</span>;<br><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> vehicle_code <span class="sql-keyword">LIKE</span> p_loc_code || <span class="sql-string">'-'</span> || p_category || <span class="sql-string">'-%'</span>;<br><br>
 
                     &nbsp;&nbsp;<span class="sql-comment">-- Return formatted code</span><br>
-                    &nbsp;&nbsp;<span class="sql-keyword">RETURN</span> loc_code || <span class="sql-string">'-'</span> || category || <span class="sql-string">'-'</span> || <br>
+                    &nbsp;&nbsp;<span class="sql-keyword">RETURN</span> p_loc_code || <span class="sql-string">'-'</span> || p_category || <span class="sql-string">'-'</span> || <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">LPAD</span>(next_num::<span class="sql-keyword">TEXT</span>, 3, <span class="sql-string">'0'</span>);<br>
                     <span class="sql-keyword">END</span>;<br>
                     $$ <span class="sql-keyword">LANGUAGE</span> plpgsql;
@@ -267,9 +267,10 @@
                 <div class="demo-box">
                     <h3>Code Explanation</h3>
                     <ul style="font-size: 0.9em; line-height: 1.6;">
+                        <li><strong>p_ prefix:</strong> Parameters prefixed with p_ to avoid ambiguity with table columns</li>
                         <li><strong>ALTER TABLE:</strong> Adds new UNIQUE column to store codes</li>
                         <li><strong>COALESCE:</strong> Returns 0 if no matches found (first vehicle)</li>
-                        <li><strong>SUBSTRING + REGEX:</strong> Extracts the number part from existing codes</li>
+                        <li><strong>SUBSTRING + REGEX:</strong> Extracts the number part from existing codes (\d+$ = digits at end)</li>
                         <li><strong>LPAD:</strong> Pads numbers to 3 digits (001, 002, etc.)</li>
                         <li><strong>|| operator:</strong> String concatenation in PostgreSQL</li>
                     </ul>
