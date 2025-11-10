@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Frontend - CSCI 5603</title>
+
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+
+        .code-example {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--ocu-cyan);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+
+        .bash-example {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-left: 4px solid var(--ocu-green);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+
+        .file-path {
+            background: var(--ocu-yellow);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .env-var {
+            background: #4caf50;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        .endpoint {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .citation {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .step-box {
+            background: var(--bg-accent);
+            border: 2px solid var(--ocu-cyan);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .step-box h3 {
+            color: var(--ocu-cyan);
+            margin-top: 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+
+        [data-theme='dark'] .warning-box {
+            background: #4a3c1f;
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+
+    <div class="presentation-container">
+        <!-- Timer display for activities -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Building a Frontend with Netlify & Neon
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Building a Frontend</h1>
+            <h2 style="color: var(--ocu-cyan);">Connecting Your Database to the Web</h2>
+            <h3>Serverless PostgreSQL with Netlify Functions & Neon</h3>
+            <div style="margin-top: 40px;">
+                <p><strong>CSCI 5603 - Database Design</strong></p>
+                <p>Week 4, Lecture 6</p>
+                <p>Instructor: Bobby Reed</p>
+            </div>
+            <p class="citation">
+                Based on the workflow from: Njoku Samson Ebere, "Query Postgres from Netlify Functions with Neon Serverless Driver" (2024)
+            </p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide">
+            <h1>Today's Learning Objectives</h1>
+            <ul>
+                <li>🌐 Understand serverless architecture and its benefits</li>
+                <li>☁️ Set up a Neon serverless PostgreSQL database</li>
+                <li>⚡ Create and deploy Netlify Functions</li>
+                <li>🔌 Connect serverless functions to PostgreSQL</li>
+                <li>🔐 Manage environment variables securely</li>
+                <li>🧪 Test API endpoints locally and in production</li>
+                <li>🎯 Build database-agnostic APIs</li>
+                <li>🚀 Deploy a live frontend for your database</li>
+            </ul>
+            <div class="highlight-box" style="margin-top: 30px;">
+                <p><strong>Focus:</strong> You'll build a serverless API that connects to YOUR database, regardless of your schema structure.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Historical Context - Serverless Evolution -->
+        <div class="slide">
+            <h1>Historical Context <span class="emoji">📜</span></h1>
+            <h2>The Evolution of Serverless Computing</h2>
+
+            <div class="concept-box">
+                <h3>From Servers to Serverless (2014-Present)</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">AWS Lambda launched in 2014, introducing the serverless paradigm—where developers write functions without managing servers. This revolutionized application deployment by auto-scaling, reducing costs, and eliminating infrastructure management. By 2024, serverless has become the standard for modern web applications.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>The Database Challenge</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Traditional databases use TCP connections designed for long-lived sessions, creating a mismatch with serverless functions that spawn and die rapidly. This "connection pooling problem" plagued serverless architectures until serverless-native databases emerged.</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Insight:</strong> Neon (founded 2021) solved this by building PostgreSQL on top of HTTP/WebSockets, perfectly suited for serverless environments with automatic scaling and connection management.
+            </div>
+        </div>
+
+        <!-- Slide 4: Why Serverless? -->
+        <div class="slide">
+            <h1>Why Serverless Architecture?</h1>
+            <h2>Benefits for Database Applications</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>Traditional Architecture</h3>
+                    <ul>
+                        <li>❌ Manage and maintain servers</li>
+                        <li>❌ Pay for idle resources 24/7</li>
+                        <li>❌ Manual scaling required</li>
+                        <li>❌ Connection pool exhaustion</li>
+                        <li>❌ Infrastructure complexity</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Serverless Architecture</h3>
+                    <ul>
+                        <li>✅ Zero server management</li>
+                        <li>✅ Pay only for execution time</li>
+                        <li>✅ Automatic scaling</li>
+                        <li>✅ Optimized for HTTP</li>
+                        <li>✅ Focus on code, not ops</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>Perfect for Student Projects</h3>
+                <p>Serverless platforms like Netlify offer generous free tiers, making them ideal for database projects and portfolios without ongoing costs.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Architecture Overview -->
+        <div class="slide">
+            <h1>Our Architecture</h1>
+            <h2>How the Pieces Fit Together</h2>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <div style="background: var(--bg-secondary); padding: 30px; border-radius: 10px;">
+                    <div style="font-size: 1.3em; line-height: 2.5;">
+                        <div>📱 <strong>Frontend (HTML/JS)</strong></div>
+                        <div>↓</div>
+                        <div>⚡ <strong>Netlify Functions</strong> (API Endpoints)</div>
+                        <div>↓</div>
+                        <div>🔌 <strong>Neon Serverless Driver</strong></div>
+                        <div>↓</div>
+                        <div>🗄️ <strong>PostgreSQL Database</strong> (Your Schema)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Point:</strong> Each Netlify Function is an independent API endpoint. You'll create different functions for different database operations (list, get, create, update, delete).
+            </div>
+        </div>
+
+        <!-- Slide 6: Part 1 - Setting Up Neon -->
+        <div class="slide">
+            <h1>Part 1: Setting Up Neon Database</h1>
+            <h2>Your Serverless PostgreSQL Instance</h2>
+
+            <div class="step-box">
+                <h3>Step 1: Create Neon Account</h3>
+                <ol>
+                    <li>Visit <a href="https://neon.tech" target="_blank" style="color: var(--ocu-cyan);">neon.tech</a></li>
+                    <li>Sign up with GitHub (recommended) or email</li>
+                    <li>Verify your account</li>
+                </ol>
+            </div>
+
+            <div class="step-box">
+                <h3>Step 2: Create a New Project</h3>
+                <ol>
+                    <li>Click "Create Project"</li>
+                    <li>Choose a project name (e.g., "movie-rental-db")</li>
+                    <li>Select a region (choose closest to you)</li>
+                    <li>Note the PostgreSQL version (16+ recommended)</li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong> Save your database credentials! You'll need the connection string that looks like: <code>postgresql://user:password@host/database</code>
+            </div>
+        </div>
+
+        <!-- Slide 7: Neon SQL Editor -->
+        <div class="slide">
+            <h1>Using Neon's SQL Editor</h1>
+            <h2>Running Queries in the Cloud</h2>
+
+            <div class="demo-box">
+                <h3>Neon provides a built-in SQL editor:</h3>
+                <ul>
+                    <li>Access via the "SQL Editor" tab in your project</li>
+                    <li>Run CREATE TABLE statements</li>
+                    <li>Insert sample data</li>
+                    <li>Test queries before building APIs</li>
+                </ul>
+            </div>
+
+            <div class="activity-box" style="margin-top: 30px;">
+                <h3>🎯 Activity: Upload Your Schema (10 min)</h3>
+                <p><button data-timer="600">Start 10-Minute Timer</button></p>
+                <ol>
+                    <li>Open your existing database schema (.sql file)</li>
+                    <li>Copy your CREATE TABLE statements</li>
+                    <li>Paste into Neon SQL Editor and execute</li>
+                    <li>Verify tables were created: <code>SELECT * FROM information_schema.tables;</code></li>
+                    <li>Insert a few test records into your tables</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 8: Alternative - DataGrip Connection -->
+        <div class="slide">
+            <h1>Alternative: Connect with DataGrip</h1>
+            <h2>Use Your Familiar Tools</h2>
+
+            <div class="tip-box">
+                <p><strong>Prefer DataGrip?</strong> You can connect your IDE to Neon!</p>
+            </div>
+
+            <div class="step-box">
+                <h3>DataGrip Connection Steps</h3>
+                <ol>
+                    <li>In Neon Dashboard, copy the connection string</li>
+                    <li>Open DataGrip → New Data Source → PostgreSQL</li>
+                    <li>Parse the connection string:
+                        <ul>
+                            <li><strong>Host:</strong> Everything after @ and before /</li>
+                            <li><strong>Port:</strong> Usually 5432</li>
+                            <li><strong>Database:</strong> After the final /</li>
+                            <li><strong>User/Password:</strong> From the connection string</li>
+                        </ul>
+                    </li>
+                    <li>Enable SSL (required for Neon)</li>
+                    <li>Test connection and apply</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 9: Part 2 - Setting Up Netlify -->
+        <div class="slide">
+            <h1>Part 2: Setting Up Netlify</h1>
+            <h2>Your Serverless Function Platform</h2>
+
+            <div class="step-box">
+                <h3>Step 1: Create Netlify Account</h3>
+                <ol>
+                    <li>Visit <a href="https://netlify.com" target="_blank" style="color: var(--ocu-cyan);">netlify.com</a></li>
+                    <li>Sign up with GitHub (highly recommended)</li>
+                    <li>This enables automatic deployment from your repos</li>
+                </ol>
+            </div>
+
+            <div class="step-box">
+                <h3>Step 2: Install Netlify CLI</h3>
+                <div class="bash-example">$ npm install -g netlify-cli</div>
+                <p>Or if you prefer, install locally in your project:</p>
+                <div class="bash-example">$ npm install --save-dev netlify-cli</div>
+            </div>
+
+            <div class="step-box">
+                <h3>Step 3: Login to Netlify</h3>
+                <div class="bash-example">$ netlify login</div>
+                <p>This opens a browser window to authorize the CLI</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Project Setup -->
+        <div class="slide">
+            <h1>Setting Up Your Project</h1>
+            <h2>Initialize Your Application</h2>
+
+            <div class="step-box">
+                <h3>Step 1: Create Project Directory</h3>
+                <div class="bash-example">$ mkdir my-database-frontend
+$ cd my-database-frontend
+$ npm init -y</div>
+            </div>
+
+            <div class="step-box">
+                <h3>Step 2: Install Neon Serverless Driver</h3>
+                <div class="bash-example">$ npm install @neondatabase/serverless</div>
+                <p>This package is optimized for serverless environments—no connection pooling required!</p>
+            </div>
+
+            <div class="step-box">
+                <h3>Step 3: Create Directory Structure</h3>
+                <div class="bash-example">$ mkdir netlify
+$ mkdir netlify/functions
+$ mkdir public</div>
+                <ul>
+                    <li><span class="file-path">netlify/functions/</span> - Your API endpoints</li>
+                    <li><span class="file-path">public/</span> - Your HTML/CSS/JS frontend</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 11: Configuration Files -->
+        <div class="slide">
+            <h1>Configuration: netlify.toml</h1>
+            <h2>Telling Netlify Where Your Code Lives</h2>
+
+            <p>Create <span class="file-path">netlify.toml</span> in your project root:</p>
+
+            <div class="code-example">[build]
+  functions = "netlify/functions"
+  publish = "public"
+
+[dev]
+  functions = "netlify/functions"
+  publish = "public"
+  port = 8888</div>
+
+            <div class="tip-box">
+                <strong>What this does:</strong>
+                <ul>
+                    <li><strong>functions:</strong> Where Netlify looks for serverless functions</li>
+                    <li><strong>publish:</strong> Which folder to serve as your website</li>
+                    <li><strong>port:</strong> Local development server port</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Environment Variables -->
+        <div class="slide">
+            <h1>Environment Variables</h1>
+            <h2>Keeping Secrets Secret 🔐</h2>
+
+            <div class="warning-box">
+                <strong>⚠️ Never commit database credentials to Git!</strong>
+            </div>
+
+            <div class="step-box">
+                <h3>Local Development: .env file</h3>
+                <p>Create <span class="file-path">.env</span> in your project root:</p>
+                <div class="code-example">DATABASE_URL=postgresql://user:password@host/database</div>
+                <p><strong>Important:</strong> Add <span class="file-path">.env</span> to your <span class="file-path">.gitignore</span>!</p>
+            </div>
+
+            <div class="step-box">
+                <h3>Production: Netlify Dashboard</h3>
+                <ol>
+                    <li>Go to your site in Netlify Dashboard</li>
+                    <li>Site settings → Environment variables</li>
+                    <li>Add variable: <span class="env-var">DATABASE_URL</span></li>
+                    <li>Paste your Neon connection string</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 13: Your First Function -->
+        <div class="slide">
+            <h1>Creating Your First Netlify Function</h1>
+            <h2>A Simple "List All" Endpoint</h2>
+
+            <p>Create <span class="file-path">netlify/functions/get-items.mjs</span>:</p>
+
+            <div class="code-example">import { neon } from '@neondatabase/serverless';
+
+export default async (req, context) => {
+  try {
+    // Connect to database using environment variable
+    const sql = neon(process.env.DATABASE_URL);
+
+    // Replace with YOUR table name
+    const result = await sql`SELECT * FROM your_table_name`;
+
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};</div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> Replace <code>your_table_name</code> with a table from YOUR database schema!
+            </div>
+        </div>
+
+        <!-- Slide 14: Understanding the Function -->
+        <div class="slide">
+            <h1>Breaking Down the Function</h1>
+            <h2>Understanding Each Part</h2>
+
+            <div class="concept-box">
+                <h3>1. Import the Driver</h3>
+                <div class="code-example">import { neon } from '@neondatabase/serverless';</div>
+                <p>Gets the Neon serverless driver (HTTP-based, not TCP)</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>2. Initialize Connection</h3>
+                <div class="code-example">const sql = neon(process.env.DATABASE_URL);</div>
+                <p><span class="env-var">DATABASE_URL</span> comes from environment variables</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>3. Execute Query</h3>
+                <div class="code-example">const result = await sql`SELECT * FROM your_table_name`;</div>
+                <p>Uses tagged template literals for safe queries</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>4. Return Response</h3>
+                <div class="code-example">return new Response(JSON.stringify(result), { ... });</div>
+                <p>Returns JSON with proper headers and status code</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Query Parameters -->
+        <div class="slide">
+            <h1>Function with Query Parameters</h1>
+            <h2>Dynamic Queries Based on Input</h2>
+
+            <p>Create <span class="file-path">netlify/functions/get-item-by-id.mjs</span>:</p>
+
+            <div class="code-example">import { neon } from '@neondatabase/serverless';
+
+export default async (req, context) => {
+  try {
+    // Parse query parameters
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
+
+    if (!id) {
+      return new Response(
+        JSON.stringify({ error: 'ID parameter required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
+
+    // Parameterized query (prevents SQL injection)
+    const result = await sql(
+      'SELECT * FROM your_table_name WHERE id = $1',
+      [id]
+    );
+
+    return new Response(JSON.stringify(result[0] || {}), {
+      status: result.length > 0 ? 200 : 404,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};</div>
+        </div>
+
+        <!-- Slide 16: POST Requests -->
+        <div class="slide">
+            <h1>Handling POST Requests</h1>
+            <h2>Inserting Data via API</h2>
+
+            <p>Create <span class="file-path">netlify/functions/create-item.mjs</span>:</p>
+
+            <div class="code-example">import { neon } from '@neondatabase/serverless';
+
+export default async (req, context) => {
+  try {
+    // Only accept POST requests
+    if (req.method !== 'POST') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Parse request body
+    const body = await req.json();
+    const { column1, column2, column3 } = body;
+
+    // Validate input
+    if (!column1 || !column2) {
+      return new Response(
+        JSON.stringify({ error: 'Required fields missing' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
+
+    // Insert with parameterized query
+    const result = await sql(
+      'INSERT INTO your_table (column1, column2, column3) VALUES ($1, $2, $3) RETURNING *',
+      [column1, column2, column3]
+    );
+
+    return new Response(JSON.stringify(result[0]), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};</div>
+        </div>
+
+        <!-- Slide 17: Testing Locally -->
+        <div class="slide">
+            <h1>Testing Your Functions Locally</h1>
+            <h2>The Netlify Dev Server</h2>
+
+            <div class="step-box">
+                <h3>Step 1: Start the Dev Server</h3>
+                <div class="bash-example">$ netlify dev</div>
+                <p>This starts a local server (typically on <code>http://localhost:8888</code>)</p>
+            </div>
+
+            <div class="step-box">
+                <h3>Step 2: Test Your Endpoints</h3>
+                <p>Your functions are available at:</p>
+                <div class="code-example">http://localhost:8888/.netlify/functions/get-items
+http://localhost:8888/.netlify/functions/get-item-by-id?id=1
+http://localhost:8888/.netlify/functions/create-item</div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Use browser for GET requests, curl/Postman/Insomnia for POST requests
+            </div>
+        </div>
+
+        <!-- Slide 18: Testing with curl -->
+        <div class="slide">
+            <h1>Testing with curl</h1>
+            <h2>Command Line API Testing</h2>
+
+            <div class="demo-box">
+                <h3>GET Request</h3>
+                <div class="bash-example">$ curl http://localhost:8888/.netlify/functions/get-items</div>
+            </div>
+
+            <div class="demo-box">
+                <h3>GET with Query Parameter</h3>
+                <div class="bash-example">$ curl "http://localhost:8888/.netlify/functions/get-item-by-id?id=1"</div>
+            </div>
+
+            <div class="demo-box">
+                <h3>POST Request</h3>
+                <div class="bash-example">$ curl -X POST http://localhost:8888/.netlify/functions/create-item \
+  -H "Content-Type: application/json" \
+  -d '{"column1":"value1","column2":"value2"}'</div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Alternative:</strong> Use GUI tools like Postman, Insomnia, or Thunder Client (VS Code extension)
+            </div>
+        </div>
+
+        <!-- Slide 19: Activity - Build Your First API -->
+        <div class="slide">
+            <h1>🎯 Activity: Build Your API</h1>
+            <h2>Hands-On Practice</h2>
+
+            <div class="activity-box">
+                <h3>Task: Create Three Functions (20 min)</h3>
+                <p><button data-timer="1200">Start 20-Minute Timer</button></p>
+                <ol>
+                    <li><strong>List Function:</strong> Get all records from one of your tables</li>
+                    <li><strong>Get by ID:</strong> Retrieve a single record by primary key</li>
+                    <li><strong>Create Function:</strong> Insert a new record (validate inputs!)</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Remember:</strong>
+                <ul>
+                    <li>Use YOUR table and column names</li>
+                    <li>Test each function with <code>netlify dev</code></li>
+                    <li>Use parameterized queries to prevent SQL injection</li>
+                    <li>Handle errors gracefully</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 20: Building the Frontend -->
+        <div class="slide">
+            <h1>Building a Simple Frontend</h1>
+            <h2>Connecting HTML to Your API</h2>
+
+            <p>Create <span class="file-path">public/index.html</span>:</p>
+
+            <div class="code-example">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Database Frontend&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .item { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;My Database Items&lt;/h1&gt;
+    &lt;div id="items"&gt;Loading...&lt;/div&gt;
+
+    &lt;script&gt;
+        // Fetch data from your API
+        fetch('/.netlify/functions/get-items')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('items');
+                container.innerHTML = data.map(item =&gt;
+                    `&lt;div class="item"&gt;${JSON.stringify(item)}&lt;/div&gt;`
+                ).join('');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('items').innerHTML =
+                    'Error loading data';
+            });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+        </div>
+
+        <!-- Slide 21: Deploying to Netlify -->
+        <div class="slide">
+            <h1>Deploying to Production</h1>
+            <h2>Making Your App Live</h2>
+
+            <div class="step-box">
+                <h3>Option 1: Git-Based Deployment (Recommended)</h3>
+                <ol>
+                    <li>Push your code to GitHub</li>
+                    <li>In Netlify Dashboard: New Site → Import from Git</li>
+                    <li>Select your repository</li>
+                    <li>Netlify auto-detects <span class="file-path">netlify.toml</span></li>
+                    <li>Add <span class="env-var">DATABASE_URL</span> in environment variables</li>
+                    <li>Deploy!</li>
+                </ol>
+            </div>
+
+            <div class="step-box">
+                <h3>Option 2: Manual Deployment</h3>
+                <div class="bash-example">$ netlify deploy --prod</div>
+                <p>Follow the prompts to deploy your site</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>After deployment:</strong> Your site gets a URL like <code>https://your-site-name.netlify.app</code>
+            </div>
+        </div>
+
+        <!-- Slide 22: CORS Considerations -->
+        <div class="slide">
+            <h1>Handling CORS</h1>
+            <h2>Cross-Origin Resource Sharing</h2>
+
+            <div class="concept-box">
+                <h3>What is CORS?</h3>
+                <p>CORS is a security feature that restricts web pages from making requests to different domains. When your frontend calls your API, browsers check CORS headers.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Adding CORS Headers</h3>
+                <p>Update your function responses:</p>
+                <div class="code-example">return new Response(JSON.stringify(result), {
+  status: 200,
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  }
+});</div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Security Note:</strong> Use <code>'*'</code> for development. In production, specify your domain instead.
+            </div>
+        </div>
+
+        <!-- Slide 23: Database-Agnostic Patterns -->
+        <div class="slide">
+            <h1>Database-Agnostic Patterns</h1>
+            <h2>Building Flexible APIs</h2>
+
+            <div class="concept-box">
+                <h3>Why Database-Agnostic?</h3>
+                <p>Each student has a different database schema. Your API should work with YOUR specific tables and columns while following best practices.</p>
+            </div>
+
+            <div class="tip-box">
+                <h3>Universal Patterns to Follow:</h3>
+                <ul>
+                    <li><strong>RESTful conventions:</strong> GET for read, POST for create, PUT for update, DELETE for delete</li>
+                    <li><strong>Status codes:</strong> 200 (OK), 201 (Created), 400 (Bad Request), 404 (Not Found), 500 (Server Error)</li>
+                    <li><strong>Error handling:</strong> Always catch errors and return meaningful messages</li>
+                    <li><strong>Validation:</strong> Check required fields before database operations</li>
+                    <li><strong>Parameterized queries:</strong> Prevent SQL injection</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 24: Advanced Query Patterns -->
+        <div class="slide">
+            <h1>Advanced Query Patterns</h1>
+            <h2>Beyond Basic CRUD</h2>
+
+            <div class="demo-box">
+                <h3>Filtering with Query Parameters</h3>
+                <div class="code-example">// URL: /get-items?category=fiction&year=2024
+
+const url = new URL(req.url);
+const category = url.searchParams.get('category');
+const year = url.searchParams.get('year');
+
+let query = 'SELECT * FROM items WHERE 1=1';
+const params = [];
+
+if (category) {
+  params.push(category);
+  query += ` AND category = $${params.length}`;
+}
+
+if (year) {
+  params.push(year);
+  query += ` AND year = $${params.length}`;
+}
+
+const result = await sql(query, params);</div>
+            </div>
+        </div>
+
+        <!-- Slide 25: Pagination -->
+        <div class="slide">
+            <h1>Implementing Pagination</h1>
+            <h2>Handling Large Result Sets</h2>
+
+            <div class="code-example">// URL: /get-items?page=2&limit=10
+
+const url = new URL(req.url);
+const page = parseInt(url.searchParams.get('page')) || 1;
+const limit = parseInt(url.searchParams.get('limit')) || 10;
+const offset = (page - 1) * limit;
+
+const sql = neon(process.env.DATABASE_URL);
+
+// Get total count
+const countResult = await sql('SELECT COUNT(*) FROM your_table');
+const total = parseInt(countResult[0].count);
+
+// Get paginated results
+const items = await sql(
+  'SELECT * FROM your_table ORDER BY id LIMIT $1 OFFSET $2',
+  [limit, offset]
+);
+
+return new Response(JSON.stringify({
+  items,
+  pagination: {
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit)
+  }
+}), {
+  status: 200,
+  headers: { 'Content-Type': 'application/json' }
+});</div>
+        </div>
+
+        <!-- Slide 26: Activity - Advanced Features -->
+        <div class="slide">
+            <h1>🎯 Activity: Add Advanced Features</h1>
+            <h2>Level Up Your API</h2>
+
+            <div class="activity-box">
+                <h3>Choose One to Implement (15 min)</h3>
+                <p><button data-timer="900">Start 15-Minute Timer</button></p>
+                <ol>
+                    <li><strong>Search Function:</strong> Search across multiple columns using LIKE or ILIKE</li>
+                    <li><strong>Update Function:</strong> Update an existing record by ID</li>
+                    <li><strong>Delete Function:</strong> Delete a record (with confirmation)</li>
+                    <li><strong>Join Query:</strong> If you have related tables, create a function that joins them</li>
+                    <li><strong>Pagination:</strong> Add pagination to your list function</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Challenge:</strong> Can you implement all five?
+            </div>
+        </div>
+
+        <!-- Slide 27: Security Best Practices -->
+        <div class="slide">
+            <h1>Security Best Practices 🔒</h1>
+            <h2>Protecting Your Application</h2>
+
+            <div class="warning-box">
+                <h3>Critical Security Measures:</h3>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <h3>✅ DO</h3>
+                    <ul>
+                        <li>Use parameterized queries</li>
+                        <li>Validate all user input</li>
+                        <li>Use environment variables</li>
+                        <li>Implement rate limiting</li>
+                        <li>Add authentication (future lecture)</li>
+                        <li>Use HTTPS only</li>
+                        <li>Sanitize error messages</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>❌ DON'T</h3>
+                    <ul>
+                        <li>Concatenate SQL strings</li>
+                        <li>Trust user input blindly</li>
+                        <li>Commit credentials to Git</li>
+                        <li>Expose stack traces</li>
+                        <li>Allow unrestricted access</li>
+                        <li>Return raw database errors</li>
+                        <li>Skip input validation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Debugging Tips -->
+        <div class="slide">
+            <h1>Debugging Your Functions</h1>
+            <h2>Common Issues and Solutions</h2>
+
+            <div class="concept-box">
+                <h3>Problem: Function not found</h3>
+                <p><strong>Solution:</strong> Check file location is <span class="file-path">netlify/functions/</span> and restart <code>netlify dev</code></p>
+            </div>
+
+            <div class="concept-box">
+                <h3>Problem: Database connection failed</h3>
+                <p><strong>Solution:</strong> Verify <span class="env-var">DATABASE_URL</span> in <span class="file-path">.env</span>, check Neon project is active</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>Problem: CORS errors in browser</h3>
+                <p><strong>Solution:</strong> Add proper CORS headers to your responses</p>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Use <code>console.log()</code> liberally! Netlify shows function logs in the dashboard.
+            </div>
+        </div>
+
+        <!-- Slide 29: Monitoring and Logs -->
+        <div class="slide">
+            <h1>Monitoring Your Application</h1>
+            <h2>Netlify Function Logs</h2>
+
+            <div class="demo-box">
+                <h3>Accessing Logs</h3>
+                <ul>
+                    <li><strong>Local:</strong> Console output from <code>netlify dev</code></li>
+                    <li><strong>Production:</strong> Netlify Dashboard → Functions → View logs</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <h3>Useful Logging Patterns:</h3>
+                <div class="code-example">console.log('Function invoked:', req.url);
+console.log('Query params:', Object.fromEntries(url.searchParams));
+console.log('Request body:', await req.json());
+console.log('Database result:', result);
+console.error('Error occurred:', error.message);</div>
+            </div>
+
+            <div class="concept-box">
+                <h3>Neon Dashboard</h3>
+                <p>Monitor database connections, query performance, and storage usage in your Neon project dashboard.</p>
+            </div>
+        </div>
+
+        <!-- Slide 30: Homework Assignment -->
+        <div class="slide">
+            <h1>📝 Homework Assignment</h1>
+            <h2>Build a Complete Frontend for Your Database</h2>
+
+            <div class="activity-box">
+                <h3>Requirements:</h3>
+                <ol>
+                    <li><strong>Migrate Database:</strong> Move your database to Neon</li>
+                    <li><strong>Create API Functions:</strong>
+                        <ul>
+                            <li>At least 3 GET endpoints (list, get by ID, search/filter)</li>
+                            <li>At least 1 POST endpoint (create new record)</li>
+                            <li>At least 1 PUT endpoint (update record)</li>
+                            <li>At least 1 DELETE endpoint</li>
+                        </ul>
+                    </li>
+                    <li><strong>Build Frontend:</strong> HTML page that displays and interacts with your data</li>
+                    <li><strong>Deploy:</strong> Live site on Netlify</li>
+                    <li><strong>Document:</strong> README with API endpoints and usage</li>
+                </ol>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>Due:</strong> Before next class</p>
+                <p><strong>Submit:</strong> GitHub repository link + Live Netlify URL</p>
+                <p><strong>Extra Credit:</strong> Implement authentication or advanced filtering</p>
+            </div>
+        </div>
+
+        <!-- Slide 31: Resources and References -->
+        <div class="slide">
+            <h1>Resources & Further Reading</h1>
+            <h2>Continue Your Learning</h2>
+
+            <div class="concept-box">
+                <h3>📚 Documentation</h3>
+                <ul>
+                    <li><a href="https://docs.neon.tech" target="_blank">Neon Documentation</a></li>
+                    <li><a href="https://docs.netlify.com/functions/overview/" target="_blank">Netlify Functions Documentation</a></li>
+                    <li><a href="https://github.com/neondatabase/serverless" target="_blank">Neon Serverless Driver on GitHub</a></li>
+                </ul>
+            </div>
+
+            <div class="concept-box">
+                <h3>🎓 Original Tutorial</h3>
+                <p><strong>Full Citation:</strong></p>
+                <p style="margin-left: 20px; font-style: italic;">
+                    Ebere, Njoku Samson. "Query Postgres from Netlify Functions with Neon Serverless Driver."
+                    <em>DEV Community</em>, 2024.
+                    <a href="https://dev.to/hackmamba/query-postgres-from-netlify-functions-with-neon-serverless-driver-33f" target="_blank">
+                        https://dev.to/hackmamba/query-postgres-from-netlify-functions-with-neon-serverless-driver-33f
+                    </a>
+                </p>
+                <p style="margin-top: 15px;">This lecture adapted the core workflow and patterns from this excellent tutorial for educational purposes.</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>🔗 Helpful Tools</h3>
+                <ul>
+                    <li><a href="https://www.postman.com/" target="_blank">Postman</a> - API testing</li>
+                    <li><a href="https://insomnia.rest/" target="_blank">Insomnia</a> - API client</li>
+                    <li><a href="https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client" target="_blank">Thunder Client</a> - VS Code API extension</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 32: Summary -->
+        <div class="slide">
+            <h1>Summary <span class="emoji">✨</span></h1>
+            <h2>What We Learned Today</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>Concepts Covered</h3>
+                    <ul>
+                        <li>Serverless architecture</li>
+                        <li>Neon serverless PostgreSQL</li>
+                        <li>Netlify Functions</li>
+                        <li>Environment variables</li>
+                        <li>RESTful API design</li>
+                        <li>CORS and security</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Skills Gained</h3>
+                    <ul>
+                        <li>Setting up cloud databases</li>
+                        <li>Writing serverless functions</li>
+                        <li>Connecting APIs to databases</li>
+                        <li>Testing and debugging</li>
+                        <li>Deploying to production</li>
+                        <li>Database-agnostic development</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3>🎯 Key Takeaway</h3>
+                <p>You now have the skills to build and deploy a live, scalable frontend for ANY PostgreSQL database—a valuable addition to your portfolio!</p>
+            </div>
+        </div>
+
+        <!-- Slide 33: Next Class -->
+        <div class="slide">
+            <h1>Next Class Preview</h1>
+            <h2>Introduction to SQL</h2>
+
+            <div class="concept-box">
+                <h3>Coming Up:</h3>
+                <ul>
+                    <li>SQL fundamentals and syntax</li>
+                    <li>SELECT statements in depth</li>
+                    <li>Filtering and sorting data</li>
+                    <li>Aggregate functions</li>
+                    <li>Writing complex queries</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Preparation:</strong> Complete the homework! You'll use SQL queries extensively in your Netlify functions, and the hands-on experience will help you understand the SQL concepts we cover next.
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; font-size: 1.5em;">
+                <p>Questions? 🤔</p>
+                <p style="margin-top: 20px;">See you next class! 👋</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="controls">
+            <button id="prev-btn">← Previous</button>
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">33</span>
+            </div>
+            <button id="next-btn">Next →</button>
+        </div>
+    </div>
+
+    <!-- Load presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+</body>
+</html>
