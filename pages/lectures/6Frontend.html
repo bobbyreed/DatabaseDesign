@@ -357,9 +357,9 @@
 
             <div class="step-box">
                 <h3>Step 1: Create Project Directory</h3>
-                <div class="bash-example">$ mkdir my-database-frontend
+                <div class="bash-example"><pre>$ mkdir my-database-frontend
 $ cd my-database-frontend
-$ npm init -y</div>
+$ npm init -y</pre></div>
             </div>
 
             <div class="step-box">
@@ -370,9 +370,9 @@ $ npm init -y</div>
 
             <div class="step-box">
                 <h3>Step 3: Create Directory Structure</h3>
-                <div class="bash-example">$ mkdir netlify
+                <div class="bash-example"><pre>$ mkdir netlify
 $ mkdir netlify/functions
-$ mkdir public</div>
+$ mkdir public</pre></div>
                 <ul>
                     <li><span class="file-path">netlify/functions/</span> - Your API endpoints</li>
                     <li><span class="file-path">public/</span> - Your HTML/CSS/JS frontend</li>
@@ -387,14 +387,14 @@ $ mkdir public</div>
 
             <p>Create <span class="file-path">netlify.toml</span> in your project root:</p>
 
-            <div class="code-example">[build]
+            <div class="code-example"><pre>[build]
   functions = "netlify/functions"
   publish = "public"
 
 [dev]
   functions = "netlify/functions"
   publish = "public"
-  port = 8888</div>
+  port = 8888</pre></div>
 
             <div class="tip-box">
                 <strong>What this does:</strong>
@@ -418,7 +418,7 @@ $ mkdir public</div>
             <div class="step-box">
                 <h3>Local Development: .env file</h3>
                 <p>Create <span class="file-path">.env</span> in your project root:</p>
-                <div class="code-example">DATABASE_URL=postgresql://user:password@host/database</div>
+                <div class="code-example"><pre>DATABASE_URL=postgresql://user:password@host/database</pre></div>
                 <p><strong>Important:</strong> Add <span class="file-path">.env</span> to your <span class="file-path">.gitignore</span>!</p>
             </div>
 
@@ -440,7 +440,7 @@ $ mkdir public</div>
 
             <p>Create <span class="file-path">netlify/functions/get-items.mjs</span>:</p>
 
-            <div class="code-example">import { neon } from '@neondatabase/serverless';
+            <div class="code-example"><pre>import { neon } from '@neondatabase/serverless';
 
 export default async (req, context) => {
   try {
@@ -460,7 +460,7 @@ export default async (req, context) => {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-};</div>
+};</pre></div>
 
             <div class="tip-box">
                 <strong>Note:</strong> Replace <code>your_table_name</code> with a table from YOUR database schema!
@@ -504,7 +504,7 @@ export default async (req, context) => {
 
             <p>Create <span class="file-path">netlify/functions/get-item-by-id.mjs</span>:</p>
 
-            <div class="code-example">import { neon } from '@neondatabase/serverless';
+            <div class="code-example"><pre>import { neon } from '@neondatabase/serverless';
 
 export default async (req, context) => {
   try {
@@ -537,7 +537,7 @@ export default async (req, context) => {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-};</div>
+};</pre></div>
         </div>
 
         <!-- Slide 16: POST Requests -->
@@ -547,7 +547,7 @@ export default async (req, context) => {
 
             <p>Create <span class="file-path">netlify/functions/create-item.mjs</span>:</p>
 
-            <div class="code-example">import { neon } from '@neondatabase/serverless';
+            <div class="code-example"><pre>import { neon } from '@neondatabase/serverless';
 
 export default async (req, context) => {
   try {
@@ -586,7 +586,7 @@ export default async (req, context) => {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-};</div>
+};</pre></div>
         </div>
 
         <!-- Slide 17: Testing Locally -->
@@ -603,9 +603,9 @@ export default async (req, context) => {
             <div class="step-box">
                 <h3>Step 2: Test Your Endpoints</h3>
                 <p>Your functions are available at:</p>
-                <div class="code-example">http://localhost:8888/.netlify/functions/get-items
+                <div class="code-example"><pre>http://localhost:8888/.netlify/functions/get-items
 http://localhost:8888/.netlify/functions/get-item-by-id?id=1
-http://localhost:8888/.netlify/functions/create-item</div>
+http://localhost:8888/.netlify/functions/create-item</pre></div>
             </div>
 
             <div class="tip-box">
@@ -630,9 +630,9 @@ http://localhost:8888/.netlify/functions/create-item</div>
 
             <div class="demo-box">
                 <h3>POST Request</h3>
-                <div class="bash-example">$ curl -X POST http://localhost:8888/.netlify/functions/create-item \
+                <div class="bash-example"><pre>$ curl -X POST http://localhost:8888/.netlify/functions/create-item \
   -H "Content-Type: application/json" \
-  -d '{"column1":"value1","column2":"value2"}'</div>
+  -d '{"column1":"value1","column2":"value2"}'</pre></div>
             </div>
 
             <div class="tip-box">
@@ -673,7 +673,7 @@ http://localhost:8888/.netlify/functions/create-item</div>
 
             <p>Create <span class="file-path">public/index.html</span>:</p>
 
-            <div class="code-example">&lt;!DOCTYPE html&gt;
+            <div class="code-example"><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
@@ -704,7 +704,7 @@ http://localhost:8888/.netlify/functions/create-item</div>
             });
     &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;</div>
+&lt;/html&gt;</pre></div>
         </div>
 
         <!-- Slide 21: Deploying to Netlify -->
@@ -748,7 +748,7 @@ http://localhost:8888/.netlify/functions/create-item</div>
             <div class="demo-box">
                 <h3>Adding CORS Headers</h3>
                 <p>Update your function responses:</p>
-                <div class="code-example">return new Response(JSON.stringify(result), {
+                <div class="code-example"><pre>return new Response(JSON.stringify(result), {
   status: 200,
   headers: {
     'Content-Type': 'application/json',
@@ -756,7 +756,7 @@ http://localhost:8888/.netlify/functions/create-item</div>
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
     'Access-Control-Allow-Headers': 'Content-Type'
   }
-});</div>
+});</pre></div>
             </div>
 
             <div class="warning-box">
@@ -793,7 +793,7 @@ http://localhost:8888/.netlify/functions/create-item</div>
 
             <div class="demo-box">
                 <h3>Filtering with Query Parameters</h3>
-                <div class="code-example">// URL: /get-items?category=fiction&year=2024
+                <div class="code-example"><pre>// URL: /get-items?category=fiction&year=2024
 
 const url = new URL(req.url);
 const category = url.searchParams.get('category');
@@ -812,7 +812,7 @@ if (year) {
   query += ` AND year = $${params.length}`;
 }
 
-const result = await sql(query, params);</div>
+const result = await sql(query, params);</pre></div>
             </div>
         </div>
 
@@ -821,7 +821,7 @@ const result = await sql(query, params);</div>
             <h1>Implementing Pagination</h1>
             <h2>Handling Large Result Sets</h2>
 
-            <div class="code-example">// URL: /get-items?page=2&limit=10
+            <div class="code-example"><pre>// URL: /get-items?page=2&limit=10
 
 const url = new URL(req.url);
 const page = parseInt(url.searchParams.get('page')) || 1;
@@ -851,7 +851,7 @@ return new Response(JSON.stringify({
 }), {
   status: 200,
   headers: { 'Content-Type': 'application/json' }
-});</div>
+});</pre></div>
         </div>
 
         <!-- Slide 26: Activity - Advanced Features -->
@@ -953,11 +953,11 @@ return new Response(JSON.stringify({
 
             <div class="tip-box">
                 <h3>Useful Logging Patterns:</h3>
-                <div class="code-example">console.log('Function invoked:', req.url);
+                <div class="code-example"><pre>console.log('Function invoked:', req.url);
 console.log('Query params:', Object.fromEntries(url.searchParams));
 console.log('Request body:', await req.json());
 console.log('Database result:', result);
-console.error('Error occurred:', error.message);</div>
+console.error('Error occurred:', error.message);</pre></div>
             </div>
 
             <div class="concept-box">
