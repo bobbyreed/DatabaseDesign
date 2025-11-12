@@ -346,11 +346,16 @@
             </div>
 
             <div class="calculus-example">
-                <strong>Example: Find staff in Glasgow properties:</strong><br>
-                {sN, fN, lN, posn, sex, DOB, sal, bN | <br>
-                &nbsp;&nbsp;(∃sN1, cty)(Staff(sN, fN, lN, posn, sex, DOB, sal, bN) ∧<br>
-                &nbsp;&nbsp;PropertyForRent(pN, st, cty, pc, typ, rms, rnt, oN, sN1, bN1) ∧<br>
-                &nbsp;&nbsp;(sN = sN1) ∧ (cty = 'Glasgow'))}
+                <strong>Example: Find staff in Glasgow properties:</strong><br><br>
+                <pre style="margin: 0; font-family: 'IBM Plex Mono', monospace;">
+{sN, fN, lN, posn, sex, DOB, sal, bN |
+  (∃sN1, cty)(
+    Staff(sN, fN, lN, posn, sex, DOB, sal, bN) ∧
+    PropertyForRent(pN, st, cty, pc, typ, rms, rnt, oN, sN1, bN1) ∧
+    (sN = sN1) ∧
+    (cty = 'Glasgow')
+  )
+}</pre>
             </div>
         </div>
 
@@ -667,9 +672,15 @@
 
             <div class="calculus-example">
                 <h3>TRC Solution:</h3>
-                <p style="font-size: 1.05em;">
-                    {S.staffNo, S.fName, S.lName | Staff(S) ∧ (∃B)(Branch(B) ∧ S.branchNo = B.branchNo ∧ B.city = 'London')}
-                </p>
+                <pre style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 1.05em;">
+{S.staffNo, S.fName, S.lName |
+  Staff(S) ∧
+  (∃B)(
+    Branch(B) ∧
+    S.branchNo = B.branchNo ∧
+    B.city = 'London'
+  )
+}</pre>
             </div>
 
             <div class="tip-box">
@@ -722,9 +733,18 @@
 
             <div class="calculus-example" style="font-size: 0.9em;">
                 <h3>TRC Solution:</h3>
-                <p>
-                    {S.supplierNo, S.name | Supplier(S) ∧ (∀P)(¬Part(P) ∨ (∃SP)(Supplies(SP) ∧ SP.supplierNo = S.supplierNo ∧ SP.partNo = P.partNo))}
-                </p>
+                <pre style="margin: 0; font-family: 'IBM Plex Mono', monospace;">
+{S.supplierNo, S.name |
+  Supplier(S) ∧
+  (∀P)(
+    ¬Part(P) ∨
+    (∃SP)(
+      Supplies(SP) ∧
+      SP.supplierNo = S.supplierNo ∧
+      SP.partNo = P.partNo
+    )
+  )
+}</pre>
             </div>
 
             <div class="tip-box">
@@ -738,9 +758,18 @@
 
             <div class="demo-box">
                 <h3>Alternative Formulation (Easier to Read):</h3>
-                <p style="font-size: 0.95em;">
-                    {S.supplierNo, S.name | Supplier(S) ∧ ¬(∃P)(Part(P) ∧ ¬(∃SP)(Supplies(SP) ∧ SP.supplierNo = S.supplierNo ∧ SP.partNo = P.partNo))}
-                </p>
+                <pre style="margin: 0 0 10px 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.95em;">
+{S.supplierNo, S.name |
+  Supplier(S) ∧
+  ¬(∃P)(
+    Part(P) ∧
+    ¬(∃SP)(
+      Supplies(SP) ∧
+      SP.supplierNo = S.supplierNo ∧
+      SP.partNo = P.partNo
+    )
+  )
+}</pre>
                 <p style="margin-top: 10px;"><em>"There does NOT exist a part that the supplier does NOT supply"</em></p>
             </div>
         </div>
