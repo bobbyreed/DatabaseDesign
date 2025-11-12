@@ -67,6 +67,46 @@
             display: none;
             z-index: 1000;
         }
+
+        /* Bridge to Your Project boxes */
+        .bridge-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #4a90e2;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .bridge-box h4 {
+            margin-top: 0;
+            color: #4a90e2;
+        }
+
+        /* Netlify integration callouts */
+        .netlify-callout {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .netlify-callout h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+
+        /* Project example boxes */
+        .project-example {
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .project-example strong {
+            color: #e65100;
+        }
     </style>
 </head>
 <body>
@@ -196,18 +236,20 @@
 
         <!-- Slide 6: Database Schema -->
         <div class="slide">
-            <h1>Our Sample Database Schema</h1>
-            <h2>DreamHome Property Rental</h2>
+            <h1>Our Teaching Database Schema</h1>
+            <h2>movie_rental_db - Your Familiar Friend</h2>
             <div class="sql-example">
-                <strong>Branch</strong> (<u>branchNo</u>, street, city, postcode)<br>
-                <strong>Staff</strong> (<u>staffNo</u>, fName, lName, position, sex, DOB, salary, <em>branchNo</em>)<br>
-                <strong>PropertyForRent</strong> (<u>propertyNo</u>, street, city, postcode, type, rooms, rent, <em>ownerNo</em>, <em>staffNo</em>, <em>branchNo</em>)<br>
-                <strong>Client</strong> (<u>clientNo</u>, fName, lName, telNo, prefType, maxRent, eMail)<br>
-                <strong>PrivateOwner</strong> (<u>ownerNo</u>, fName, lName, address, telNo, eMail, password)<br>
-                <strong>Viewing</strong> (<u><em>clientNo</em></u>, <u><em>propertyNo</em></u>, viewDate, comment)<br>
-                <strong>Registration</strong> (<u><em>clientNo</em></u>, <u><em>branchNo</em></u>, <em>staffNo</em>, dateJoined)
+                <strong>Movies</strong> (<u>movie_id</u>, title, genre, release_year, <em>studio_id</em>)<br>
+                <strong>Members</strong> (<u>member_id</u>, name, email, join_date)<br>
+                <strong>Rentals</strong> (<u>rental_id</u>, <em>movie_id</em>, <em>member_id</em>, rental_date, return_date)<br>
+                <strong>Studios</strong> (<u>studio_id</u>, name, location)
             </div>
             <p><em>Note: Primary keys are underlined, foreign keys are italicized</em></p>
+
+            <div class="netlify-callout" style="margin-top: 30px;">
+                <h4>🌐 Connection to Your Project</h4>
+                <p><strong>Remember:</strong> In Lecture 6, you built a Netlify frontend with API endpoints for YOUR project database. Today's SQL concepts will help you enhance those APIs with filtering, sorting, search, and statistics!</p>
+            </div>
         </div>
 
         <!-- Slide 7: SELECT Statement Structure -->
@@ -235,62 +277,84 @@
             <h1>Basic SELECT Queries</h1>
             <h2>Retrieving All Data</h2>
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff;
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Movies;
             </div>
             <table class="table-schema">
                 <tr>
-                    <th>staffNo</th><th>fName</th><th>lName</th><th>position</th><th>DOB</th><th>salary</th><th>branchNo</th>
+                    <th>movie_id</th><th>title</th><th>genre</th><th>release_year</th><th>studio_id</th>
                 </tr>
                 <tr>
-                    <td>SL21</td><td>John</td><td>White</td><td>Manager</td><td>1-Oct-45</td><td>30000.00</td><td>B005</td>
+                    <td>1</td><td>The Matrix</td><td>Science Fiction</td><td>1999</td><td>1</td>
                 </tr>
                 <tr>
-                    <td>SG37</td><td>Ann</td><td>Beech</td><td>Assistant</td><td>10-Nov-60</td><td>12000.00</td><td>B003</td>
+                    <td>2</td><td>Inception</td><td>Science Fiction</td><td>2010</td><td>1</td>
                 </tr>
                 <tr>
-                    <td>SG14</td><td>David</td><td>Ford</td><td>Supervisor</td><td>24-Mar-58</td><td>18000.00</td><td>B003</td>
+                    <td>3</td><td>The Godfather</td><td>Drama</td><td>1972</td><td>2</td>
                 </tr>
                 <tr>
-                    <td>SA9</td><td>Mary</td><td>Howe</td><td>Assistant</td><td>19-Feb-70</td><td>9000.00</td><td>B007</td>
+                    <td>4</td><td>Pulp Fiction</td><td>Crime</td><td>1994</td><td>3</td>
                 </tr>
             </table>
+
+            <div class="bridge-box" style="margin-top: 30px;">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Try this with YOUR data:</strong></p>
+                <p>Replace <code>Movies</code> with one of your project tables. This is the simplest query - it returns ALL rows and ALL columns.</p>
+                <div class="project-example">
+                    <strong>Recipe database:</strong> <code>SELECT * FROM recipes;</code><br>
+                    <strong>Inventory database:</strong> <code>SELECT * FROM products;</code><br>
+                    <strong>Library database:</strong> <code>SELECT * FROM books;</code>
+                </div>
+            </div>
         </div>
 
         <!-- Slide 9: DISTINCT -->
         <div class="slide">
             <h1>Using DISTINCT</h1>
             <h2>Eliminating Duplicates</h2>
-            <p><strong>Problem:</strong> List property numbers of all properties that have been viewed.</p>
-            
+            <p><strong>Problem:</strong> List all unique genres of movies in our database.</p>
+
             <div class="comparison-table">
                 <div>
                     <h3>Without DISTINCT</h3>
                     <div class="sql-example">
-                        <span class="sql-keyword">SELECT</span> propertyNo<br>
-                        <span class="sql-keyword">FROM</span> Viewing;
+                        <span class="sql-keyword">SELECT</span> genre<br>
+                        <span class="sql-keyword">FROM</span> Movies;
                     </div>
                     <table class="table-schema">
-                        <tr><th>propertyNo</th></tr>
-                        <tr><td>PA14</td></tr>
-                        <tr><td>PG4</td></tr>
-                        <tr><td style="background: #ffeb3b;">PG4</td></tr>
-                        <tr><td style="background: #ffeb3b;">PA14</td></tr>
-                        <tr><td>PG36</td></tr>
+                        <tr><th>genre</th></tr>
+                        <tr><td>Science Fiction</td></tr>
+                        <tr><td style="background: #ffeb3b;">Science Fiction</td></tr>
+                        <tr><td>Drama</td></tr>
+                        <tr><td>Crime</td></tr>
+                        <tr><td style="background: #ffeb3b;">Drama</td></tr>
                     </table>
                 </div>
                 <div>
                     <h3>With DISTINCT</h3>
                     <div class="sql-example">
-                        <span class="sql-keyword">SELECT DISTINCT</span> propertyNo<br>
-                        <span class="sql-keyword">FROM</span> Viewing;
+                        <span class="sql-keyword">SELECT DISTINCT</span> genre<br>
+                        <span class="sql-keyword">FROM</span> Movies;
                     </div>
                     <table class="table-schema">
-                        <tr><th>propertyNo</th></tr>
-                        <tr><td>PA14</td></tr>
-                        <tr><td>PG4</td></tr>
-                        <tr><td>PG36</td></tr>
+                        <tr><th>genre</th></tr>
+                        <tr><td>Science Fiction</td></tr>
+                        <tr><td>Drama</td></tr>
+                        <tr><td>Crime</td></tr>
                     </table>
                 </div>
+            </div>
+
+            <div class="bridge-box" style="margin-top: 30px;">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Use DISTINCT to find unique values:</strong></p>
+                <div class="project-example">
+                    <strong>Recipe database:</strong> <code>SELECT DISTINCT cuisine FROM recipes;</code><br>
+                    <strong>Inventory database:</strong> <code>SELECT DISTINCT category FROM products;</code><br>
+                    <strong>Library database:</strong> <code>SELECT DISTINCT author FROM books;</code>
+                </div>
+                <p style="margin-top: 10px;"><strong>Great for:</strong> Populating dropdown filters in your Netlify frontend!</p>
             </div>
         </div>
 
@@ -298,13 +362,13 @@
         <div class="slide">
             <h1>Filtering with WHERE</h1>
             <h2>Conditional Data Retrieval</h2>
-            <p><strong>Example:</strong> List all staff with salary greater than 10,000</p>
+            <p><strong>Example:</strong> Find all Science Fiction movies</p>
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> salary > 10000;
+                <span class="sql-keyword">SELECT</span> title, genre, release_year<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">WHERE</span> genre = <span class="sql-string">'Science Fiction'</span>;
             </div>
-            
+
             <h3>Comparison Operators</h3>
             <ul>
                 <li><code>=</code> Equal to</li>
@@ -314,6 +378,12 @@
                 <li><code>&gt;</code> Greater than</li>
                 <li><code>&gt;=</code> Greater than or equal to</li>
             </ul>
+
+            <div class="netlify-callout" style="margin-top: 30px;">
+                <h4>💻 This Powers Your API</h4>
+                <p>In your Netlify function from Lecture 6, this WHERE clause becomes a query parameter:</p>
+                <p><code>GET /api/movies?genre=Science%20Fiction</code></p>
+            </div>
         </div>
 
         <!-- Slide 11: Activity - Basic Queries -->
@@ -321,14 +391,23 @@
             <h1>🎯 Activity: Write Your First Queries</h1>
             <h2>15 Minutes - Individual Work</h2>
             <div class="activity-box">
-                <p>Using our database schema, write SQL queries for:</p>
+                <p><strong>Part A: Practice with movie_rental_db</strong></p>
                 <ol>
-                    <li>List all properties in Glasgow</li>
-                    <li>Find all staff who are Assistants</li>
-                    <li>Show all properties with rent less than 500</li>
-                    <li>Display client names and email addresses</li>
-                    <li>Find all male staff members</li>
+                    <li>List all Drama movies</li>
+                    <li>Find all movies released after 2000</li>
+                    <li>Show member names and email addresses</li>
+                    <li>Find all rentals that have been returned</li>
                 </ol>
+            </div>
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>Part B: Apply to YOUR Project</h4>
+                <p>Write 2-3 WHERE clause queries for your own project database. Think about what filters would be useful in your Netlify frontend!</p>
+                <p><strong>Examples:</strong></p>
+                <ul style="font-size: 0.95em;">
+                    <li>Filter by category/type</li>
+                    <li>Filter by date range</li>
+                    <li>Filter by numeric value (price, quantity, rating, etc.)</li>
+                </ul>
                 <button onclick="startTimer(15)">Start Timer</button>
             </div>
         </div>
@@ -337,21 +416,31 @@
         <div class="slide">
             <h1>Sorting Results with ORDER BY</h1>
             <h2>Single Column Ordering</h2>
-            <p><strong>Example:</strong> List salaries for all staff, arranged in descending order</p>
+            <p><strong>Example:</strong> List movies arranged by release year, newest first</p>
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">ORDER BY</span> salary <span class="sql-keyword">DESC</span>;
+                <span class="sql-keyword">SELECT</span> title, genre, release_year<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">ORDER BY</span> release_year <span class="sql-keyword">DESC</span>;
             </div>
-            
+
             <table class="table-schema">
-                <tr><th>staffNo</th><th>fName</th><th>lName</th><th>salary</th></tr>
-                <tr><td>SL21</td><td>John</td><td>White</td><td>30000.00</td></tr>
-                <tr><td>SG5</td><td>Susan</td><td>Brand</td><td>24000.00</td></tr>
-                <tr><td>SG14</td><td>David</td><td>Ford</td><td>18000.00</td></tr>
-                <tr><td>SG37</td><td>Ann</td><td>Beech</td><td>12000.00</td></tr>
+                <tr><th>title</th><th>genre</th><th>release_year</th></tr>
+                <tr><td>Inception</td><td>Science Fiction</td><td>2010</td></tr>
+                <tr><td>The Matrix</td><td>Science Fiction</td><td>1999</td></tr>
+                <tr><td>Pulp Fiction</td><td>Crime</td><td>1994</td></tr>
+                <tr><td>The Godfather</td><td>Drama</td><td>1972</td></tr>
             </table>
             <p><em>Note: Default is ASC (ascending), use DESC for descending</em></p>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Sorting makes data useful:</strong></p>
+                <div class="project-example">
+                    <strong>Recipe database:</strong> <code>ORDER BY prep_time ASC</code> (quickest first)<br>
+                    <strong>Inventory database:</strong> <code>ORDER BY price DESC</code> (most expensive first)<br>
+                    <strong>Library database:</strong> <code>ORDER BY publication_year DESC</code> (newest first)
+                </div>
+            </div>
         </div>
 
         <!-- Slide 13: Aggregate Functions -->
@@ -371,18 +460,22 @@
                     </ul>
                 </div>
                 <div>
-                    <h3>Example</h3>
+                    <h3>Example: Movie Stats</h3>
                     <div class="sql-example">
-                        <span class="sql-keyword">SELECT</span> 
-                            <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> staff_count,<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(salary) <span class="sql-keyword">AS</span> avg_salary,<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">MAX</span>(salary) <span class="sql-keyword">AS</span> max_salary<br>
-                        <span class="sql-keyword">FROM</span> Staff;
+                        <span class="sql-keyword">SELECT</span>
+                            <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_movies,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">MIN</span>(release_year) <span class="sql-keyword">AS</span> oldest,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">MAX</span>(release_year) <span class="sql-keyword">AS</span> newest<br>
+                        <span class="sql-keyword">FROM</span> Movies;
                     </div>
                 </div>
             </div>
             <div class="note-box">
                 <p><strong>Important:</strong> Aggregate functions can only be used in SELECT list and HAVING clause</p>
+            </div>
+            <div class="netlify-callout" style="margin-top: 20px;">
+                <h4>💻 Perfect for Dashboard APIs!</h4>
+                <p>Create an API endpoint like <code>GET /api/stats</code> that returns aggregate data for your frontend dashboard.</p>
             </div>
         </div>
 
@@ -390,41 +483,49 @@
         <div class="slide">
             <h1>GROUP BY Clause</h1>
             <h2>Grouping for Subtotals</h2>
-            <p><strong>Example:</strong> Find number of staff in each branch and their total salaries</p>
+            <p><strong>Example:</strong> Count how many movies we have in each genre</p>
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> <span class="highlight">branchNo</span>,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(staffNo) <span class="sql-keyword">AS</span> myCount,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(salary) <span class="sql-keyword">AS</span> mySum<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">GROUP BY</span> <span class="highlight">branchNo</span><br>
-                <span class="sql-keyword">ORDER BY</span> branchNo;
+                <span class="sql-keyword">SELECT</span> <span class="highlight">genre</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> movie_count<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">GROUP BY</span> <span class="highlight">genre</span><br>
+                <span class="sql-keyword">ORDER BY</span> movie_count <span class="sql-keyword">DESC</span>;
             </div>
-            
+
             <table class="table-schema">
-                <tr><th>branchNo</th><th>myCount</th><th>mySum</th></tr>
-                <tr><td>B003</td><td>3</td><td>54000.00</td></tr>
-                <tr><td>B005</td><td>2</td><td>39000.00</td></tr>
-                <tr><td>B007</td><td>1</td><td>9000.00</td></tr>
+                <tr><th>genre</th><th>movie_count</th></tr>
+                <tr><td>Science Fiction</td><td>2</td></tr>
+                <tr><td>Drama</td><td>1</td></tr>
+                <tr><td>Crime</td><td>1</td></tr>
             </table>
-            
+
             <p><strong>Rule:</strong> All columns in SELECT must either be in GROUP BY or be aggregate functions</p>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>GROUP BY creates category breakdowns:</strong></p>
+                <div class="project-example">
+                    <strong>Recipe database:</strong> <code>SELECT cuisine, COUNT(*) FROM recipes GROUP BY cuisine;</code><br>
+                    <strong>Inventory database:</strong> <code>SELECT category, SUM(quantity) FROM products GROUP BY category;</code><br>
+                    <strong>Library database:</strong> <code>SELECT genre, COUNT(*) FROM books GROUP BY genre;</code>
+                </div>
+            </div>
         </div>
 
         <!-- Slide 15: HAVING Clause -->
         <div class="slide">
             <h1>HAVING Clause</h1>
             <h2>Filtering Grouped Results</h2>
-            <p><strong>Example:</strong> For branches with more than 1 staff member, show count and sum of salaries</p>
+            <p><strong>Example:</strong> Show members who have rented 5 or more movies</p>
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> branchNo,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(staffNo) <span class="sql-keyword">AS</span> myCount,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(salary) <span class="sql-keyword">AS</span> mySum<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">GROUP BY</span> branchNo<br>
-                <span class="sql-keyword">HAVING COUNT</span>(staffNo) > 1<br>
-                <span class="sql-keyword">ORDER BY</span> branchNo;
+                <span class="sql-keyword">SELECT</span> member_id,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> rental_count<br>
+                <span class="sql-keyword">FROM</span> Rentals<br>
+                <span class="sql-keyword">GROUP BY</span> member_id<br>
+                <span class="sql-keyword">HAVING COUNT</span>(*) >= 5<br>
+                <span class="sql-keyword">ORDER BY</span> rental_count <span class="sql-keyword">DESC</span>;
             </div>
-            
+
             <div class="comparison-table">
                 <div>
                     <h3>WHERE vs HAVING</h3>
@@ -436,32 +537,56 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Find "top" categories with HAVING:</strong></p>
+                <div class="project-example">
+                    <strong>Recipe database:</strong> Popular cuisines with 10+ recipes<br>
+                    <strong>Inventory database:</strong> Categories with total value > $5000<br>
+                    <strong>Library database:</strong> Authors with 3+ books
+                </div>
+            </div>
         </div>
 
         <!-- Slide 16: Pattern Matching -->
         <div class="slide">
             <h1>Pattern Matching with LIKE</h1>
             <h2>Flexible String Searching</h2>
-            
+
             <h3>Special Pattern Symbols</h3>
             <ul>
                 <li><code>%</code> - Zero or more characters</li>
                 <li><code>_</code> - Exactly one character</li>
             </ul>
-            
-            <h3>Examples</h3>
+
+            <h3>Examples with Movies</h3>
             <div class="sql-example">
-                <span class="sql-comment">-- Find all addresses in Glasgow</span><br>
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Branch<br>
-                <span class="sql-keyword">WHERE</span> city <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Glasgow%'</span>;<br><br>
-                
-                <span class="sql-comment">-- Find staff with 'o' as second letter of first name</span><br>
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> fName <span class="sql-keyword">LIKE</span> <span class="sql-string">'_o%'</span>;<br><br>
-                
-                <span class="sql-comment">-- Find properties on streets ending with 'Rd'</span><br>
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> PropertyForRent<br>
-                <span class="sql-keyword">WHERE</span> street <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Rd'</span>;
+                <span class="sql-comment">-- Find movies with "The" in the title</span><br>
+                <span class="sql-keyword">SELECT</span> title, release_year<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'%The%'</span>;<br><br>
+
+                <span class="sql-comment">-- Find members with email ending in .edu</span><br>
+                <span class="sql-keyword">SELECT</span> name, email<br>
+                <span class="sql-keyword">FROM</span> Members<br>
+                <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">LIKE</span> <span class="sql-string">'%.edu'</span>;
+            </div>
+
+            <div class="netlify-callout" style="margin-top: 20px;">
+                <h4>💻 This Is Your Search Feature!</h4>
+                <p>LIKE powers search boxes in your Netlify frontend:</p>
+                <p><code>GET /api/search?q=Matrix</code> → <code>WHERE title LIKE '%Matrix%'</code></p>
+            </div>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Add search to your project:</strong></p>
+                <div class="project-example">
+                    <strong>Recipe database:</strong> <code>WHERE name LIKE '%chicken%'</code><br>
+                    <strong>Inventory database:</strong> <code>WHERE description LIKE '%wireless%'</code><br>
+                    <strong>Library database:</strong> <code>WHERE title LIKE '%python%'</code>
+                </div>
             </div>
         </div>
 
@@ -497,34 +622,256 @@
             
             <div class="sql-example">
                 <span class="sql-comment">-- Good formatting example</span><br>
-                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(p.propertyNo) <span class="sql-keyword">AS</span> properties_managed<br>
-                <span class="sql-keyword">FROM</span> Staff s<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> PropertyForRent p <span class="sql-keyword">ON</span> s.staffNo = p.staffNo<br>
-                <span class="sql-keyword">WHERE</span> s.position = <span class="sql-string">'Manager'</span><br>
-                <span class="sql-keyword">GROUP BY</span> s.staffNo, s.fName, s.lName<br>
-                <span class="sql-keyword">HAVING COUNT</span>(p.propertyNo) > 0<br>
-                <span class="sql-keyword">ORDER BY</span> properties_managed <span class="sql-keyword">DESC</span>;
+                <span class="sql-keyword">SELECT</span> genre,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_movies,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(release_year) <span class="sql-keyword">AS</span> avg_year<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">WHERE</span> release_year >= 2000<br>
+                <span class="sql-keyword">GROUP BY</span> genre<br>
+                <span class="sql-keyword">HAVING COUNT</span>(*) > 1<br>
+                <span class="sql-keyword">ORDER BY</span> total_movies <span class="sql-keyword">DESC</span>;
             </div>
+        </div>
+
+        <!-- NEW SECTION: SQL Powers Your Netlify API -->
+
+        <!-- Slide 17a: SQL Powers Your Netlify API -->
+        <div class="slide">
+            <h1>SQL Powers Your Netlify API</h1>
+            <h2>Connecting Lecture 6 to Lecture 7</h2>
+
+            <div class="netlify-callout">
+                <h4>🌐 Remember Lecture 6?</h4>
+                <p>You built a live Netlify frontend with API endpoints for your project database. Today's SQL concepts make those APIs much more powerful!</p>
+            </div>
+
+            <h3 style="margin-top: 30px;">The Pattern:</h3>
+            <div class="demo-box">
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Learn SQL concept</strong> with movie_rental_db examples</li>
+                    <li><strong>Adapt to YOUR project</strong> database schema</li>
+                    <li><strong>Add to Netlify function</strong> as a new API endpoint</li>
+                    <li><strong>Update frontend</strong> to call and display the results</li>
+                </ol>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <p><strong>By the end of today:</strong> Your project will have filtering, sorting, search, and dashboard statistics - all powered by SQL!</p>
+            </div>
+        </div>
+
+        <!-- Slide 17b: WHERE Becomes Query Parameters -->
+        <div class="slide">
+            <h1>WHERE Clause → Query Parameters</h1>
+            <h2>Filtering Data via API</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.9em;">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> Movies<br>
+                        <span class="sql-keyword">WHERE</span> genre = <span class="sql-string">'Drama'</span>;
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.9em;">
+                        GET /api/movies?genre=Drama
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> { genre } = event.queryStringParameters || {};<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">let</span> query = <span class="sql-string">'SELECT * FROM Movies'</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> params = [];<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">if</span> (genre) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;params.push(genre);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;query += <span class="sql-string">' WHERE genre = $1'</span>;<br>
+                &nbsp;&nbsp;}<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query, params);<br>
+                &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
+                };
+            </div>
+        </div>
+
+        <!-- Slide 17c: ORDER BY Becomes Sort Parameters -->
+        <div class="slide">
+            <h1>ORDER BY → Sort Parameters</h1>
+            <h2>Letting Users Control Sort Order</h2>
+
+            <div class="netlify-callout">
+                <h4>💡 User Experience Tip</h4>
+                <p>Let your frontend users choose how to sort results. Common patterns: "Sort by: Date | Price | Name"</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Netlify Function with Safe Sorting:</h3>
+            <div class="sql-example" style="font-size: 0.8em;">
+                <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> { sortBy, order } = event.queryStringParameters || {};<br><br>
+
+                &nbsp;&nbsp;<span class="sql-comment">// IMPORTANT: Whitelist valid sort columns (prevent SQL injection)</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> validSorts = [<span class="sql-string">'release_year'</span>, <span class="sql-string">'title'</span>, <span class="sql-string">'genre'</span>];<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> validOrders = [<span class="sql-string">'ASC'</span>, <span class="sql-string">'DESC'</span>];<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> sortColumn = validSorts.includes(sortBy) ? sortBy : <span class="sql-string">'release_year'</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> sortOrder = validOrders.includes(order?.toUpperCase()) ? order.toUpperCase() : <span class="sql-string">'DESC'</span>;<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`SELECT * FROM Movies ORDER BY ${sortColumn} ${sortOrder}`</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
+                };
+            </div>
+
+            <p style="margin-top: 15px;"><strong>API Call:</strong> <code>GET /api/movies?sortBy=release_year&order=DESC</code></p>
+        </div>
+
+        <!-- Slide 17d: Aggregates Become Dashboard APIs -->
+        <div class="slide">
+            <h1>Aggregates → Dashboard Statistics</h1>
+            <h2>Powering Admin Panels and Dashboards</h2>
+
+            <div class="netlify-callout">
+                <h4>📊 Perfect Use Case</h4>
+                <p>Create a <code>/api/stats</code> endpoint that returns high-level metrics for your dashboard page.</p>
+            </div>
+
+            <h3>Dashboard Stats Endpoint:</h3>
+            <div class="sql-example" style="font-size: 0.8em;">
+                <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SELECT<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(DISTINCT genre) as total_genres,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as total_movies,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIN(release_year) as oldest_movie_year,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX(release_year) as newest_movie_year<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;FROM Movies<br>
+                &nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br>
+                &nbsp;&nbsp;<span class="sql-keyword">return</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;statusCode: 200,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify(result.rows[0])<br>
+                &nbsp;&nbsp;};<br>
+                };
+            </div>
+
+            <h3 style="margin-top: 20px;">Frontend Display:</h3>
+            <div class="project-example">
+                <strong>Dashboard cards showing:</strong><br>
+                Total Genres: 3 | Total Movies: 150 | Collection: 1972-2024
+            </div>
+        </div>
+
+        <!-- Slide 17e: GROUP BY Becomes Category Breakdown APIs -->
+        <div class="slide">
+            <h1>GROUP BY → Category Breakdown</h1>
+            <h2>Analytics by Category</h2>
+
+            <div class="netlify-callout">
+                <h4>📈 Analytics Gold</h4>
+                <p>GROUP BY queries power charts, graphs, and category breakdowns in your frontend.</p>
+            </div>
+
+            <h3>Movies by Genre Endpoint:</h3>
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SELECT genre,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as movie_count<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;FROM Movies<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;GROUP BY genre<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY movie_count DESC<br>
+                &nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br>
+                &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
+                };
+            </div>
+
+            <h3 style="margin-top: 20px;">Returns JSON like:</h3>
+            <div class="sql-example" style="font-size: 0.9em;">
+                [<br>
+                &nbsp;&nbsp;{ "genre": "Science Fiction", "movie_count": 2 },<br>
+                &nbsp;&nbsp;{ "genre": "Drama", "movie_count": 1 },<br>
+                &nbsp;&nbsp;{ "genre": "Crime", "movie_count": 1 }<br>
+                ]
+            </div>
+
+            <p style="margin-top: 15px;"><strong>Frontend:</strong> Display as bar chart, pie chart, or simple list</p>
+        </div>
+
+        <!-- Slide 17f: LIKE Becomes Search -->
+        <div class="slide">
+            <h1>LIKE → Search Functionality</h1>
+            <h2>The Foundation of Every Search Box</h2>
+
+            <div class="netlify-callout">
+                <h4>🔍 User Expectation</h4>
+                <p>Users expect to search your data. LIKE makes it possible with simple pattern matching.</p>
+            </div>
+
+            <h3>Search Endpoint:</h3>
+            <div class="sql-example" style="font-size: 0.8em;">
+                <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> { q } = event.queryStringParameters || {};<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">if</span> (!q) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statusCode: 400,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify({ error: <span class="sql-string">'Search query required'</span> })<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                &nbsp;&nbsp;}<br><br>
+
+                &nbsp;&nbsp;<span class="sql-comment">// Use ILIKE for case-insensitive search (PostgreSQL)</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SELECT * FROM Movies<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;WHERE title ILIKE $1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY release_year DESC<br>
+                &nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> searchPattern = <span class="sql-string">`%${q}%`</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query, [searchPattern]);<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
+                };
+            </div>
+
+            <p style="margin-top: 15px;"><strong>API Call:</strong> <code>GET /api/search?q=Matrix</code></p>
         </div>
 
         <!-- Slide 18: Complex Query Activity -->
         <div class="slide">
-            <h1>🎯 Activity: Complex Queries</h1>
-            <h2>20 Minutes - Pair Programming</h2>
+            <h1>🎯 Activity: Plan Your API Enhancements</h1>
+            <h2>20 Minutes - Individual Work</h2>
             <div class="activity-box">
-                <p><strong>Challenge:</strong> Write queries for these business questions:</p>
-                <ol>
-                    <li>Which branch has the highest average staff salary?</li>
-                    <li>List all properties that have never been viewed</li>
-                    <li>Find clients who have viewed more than 3 properties</li>
-                    <li>Show the total rent income potential for each city</li>
-                    <li>Identify staff members who don't manage any properties</li>
+                <p><strong>Goal:</strong> Plan 3-5 new API endpoints for YOUR project using today's SQL concepts.</p>
+
+                <h3>For Each Endpoint, Specify:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Endpoint URL:</strong> e.g., <code>GET /api/recipes-by-cuisine?cuisine=Italian</code></li>
+                    <li><strong>SQL Query:</strong> What query will power it?</li>
+                    <li><strong>Purpose:</strong> What feature does this enable in your frontend?</li>
                 </ol>
+            </div>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>Endpoint Ideas:</h4>
+                <ul style="font-size: 0.95em;">
+                    <li>✅ <strong>Filter endpoint:</strong> Filter by category/type (uses WHERE)</li>
+                    <li>✅ <strong>Sort endpoint:</strong> Sortable list (uses ORDER BY)</li>
+                    <li>✅ <strong>Search endpoint:</strong> Search by keyword (uses LIKE)</li>
+                    <li>✅ <strong>Stats endpoint:</strong> Dashboard metrics (uses aggregates)</li>
+                    <li>✅ <strong>Category breakdown:</strong> Group by category (uses GROUP BY)</li>
+                </ul>
                 <button onclick="startTimer(20)">Start Timer</button>
-                <div style="margin-top: 20px;">
-                    <p><strong>Hint:</strong> Some of these may require subqueries or joins (preview of next lecture!)</p>
-                </div>
             </div>
         </div>
 
@@ -577,15 +924,20 @@
             
             <h3>Example: Improving Query Performance</h3>
             <div class="sql-example">
-                <span class="sql-comment">-- Slower: Gets all columns, then filters</span><br>
+                <span class="sql-comment">-- Slower: Gets all columns, wildcard at start</span><br>
                 <span class="sql-keyword">SELECT</span> *<br>
-                <span class="sql-keyword">FROM</span> PropertyForRent<br>
-                <span class="sql-keyword">WHERE</span> city <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Glasgow%'</span>;<br><br>
-                
-                <span class="sql-comment">-- Faster: Specific columns, exact match if possible</span><br>
-                <span class="sql-keyword">SELECT</span> propertyNo, street, rent<br>
-                <span class="sql-keyword">FROM</span> PropertyForRent<br>
-                <span class="sql-keyword">WHERE</span> city = <span class="sql-string">'Glasgow'</span>;
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Matrix%'</span>;<br><br>
+
+                <span class="sql-comment">-- Faster: Specific columns, wildcard at end</span><br>
+                <span class="sql-keyword">SELECT</span> movie_id, title, release_year<br>
+                <span class="sql-keyword">FROM</span> Movies<br>
+                <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'Matrix%'</span>;
+            </div>
+
+            <div class="netlify-callout" style="margin-top: 20px;">
+                <h4>💡 API Performance Matters</h4>
+                <p>Slow queries = slow API = frustrated users. Use EXPLAIN to analyze your Netlify function queries!</p>
             </div>
         </div>
 
@@ -594,14 +946,14 @@
             <h1>Preview: Joining Tables</h1>
             <h2>Coming Next Lecture</h2>
             <p>So far, we've queried single tables. Real power comes from combining data:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Example: Show staff names with their branch cities</span><br>
-                <span class="sql-keyword">SELECT</span> s.fName, s.lName, b.city<br>
-                <span class="sql-keyword">FROM</span> Staff s<br>
-                <span class="sql-keyword">INNER JOIN</span> Branch b <span class="sql-keyword">ON</span> s.branchNo = b.branchNo;
+                <span class="sql-comment">-- Example: Show movies with their studio names</span><br>
+                <span class="sql-keyword">SELECT</span> m.title, m.genre, s.name <span class="sql-keyword">AS</span> studio_name<br>
+                <span class="sql-keyword">FROM</span> Movies m<br>
+                <span class="sql-keyword">INNER JOIN</span> Studios s <span class="sql-keyword">ON</span> m.studio_id = s.studio_id;
             </div>
-            
+
             <h3>Types of Joins We'll Cover:</h3>
             <ul>
                 <li><strong>INNER JOIN:</strong> Matching rows from both tables</li>
@@ -610,6 +962,11 @@
                 <li><strong>FULL OUTER JOIN:</strong> All rows from both tables</li>
                 <li><strong>CROSS JOIN:</strong> Cartesian product</li>
             </ul>
+
+            <div class="netlify-callout" style="margin-top: 20px;">
+                <h4>💻 Why Joins Matter for Your API</h4>
+                <p>JOINs let your API return rich, related data in one request instead of requiring multiple API calls from your frontend!</p>
+            </div>
         </div>
 
         <!-- IN-CLASS EXERCISES -->
@@ -617,244 +974,239 @@
         <!-- Slide 22: Exercise Overview -->
         <div class="slide">
             <h1>In-Class Exercises <span class="emoji">🏗️</span></h1>
-            <h2>Basic DQL & DML Practice</h2>
+            <h2>Enhance Your Netlify APIs</h2>
 
-            <div class="demo-box">
-                <h3>Exercise Overview</h3>
-                <p style="font-size: 1.2em;">Today, you'll practice writing fundamental SQL queries including SELECT statements with various WHERE conditions and basic data manipulation (INSERT, UPDATE, DELETE) operations.</p>
+            <div class="netlify-callout">
+                <h3>Goal: Level Up Your Project</h3>
+                <p style="font-size: 1.15em;">Take the Netlify frontend you built in Lecture 6 and add powerful new features using today's SQL concepts!</p>
             </div>
 
             <div class="activity-box">
-                <h3>Learning Objectives</h3>
+                <h3>What You'll Build:</h3>
                 <ul style="font-size: 1.15em;">
-                    <li>✅ Write SELECT queries with different filter types</li>
-                    <li>✅ Apply range, equality, and pattern matching conditions</li>
-                    <li>✅ Execute INSERT, UPDATE, and DELETE statements</li>
-                    <li>✅ Handle real-world data modification scenarios</li>
+                    <li>✅ <strong>Exercise 1:</strong> Add filtering and sorting endpoints</li>
+                    <li>✅ <strong>Exercise 2:</strong> Create a dashboard stats endpoint</li>
+                    <li>✅ <strong>Exercise 3:</strong> Implement search functionality</li>
                 </ul>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <p><strong>By the end:</strong> Your project will have professional features like search, filtering, and analytics!</p>
             </div>
         </div>
 
-        <!-- Slide 23: Exercise 1 -->
+        <!-- Slide 23: Exercise 1 - Part A -->
         <div class="slide">
-            <h1>Exercise 1: Basic Select & Filter</h1>
-            <h2>Individual Exercise (20 minutes)</h2>
+            <h1>Exercise 1A: Filter Endpoint</h1>
+            <h2>Individual Exercise (15 minutes)</h2>
 
             <div class="activity-box">
-                <h3>Your Task:</h3>
-                <p style="font-size: 1.1em;">Using the Student/Course schema below, write and execute <strong>five basic SELECT queries</strong>, each using a different WHERE condition.</p>
+                <h3>Task:</h3>
+                <p style="font-size: 1.1em;">Create a new Netlify API endpoint that <strong>filters</strong> your data by one category/field.</p>
             </div>
 
             <div class="demo-box">
-                <h3>Schema:</h3>
-                <div style="font-family: monospace; font-size: 0.95em;">
-                    <strong>Student</strong>(studentID, firstName, lastName, email, major, GPA, enrollmentDate)<br>
-                    <strong>Course</strong>(courseID, courseName, department, credits, instructorName)<br>
-                    <strong>Enrollment</strong>(studentID, courseID, semester, grade, enrollDate)
+                <h3>Example: Recipe Database</h3>
+                <p><strong>Endpoint:</strong> <code>/api/recipes-by-cuisine.js</code></p>
+                <p><strong>URL:</strong> <code>GET /api/recipes-by-cuisine?cuisine=Italian</code></p>
+                <p><strong>SQL Query:</strong></p>
+                <div class="sql-example" style="font-size: 0.9em;">
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> recipes<br>
+                    <span class="sql-keyword">WHERE</span> cuisine = $1<br>
+                    <span class="sql-keyword">ORDER BY</span> name <span class="sql-keyword">ASC</span>;
                 </div>
             </div>
 
-            <div class="sql-example">
-                <h3>Write queries for:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.7;">
-                    <li><strong>Equality:</strong> Find all students with major = 'Computer Science'</li>
-                    <li><strong>Range:</strong> Find all students with GPA between 3.0 and 4.0</li>
-                    <li><strong>Comparison:</strong> Find all courses with credits > 3</li>
-                    <li><strong>LIKE:</strong> Find all students whose email ends with '@okcu.edu'</li>
-                    <li><strong>Combined:</strong> Find CS majors with GPA >= 3.5</li>
+            <div class="bridge-box">
+                <h4>Your Turn:</h4>
+                <ol style="font-size: 1.05em;">
+                    <li>Create new file: <code>netlify/functions/filter-by-[field].js</code></li>
+                    <li>Accept query parameter for filtering</li>
+                    <li>Use parameterized query with WHERE clause</li>
+                    <li>Test with: <code>netlify dev</code></li>
+                </ol>
+            </div>
+
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 24: Exercise 1 - Part B -->
+        <div class="slide">
+            <h1>Exercise 1B: Add Sorting</h1>
+            <h2>Individual Exercise (15 minutes)</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.1em;">Enhance the filter endpoint to accept <strong>sort</strong> parameters.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Code Template:</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+                    <span class="sql-keyword">const</span> { Pool } = require(<span class="sql-string">'pg'</span>);<br>
+                    <span class="sql-keyword">const</span> pool = <span class="sql-keyword">new</span> Pool({ connectionString: process.env.DATABASE_URL });<br><br>
+
+                    <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> { category, sortBy, order } = event.queryStringParameters || {};<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-comment">// IMPORTANT: Whitelist valid sort columns</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> validSorts = [<span class="sql-string">'name'</span>, <span class="sql-string">'date'</span>, <span class="sql-string">'price'</span>];<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> validOrders = [<span class="sql-string">'ASC'</span>, <span class="sql-string">'DESC'</span>];<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> sortColumn = validSorts.includes(sortBy) ? sortBy : <span class="sql-string">'name'</span>;<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> sortOrder = validOrders.includes(order?.toUpperCase()) ? order : <span class="sql-string">'ASC'</span>;<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`SELECT * FROM your_table WHERE category = $1 ORDER BY ${sortColumn} ${sortOrder}`</span>;<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query, [category]);<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
+                    };
+                </div>
+            </div>
+
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 25: Exercise 2 -->
+        <div class="slide">
+            <h1>Exercise 2: Dashboard Stats Endpoint</h1>
+            <h2>Individual Exercise (20 minutes)</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.1em;">Create an API endpoint that returns <strong>aggregate statistics</strong> for a dashboard.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Example Stats to Calculate:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Total count of records: <code>COUNT(*)</code></li>
+                    <li>Average of numeric field: <code>AVG(field)</code></li>
+                    <li>Min/Max values: <code>MIN(field), MAX(field)</code></li>
+                    <li>Group counts: <code>COUNT(*) ... GROUP BY category</code></li>
+                </ul>
+            </div>
+
+            <div class="bridge-box">
+                <h4>Implementation Steps:</h4>
+                <ol style="font-size: 1.05em;">
+                    <li>Create <code>/api/stats.js</code> endpoint</li>
+                    <li>Write SQL query with aggregate functions</li>
+                    <li>Return JSON with statistics</li>
+                    <li>Test the endpoint</li>
+                    <li><strong>Bonus:</strong> Display stats in your frontend HTML</li>
                 </ol>
             </div>
 
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
 
-        <!-- Slide 24: Understanding Exercise 1 -->
+        <!-- Slide 26: Exercise 3 -->
         <div class="slide">
-            <h1>Understanding: SELECT & Filter Queries</h1>
-
-            <div class="tip-box">
-                <h3>Solutions:</h3>
-            </div>
-
-            <div class="sql-example" style="font-size: 0.9em;">
-                <span class="sql-comment">-- Query 1: Equality</span><br>
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
-                <span class="sql-keyword">WHERE</span> major = <span class="sql-string">'Computer Science'</span>;<br><br>
-
-                <span class="sql-comment">-- Query 2: Range (using BETWEEN)</span><br>
-                <span class="sql-keyword">SELECT</span> studentID, firstName, lastName, GPA<br>
-                <span class="sql-keyword">FROM</span> Student<br>
-                <span class="sql-keyword">WHERE</span> GPA <span class="sql-keyword">BETWEEN</span> 3.0 <span class="sql-keyword">AND</span> 4.0;<br><br>
-
-                <span class="sql-comment">-- Query 3: Comparison</span><br>
-                <span class="sql-keyword">SELECT</span> courseID, courseName, credits<br>
-                <span class="sql-keyword">FROM</span> Course<br>
-                <span class="sql-keyword">WHERE</span> credits > 3;<br><br>
-
-                <span class="sql-comment">-- Query 4: Pattern matching with LIKE</span><br>
-                <span class="sql-keyword">SELECT</span> firstName, lastName, email<br>
-                <span class="sql-keyword">FROM</span> Student<br>
-                <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">LIKE</span> <span class="sql-string">'%@okcu.edu'</span>;<br><br>
-
-                <span class="sql-comment">-- Query 5: Combined conditions</span><br>
-                <span class="sql-keyword">SELECT</span> studentID, firstName, lastName, major, GPA<br>
-                <span class="sql-keyword">FROM</span> Student<br>
-                <span class="sql-keyword">WHERE</span> major = <span class="sql-string">'Computer Science'</span><br>
-                &nbsp;&nbsp;<span class="sql-keyword">AND</span> GPA >= 3.5;
-            </div>
-        </div>
-
-        <!-- Slide 25: Understanding Exercise 1 (continued) -->
-        <div class="slide">
-            <h1>Understanding: WHERE Condition Types</h1>
-
-            <div class="demo-box">
-                <h3>Key Insights from Exercise 1:</h3>
-                <table class="table-schema" style="font-size: 0.95em;">
-                    <tr>
-                        <th>Condition Type</th>
-                        <th>Operator</th>
-                        <th>Use Case</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Equality</strong></td>
-                        <td>=</td>
-                        <td>Exact match (major = 'Computer Science')</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Range</strong></td>
-                        <td>BETWEEN...AND</td>
-                        <td>Values within a range (GPA 3.0-4.0)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Comparison</strong></td>
-                        <td>>, <, >=, <=, !=</td>
-                        <td>Relative comparisons (credits > 3)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Pattern Match</strong></td>
-                        <td>LIKE with % and _</td>
-                        <td>Flexible string matching</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Combined</strong></td>
-                        <td>AND, OR, NOT</td>
-                        <td>Multiple conditions together</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="tip-box">
-                <h3>Performance Tip:</h3>
-                <p>Pattern matching with LIKE '%text' (wildcard at start) is slower than 'text%' because it can't use indexes efficiently.</p>
-            </div>
-        </div>
-
-        <!-- Slide 26: Exercise 2 -->
-        <div class="slide">
-            <h1>Exercise 2: Simple Data Manipulation (DML)</h1>
+            <h1>Exercise 3: Search Endpoint</h1>
             <h2>Individual Exercise (20 minutes)</h2>
 
-            <div class="warning-box">
-                <h3>⚠️ Important:</h3>
-                <p>DML statements modify data. Always double-check your WHERE clauses!</p>
-            </div>
-
             <div class="activity-box">
-                <h3>Your Task:</h3>
-                <p>Write the appropriate INSERT, UPDATE, and DELETE statements for these three scenarios:</p>
+                <h3>Task:</h3>
+                <p style="font-size: 1.1em;">Implement a <strong>search</strong> endpoint using LIKE for pattern matching.</p>
             </div>
 
             <div class="demo-box">
-                <h3>Scenario 1: INSERT</h3>
-                <p>A new student has enrolled:</p>
-                <ul style="font-size: 1.05em; font-family: monospace;">
-                    <li>studentID: 'S12345'</li>
-                    <li>firstName: 'Maria', lastName: 'Garcia'</li>
-                    <li>email: 'maria.garcia@okcu.edu'</li>
-                    <li>major: 'Data Science', GPA: 3.8</li>
-                    <li>enrollmentDate: '2024-01-15'</li>
-                </ul>
+                <h3>Search Template:</h3>
+                <div class="sql-example" style="font-size: 0.8em;">
+                    <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> { q } = event.queryStringParameters || {};<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-keyword">if</span> (!q) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 400, body: JSON.stringify({ error: <span class="sql-string">'Search query required'</span> }) };<br>
+                    &nbsp;&nbsp;}<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-comment">// Use ILIKE for case-insensitive (PostgreSQL)</span><br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`SELECT * FROM your_table WHERE name ILIKE $1 ORDER BY name`</span>;<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> searchPattern = <span class="sql-string">`%${q}%`</span>;<br><br>
+
+                    &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query, [searchPattern]);<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
+                    };
+                </div>
             </div>
 
-            <div class="demo-box">
-                <h3>Scenario 2: UPDATE</h3>
-                <p>Student 'S10001' has changed their major from 'Biology' to 'Biochemistry' and their new GPA is 3.65.</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Scenario 3: DELETE</h3>
-                <p>Remove all enrollment records for semester 'Fall2020' (old data cleanup).</p>
+            <div class="bridge-box">
+                <h4>Your Turn:</h4>
+                <ol style="font-size: 1.05em;">
+                    <li>Create <code>/api/search.js</code></li>
+                    <li>Accept <code>q</code> query parameter</li>
+                    <li>Search 1-2 text fields in your table</li>
+                    <li><strong>Bonus:</strong> Add search box to your frontend!</li>
+                </ol>
             </div>
 
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
 
-        <!-- Slide 27: Understanding Exercise 2 -->
+        <!-- Slide 27: Exercise Wrap-Up -->
         <div class="slide">
-            <h1>Understanding: DML Operations</h1>
+            <h1>Exercise Wrap-Up</h1>
+            <h2>What You've Accomplished</h2>
 
-            <div class="tip-box">
-                <h3>Solutions:</h3>
+            <div class="netlify-callout">
+                <h3>🎉 Your Project Now Has:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li>✅ <strong>Filtering:</strong> Users can filter by category/type</li>
+                    <li>✅ <strong>Sorting:</strong> Sortable lists by different fields</li>
+                    <li>✅ <strong>Dashboard:</strong> Aggregate statistics at a glance</li>
+                    <li>✅ <strong>Search:</strong> Users can search your data</li>
+                </ul>
             </div>
 
-            <div class="sql-example" style="font-size: 0.85em;">
-                <span class="sql-comment">-- Scenario 1: INSERT new student</span><br>
-                <span class="sql-keyword">INSERT INTO</span> Student (studentID, firstName, lastName, email, major, GPA, enrollmentDate)<br>
-                <span class="sql-keyword">VALUES</span> (<span class="sql-string">'S12345'</span>, <span class="sql-string">'Maria'</span>, <span class="sql-string">'Garcia'</span>, <span class="sql-string">'maria.garcia@okcu.edu'</span>,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-string">'Data Science'</span>, 3.8, <span class="sql-string">'2024-01-15'</span>);<br><br>
-
-                <span class="sql-comment">-- Scenario 2: UPDATE existing student</span><br>
-                <span class="sql-keyword">UPDATE</span> Student<br>
-                <span class="sql-keyword">SET</span> major = <span class="sql-string">'Biochemistry'</span>,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;GPA = 3.65<br>
-                <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;<br><br>
-
-                <span class="sql-comment">-- Scenario 3: DELETE old enrollment records</span><br>
-                <span class="sql-keyword">DELETE FROM</span> Enrollment<br>
-                <span class="sql-keyword">WHERE</span> semester = <span class="sql-string">'Fall2020'</span>;
-            </div>
-
-            <div class="warning-box">
-                <h3>⚠️ Critical Safety Rules:</h3>
+            <div class="tip-box" style="margin-top: 30px;">
+                <h3>💡 Next Steps (Optional)</h3>
                 <ul style="font-size: 1.05em;">
-                    <li><strong>Always use WHERE:</strong> UPDATE and DELETE without WHERE affect ALL rows!</li>
-                    <li><strong>Test with SELECT first:</strong> Run SELECT with same WHERE to verify which rows will be affected</li>
-                    <li><strong>Use transactions:</strong> Wrap modifications in BEGIN/COMMIT for rollback capability</li>
+                    <li>Add a GROUP BY endpoint for category breakdowns</li>
+                    <li>Implement pagination with LIMIT and OFFSET</li>
+                    <li>Create a "top 10" endpoint with ORDER BY + LIMIT</li>
+                    <li>Update your frontend UI to use these new endpoints</li>
+                </ul>
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>Testing Your APIs:</h3>
+                <p>Run <code>netlify dev</code> and visit:</p>
+                <ul style="font-family: monospace; font-size: 0.95em;">
+                    <li>http://localhost:8888/api/filter-by-category?category=value</li>
+                    <li>http://localhost:8888/api/stats</li>
+                    <li>http://localhost:8888/api/search?q=keyword</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 28: Understanding Exercise 2 (continued) -->
+        <!-- Slide 28: Deployment -->
         <div class="slide">
-            <h1>Understanding: DML Best Practices</h1>
+            <h1>Deploy Your Enhanced Project</h1>
+            <h2>Share Your Work!</h2>
 
-            <div class="demo-box">
-                <h3>Testing DML Before Execution:</h3>
-                <div class="sql-example" style="font-size: 0.9em;">
-                    <span class="sql-comment">-- Before UPDATE, test with SELECT</span><br>
-                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
-                    <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;<br>
-                    <span class="sql-comment">-- Verify this returns the correct student!</span><br><br>
-
-                    <span class="sql-comment">-- Then execute UPDATE</span><br>
-                    <span class="sql-keyword">UPDATE</span> Student<br>
-                    <span class="sql-keyword">SET</span> major = <span class="sql-string">'Biochemistry'</span>, GPA = 3.65<br>
-                    <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;<br><br>
-
-                    <span class="sql-comment">-- Verify the change</span><br>
-                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
-                    <span class="sql-keyword">WHERE</span> studentID = <span class="sql-string">'S10001'</span>;
-                </div>
+            <div class="netlify-callout">
+                <h3>🚀 Ready to Deploy?</h3>
+                <p style="font-size: 1.1em;">If your exercises are working locally, push to GitHub to deploy to Netlify!</p>
             </div>
 
-            <div class="tip-box">
-                <h3>Common DML Mistakes to Avoid:</h3>
-                <ul style="font-size: 1.05em; line-height: 1.8;">
-                    <li>❌ Forgetting WHERE clause (affects all rows!)</li>
-                    <li>❌ Using wrong operator (= vs IN for multiple values)</li>
-                    <li>❌ Violating foreign key constraints</li>
-                    <li>❌ Not checking affected row count after execution</li>
+            <div class="demo-box">
+                <h3>Deployment Steps:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Test locally:</strong> <code>netlify dev</code></li>
+                    <li><strong>Commit changes:</strong> <code>git add . && git commit -m "Add filtering, stats, and search APIs"</code></li>
+                    <li><strong>Push to GitHub:</strong> <code>git push origin main</code></li>
+                    <li><strong>Auto-deploy:</strong> Netlify automatically builds and deploys</li>
+                    <li><strong>Test live:</strong> Visit your Netlify URL</li>
+                </ol>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <h3>⚠️ Before Deploying:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Verify DATABASE_URL environment variable is set in Netlify</li>
+                    <li>Test all endpoints work locally</li>
+                    <li>Check for console errors</li>
                 </ul>
             </div>
         </div>
@@ -864,175 +1216,163 @@
         <!-- Slide 29: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
-            <h2>Week 7: Query Optimization & Transactions</h2>
+            <h2>Week 7: Enhance Your Project APIs</h2>
 
-            <div class="demo-box">
+            <div class="netlify-callout">
                 <h3>Assignment Overview</h3>
-                <p style="font-size: 1.15em;">This week's homework extends today's exercises by introducing query optimization analysis and transaction management for data integrity.</p>
+                <p style="font-size: 1.15em;">Build on your Netlify project by implementing advanced SQL queries and analyzing their performance.</p>
             </div>
 
             <div class="tip-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Commit URL turned into D2L</p>
+                <p>Submit live Netlify URL + GitHub commit URL to D2L</p>
             </div>
 
             <div class="activity-box">
                 <h3>Components:</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>Homework Extension 1:</strong> EXPLAIN Plan Analysis (50 points)</li>
-                    <li><strong>Homework Extension 2:</strong> Transaction Implementation (50 points)</li>
+                    <li><strong>Part 1:</strong> Implement 5+ Advanced SQL Queries (40 points)</li>
+                    <li><strong>Part 2:</strong> Create 3 New API Endpoints (40 points)</li>
+                    <li><strong>Part 3:</strong> EXPLAIN Analysis & Optimization (20 points)</li>
                 </ol>
                 <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total: 100 points</strong></p>
             </div>
         </div>
 
-        <!-- Slide 30: Homework Extension 1 -->
+        <!-- Slide 30: Part 1 - Advanced Queries -->
         <div class="slide">
-            <h1>Homework Extension 1: EXPLAIN Plan Analysis</h1>
-            <h2>Building on Exercise 1</h2>
+            <h1>Part 1: Write Advanced SQL Queries</h1>
+            <h2>40 Points</h2>
 
             <div class="activity-box">
                 <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Provide a <strong>screenshot of the EXPLAIN plan</strong> for two of your SELECT queries from Exercise 1 and analyze which is more efficient.</p>
+                <p style="font-size: 1.15em;">Write <strong>5+ SQL queries</strong> for your project database demonstrating different concepts from today's lecture.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Required Query Types:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Filtered Query:</strong> WHERE with 2+ conditions (using AND/OR)</li>
+                    <li><strong>Sorted Query:</strong> ORDER BY on at least one column</li>
+                    <li><strong>Search Query:</strong> LIKE for pattern matching</li>
+                    <li><strong>Aggregate Query:</strong> COUNT, SUM, AVG, MIN, or MAX</li>
+                    <li><strong>Grouped Query:</strong> GROUP BY with aggregate + HAVING clause</li>
+                </ol>
+            </div>
+
+            <div class="bridge-box">
+                <h4>Deliverable:</h4>
+                <p>Create a file <code>homework_queries.sql</code> with all 5+ queries, each with:</p>
+                <ul style="font-size: 1.05em;">
+                    <li>Comment explaining what the query does</li>
+                    <li>The SQL query itself</li>
+                    <li>Sample output (copy/paste or screenshot)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 31: Part 2 - API Endpoints -->
+        <div class="slide">
+            <h1>Part 2: Implement API Endpoints</h1>
+            <h2>40 Points</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Create <strong>3 new Netlify API endpoints</strong> using queries from Part 1.</p>
             </div>
 
             <div class="demo-box">
                 <h3>Requirements:</h3>
                 <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Choose two queries from Exercise 1:</strong>
+                    <li><strong>Endpoint 1: Filter + Sort</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Pick two queries with different complexity levels</li>
-                            <li>Suggested: Query 1 (simple equality) vs Query 5 (combined conditions)</li>
+                            <li>Accept query parameters for filtering and sorting</li>
+                            <li>Use parameterized queries (prevent SQL injection)</li>
+                            <li>Example: <code>/api/items-by-category?category=value&sortBy=name&order=ASC</code></li>
                         </ul>
                     </li>
-                    <li><strong>Generate EXPLAIN output:</strong>
+                    <li><strong>Endpoint 2: Dashboard Stats</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Run EXPLAIN before each query</li>
-                            <li>Capture clear screenshots showing the execution plan</li>
+                            <li>Return aggregate statistics as JSON</li>
+                            <li>Use COUNT, AVG, MIN, MAX, or SUM</li>
+                            <li>Example: <code>/api/stats</code></li>
                         </ul>
                     </li>
-                    <li><strong>Write analysis (200-250 words):</strong>
+                    <li><strong>Endpoint 3: Search</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Compare the two EXPLAIN outputs</li>
-                            <li>Identify key differences (scan type, rows examined, etc.)</li>
-                            <li>Determine which query is likely more efficient and why</li>
-                            <li>Suggest one optimization (e.g., adding an index)</li>
+                            <li>Accept search query parameter</li>
+                            <li>Use LIKE/ILIKE for pattern matching</li>
+                            <li>Example: <code>/api/search?q=keyword</code></li>
                         </ul>
                     </li>
                 </ol>
             </div>
         </div>
 
-        <!-- Slide 31: EXPLAIN Example -->
+        <!-- Slide 32: Part 3 - EXPLAIN Analysis -->
         <div class="slide">
-            <h1>Understanding EXPLAIN Plans</h1>
+            <h1>Part 3: Query Performance Analysis</h1>
+            <h2>20 Points</h2>
 
-            <div class="sql-example">
-                <h3>Example Usage:</h3>
-                <span class="sql-keyword">EXPLAIN</span> <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student<br>
-                <span class="sql-keyword">WHERE</span> major = <span class="sql-string">'Computer Science'</span> <span class="sql-keyword">AND</span> GPA >= 3.5;
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Analyze the performance of your <strong>most complex query</strong> from Part 1 using EXPLAIN.</p>
             </div>
 
             <div class="demo-box">
-                <h3>Key Metrics to Analyze:</h3>
-                <table class="table-schema" style="font-size: 0.9em;">
-                    <tr>
-                        <th>Metric</th>
-                        <th>What It Means</th>
-                        <th>Better Value</th>
-                    </tr>
-                    <tr>
-                        <td><strong>type</strong></td>
-                        <td>Access method (ALL, index, range, etc.)</td>
-                        <td>index > ALL (full table scan)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>rows</strong></td>
-                        <td>Estimated rows examined</td>
-                        <td>Lower is better</td>
-                    </tr>
-                    <tr>
-                        <td><strong>key</strong></td>
-                        <td>Which index used (if any)</td>
-                        <td>Using an index is better than NULL</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Extra</strong></td>
-                        <td>Additional info (Using where, Using index, etc.)</td>
-                        <td>"Using index" is optimal</td>
-                    </tr>
-                </table>
+                <h3>Requirements:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Run EXPLAIN:</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>PostgreSQL: <code>EXPLAIN ANALYZE your_query;</code></li>
+                            <li>Take screenshot of the output</li>
+                        </ul>
+                    </li>
+                    <li><strong>Write Analysis (150-200 words):</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>What type of scan is being used? (Seq Scan, Index Scan, etc.)</li>
+                            <li>Approximately how many rows are examined?</li>
+                            <li>Is the query efficient? Why or why not?</li>
+                            <li>Suggest ONE optimization (e.g., add an index, rewrite query, etc.)</li>
+                        </ul>
+                    </li>
+                </ol>
             </div>
 
             <div class="tip-box">
-                <strong>Note:</strong> Different databases (MySQL, PostgreSQL, SQL Server) have slightly different EXPLAIN syntax and output formats. Consult your database documentation!
-            </div>
-        </div>
-
-        <!-- Slide 32: Homework Extension 2 -->
-        <div class="slide">
-            <h1>Homework Extension 2: Transaction Implementation</h1>
-            <h2>Building on Exercise 2</h2>
-
-            <div class="activity-box">
-                <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Wrap your three DML statements from Exercise 2 inside a <strong>single SQL transaction</strong> and explain when to use COMMIT vs ROLLBACK.</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Requirements:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Write Transaction Block:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Include BEGIN TRANSACTION (or START TRANSACTION)</li>
-                            <li>Place all three DML statements (INSERT, UPDATE, DELETE) inside</li>
-                            <li>Add appropriate COMMIT or ROLLBACK statement</li>
-                        </ul>
-                    </li>
-                    <li><strong>Explain Your Choice (150-200 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Why did you choose COMMIT or ROLLBACK?</li>
-                            <li>What scenarios would require ROLLBACK?</li>
-                            <li>How do transactions ensure data integrity?</li>
-                            <li>What happens if the database crashes mid-transaction?</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- Slide 33: Transaction Example -->
-        <div class="slide">
-            <h1>Understanding Transactions</h1>
-
-            <div class="sql-example" style="font-size: 0.85em;">
-                <h3>Transaction Template:</h3>
-                <span class="sql-keyword">BEGIN TRANSACTION</span>;<br><br>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your INSERT statement</span><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">INSERT INTO</span> Student (...) <span class="sql-keyword">VALUES</span> (...);<br><br>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your UPDATE statement</span><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">UPDATE</span> Student <span class="sql-keyword">SET</span> ... <span class="sql-keyword">WHERE</span> ...;<br><br>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">-- Your DELETE statement</span><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">DELETE FROM</span> Enrollment <span class="sql-keyword">WHERE</span> ...;<br><br>
-
-                <span class="sql-comment">-- If all successful:</span><br>
-                <span class="sql-keyword">COMMIT</span>;<br><br>
-
-                <span class="sql-comment">-- If error occurs or you want to undo:</span><br>
-                <span class="sql-comment">-- ROLLBACK;</span>
-            </div>
-
-            <div class="demo-box">
-                <h3>ACID Properties of Transactions:</h3>
-                <ul style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Atomicity:</strong> All or nothing - either all statements succeed or none do</li>
-                    <li><strong>Consistency:</strong> Database moves from one valid state to another</li>
-                    <li><strong>Isolation:</strong> Concurrent transactions don't interfere</li>
-                    <li><strong>Durability:</strong> Committed changes are permanent</li>
+                <h3>How to Run EXPLAIN on Neon:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Use Neon SQL Editor (in your Neon dashboard)</li>
+                    <li>OR connect via <code>psql</code> using your DATABASE_URL</li>
+                    <li>Run <code>EXPLAIN ANALYZE</code> before your SELECT query</li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- Slide 33: Frontend Integration (Bonus) -->
+        <div class="slide">
+            <h1>Bonus: Frontend Integration</h1>
+            <h2>+10 Extra Credit Points</h2>
+
+            <div class="netlify-callout">
+                <h3>Optional Bonus:</h3>
+                <p style="font-size: 1.15em;">Update your HTML frontend to use at least 2 of your new API endpoints.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Implementation Ideas:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Filter dropdown:</strong> Let users filter by category</li>
+                    <li><strong>Sort buttons:</strong> "Sort by Name" / "Sort by Date" buttons</li>
+                    <li><strong>Search box:</strong> Real-time search as user types</li>
+                    <li><strong>Dashboard cards:</strong> Display stats in styled cards</li>
+                    <li><strong>Category breakdown:</strong> Show counts by category</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <h3>To Earn Bonus Points:</h3>
+                <p>Your live Netlify site must demonstrate the frontend using your new APIs. Include screenshots in your submission showing the features in action!</p>
             </div>
         </div>
 
@@ -1041,38 +1381,33 @@
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
             <div class="demo-box">
-                <h3>Format & Submission:</h3>
-                <ul style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>File Format:</strong> Markdown document (.md)</li>
-                    <li><strong>File Naming:</strong> LastName_FirstName_Week7_Homework.md</li>
-                    <li><strong>Repository:</strong> Create file in your GitHub homework repository</li>
-                    <li><strong>Submission Platform:</strong> Submit commit URL to D2L</li>
-                    <li><strong>Due Date:</strong> Before class begins next week</li>
-                </ul>
-            </div>
-
-            <div class="activity-box">
-                <h3>Markdown Document Structure:</h3>
-                <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Header:</strong> Name, date, course, "Week 7 Homework"</li>
-                    <li><strong>Section 1:</strong> Extension 1 - EXPLAIN Plan Analysis
+                <h3>What to Submit:</h3>
+                <ol style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>Live Netlify URL</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Screenshot of EXPLAIN for Query 1</li>
-                            <li>Screenshot of EXPLAIN for Query 2</li>
-                            <li>Analysis (200-250 words)</li>
+                            <li>Your deployed site with working API endpoints</li>
+                            <li>Test all 3 endpoints are accessible</li>
                         </ul>
                     </li>
-                    <li><strong>Section 2:</strong> Extension 2 - Transaction Implementation
+                    <li><strong>GitHub Repository</strong>
                         <ul style="margin-top: 8px;">
-                            <li>Complete transaction block code</li>
-                            <li>Explanation (150-200 words)</li>
+                            <li>Must include <code>homework_queries.sql</code></li>
+                            <li>Must include new API function files</li>
+                            <li>Submit commit URL to D2L</li>
+                        </ul>
+                    </li>
+                    <li><strong>README.md or Homework Document</strong>
+                        <ul style="margin-top: 8px;">
+                            <li>Part 3 EXPLAIN screenshot + analysis</li>
+                            <li>API endpoint URLs for testing</li>
+                            <li>Brief description of each endpoint</li>
                         </ul>
                     </li>
                 </ol>
             </div>
 
-            <div class="demo-box">
-                <h3>Grading:</h3>
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>Grading Rubric:</h3>
                 <table class="table-schema" style="font-size: 0.95em;">
                     <tr>
                         <th>Component</th>
@@ -1080,39 +1415,59 @@
                         <th>Criteria</th>
                     </tr>
                     <tr>
-                        <td><strong>EXPLAIN Analysis</strong></td>
-                        <td>50</td>
-                        <td>Screenshots (15), Analysis quality (25), Optimization (10)</td>
+                        <td><strong>Part 1: Queries</strong></td>
+                        <td>40</td>
+                        <td>All 5 query types present (8 pts each)</td>
                     </tr>
                     <tr>
-                        <td><strong>Transaction</strong></td>
-                        <td>50</td>
-                        <td>Correct syntax (25), Explanation (20), ACID understanding (5)</td>
+                        <td><strong>Part 2: APIs</strong></td>
+                        <td>40</td>
+                        <td>3 working endpoints, proper error handling</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Part 3: Analysis</strong></td>
+                        <td>20</td>
+                        <td>EXPLAIN screenshot (10), Analysis quality (10)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bonus: Frontend</strong></td>
+                        <td>+10</td>
+                        <td>Working UI using 2+ new endpoints</td>
                     </tr>
                 </table>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <h3>Due: Before Next Week's Class</h3>
+                <p>Submit to D2L: Live Netlify URL + GitHub commit URL</p>
             </div>
         </div>
 
         <!-- Slide 35: Practice Problems -->
         <div class="slide">
             <h1>Additional Practice Problems</h1>
-            <h2>Optional Extra Practice</h2>
+            <h2>Optional Extra Practice with movie_rental_db</h2>
             <div class="activity-box">
                 <p><strong>For additional practice (not graded):</strong></p>
 
-                <h3>Write SQL queries for:</h3>
+                <h3>Write SQL queries for movie_rental_db:</h3>
                 <ol>
-                    <li>List all staff members earning between 10,000 and 20,000</li>
-                    <li>Count how many properties are available in each city</li>
-                    <li>Find the cheapest property in each property type</li>
-                    <li>Show branches where total staff salary exceeds 40,000</li>
-                    <li>List clients who prefer 'Flat' and have budget over 400</li>
-                    <li>Find staff members whose names contain 'son'</li>
-                    <li>Calculate the average rent for each property type</li>
-                    <li>Show the top 3 highest-paid employees</li>
+                    <li>List all movies released between 1990 and 2000</li>
+                    <li>Count how many movies are in each genre</li>
+                    <li>Find the oldest and newest movie in the database</li>
+                    <li>Show genres with more than 5 movies (use HAVING)</li>
+                    <li>List members whose email ends with '.edu'</li>
+                    <li>Find movies whose titles start with 'The'</li>
+                    <li>Calculate average release year by genre</li>
+                    <li>Show the top 5 most recently added members</li>
                 </ol>
 
                 <p><strong>Bonus:</strong> Write a query using a subquery (preview of next week)</p>
+            </div>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>Apply to YOUR Project:</h4>
+                <p>Adapt these challenge patterns to your own database schema for even more practice!</p>
             </div>
         </div>
 
@@ -1200,7 +1555,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">38</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">44</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
