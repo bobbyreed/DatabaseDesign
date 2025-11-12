@@ -234,21 +234,29 @@
             </div>
         </div>
 
-        <!-- Slide 6: Database Schema -->
+        <!-- Slide 6: Your Project Database -->
         <div class="slide">
-            <h1>Our Teaching Database Schema</h1>
-            <h2>movie_rental_db - Your Familiar Friend</h2>
-            <div class="sql-example">
-                <strong>Movies</strong> (<u>movie_id</u>, title, genre, release_year, <em>studio_id</em>)<br>
-                <strong>Members</strong> (<u>member_id</u>, name, email, join_date)<br>
-                <strong>Rentals</strong> (<u>rental_id</u>, <em>movie_id</em>, <em>member_id</em>, rental_date, return_date)<br>
-                <strong>Studios</strong> (<u>studio_id</u>, name, location)
-            </div>
-            <p><em>Note: Primary keys are underlined, foreign keys are italicized</em></p>
+            <h1>Working with YOUR Database</h1>
+            <h2>Apply SQL to Your Project Schema</h2>
 
-            <div class="netlify-callout" style="margin-top: 30px;">
+            <div class="netlify-callout">
                 <h4>🌐 Connection to Your Project</h4>
                 <p><strong>Remember:</strong> In Lecture 6, you built a Netlify frontend with API endpoints for YOUR project database. Today's SQL concepts will help you enhance those APIs with filtering, sorting, search, and statistics!</p>
+            </div>
+
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>Today's Approach:</h3>
+                <p style="font-size: 1.15em; line-height: 1.7;">All examples will use <strong>generic table and column names</strong> that you can easily adapt to your specific database schema. Think about how each concept applies to YOUR tables!</p>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <h3>Example Project Schemas:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>Recipe Database:</strong> recipes, ingredients, categories</li>
+                    <li><strong>Inventory System:</strong> products, suppliers, orders</li>
+                    <li><strong>Library Manager:</strong> books, authors, members</li>
+                    <li><strong>Event Planner:</strong> events, venues, attendees</li>
+                </ul>
             </div>
         </div>
 
@@ -277,35 +285,31 @@
             <h1>Basic SELECT Queries</h1>
             <h2>Retrieving All Data</h2>
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Movies;
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> your_table;
             </div>
-            <table class="table-schema">
-                <tr>
-                    <th>movie_id</th><th>title</th><th>genre</th><th>release_year</th><th>studio_id</th>
-                </tr>
-                <tr>
-                    <td>1</td><td>The Matrix</td><td>Science Fiction</td><td>1999</td><td>1</td>
-                </tr>
-                <tr>
-                    <td>2</td><td>Inception</td><td>Science Fiction</td><td>2010</td><td>1</td>
-                </tr>
-                <tr>
-                    <td>3</td><td>The Godfather</td><td>Drama</td><td>1972</td><td>2</td>
-                </tr>
-                <tr>
-                    <td>4</td><td>Pulp Fiction</td><td>Crime</td><td>1994</td><td>3</td>
-                </tr>
-            </table>
+
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>What This Does:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.7;">
+                    <li>Returns <strong>ALL rows</strong> from the table</li>
+                    <li>Returns <strong>ALL columns</strong> for each row</li>
+                    <li>Simple but often inefficient in production</li>
+                </ul>
+            </div>
 
             <div class="bridge-box" style="margin-top: 30px;">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>Try this with YOUR data:</strong></p>
-                <p>Replace <code>Movies</code> with one of your project tables. This is the simplest query - it returns ALL rows and ALL columns.</p>
+                <h4>🌉 Apply to Your Project</h4>
+                <p><strong>Replace <code>your_table</code> with one of your actual table names:</strong></p>
                 <div class="project-example">
                     <strong>Recipe database:</strong> <code>SELECT * FROM recipes;</code><br>
                     <strong>Inventory database:</strong> <code>SELECT * FROM products;</code><br>
-                    <strong>Library database:</strong> <code>SELECT * FROM books;</code>
+                    <strong>Library database:</strong> <code>SELECT * FROM books;</code><br>
+                    <strong>Event database:</strong> <code>SELECT * FROM events;</code>
                 </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <p><strong>Better Practice:</strong> Specify column names instead of * for production code!</p>
             </div>
         </div>
 
@@ -313,46 +317,33 @@
         <div class="slide">
             <h1>Using DISTINCT</h1>
             <h2>Eliminating Duplicates</h2>
-            <p><strong>Problem:</strong> List all unique genres of movies in our database.</p>
 
-            <div class="comparison-table">
-                <div>
-                    <h3>Without DISTINCT</h3>
-                    <div class="sql-example">
-                        <span class="sql-keyword">SELECT</span> genre<br>
-                        <span class="sql-keyword">FROM</span> Movies;
-                    </div>
-                    <table class="table-schema">
-                        <tr><th>genre</th></tr>
-                        <tr><td>Science Fiction</td></tr>
-                        <tr><td style="background: #ffeb3b;">Science Fiction</td></tr>
-                        <tr><td>Drama</td></tr>
-                        <tr><td>Crime</td></tr>
-                        <tr><td style="background: #ffeb3b;">Drama</td></tr>
-                    </table>
-                </div>
-                <div>
-                    <h3>With DISTINCT</h3>
-                    <div class="sql-example">
-                        <span class="sql-keyword">SELECT DISTINCT</span> genre<br>
-                        <span class="sql-keyword">FROM</span> Movies;
-                    </div>
-                    <table class="table-schema">
-                        <tr><th>genre</th></tr>
-                        <tr><td>Science Fiction</td></tr>
-                        <tr><td>Drama</td></tr>
-                        <tr><td>Crime</td></tr>
-                    </table>
-                </div>
+            <div class="sql-example">
+                <span class="sql-comment">-- Without DISTINCT: May return duplicate values</span><br>
+                <span class="sql-keyword">SELECT</span> category <span class="sql-keyword">FROM</span> items;<br><br>
+
+                <span class="sql-comment">-- With DISTINCT: Returns only unique values</span><br>
+                <span class="sql-keyword">SELECT DISTINCT</span> category <span class="sql-keyword">FROM</span> items;
+            </div>
+
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>When to Use DISTINCT:</h3>
+                <ul style="font-size: 1.15em; line-height: 1.7;">
+                    <li>Get list of unique categories/types</li>
+                    <li>Count unique values: <code>COUNT(DISTINCT column)</code></li>
+                    <li>Populate dropdown/filter options in UI</li>
+                    <li>Remove duplicate results from queries</li>
+                </ul>
             </div>
 
             <div class="bridge-box" style="margin-top: 30px;">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>Use DISTINCT to find unique values:</strong></p>
+                <h4>🌉 Apply to Your Project</h4>
+                <p><strong>Find unique values in YOUR data:</strong></p>
                 <div class="project-example">
                     <strong>Recipe database:</strong> <code>SELECT DISTINCT cuisine FROM recipes;</code><br>
                     <strong>Inventory database:</strong> <code>SELECT DISTINCT category FROM products;</code><br>
-                    <strong>Library database:</strong> <code>SELECT DISTINCT author FROM books;</code>
+                    <strong>Library database:</strong> <code>SELECT DISTINCT author FROM books;</code><br>
+                    <strong>Event database:</strong> <code>SELECT DISTINCT venue_type FROM venues;</code>
                 </div>
                 <p style="margin-top: 10px;"><strong>Great for:</strong> Populating dropdown filters in your Netlify frontend!</p>
             </div>
@@ -362,14 +353,22 @@
         <div class="slide">
             <h1>Filtering with WHERE</h1>
             <h2>Conditional Data Retrieval</h2>
-            <p><strong>Example:</strong> Find all Science Fiction movies</p>
+
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> title, genre, release_year<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">WHERE</span> genre = <span class="sql-string">'Science Fiction'</span>;
+                <span class="sql-comment">-- Filter by exact match</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> category = <span class="sql-string">'Electronics'</span>;<br><br>
+
+                <span class="sql-comment">-- Filter by numeric comparison</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> price > 100;<br><br>
+
+                <span class="sql-comment">-- Multiple conditions</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> category = <span class="sql-string">'Books'</span> <span class="sql-keyword">AND</span> price < 50;
             </div>
 
-            <h3>Comparison Operators</h3>
+            <h3 style="margin-top: 30px;">Comparison Operators</h3>
             <ul>
                 <li><code>=</code> Equal to</li>
                 <li><code>&lt;&gt;</code> or <code>!=</code> Not equal to</li>
@@ -377,12 +376,13 @@
                 <li><code>&lt;=</code> Less than or equal to</li>
                 <li><code>&gt;</code> Greater than</li>
                 <li><code>&gt;=</code> Greater than or equal to</li>
+                <li><code>AND</code>, <code>OR</code>, <code>NOT</code> Combine conditions</li>
             </ul>
 
             <div class="netlify-callout" style="margin-top: 30px;">
                 <h4>💻 This Powers Your API</h4>
-                <p>In your Netlify function from Lecture 6, this WHERE clause becomes a query parameter:</p>
-                <p><code>GET /api/movies?genre=Science%20Fiction</code></p>
+                <p>WHERE clauses become query parameters in your Netlify functions:</p>
+                <p><code>GET /api/items?category=Electronics</code></p>
             </div>
         </div>
 
@@ -390,24 +390,30 @@
         <div class="slide">
             <h1>🎯 Activity: Write Your First Queries</h1>
             <h2>15 Minutes - Individual Work</h2>
+
             <div class="activity-box">
-                <p><strong>Part A: Practice with movie_rental_db</strong></p>
-                <ol>
-                    <li>List all Drama movies</li>
-                    <li>Find all movies released after 2000</li>
-                    <li>Show member names and email addresses</li>
-                    <li>Find all rentals that have been returned</li>
+                <h3>Apply to YOUR Project Database</h3>
+                <p style="font-size: 1.1em;">Write <strong>3-5 WHERE clause queries</strong> for your project. Think about what filters would be useful in your Netlify frontend!</p>
+            </div>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>Query Ideas:</h4>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Filter by category/type:</strong> Get all items of a specific category</li>
+                    <li><strong>Filter by numeric value:</strong> Items above/below a price, quantity, rating, etc.</li>
+                    <li><strong>Filter by date:</strong> Items created after a certain date</li>
+                    <li><strong>Filter by text field:</strong> Items matching specific status, location, etc.</li>
+                    <li><strong>Multiple conditions:</strong> Combine 2+ filters with AND/OR</li>
                 </ol>
             </div>
-            <div class="bridge-box" style="margin-top: 20px;">
-                <h4>Part B: Apply to YOUR Project</h4>
-                <p>Write 2-3 WHERE clause queries for your own project database. Think about what filters would be useful in your Netlify frontend!</p>
-                <p><strong>Examples:</strong></p>
-                <ul style="font-size: 0.95em;">
-                    <li>Filter by category/type</li>
-                    <li>Filter by date range</li>
-                    <li>Filter by numeric value (price, quantity, rating, etc.)</li>
-                </ul>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>Example Templates:</h3>
+                <div class="project-example">
+                    <strong>Recipe DB:</strong> <code>WHERE cuisine = 'Italian' AND prep_time < 30</code><br>
+                    <strong>Inventory DB:</strong> <code>WHERE category = 'Electronics' AND price > 100</code><br>
+                    <strong>Library DB:</strong> <code>WHERE genre = 'Fiction' AND publication_year > 2020</code>
+                </div>
                 <button onclick="startTimer(15)">Start Timer</button>
             </div>
         </div>
@@ -415,30 +421,41 @@
         <!-- Slide 12: ORDER BY -->
         <div class="slide">
             <h1>Sorting Results with ORDER BY</h1>
-            <h2>Single Column Ordering</h2>
-            <p><strong>Example:</strong> List movies arranged by release year, newest first</p>
+            <h2>Control Result Ordering</h2>
+
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> title, genre, release_year<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">ORDER BY</span> release_year <span class="sql-keyword">DESC</span>;
+                <span class="sql-comment">-- Sort ascending (A-Z, 0-9, oldest-newest)</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">ORDER BY</span> name <span class="sql-keyword">ASC</span>;<br><br>
+
+                <span class="sql-comment">-- Sort descending (Z-A, 9-0, newest-oldest)</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">ORDER BY</span> created_date <span class="sql-keyword">DESC</span>;<br><br>
+
+                <span class="sql-comment">-- Sort by multiple columns</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">ORDER BY</span> category <span class="sql-keyword">ASC</span>, price <span class="sql-keyword">DESC</span>;
             </div>
 
-            <table class="table-schema">
-                <tr><th>title</th><th>genre</th><th>release_year</th></tr>
-                <tr><td>Inception</td><td>Science Fiction</td><td>2010</td></tr>
-                <tr><td>The Matrix</td><td>Science Fiction</td><td>1999</td></tr>
-                <tr><td>Pulp Fiction</td><td>Crime</td><td>1994</td></tr>
-                <tr><td>The Godfather</td><td>Drama</td><td>1972</td></tr>
-            </table>
-            <p><em>Note: Default is ASC (ascending), use DESC for descending</em></p>
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>Common Sorting Patterns:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.7;">
+                    <li><strong>Alphabetical:</strong> <code>ORDER BY name ASC</code></li>
+                    <li><strong>Newest first:</strong> <code>ORDER BY created_date DESC</code></li>
+                    <li><strong>Highest price:</strong> <code>ORDER BY price DESC</code></li>
+                    <li><strong>Top rated:</strong> <code>ORDER BY rating DESC</code></li>
+                </ul>
+                <p><em>Note: Default is ASC (ascending), use DESC for descending</em></p>
+            </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>Sorting makes data useful:</strong></p>
+                <h4>🌉 Apply to Your Project</h4>
+                <p><strong>Choose the sort that makes sense for YOUR data:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe database:</strong> <code>ORDER BY prep_time ASC</code> (quickest first)<br>
-                    <strong>Inventory database:</strong> <code>ORDER BY price DESC</code> (most expensive first)<br>
-                    <strong>Library database:</strong> <code>ORDER BY publication_year DESC</code> (newest first)
+                    <strong>Recipe DB:</strong> <code>ORDER BY prep_time ASC</code> (quickest first)<br>
+                    <strong>Inventory DB:</strong> <code>ORDER BY price DESC</code> (most expensive first)<br>
+                    <strong>Library DB:</strong> <code>ORDER BY publication_year DESC</code> (newest first)<br>
+                    <strong>Event DB:</strong> <code>ORDER BY event_date ASC</code> (soonest first)
                 </div>
             </div>
         </div>
@@ -446,7 +463,8 @@
         <!-- Slide 13: Aggregate Functions -->
         <div class="slide">
             <h1>Aggregate Functions</h1>
-            <h2>Statistical Operations</h2>
+            <h2>Statistical Operations on Data Sets</h2>
+
             <div class="two-column">
                 <div>
                     <h3>Available Functions</h3>
@@ -460,54 +478,75 @@
                     </ul>
                 </div>
                 <div>
-                    <h3>Example: Movie Stats</h3>
+                    <h3>Example: Get Stats</h3>
                     <div class="sql-example">
-                        <span class="sql-keyword">SELECT</span>
-                            <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_movies,<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">MIN</span>(release_year) <span class="sql-keyword">AS</span> oldest,<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">MAX</span>(release_year) <span class="sql-keyword">AS</span> newest<br>
-                        <span class="sql-keyword">FROM</span> Movies;
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_items,<br>
+                        &nbsp;&nbsp;<span class="sql-function">AVG</span>(price) <span class="sql-keyword">AS</span> avg_price,<br>
+                        &nbsp;&nbsp;<span class="sql-function">MIN</span>(price) <span class="sql-keyword">AS</span> min_price,<br>
+                        &nbsp;&nbsp;<span class="sql-function">MAX</span>(price) <span class="sql-keyword">AS</span> max_price<br>
+                        <span class="sql-keyword">FROM</span> items;
                     </div>
                 </div>
             </div>
-            <div class="note-box">
+
+            <div class="note-box" style="margin-top: 20px;">
                 <p><strong>Important:</strong> Aggregate functions can only be used in SELECT list and HAVING clause</p>
             </div>
+
             <div class="netlify-callout" style="margin-top: 20px;">
                 <h4>💻 Perfect for Dashboard APIs!</h4>
                 <p>Create an API endpoint like <code>GET /api/stats</code> that returns aggregate data for your frontend dashboard.</p>
+            </div>
+
+            <div class="bridge-box" style="margin-top: 20px;">
+                <h4>🌉 Apply to Your Project</h4>
+                <div class="project-example">
+                    <strong>Recipe DB:</strong> <code>AVG(prep_time), COUNT(*)</code><br>
+                    <strong>Inventory DB:</strong> <code>SUM(quantity), AVG(price)</code><br>
+                    <strong>Library DB:</strong> <code>COUNT(*), MIN(publication_year)</code>
+                </div>
             </div>
         </div>
 
         <!-- Slide 14: GROUP BY -->
         <div class="slide">
             <h1>GROUP BY Clause</h1>
-            <h2>Grouping for Subtotals</h2>
-            <p><strong>Example:</strong> Count how many movies we have in each genre</p>
+            <h2>Grouping for Subtotals and Category Breakdowns</h2>
+
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> <span class="highlight">genre</span>,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> movie_count<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">GROUP BY</span> <span class="highlight">genre</span><br>
-                <span class="sql-keyword">ORDER BY</span> movie_count <span class="sql-keyword">DESC</span>;
+                <span class="sql-comment">-- Count items in each category</span><br>
+                <span class="sql-keyword">SELECT</span> <span class="highlight">category</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> item_count<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">GROUP BY</span> <span class="highlight">category</span><br>
+                <span class="sql-keyword">ORDER BY</span> item_count <span class="sql-keyword">DESC</span>;<br><br>
+
+                <span class="sql-comment">-- Average price per category</span><br>
+                <span class="sql-keyword">SELECT</span> <span class="highlight">category</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(price) <span class="sql-keyword">AS</span> avg_price,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">GROUP BY</span> <span class="highlight">category</span>;
             </div>
 
-            <table class="table-schema">
-                <tr><th>genre</th><th>movie_count</th></tr>
-                <tr><td>Science Fiction</td><td>2</td></tr>
-                <tr><td>Drama</td><td>1</td></tr>
-                <tr><td>Crime</td><td>1</td></tr>
-            </table>
-
-            <p><strong>Rule:</strong> All columns in SELECT must either be in GROUP BY or be aggregate functions</p>
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>🔑 Golden Rule:</h3>
+                <p style="font-size: 1.15em;">All columns in SELECT must either be:</p>
+                <ol style="font-size: 1.1em; line-height: 1.7;">
+                    <li>In the GROUP BY clause, OR</li>
+                    <li>Inside an aggregate function (COUNT, SUM, AVG, etc.)</li>
+                </ol>
+            </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Bridge to Your Project</h4>
+                <h4>🌉 Apply to Your Project</h4>
                 <p><strong>GROUP BY creates category breakdowns:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe database:</strong> <code>SELECT cuisine, COUNT(*) FROM recipes GROUP BY cuisine;</code><br>
-                    <strong>Inventory database:</strong> <code>SELECT category, SUM(quantity) FROM products GROUP BY category;</code><br>
-                    <strong>Library database:</strong> <code>SELECT genre, COUNT(*) FROM books GROUP BY genre;</code>
+                    <strong>Recipe DB:</strong> <code>SELECT cuisine, COUNT(*) FROM recipes GROUP BY cuisine;</code><br>
+                    <strong>Inventory DB:</strong> <code>SELECT category, SUM(quantity) FROM products GROUP BY category;</code><br>
+                    <strong>Library DB:</strong> <code>SELECT author, COUNT(*) FROM books GROUP BY author;</code><br>
+                    <strong>Event DB:</strong> <code>SELECT venue, COUNT(*) FROM events GROUP BY venue;</code>
                 </div>
             </div>
         </div>
@@ -516,35 +555,56 @@
         <div class="slide">
             <h1>HAVING Clause</h1>
             <h2>Filtering Grouped Results</h2>
-            <p><strong>Example:</strong> Show members who have rented 5 or more movies</p>
+
             <div class="sql-example">
-                <span class="sql-keyword">SELECT</span> member_id,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> rental_count<br>
-                <span class="sql-keyword">FROM</span> Rentals<br>
-                <span class="sql-keyword">GROUP BY</span> member_id<br>
-                <span class="sql-keyword">HAVING COUNT</span>(*) >= 5<br>
-                <span class="sql-keyword">ORDER BY</span> rental_count <span class="sql-keyword">DESC</span>;
+                <span class="sql-comment">-- Find categories with more than 10 items</span><br>
+                <span class="sql-keyword">SELECT</span> category,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> item_count<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">GROUP BY</span> category<br>
+                <span class="sql-keyword">HAVING COUNT</span>(*) > 10<br>
+                <span class="sql-keyword">ORDER BY</span> item_count <span class="sql-keyword">DESC</span>;<br><br>
+
+                <span class="sql-comment">-- Categories with average price over $100</span><br>
+                <span class="sql-keyword">SELECT</span> category,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(price) <span class="sql-keyword">AS</span> avg_price<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">GROUP BY</span> category<br>
+                <span class="sql-keyword">HAVING AVG</span>(price) > 100;
             </div>
 
-            <div class="comparison-table">
-                <div>
-                    <h3>WHERE vs HAVING</h3>
-                    <ul>
-                        <li><strong>WHERE:</strong> Filters individual rows</li>
-                        <li><strong>HAVING:</strong> Filters groups</li>
-                        <li>WHERE comes before GROUP BY</li>
-                        <li>HAVING comes after GROUP BY</li>
-                    </ul>
-                </div>
+            <div class="demo-box" style="margin-top: 30px;">
+                <h3>WHERE vs HAVING</h3>
+                <table class="table-schema" style="font-size: 0.95em;">
+                    <tr>
+                        <th>Clause</th>
+                        <th>Filters</th>
+                        <th>Position</th>
+                        <th>Can Use Aggregates?</th>
+                    </tr>
+                    <tr>
+                        <td><strong>WHERE</strong></td>
+                        <td>Individual rows</td>
+                        <td>Before GROUP BY</td>
+                        <td>❌ No</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HAVING</strong></td>
+                        <td>Groups</td>
+                        <td>After GROUP BY</td>
+                        <td>✅ Yes</td>
+                    </tr>
+                </table>
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>Find "top" categories with HAVING:</strong></p>
+                <h4>🌉 Apply to Your Project</h4>
+                <p><strong>Find "top" or "qualifying" categories:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe database:</strong> Popular cuisines with 10+ recipes<br>
-                    <strong>Inventory database:</strong> Categories with total value > $5000<br>
-                    <strong>Library database:</strong> Authors with 3+ books
+                    <strong>Recipe DB:</strong> Cuisines with 10+ recipes<br>
+                    <strong>Inventory DB:</strong> Categories with total value > $5000<br>
+                    <strong>Library DB:</strong> Authors with 3+ books<br>
+                    <strong>Event DB:</strong> Venues hosting 5+ events
                 </div>
             </div>
         </div>
@@ -554,38 +614,46 @@
             <h1>Pattern Matching with LIKE</h1>
             <h2>Flexible String Searching</h2>
 
-            <h3>Special Pattern Symbols</h3>
-            <ul>
-                <li><code>%</code> - Zero or more characters</li>
-                <li><code>_</code> - Exactly one character</li>
-            </ul>
+            <div class="demo-box">
+                <h3>Special Pattern Symbols</h3>
+                <ul style="font-size: 1.15em;">
+                    <li><code>%</code> - Zero or more characters</li>
+                    <li><code>_</code> - Exactly one character</li>
+                </ul>
+            </div>
 
-            <h3>Examples with Movies</h3>
-            <div class="sql-example">
-                <span class="sql-comment">-- Find movies with "The" in the title</span><br>
-                <span class="sql-keyword">SELECT</span> title, release_year<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'%The%'</span>;<br><br>
+            <div class="sql-example" style="margin-top: 30px;">
+                <span class="sql-comment">-- Contains "Pro" anywhere in name</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Pro%'</span>;<br><br>
 
-                <span class="sql-comment">-- Find members with email ending in .edu</span><br>
-                <span class="sql-keyword">SELECT</span> name, email<br>
-                <span class="sql-keyword">FROM</span> Members<br>
-                <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">LIKE</span> <span class="sql-string">'%.edu'</span>;
+                <span class="sql-comment">-- Starts with "Pro"</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'Pro%'</span>;<br><br>
+
+                <span class="sql-comment">-- Ends with ".com"</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> users<br>
+                <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">LIKE</span> <span class="sql-string">'%.com'</span>;<br><br>
+
+                <span class="sql-comment">-- PostgreSQL: Case-insensitive search</span><br>
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">ILIKE</span> <span class="sql-string">'%pro%'</span>;
             </div>
 
             <div class="netlify-callout" style="margin-top: 20px;">
                 <h4>💻 This Is Your Search Feature!</h4>
                 <p>LIKE powers search boxes in your Netlify frontend:</p>
-                <p><code>GET /api/search?q=Matrix</code> → <code>WHERE title LIKE '%Matrix%'</code></p>
+                <p><code>GET /api/search?q=keyword</code> → <code>WHERE name ILIKE '%keyword%'</code></p>
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>Add search to your project:</strong></p>
+                <h4>🌉 Apply to Your Project</h4>
+                <p><strong>Add search to YOUR data:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe database:</strong> <code>WHERE name LIKE '%chicken%'</code><br>
-                    <strong>Inventory database:</strong> <code>WHERE description LIKE '%wireless%'</code><br>
-                    <strong>Library database:</strong> <code>WHERE title LIKE '%python%'</code>
+                    <strong>Recipe DB:</strong> <code>WHERE name ILIKE '%chicken%'</code><br>
+                    <strong>Inventory DB:</strong> <code>WHERE description ILIKE '%wireless%'</code><br>
+                    <strong>Library DB:</strong> <code>WHERE title ILIKE '%python%'</code><br>
+                    <strong>Event DB:</strong> <code>WHERE venue_name ILIKE '%center%'</code>
                 </div>
             </div>
         </div>
@@ -622,14 +690,14 @@
             
             <div class="sql-example">
                 <span class="sql-comment">-- Good formatting example</span><br>
-                <span class="sql-keyword">SELECT</span> genre,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_movies,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(release_year) <span class="sql-keyword">AS</span> avg_year<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">WHERE</span> release_year >= 2000<br>
-                <span class="sql-keyword">GROUP BY</span> genre<br>
-                <span class="sql-keyword">HAVING COUNT</span>(*) > 1<br>
-                <span class="sql-keyword">ORDER BY</span> total_movies <span class="sql-keyword">DESC</span>;
+                <span class="sql-keyword">SELECT</span> category,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_items,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(price) <span class="sql-keyword">AS</span> avg_price<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> price > 50<br>
+                <span class="sql-keyword">GROUP BY</span> category<br>
+                <span class="sql-keyword">HAVING COUNT</span>(*) > 5<br>
+                <span class="sql-keyword">ORDER BY</span> total_items <span class="sql-keyword">DESC</span>;
             </div>
         </div>
 
@@ -642,13 +710,13 @@
 
             <div class="netlify-callout">
                 <h4>🌐 Remember Lecture 6?</h4>
-                <p>You built a live Netlify frontend with API endpoints for your project database. Today's SQL concepts make those APIs much more powerful!</p>
+                <p>You built a live Netlify frontend with API endpoints for YOUR project database. Today's SQL concepts make those APIs much more powerful!</p>
             </div>
 
             <h3 style="margin-top: 30px;">The Pattern:</h3>
             <div class="demo-box">
                 <ol style="font-size: 1.1em; line-height: 1.8;">
-                    <li><strong>Learn SQL concept</strong> with movie_rental_db examples</li>
+                    <li><strong>Learn SQL concept</strong> with generic examples</li>
                     <li><strong>Adapt to YOUR project</strong> database schema</li>
                     <li><strong>Add to Netlify function</strong> as a new API endpoint</li>
                     <li><strong>Update frontend</strong> to call and display the results</li>
@@ -670,14 +738,14 @@
                     <h3>SQL Query</h3>
                     <div class="sql-example" style="font-size: 0.9em;">
                         <span class="sql-keyword">SELECT</span> *<br>
-                        <span class="sql-keyword">FROM</span> Movies<br>
-                        <span class="sql-keyword">WHERE</span> genre = <span class="sql-string">'Drama'</span>;
+                        <span class="sql-keyword">FROM</span> items<br>
+                        <span class="sql-keyword">WHERE</span> category = <span class="sql-string">'Electronics'</span>;
                     </div>
                 </div>
                 <div>
                     <h3>API Call</h3>
                     <div class="sql-example" style="font-size: 0.9em;">
-                        GET /api/movies?genre=Drama
+                        GET /api/items?category=Electronics
                     </div>
                 </div>
             </div>
@@ -685,14 +753,14 @@
             <h3 style="margin-top: 30px;">Netlify Function Code:</h3>
             <div class="sql-example" style="font-size: 0.85em;">
                 <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
-                &nbsp;&nbsp;<span class="sql-keyword">const</span> { genre } = event.queryStringParameters || {};<br><br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> { category } = event.queryStringParameters || {};<br><br>
 
-                &nbsp;&nbsp;<span class="sql-keyword">let</span> query = <span class="sql-string">'SELECT * FROM Movies'</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">let</span> query = <span class="sql-string">'SELECT * FROM items'</span>;<br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> params = [];<br><br>
 
-                &nbsp;&nbsp;<span class="sql-keyword">if</span> (genre) {<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;params.push(genre);<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;query += <span class="sql-string">' WHERE genre = $1'</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">if</span> (category) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;params.push(category);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;query += <span class="sql-string">' WHERE category = $1'</span>;<br>
                 &nbsp;&nbsp;}<br><br>
 
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query, params);<br>
@@ -717,20 +785,20 @@
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> { sortBy, order } = event.queryStringParameters || {};<br><br>
 
                 &nbsp;&nbsp;<span class="sql-comment">// IMPORTANT: Whitelist valid sort columns (prevent SQL injection)</span><br>
-                &nbsp;&nbsp;<span class="sql-keyword">const</span> validSorts = [<span class="sql-string">'release_year'</span>, <span class="sql-string">'title'</span>, <span class="sql-string">'genre'</span>];<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> validSorts = [<span class="sql-string">'name'</span>, <span class="sql-string">'price'</span>, <span class="sql-string">'created_date'</span>];<br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> validOrders = [<span class="sql-string">'ASC'</span>, <span class="sql-string">'DESC'</span>];<br><br>
 
-                &nbsp;&nbsp;<span class="sql-keyword">const</span> sortColumn = validSorts.includes(sortBy) ? sortBy : <span class="sql-string">'release_year'</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> sortColumn = validSorts.includes(sortBy) ? sortBy : <span class="sql-string">'created_date'</span>;<br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> sortOrder = validOrders.includes(order?.toUpperCase()) ? order.toUpperCase() : <span class="sql-string">'DESC'</span>;<br><br>
 
-                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`SELECT * FROM Movies ORDER BY ${sortColumn} ${sortOrder}`</span>;<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`SELECT * FROM items ORDER BY ${sortColumn} ${sortOrder}`</span>;<br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br><br>
 
                 &nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: 200, body: JSON.stringify(result.rows) };<br>
                 };
             </div>
 
-            <p style="margin-top: 15px;"><strong>API Call:</strong> <code>GET /api/movies?sortBy=release_year&order=DESC</code></p>
+            <p style="margin-top: 15px;"><strong>API Call:</strong> <code>GET /api/items?sortBy=price&order=DESC</code></p>
         </div>
 
         <!-- Slide 17d: Aggregates Become Dashboard APIs -->
@@ -748,11 +816,12 @@
                 <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;SELECT<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(DISTINCT genre) as total_genres,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as total_movies,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIN(release_year) as oldest_movie_year,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX(release_year) as newest_movie_year<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;FROM Movies<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(DISTINCT category) as total_categories,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as total_items,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AVG(price) as avg_price,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIN(price) as min_price,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX(price) as max_price<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;FROM items<br>
                 &nbsp;&nbsp;`</span>;<br><br>
 
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br>
@@ -763,10 +832,9 @@
                 };
             </div>
 
-            <h3 style="margin-top: 20px;">Frontend Display:</h3>
+            <h3 style="margin-top: 20px;">Returns JSON like:</h3>
             <div class="project-example">
-                <strong>Dashboard cards showing:</strong><br>
-                Total Genres: 3 | Total Movies: 150 | Collection: 1972-2024
+                <code>{ "total_categories": 5, "total_items": 127, "avg_price": 49.99, "min_price": 9.99, "max_price": 299.99 }</code>
             </div>
         </div>
 
@@ -780,15 +848,16 @@
                 <p>GROUP BY queries power charts, graphs, and category breakdowns in your frontend.</p>
             </div>
 
-            <h3>Movies by Genre Endpoint:</h3>
+            <h3>Items by Category Endpoint:</h3>
             <div class="sql-example" style="font-size: 0.85em;">
                 <span class="sql-keyword">exports.handler</span> = <span class="sql-keyword">async</span> (event, context) => {<br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;SELECT genre,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as movie_count<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;FROM Movies<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;GROUP BY genre<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY movie_count DESC<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SELECT category,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) as item_count,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AVG(price) as avg_price<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;FROM items<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;GROUP BY category<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY item_count DESC<br>
                 &nbsp;&nbsp;`</span>;<br><br>
 
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br>
@@ -799,13 +868,13 @@
             <h3 style="margin-top: 20px;">Returns JSON like:</h3>
             <div class="sql-example" style="font-size: 0.9em;">
                 [<br>
-                &nbsp;&nbsp;{ "genre": "Science Fiction", "movie_count": 2 },<br>
-                &nbsp;&nbsp;{ "genre": "Drama", "movie_count": 1 },<br>
-                &nbsp;&nbsp;{ "genre": "Crime", "movie_count": 1 }<br>
+                &nbsp;&nbsp;{ "category": "Electronics", "item_count": 45, "avg_price": 129.99 },<br>
+                &nbsp;&nbsp;{ "category": "Books", "item_count": 32, "avg_price": 24.99 },<br>
+                &nbsp;&nbsp;{ "category": "Clothing", "item_count": 28, "avg_price": 39.99 }<br>
                 ]
             </div>
 
-            <p style="margin-top: 15px;"><strong>Frontend:</strong> Display as bar chart, pie chart, or simple list</p>
+            <p style="margin-top: 15px;"><strong>Frontend:</strong> Display as bar chart, pie chart, or table</p>
         </div>
 
         <!-- Slide 17f: LIKE Becomes Search -->
@@ -832,9 +901,9 @@
 
                 &nbsp;&nbsp;<span class="sql-comment">// Use ILIKE for case-insensitive search (PostgreSQL)</span><br>
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;SELECT * FROM Movies<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;WHERE title ILIKE $1<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY release_year DESC<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SELECT * FROM items<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;WHERE name ILIKE $1 OR description ILIKE $1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY name<br>
                 &nbsp;&nbsp;`</span>;<br><br>
 
                 &nbsp;&nbsp;<span class="sql-keyword">const</span> searchPattern = <span class="sql-string">`%${q}%`</span>;<br>
@@ -844,7 +913,7 @@
                 };
             </div>
 
-            <p style="margin-top: 15px;"><strong>API Call:</strong> <code>GET /api/search?q=Matrix</code></p>
+            <p style="margin-top: 15px;"><strong>API Call:</strong> <code>GET /api/search?q=wireless</code></p>
         </div>
 
         <!-- Slide 18: Complex Query Activity -->
@@ -926,13 +995,13 @@
             <div class="sql-example">
                 <span class="sql-comment">-- Slower: Gets all columns, wildcard at start</span><br>
                 <span class="sql-keyword">SELECT</span> *<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'%Matrix%'</span>;<br><br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'%widget%'</span>;<br><br>
 
-                <span class="sql-comment">-- Faster: Specific columns, wildcard at end</span><br>
-                <span class="sql-keyword">SELECT</span> movie_id, title, release_year<br>
-                <span class="sql-keyword">FROM</span> Movies<br>
-                <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'Matrix%'</span>;
+                <span class="sql-comment">-- Faster: Specific columns, wildcard at end when possible</span><br>
+                <span class="sql-keyword">SELECT</span> id, name, price<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> name <span class="sql-keyword">LIKE</span> <span class="sql-string">'Widget%'</span>;
             </div>
 
             <div class="netlify-callout" style="margin-top: 20px;">
@@ -948,10 +1017,10 @@
             <p>So far, we've queried single tables. Real power comes from combining data:</p>
 
             <div class="sql-example">
-                <span class="sql-comment">-- Example: Show movies with their studio names</span><br>
-                <span class="sql-keyword">SELECT</span> m.title, m.genre, s.name <span class="sql-keyword">AS</span> studio_name<br>
-                <span class="sql-keyword">FROM</span> Movies m<br>
-                <span class="sql-keyword">INNER JOIN</span> Studios s <span class="sql-keyword">ON</span> m.studio_id = s.studio_id;
+                <span class="sql-comment">-- Example: Get items with their category details</span><br>
+                <span class="sql-keyword">SELECT</span> i.name, i.price, c.category_name, c.description<br>
+                <span class="sql-keyword">FROM</span> items i<br>
+                <span class="sql-keyword">INNER JOIN</span> categories c <span class="sql-keyword">ON</span> i.category_id = c.category_id;
             </div>
 
             <h3>Types of Joins We'll Cover:</h3>
@@ -1446,28 +1515,28 @@
         <!-- Slide 35: Practice Problems -->
         <div class="slide">
             <h1>Additional Practice Problems</h1>
-            <h2>Optional Extra Practice with movie_rental_db</h2>
+            <h2>Optional Extra Practice for YOUR Project</h2>
             <div class="activity-box">
                 <p><strong>For additional practice (not graded):</strong></p>
 
-                <h3>Write SQL queries for movie_rental_db:</h3>
-                <ol>
-                    <li>List all movies released between 1990 and 2000</li>
-                    <li>Count how many movies are in each genre</li>
-                    <li>Find the oldest and newest movie in the database</li>
-                    <li>Show genres with more than 5 movies (use HAVING)</li>
-                    <li>List members whose email ends with '.edu'</li>
-                    <li>Find movies whose titles start with 'The'</li>
-                    <li>Calculate average release year by genre</li>
-                    <li>Show the top 5 most recently added members</li>
+                <h3>Apply these patterns to YOUR project database:</h3>
+                <ol style="font-size: 1.05em; line-height: 1.7;">
+                    <li><strong>Range query:</strong> Find items between two values (dates, prices, quantities)</li>
+                    <li><strong>GROUP BY count:</strong> Count how many items are in each category/type</li>
+                    <li><strong>MIN/MAX:</strong> Find the oldest and newest, or cheapest and most expensive</li>
+                    <li><strong>HAVING filter:</strong> Show categories with more than X items</li>
+                    <li><strong>Pattern match:</strong> Find records where email/text field matches a pattern</li>
+                    <li><strong>Prefix search:</strong> Find items whose names start with specific text</li>
+                    <li><strong>AVG by group:</strong> Calculate average price/value/rating by category</li>
+                    <li><strong>TOP N with LIMIT:</strong> Show the top 5-10 items by some criteria + ORDER BY</li>
                 </ol>
 
-                <p><strong>Bonus:</strong> Write a query using a subquery (preview of next week)</p>
+                <p style="margin-top: 20px;"><strong>Bonus:</strong> Write a query using a subquery (preview of next week)</p>
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>Apply to YOUR Project:</h4>
-                <p>Adapt these challenge patterns to your own database schema for even more practice!</p>
+                <h4>💡 Pro Tip:</h4>
+                <p>As you write these queries, think about which ones would make useful API endpoints for your Netlify project!</p>
             </div>
         </div>
 
