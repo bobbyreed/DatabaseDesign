@@ -260,6 +260,101 @@
             </div>
         </div>
 
+        <!-- Slide 6a: Frontend Setup - Displaying All Your Tables -->
+        <div class="slide">
+            <h1>Frontend Setup: Display All 3 Tables</h1>
+            <h2>Expand Your Main Page</h2>
+
+            <div class="netlify-callout">
+                <h4>🎯 Goal</h4>
+                <p>Update your main HTML page to fetch and display data from all 3 of your project tables, giving users a complete overview of your database.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Expanding get-items.mjs (or your main GET function)</h3>
+                <pre class="code-example"><span class="sql-comment">// Option 1: Single endpoint that returns all tables</span>
+<span class="sql-keyword">exports</span>.handler = <span class="sql-keyword">async</span> (<span class="sql-keyword">event</span>, <span class="sql-keyword">context</span>) => {
+  <span class="sql-keyword">try</span> {
+    <span class="sql-comment">// Fetch all three tables in parallel</span>
+    <span class="sql-keyword">const</span> [table1, table2, table3] = <span class="sql-keyword">await</span> Promise.all([
+      pool.query(<span class="sql-string">'SELECT * FROM your_first_table ORDER BY id'</span>),
+      pool.query(<span class="sql-string">'SELECT * FROM your_second_table ORDER BY id'</span>),
+      pool.query(<span class="sql-string">'SELECT * FROM your_third_table ORDER BY id'</span>)
+    ]);
+
+    <span class="sql-keyword">return</span> {
+      statusCode: <span class="sql-number">200</span>,
+      body: JSON.stringify({
+        firstTable: table1.rows,
+        secondTable: table2.rows,
+        thirdTable: table3.rows
+      })
+    };
+  } <span class="sql-keyword">catch</span> (error) {
+    <span class="sql-keyword">return</span> { statusCode: <span class="sql-number">500</span>, body: JSON.stringify({ error: error.message }) };
+  }
+};</pre>
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Alternative: Separate Endpoints</h4>
+                <p>You can also keep 3 separate GET functions (get-table1.mjs, get-table2.mjs, get-table3.mjs) and call them separately from your HTML. This is more modular but requires more fetch calls.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6b: Frontend HTML - Displaying Multiple Tables -->
+        <div class="slide">
+            <h1>Update Your index.html</h1>
+            <h2>Display All 3 Tables on One Page</h2>
+
+            <div class="demo-box">
+                <h3>JavaScript Fetch Example:</h3>
+                <pre class="code-example"><span class="sql-comment">// In your index.html or app.js</span>
+<span class="sql-keyword">async function</span> loadAllData() {
+  <span class="sql-keyword">try</span> {
+    <span class="sql-comment">// Fetch from your combined endpoint</span>
+    <span class="sql-keyword">const</span> response = <span class="sql-keyword">await</span> fetch(<span class="sql-string">'/api/get-all-data'</span>);
+    <span class="sql-keyword">const</span> data = <span class="sql-keyword">await</span> response.json();
+
+    <span class="sql-comment">// Display each table</span>
+    displayTable(<span class="sql-string">'table1-container'</span>, data.firstTable, <span class="sql-string">'First Table Name'</span>);
+    displayTable(<span class="sql-string">'table2-container'</span>, data.secondTable, <span class="sql-string">'Second Table Name'</span>);
+    displayTable(<span class="sql-string">'table3-container'</span>, data.thirdTable, <span class="sql-string">'Third Table Name'</span>);
+  } <span class="sql-keyword">catch</span> (error) {
+    console.error(<span class="sql-string">'Error loading data:'</span>, error);
+  }
+}
+
+<span class="sql-keyword">function</span> displayTable(containerId, rows, tableName) {
+  <span class="sql-keyword">const</span> container = document.getElementById(containerId);
+  <span class="sql-keyword">if</span> (!rows.length) {
+    container.innerHTML = <span class="sql-string">`&lt;p&gt;No data in ${tableName}&lt;/p&gt;`</span>;
+    <span class="sql-keyword">return</span>;
+  }
+
+  <span class="sql-comment">// Create table HTML</span>
+  <span class="sql-keyword">const</span> headers = Object.keys(rows[<span class="sql-number">0</span>]);
+  <span class="sql-keyword">const</span> tableHTML = <span class="sql-string">`
+    &lt;h3&gt;${tableName}&lt;/h3&gt;
+    &lt;table&gt;
+      &lt;thead&gt;&lt;tr&gt;${headers.map(h =&gt; \`&lt;th&gt;${h}&lt;/th&gt;\`).join('')}&lt;/tr&gt;&lt;/thead&gt;
+      &lt;tbody&gt;${rows.map(row =&gt; \`
+        &lt;tr&gt;${headers.map(h =&gt; \`&lt;td&gt;${row[h]}&lt;/td&gt;\`).join('')}&lt;/tr&gt;
+      \`).join('')}&lt;/tbody&gt;
+    &lt;/table&gt;
+  `</span>;
+  container.innerHTML = tableHTML;
+}
+
+<span class="sql-comment">// Load data when page loads</span>
+window.addEventListener(<span class="sql-string">'DOMContentLoaded'</span>, loadAllData);</pre>
+            </div>
+
+            <div class="tip-box">
+                <strong>HTML Structure:</strong> Add three div containers with IDs: <code>&lt;div id="table1-container"&gt;&lt;/div&gt;</code>, <code>&lt;div id="table2-container"&gt;&lt;/div&gt;</code>, <code>&lt;div id="table3-container"&gt;&lt;/div&gt;</code>
+            </div>
+        </div>
+
         <!-- Slide 7: SELECT Statement Structure -->
         <div class="slide">
             <h1>The SELECT Statement</h1>
@@ -1277,6 +1372,131 @@
                     <li>Test all endpoints work locally</li>
                     <li>Check for console errors</li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- Slide 28a: Polish Your Frontend Design -->
+        <div class="slide">
+            <h1>Polish Your Frontend</h1>
+            <h2>Add Context and Design to Your Tables</h2>
+
+            <div class="netlify-callout">
+                <h4>🎨 Make It Beautiful!</h4>
+                <p>Raw tables work, but adding context, styling, and user-friendly design makes your project professional.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>HTML Structure Enhancement:</h3>
+                <pre class="code-example"><span class="sql-comment">&lt;!-- Instead of just raw tables... --&gt;</span>
+<span class="sql-keyword">&lt;body&gt;</span>
+  <span class="sql-comment">&lt;!-- Add a header with project context --&gt;</span>
+  <span class="sql-keyword">&lt;header&gt;</span>
+    <span class="sql-keyword">&lt;h1&gt;</span>My Database Project<span class="sql-keyword">&lt;/h1&gt;</span>
+    <span class="sql-keyword">&lt;p&gt;</span>A comprehensive system for managing [your domain]<span class="sql-keyword">&lt;/p&gt;</span>
+  <span class="sql-keyword">&lt;/header&gt;</span>
+
+  <span class="sql-keyword">&lt;main&gt;</span>
+    <span class="sql-comment">&lt;!-- Add sections with descriptions --&gt;</span>
+    <span class="sql-keyword">&lt;section</span> <span class="sql-keyword">class</span>=<span class="sql-string">"data-section"</span><span class="sql-keyword">&gt;</span>
+      <span class="sql-keyword">&lt;div</span> <span class="sql-keyword">class</span>=<span class="sql-string">"section-header"</span><span class="sql-keyword">&gt;</span>
+        <span class="sql-keyword">&lt;h2&gt;</span>Table 1: [Descriptive Name]<span class="sql-keyword">&lt;/h2&gt;</span>
+        <span class="sql-keyword">&lt;p</span> <span class="sql-keyword">class</span>=<span class="sql-string">"section-description"</span><span class="sql-keyword">&gt;</span>
+          This table contains [brief explanation of what this data represents]
+        <span class="sql-keyword">&lt;/p&gt;</span>
+        <span class="sql-keyword">&lt;p</span> <span class="sql-keyword">class</span>=<span class="sql-string">"record-count"</span><span class="sql-keyword">&gt;</span>Total Records: <span class="sql-keyword">&lt;span</span> <span class="sql-keyword">id</span>=<span class="sql-string">"count1"</span><span class="sql-keyword">&gt;</span>0<span class="sql-keyword">&lt;/span&gt;&lt;/p&gt;</span>
+      <span class="sql-keyword">&lt;/div&gt;</span>
+      <span class="sql-keyword">&lt;div</span> <span class="sql-keyword">id</span>=<span class="sql-string">"table1-container"</span><span class="sql-keyword">&gt;&lt;/div&gt;</span>
+    <span class="sql-keyword">&lt;/section&gt;</span>
+
+    <span class="sql-comment">&lt;!-- Repeat for table 2 and table 3 --&gt;</span>
+  <span class="sql-keyword">&lt;/main&gt;</span>
+<span class="sql-keyword">&lt;/body&gt;</span></pre>
+            </div>
+        </div>
+
+        <!-- Slide 28b: CSS Styling for Professional Tables -->
+        <div class="slide">
+            <h1>Add Professional Styling</h1>
+            <h2>CSS to Make Tables Shine</h2>
+
+            <div class="demo-box">
+                <h3>Recommended CSS:</h3>
+                <pre class="code-example"><span class="sql-comment">/* Add to your styles.css or &lt;style&gt; tag */</span>
+<span class="sql-keyword">body</span> {
+  font-family: <span class="sql-string">'Arial'</span>, sans-serif;
+  max-width: <span class="sql-number">1200</span>px;
+  margin: <span class="sql-number">0</span> auto;
+  padding: <span class="sql-number">20</span>px;
+  background-color: <span class="sql-string">#f5f5f5</span>;
+}
+
+<span class="sql-keyword">header</span> {
+  text-align: center;
+  padding: <span class="sql-number">30</span>px;
+  background: linear-gradient(<span class="sql-number">135</span>deg, <span class="sql-string">#667eea</span> 0%, <span class="sql-string">#764ba2</span> 100%);
+  color: white;
+  border-radius: <span class="sql-number">10</span>px;
+  margin-bottom: <span class="sql-number">30</span>px;
+}
+
+<span class="sql-keyword">.data-section</span> {
+  background: white;
+  padding: <span class="sql-number">25</span>px;
+  margin-bottom: <span class="sql-number">30</span>px;
+  border-radius: <span class="sql-number">8</span>px;
+  box-shadow: <span class="sql-number">0</span> <span class="sql-number">2</span>px <span class="sql-number">4</span>px rgba(<span class="sql-number">0</span>,<span class="sql-number">0</span>,<span class="sql-number">0</span>,<span class="sql-number">0.1</span>);
+}
+
+<span class="sql-keyword">.section-header h2</span> {
+  color: <span class="sql-string">#333</span>;
+  border-bottom: <span class="sql-number">3</span>px solid <span class="sql-string">#667eea</span>;
+  padding-bottom: <span class="sql-number">10</span>px;
+}
+
+<span class="sql-keyword">.section-description</span> {
+  color: <span class="sql-string">#666</span>;
+  font-style: italic;
+  margin: <span class="sql-number">10</span>px 0;
+}
+
+<span class="sql-keyword">.record-count</span> {
+  color: <span class="sql-string">#764ba2</span>;
+  font-weight: bold;
+}
+
+<span class="sql-comment">/* Style your tables */</span>
+<span class="sql-keyword">table</span> {
+  width: <span class="sql-number">100</span>%;
+  border-collapse: collapse;
+  margin-top: <span class="sql-number">15</span>px;
+}
+
+<span class="sql-keyword">th</span> {
+  background-color: <span class="sql-string">#667eea</span>;
+  color: white;
+  padding: <span class="sql-number">12</span>px;
+  text-align: left;
+  font-weight: <span class="sql-number">600</span>;
+}
+
+<span class="sql-keyword">td</span> {
+  padding: <span class="sql-number">10</span>px;
+  border-bottom: <span class="sql-number">1</span>px solid <span class="sql-string">#ddd</span>;
+}
+
+<span class="sql-keyword">tr:hover</span> {
+  background-color: <span class="sql-string">#f0f0f0</span>;
+}</pre>
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Update Your JavaScript</h4>
+                <p>Don't forget to update the <code>displayTable()</code> function to populate the record count:</p>
+                <pre class="code-example" style="font-size: 0.85em;">document.getElementById(<span class="sql-string">'count1'</span>).textContent = rows.length;</pre>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Pro Tip:</strong> Add loading states, error messages, and empty state handling for a polished user experience!
             </div>
         </div>
 
