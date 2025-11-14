@@ -107,21 +107,102 @@ const result = await pool.query(`
 
 ### Integration Strategy Per Lecture
 
-**Lecture 7 (SQL Basics):**
-- Add "SQL Powers Your Netlify API" section
-- Show how WHERE, ORDER BY, LIKE enhance their existing GET endpoints
-- Homework: Students add 2-3 new filtered/sorted API endpoints
+**Lecture 7 (SQL Basics):** ✅ COMPLETED
+- ✅ Added "SQL Powers Your Netlify API" section (Slides 17a-17f)
+- ✅ Show how WHERE, ORDER BY, LIKE enhance their existing GET endpoints
+- ✅ Homework: Students add 2-3 new filtered/sorted API endpoints
+- ✅ **NEW: Frontend Integration Slides (Slides 6a, 6b, 28a, 28b)**
+  - **Slides 6a-6b:** Display all 3 tables on main page
+    - Expand get-items.mjs with Promise.all parallel fetching
+    - JavaScript fetch and displayTable() examples
+    - Alternative separate endpoints approach
+  - **Slides 28a-28b:** Polish HTML design with professional styling
+    - Add context headers and section descriptions
+    - Professional CSS with gradients, cards, hover effects
+    - Record counts and loading states
 
-**Lecture 8 (Advanced SQL - JOINs, Subqueries):**
+**Lecture 8 (Advanced SQL - JOINs, Subqueries):** 🔄 TO BE REVISED
 - Show multi-table queries → new API endpoints with related data
 - Students create endpoints that join their project tables
 - Frontend displays richer, related information
+- **NEEDED: Frontend Integration Exercises**
+  - Show how to display JOINed data in HTML (nested objects vs. flat)
+  - Build API endpoint that returns related data (e.g., items with category names)
+  - Update frontend to show enriched data (e.g., "Electronics" instead of category_id: 3)
+  - CSS for displaying related information (badges, tags, linked data)
 
-**Lecture 9 (Views, Indexes, Optimization):**
+**Lecture 9 (Views, Indexes, Optimization):** 🔄 TO BE REVISED
 - Performance analysis of their live API
 - Create views for complex queries
 - Add indexes to slow queries
 - EXPLAIN analysis on their actual data
+- **NEEDED: Frontend Performance Integration Exercises**
+  - Show loading time improvements in browser DevTools
+  - Create view for complex query, simplify frontend fetch call
+  - Measure before/after: EXPLAIN query time → frontend render time
+  - Add loading spinners while slow queries execute
+
+---
+
+## Frontend Integration Exercise Pattern (NEW)
+
+### Established in Lecture 7, Apply to Lectures 8 & 9
+
+**Pattern:** Each SQL lecture should include 2-4 slides showing students how to apply the SQL concepts directly to their frontend.
+
+**Lecture 7 Frontend Exercise Structure:**
+1. **Early slides (after introduction):** Help students set up their frontend to display ALL project data
+   - Slides 6a-6b: Expand API functions to fetch multiple tables
+   - Provide complete working code examples
+   - Show both single-endpoint and multi-endpoint approaches
+
+2. **Late slides (before homework):** Guide students to polish their UI with professional design
+   - Slides 28a-28b: HTML structure and CSS styling
+   - Add context (headers, descriptions, record counts)
+   - Professional styling (gradients, cards, hover effects, responsive design)
+
+**Apply This Pattern to Lecture 8:**
+1. **Early slides:** Show how to display JOINed data in the frontend
+   - Example: Display "Electronics" instead of category_id: 3
+   - Handle nested vs. flat JSON responses
+   - Update displayTable() to show related data
+
+2. **Late slides:** Style related/joined data
+   - CSS for badges showing category names
+   - Display related items (e.g., "Posted by: John Doe" instead of user_id: 5)
+   - Cards or grouped displays for related data
+
+**Apply This Pattern to Lecture 9:**
+1. **Early slides:** Show performance measurement in browser
+   - Browser DevTools Network tab timing
+   - Loading spinners for slow queries
+
+2. **Late slides:** Show frontend impact of optimization
+   - Before/after screenshots of load times
+   - Simplified fetch calls using views
+   - Better UX with faster queries
+
+### Code Example Template for Frontend Exercises
+
+**Template for "Display Enhanced Data" slide:**
+```html
+<div class="demo-box">
+  <h3>Frontend Integration:</h3>
+  <pre class="code-example">
+    // Show how the SQL concept translates to frontend code
+    // Include fetch() call, data processing, and DOM updates
+  </pre>
+</div>
+
+<div class="bridge-box">
+  <h4>🌉 Adapt to Your Project</h4>
+  <p>Think about how this applies to YOUR tables...</p>
+</div>
+
+<div class="tip-box">
+  <strong>💡 Pro Tip:</strong> Specific best practice or gotcha
+</div>
+```
 
 ---
 
