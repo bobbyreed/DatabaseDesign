@@ -69,6 +69,46 @@
         [data-theme="dark"] .diagram-box {
             background: var(--bg-secondary);
         }
+
+        /* Bridge to Your Project boxes */
+        .bridge-box {
+            background-color: #f0f8ff;
+            border-left: 4px solid #4a90e2;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .bridge-box h4 {
+            margin-top: 0;
+            color: #4a90e2;
+        }
+
+        /* Netlify integration callouts */
+        .netlify-callout {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .netlify-callout h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+
+        /* Project example boxes */
+        .project-example {
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .project-example strong {
+            color: #e65100;
+        }
     </style>
 </head>
 <body>
@@ -101,7 +141,8 @@
                 <li>🎯 Use EXISTS, NOT EXISTS for powerful filtering</li>
                 <li>🎯 Apply ANY, ALL, and SOME operators effectively</li>
                 <li>🎯 Combine queries with set operations</li>
-                <li>🎯 Optimize complex queries for performance</li>
+                <li>🎯 Build JOIN-based API endpoints for YOUR project</li>
+                <li>🎯 Display related data beautifully in your frontend</li>
             </ul>
         </div>
 
@@ -126,15 +167,26 @@
             <p>Before diving into advanced JOINs, let's review the basic INNER JOIN:</p>
 
             <div class="sql-example">
-                <span class="sql-comment">-- Find all properties and their managing staff</span><br>
-                <span class="sql-keyword">SELECT</span> p.propertyNo, p.street, s.fName, s.lName<br>
-                <span class="sql-keyword">FROM</span> PropertyForRent p<br>
-                <span class="sql-keyword">INNER JOIN</span> Staff s <span class="sql-keyword">ON</span> p.staffNo = s.staffNo;
+                <span class="sql-comment">-- Show items with their category names (not just category_id)</span><br>
+                <span class="sql-keyword">SELECT</span> i.item_id, i.name, c.category_name<br>
+                <span class="sql-keyword">FROM</span> items i<br>
+                <span class="sql-keyword">INNER JOIN</span> categories c <span class="sql-keyword">ON</span> i.category_id = c.category_id;
             </div>
 
             <div class="concept-box">
                 <strong>Remember:</strong> INNER JOIN returns only matching rows from both tables.
-                <br>If a property has no staff assigned, or staff manages no properties, they won't appear!
+                <br>If an item has no category assigned, or a category has no items, they won't appear!
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Adapt this concept:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> JOIN recipes and categories to show "Desserts" instead of category_id: 3</li>
+                    <li><strong>Movie rental:</strong> JOIN Movies and Studios to display studio names with each movie</li>
+                    <li><strong>Library database:</strong> JOIN books and authors to show author names, not just author_id</li>
+                    <li><strong>Event planner:</strong> JOIN events and venues to display venue names and addresses</li>
+                </ul>
             </div>
         </div>
 
@@ -142,44 +194,55 @@
         <div class="slide">
             <h1>LEFT OUTER JOIN</h1>
             <p>Includes ALL rows from the LEFT table, even without matches:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- List all branches and their properties (including branches with no properties)</span><br>
-                <span class="sql-keyword">SELECT</span> b.*, p.*<br>
-                <span class="sql-keyword">FROM</span> Branch b<br>
-                <span class="sql-keyword">LEFT JOIN</span> PropertyForRent p<br>
-                &nbsp;&nbsp;<span class="sql-keyword">ON</span> b.city = p.city;
+                <span class="sql-comment">-- List all categories and their items (including categories with no items)</span><br>
+                <span class="sql-keyword">SELECT</span> c.category_id, c.category_name, i.item_id, i.name<br>
+                <span class="sql-keyword">FROM</span> categories c<br>
+                <span class="sql-keyword">LEFT JOIN</span> items i<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ON</span> c.category_id = i.category_id;
             </div>
-            
+
             <table class="table-result">
                 <tr>
-                    <th>branchNo</th>
-                    <th>bCity</th>
-                    <th>propertyNo</th>
-                    <th>pCity</th>
+                    <th>category_id</th>
+                    <th>category_name</th>
+                    <th>item_id</th>
+                    <th>name</th>
                 </tr>
                 <tr>
-                    <td>B003</td>
-                    <td>Glasgow</td>
-                    <td>PG4</td>
-                    <td>Glasgow</td>
+                    <td>1</td>
+                    <td>Electronics</td>
+                    <td>101</td>
+                    <td>Laptop</td>
                 </tr>
                 <tr>
-                    <td>B004</td>
-                    <td>Bristol</td>
+                    <td>2</td>
+                    <td>Books</td>
                     <td>NULL</td>
                     <td>NULL</td>
                 </tr>
                 <tr>
-                    <td>B002</td>
-                    <td>London</td>
-                    <td>PL94</td>
-                    <td>London</td>
+                    <td>3</td>
+                    <td>Tools</td>
+                    <td>103</td>
+                    <td>Hammer</td>
                 </tr>
             </table>
-            
+
             <div class="tip-box">
                 <strong>Key Point:</strong> NULL values appear for the right table when no match exists.
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>When to use LEFT JOIN in YOUR project:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> Show ALL categories, even ones with no recipes yet</li>
+                    <li><strong>Movie rental:</strong> List ALL members, even those who haven't rented anything</li>
+                    <li><strong>Inventory:</strong> Display ALL suppliers, including ones with no products in stock</li>
+                    <li><strong>Event planner:</strong> Show ALL venues, even those with no upcoming events</li>
+                </ul>
             </div>
         </div>
 
@@ -187,42 +250,42 @@
         <div class="slide">
             <h1>RIGHT OUTER JOIN</h1>
             <p>Includes ALL rows from the RIGHT table, even without matches:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- List all properties and their branches (including unassigned properties)</span><br>
-                <span class="sql-keyword">SELECT</span> b.*, p.*<br>
-                <span class="sql-keyword">FROM</span> Branch b<br>
-                <span class="sql-keyword">RIGHT JOIN</span> PropertyForRent p<br>
-                &nbsp;&nbsp;<span class="sql-keyword">ON</span> b.city = p.city;
+                <span class="sql-comment">-- List all items and their categories (including uncategorized items)</span><br>
+                <span class="sql-keyword">SELECT</span> c.category_id, c.category_name, i.item_id, i.name<br>
+                <span class="sql-keyword">FROM</span> categories c<br>
+                <span class="sql-keyword">RIGHT JOIN</span> items i<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ON</span> c.category_id = i.category_id;
             </div>
-            
+
             <table class="table-result">
                 <tr>
-                    <th>branchNo</th>
-                    <th>bCity</th>
-                    <th>propertyNo</th>
-                    <th>pCity</th>
+                    <th>category_id</th>
+                    <th>category_name</th>
+                    <th>item_id</th>
+                    <th>name</th>
                 </tr>
                 <tr>
                     <td>NULL</td>
                     <td>NULL</td>
-                    <td>PA14</td>
-                    <td>Aberdeen</td>
+                    <td>99</td>
+                    <td>Misc Item</td>
                 </tr>
                 <tr>
-                    <td>B003</td>
-                    <td>Glasgow</td>
-                    <td>PG4</td>
-                    <td>Glasgow</td>
+                    <td>1</td>
+                    <td>Electronics</td>
+                    <td>101</td>
+                    <td>Laptop</td>
                 </tr>
                 <tr>
-                    <td>B002</td>
-                    <td>London</td>
-                    <td>PL94</td>
-                    <td>London</td>
+                    <td>3</td>
+                    <td>Tools</td>
+                    <td>103</td>
+                    <td>Hammer</td>
                 </tr>
             </table>
-            
+
             <div class="demo-box">
                 <strong>Pro Tip:</strong> RIGHT JOIN can always be rewritten as LEFT JOIN by swapping table order!
             </div>
@@ -232,19 +295,29 @@
         <div class="slide">
             <h1>FULL OUTER JOIN</h1>
             <p>Combines LEFT and RIGHT JOINs - includes ALL rows from BOTH tables:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- List all branches and properties, showing unmatched from both</span><br>
-                <span class="sql-keyword">SELECT</span> b.branchNo, b.city <span class="sql-keyword">AS</span> branch_city,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.propertyNo, p.city <span class="sql-keyword">AS</span> prop_city<br>
-                <span class="sql-keyword">FROM</span> Branch b<br>
-                <span class="sql-keyword">FULL OUTER JOIN</span> PropertyForRent p<br>
-                &nbsp;&nbsp;<span class="sql-keyword">ON</span> b.city = p.city;
+                <span class="sql-comment">-- List all categories and items, showing unmatched from both</span><br>
+                <span class="sql-keyword">SELECT</span> c.category_id, c.category_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.item_id, i.name<br>
+                <span class="sql-keyword">FROM</span> categories c<br>
+                <span class="sql-keyword">FULL OUTER JOIN</span> items i<br>
+                &nbsp;&nbsp;<span class="sql-keyword">ON</span> c.category_id = i.category_id;
             </div>
-            
+
             <div class="warning-box">
                 <strong>⚠️ Note:</strong> Not all databases support FULL OUTER JOIN (MySQL doesn't).
                 You can simulate it using UNION of LEFT and RIGHT JOINs.
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>FULL JOIN use cases:</strong></p>
+                <ul>
+                    <li><strong>Auditing:</strong> Find both orphaned records AND empty categories</li>
+                    <li><strong>Data quality:</strong> Identify items without categories AND categories without items</li>
+                    <li><strong>Reporting:</strong> Show complete picture of your data relationships</li>
+                </ul>
             </div>
         </div>
 
@@ -252,7 +325,7 @@
         <div class="slide">
             <h1>Introduction to Subqueries</h1>
             <p>A query within a query - incredibly powerful for complex logic!</p>
-            
+
             <div class="concept-box">
                 <h3>Types of Subqueries:</h3>
                 <ul>
@@ -262,16 +335,26 @@
                     <li><strong>Correlated:</strong> References outer query columns</li>
                 </ul>
             </div>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Simple scalar subquery</span><br>
-                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, position<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> branchNo = (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> branchNo<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Branch<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> street = <span class="sql-string">'163 Main St'</span><br>
+                <span class="sql-comment">-- Simple scalar subquery: Find items in a specific supplier's category</span><br>
+                <span class="sql-keyword">SELECT</span> item_id, name, price<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> category_id = (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> category_id<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> categories<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> category_name = <span class="sql-string">'Electronics'</span><br>
                 );
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Subquery use cases:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> Find recipes in the most popular category</li>
+                    <li><strong>Movie rental:</strong> Show movies from the highest-rated studio</li>
+                    <li><strong>Inventory:</strong> List items from suppliers with best pricing</li>
+                </ul>
             </div>
         </div>
 
@@ -279,21 +362,31 @@
         <div class="slide">
             <h1>Subqueries with Aggregates</h1>
             <p>Perfect for comparisons against calculated values:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Find staff earning more than average</span><br>
-                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;salary - (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(salary) <span class="sql-keyword">FROM</span> Staff) <span class="sql-keyword">AS</span> above_avg<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> salary > (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(salary)<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
+                <span class="sql-comment">-- Find products priced higher than average</span><br>
+                <span class="sql-keyword">SELECT</span> product_id, name, price,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;price - (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(price) <span class="sql-keyword">FROM</span> products) <span class="sql-keyword">AS</span> above_avg<br>
+                <span class="sql-keyword">FROM</span> products<br>
+                <span class="sql-keyword">WHERE</span> price > (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(price)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> products<br>
                 );
             </div>
-            
+
             <div class="warning-box">
-                <strong>⚠️ Common Mistake:</strong> You CANNOT write: WHERE salary > AVG(salary)
+                <strong>⚠️ Common Mistake:</strong> You CANNOT write: WHERE price > AVG(price)
                 <br>Aggregate functions need GROUP BY or subqueries!
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Aggregate subquery examples:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> Find recipes with cook time > average for their category</li>
+                    <li><strong>Movie rental:</strong> List members who rent more than average rentals per month</li>
+                    <li><strong>E-commerce:</strong> Show orders with total > average order value</li>
+                </ul>
             </div>
         </div>
 
@@ -301,72 +394,282 @@
         <div class="slide">
             <h1>Using IN with Subqueries</h1>
             <p>Check if a value exists in a subquery result set:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Nested subquery: Find properties managed by staff at '163 Main St'</span><br>
-                <span class="sql-keyword">SELECT</span> propertyNo, street, city, rent<br>
-                <span class="sql-keyword">FROM</span> PropertyForRent<br>
-                <span class="sql-keyword">WHERE</span> staffNo <span class="sql-keyword">IN</span> (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> staffNo<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo <span class="sql-keyword">IN</span> (<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">SELECT</span> branchNo<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">FROM</span> Branch<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">WHERE</span> street = <span class="sql-string">'163 Main St'</span><br>
-                &nbsp;&nbsp;)<br>
+                <span class="sql-comment">-- Nested subquery: Find items supplied by premium suppliers</span><br>
+                <span class="sql-keyword">SELECT</span> item_id, name, price<br>
+                <span class="sql-keyword">FROM</span> items<br>
+                <span class="sql-keyword">WHERE</span> supplier_id <span class="sql-keyword">IN</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> supplier_id<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> suppliers<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> rating = <span class="sql-string">'Premium'</span><br>
                 );
             </div>
-            
+
             <div class="tip-box">
-                <strong>Performance Tip:</strong> IN is great for small result sets. 
+                <strong>Performance Tip:</strong> IN is great for small result sets.
                 For large sets, consider EXISTS instead.
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>IN subquery patterns:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> Find recipes using ingredients from local suppliers</li>
+                    <li><strong>Movie rental:</strong> List movies rented by VIP members</li>
+                    <li><strong>Event planner:</strong> Show events at venues in premium locations</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 10: Activity 1 - JOIN Practice -->
+        <!-- Slide 10: JOINs Power Your Netlify API -->
+        <div class="slide">
+            <h1>JOINs Power Your Netlify API</h1>
+            <h2>Rich API Responses with Related Data</h2>
+
+            <div class="netlify-callout">
+                <h4>🚀 Why JOINs Matter for Your API</h4>
+                <p>Without JOINs, your API returns IDs. With JOINs, it returns meaningful data!</p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="comparison-card bad">
+                    <h3>❌ Without JOIN</h3>
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        {<br>
+                        &nbsp;&nbsp;"item_id": 101,<br>
+                        &nbsp;&nbsp;"name": "Laptop",<br>
+                        &nbsp;&nbsp;"category_id": 1<br>
+                        }
+                    </div>
+                    <p>Frontend has to make another API call to get category name!</p>
+                </div>
+                <div class="comparison-card good">
+                    <h3>✅ With JOIN</h3>
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        {<br>
+                        &nbsp;&nbsp;"item_id": 101,<br>
+                        &nbsp;&nbsp;"name": "Laptop",<br>
+                        &nbsp;&nbsp;"category_name": "Electronics"<br>
+                        }
+                    </div>
+                    <p>Everything the frontend needs in one request!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Implementing JOIN-Based Endpoints -->
+        <div class="slide">
+            <h1>Implementing JOIN-Based Endpoints</h1>
+            <h2>Netlify Function with JOINs</h2>
+
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-comment">// netlify/functions/items-with-categories.js</span><br>
+                <span class="sql-keyword">const</span> { Pool } = require(<span class="sql-string">'pg'</span>);<br>
+                <span class="sql-keyword">const</span> pool = <span class="sql-keyword">new</span> Pool({ connectionString: process.env.DATABASE_URL });<br><br>
+
+                exports.handler = <span class="sql-keyword">async</span> (event, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> query = <span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SELECT i.item_id, i.name, i.price, i.description,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.category_name, c.description as category_desc<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;FROM items i<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;LEFT JOIN categories c ON i.category_id = c.category_id<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ORDER BY i.name<br>
+                &nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statusCode: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify(result.rows)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return</span> { statusCode: <span class="sql-number">500</span>, body: JSON.stringify({ error: error.message }) };<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+        </div>
+
+        <!-- Slide 12: Nested vs Flat JSON -->
+        <div class="slide">
+            <h1>Nested vs Flat JSON Structures</h1>
+            <h2>Two Approaches for JOIN Results</h2>
+
+            <div class="comparison-table">
+                <div class="comparison-card">
+                    <h3>Flat Structure (Easier)</h3>
+                    <div class="sql-example" style="font-size: 0.75em;">
+                        {<br>
+                        &nbsp;&nbsp;"item_id": 101,<br>
+                        &nbsp;&nbsp;"name": "Laptop",<br>
+                        &nbsp;&nbsp;"price": 999.99,<br>
+                        &nbsp;&nbsp;"category_id": 1,<br>
+                        &nbsp;&nbsp;"category_name": "Electronics",<br>
+                        &nbsp;&nbsp;"category_desc": "Electronic devices"<br>
+                        }
+                    </div>
+                    <p><strong>Pros:</strong> Simple query, easy frontend</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Nested Structure (Cleaner)</h3>
+                    <div class="sql-example" style="font-size: 0.75em;">
+                        {<br>
+                        &nbsp;&nbsp;"item_id": 101,<br>
+                        &nbsp;&nbsp;"name": "Laptop",<br>
+                        &nbsp;&nbsp;"price": 999.99,<br>
+                        &nbsp;&nbsp;"category": {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"category_id": 1,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"name": "Electronics",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"description": "Electronic devices"<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    <p><strong>Pros:</strong> Better organization, clearer relationships</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Start with flat!</strong> It's simpler. Try nested for bonus points!
+            </div>
+        </div>
+
+        <!-- Slide 13: Frontend Display of JOIN Data -->
+        <div class="slide">
+            <h1>Frontend Display of JOIN Data</h1>
+
+            <div class="sql-example" style="font-size: 0.8em;">
+                <span class="sql-comment">// Fetch and display items with categories</span><br>
+                <span class="sql-keyword">async function</span> loadItems() {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> response = <span class="sql-keyword">await</span> fetch(<span class="sql-string">'/.netlify/functions/items-with-categories'</span>);<br>
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> items = <span class="sql-keyword">await</span> response.json();<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">const</span> container = document.getElementById(<span class="sql-string">'items-list'</span>);<br>
+                &nbsp;&nbsp;items.forEach(item => {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> card = <span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="item-card"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;${item.name}&lt;/h3&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="price"&gt;$${item.price}&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="category-badge"&gt;${item.category_name}&lt;/span&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;container.innerHTML += card;<br>
+                &nbsp;&nbsp;});<br>
+                }
+            </div>
+
+            <div class="project-example">
+                <strong>Result:</strong> Each item displays with its category name as a badge, not just "category_id: 1"
+            </div>
+        </div>
+
+        <!-- Slide 14: Styling Related Data -->
+        <div class="slide">
+            <h1>Styling Related Data</h1>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-comment">/* CSS for category badges */</span><br>
+                .category-badge {<br>
+                &nbsp;&nbsp;background-color: #4a90e2;<br>
+                &nbsp;&nbsp;color: white;<br>
+                &nbsp;&nbsp;padding: 4px 12px;<br>
+                &nbsp;&nbsp;border-radius: 12px;<br>
+                &nbsp;&nbsp;font-size: 0.85em;<br>
+                &nbsp;&nbsp;font-weight: 600;<br>
+                &nbsp;&nbsp;display: inline-block;<br>
+                &nbsp;&nbsp;margin-top: 8px;<br>
+                }<br><br>
+
+                .item-card {<br>
+                &nbsp;&nbsp;border: 1px solid #ddd;<br>
+                &nbsp;&nbsp;padding: 16px;<br>
+                &nbsp;&nbsp;margin: 12px 0;<br>
+                &nbsp;&nbsp;border-radius: 8px;<br>
+                &nbsp;&nbsp;box-shadow: 0 2px 4px rgba(0,0,0,0.1);<br>
+                }
+            </div>
+
+            <div class="demo-box">
+                <h3>Visual Example:</h3>
+                <div style="border: 1px solid #ddd; padding: 16px; margin: 12px 0; border-radius: 8px;">
+                    <h3 style="margin: 0 0 8px 0;">Laptop</h3>
+                    <p style="margin: 0 0 8px 0; font-weight: 600;">$999.99</p>
+                    <span style="background-color: #4a90e2; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85em;">Electronics</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Build Your First JOIN API -->
+        <div class="slide">
+            <h1>Exercise: Build Your First JOIN API</h1>
+            <h2>15-Minute Challenge</h2>
+
+            <div class="activity-box">
+                <h3>Your Task:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8;">
+                    <li>Create a new Netlify function that joins 2 of YOUR tables</li>
+                    <li>Use LEFT JOIN to include all records from the main table</li>
+                    <li>Return the data as flat JSON structure</li>
+                    <li>Test the endpoint in your browser</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <h3>Example endpoints you could create:</h3>
+                <ul>
+                    <li><strong>recipes-with-categories.js</strong> - Recipes showing category names</li>
+                    <li><strong>movies-with-studios.js</strong> - Movies showing studio names</li>
+                    <li><strong>events-with-venues.js</strong> - Events showing venue details</li>
+                    <li><strong>products-with-suppliers.js</strong> - Products showing supplier names</li>
+                </ul>
+            </div>
+
+            <button data-timer="15">Start 15-Minute Timer</button>
+        </div>
+
+        <!-- Slide 16: Activity 1 - JOIN Practice -->
         <div class="slide">
             <h1>Activity 1: JOIN Challenge <span class="emoji">💻</span></h1>
             <div class="activity-box">
                 <h3>15-Minute Exercise</h3>
-                <p>Using our property rental database, write queries to:</p>
+                <p>Using YOUR project database, write queries to:</p>
                 <ol>
-                    <li>List ALL staff members and the properties they manage (if any)</li>
-                    <li>Show ALL properties and their assigned staff (if any)</li>
-                    <li>Find branches that have NO properties in their city</li>
-                    <li>Identify staff members who manage NO properties</li>
+                    <li>Join 2 of your tables using INNER JOIN</li>
+                    <li>Join the same tables using LEFT JOIN - observe the difference</li>
+                    <li>Find records in one table that have NO matches in the related table</li>
+                    <li>Create a query that shows "orphaned" records (items without categories, etc.)</li>
                 </ol>
                 <p style="margin-top: 20px;"><strong>Hint:</strong> Think about which JOIN type preserves unmatched rows!</p>
             </div>
             <button data-timer="15">Start 15-Minute Timer</button>
         </div>
 
-        <!-- Slide 11: ANY and ALL Operators -->
+        <!-- Slide 17: ANY and ALL Operators -->
         <div class="slide">
             <h1>ANY and ALL Operators</h1>
             <p>Compare a value against a set of values from a subquery:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Find staff earning more than ANY staff at branch B003</span><br>
-                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> salary > <span class="sql-keyword">ANY</span> (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> salary<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span><br>
+                <span class="sql-comment">-- Find products priced higher than ANY product in "Electronics"</span><br>
+                <span class="sql-keyword">SELECT</span> product_id, name, price<br>
+                <span class="sql-keyword">FROM</span> products<br>
+                <span class="sql-keyword">WHERE</span> price > <span class="sql-keyword">ANY</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> price<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> products<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> category_id = (<span class="sql-keyword">SELECT</span> category_id <span class="sql-keyword">FROM</span> categories <span class="sql-keyword">WHERE</span> category_name = <span class="sql-string">'Electronics'</span>)<br>
                 );
             </div>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Find staff earning more than ALL staff at branch B003</span><br>
-                <span class="sql-keyword">SELECT</span> staffNo, fName, lName, salary<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> salary > <span class="sql-keyword">ALL</span> (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> salary<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span><br>
+                <span class="sql-comment">-- Find products priced higher than ALL products in "Electronics"</span><br>
+                <span class="sql-keyword">SELECT</span> product_id, name, price<br>
+                <span class="sql-keyword">FROM</span> products<br>
+                <span class="sql-keyword">WHERE</span> price > <span class="sql-keyword">ALL</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> price<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> products<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> category_id = (<span class="sql-keyword">SELECT</span> category_id <span class="sql-keyword">FROM</span> categories <span class="sql-keyword">WHERE</span> category_name = <span class="sql-string">'Electronics'</span>)<br>
                 );
             </div>
-            
+
             <div class="concept-box">
                 <strong>Remember:</strong>
                 <ul>
@@ -378,66 +681,87 @@
             </div>
         </div>
 
-        <!-- Slide 12: EXISTS and NOT EXISTS -->
+        <!-- Slide 18: EXISTS and NOT EXISTS -->
         <div class="slide">
             <h1>EXISTS and NOT EXISTS</h1>
             <p>Check for the existence of rows - returns TRUE/FALSE only:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Find staff who manage at least one property</span><br>
-                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName<br>
-                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-comment">-- Find categories that have at least one item</span><br>
+                <span class="sql-keyword">SELECT</span> c.category_id, c.category_name<br>
+                <span class="sql-keyword">FROM</span> categories c<br>
                 <span class="sql-keyword">WHERE</span> <span class="sql-keyword">EXISTS</span> (<br>
                 &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p.staffNo = s.staffNo<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> items i<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> i.category_id = c.category_id<br>
                 );
             </div>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Find staff who manage NO properties</span><br>
-                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName<br>
-                <span class="sql-keyword">FROM</span> Staff s<br>
+                <span class="sql-comment">-- Find categories with NO items (empty categories)</span><br>
+                <span class="sql-keyword">SELECT</span> c.category_id, c.category_name<br>
+                <span class="sql-keyword">FROM</span> categories c<br>
                 <span class="sql-keyword">WHERE</span> <span class="sql-keyword">NOT EXISTS</span> (<br>
                 &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p.staffNo = s.staffNo<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> items i<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> i.category_id = c.category_id<br>
                 );
             </div>
-            
+
             <div class="tip-box">
-                <strong>Performance:</strong> EXISTS often faster than IN for large datasets - 
+                <strong>Performance:</strong> EXISTS often faster than IN for large datasets -
                 it stops searching once it finds the first match!
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>EXISTS use cases:</strong></p>
+                <ul>
+                    <li><strong>Data quality:</strong> Find empty categories, unused venues, inactive suppliers</li>
+                    <li><strong>Recipe database:</strong> Show categories with NO recipes (need content!)</li>
+                    <li><strong>Movie rental:</strong> Find members who HAVE rented vs. never rented</li>
+                    <li><strong>Inventory:</strong> Identify suppliers with NO current products</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 13: Correlated Subqueries -->
+        <!-- Slide 19: Correlated Subqueries -->
         <div class="slide">
             <h1>Correlated Subqueries</h1>
             <p>Subqueries that reference the outer query - executed for each row:</p>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Find properties with rent higher than average for their city</span><br>
-                <span class="sql-keyword">SELECT</span> p1.propertyNo, p1.city, p1.rent<br>
-                <span class="sql-keyword">FROM</span> PropertyForRent p1<br>
-                <span class="sql-keyword">WHERE</span> p1.rent > (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(p2.rent)<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> PropertyForRent p2<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p2.city = p1.city  <span class="sql-comment">-- References outer query!</span><br>
+                <span class="sql-comment">-- Find products priced higher than average for their category</span><br>
+                <span class="sql-keyword">SELECT</span> p1.product_id, p1.name, p1.price, p1.category_id<br>
+                <span class="sql-keyword">FROM</span> products p1<br>
+                <span class="sql-keyword">WHERE</span> p1.price > (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(p2.price)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> products p2<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> p2.category_id = p1.category_id  <span class="sql-comment">-- References outer query!</span><br>
                 );
             </div>
-            
+
             <div class="warning-box">
-                <strong>⚠️ Performance Warning:</strong> Correlated subqueries run once per row 
+                <strong>⚠️ Performance Warning:</strong> Correlated subqueries run once per row
                 in the outer query. Can be slow on large tables!
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Correlated subquery patterns:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> Recipes with prep time > average for their difficulty level</li>
+                    <li><strong>Movie rental:</strong> Movies with rental count > average for their genre</li>
+                    <li><strong>E-commerce:</strong> Products with sales > average for their supplier</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 14: Set Operations Overview -->
+        <!-- Slide 20: Set Operations Overview -->
         <div class="slide">
             <h1>Set Operations</h1>
             <p>Combine results from multiple queries:</p>
-            
+
             <div class="concept-box">
                 <h3>SQL Set Operations:</h3>
                 <ul>
@@ -447,56 +771,77 @@
                     <li><strong>EXCEPT/MINUS:</strong> Rows in first but not second query</li>
                 </ul>
             </div>
-            
+
             <div class="sql-example">
-                <span class="sql-comment">-- Cities with both branches and properties</span><br>
-                <span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> Branch<br>
+                <span class="sql-comment">-- Find tags used in both products AND categories</span><br>
+                <span class="sql-keyword">SELECT</span> tag_name <span class="sql-keyword">FROM</span> product_tags<br>
                 <span class="sql-keyword">INTERSECT</span><br>
-                <span class="sql-keyword">SELECT</span> city <span class="sql-keyword">FROM</span> PropertyForRent;
+                <span class="sql-keyword">SELECT</span> tag_name <span class="sql-keyword">FROM</span> category_tags;
             </div>
-            
+
             <div class="tip-box">
-                <strong>Requirement:</strong> Queries must be union-compatible 
+                <strong>Requirement:</strong> Queries must be union-compatible
                 (same number of columns, compatible data types)
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Set operation examples:</strong></p>
+                <ul>
+                    <li><strong>UNION:</strong> Combine active + archived items into one list</li>
+                    <li><strong>INTERSECT:</strong> Find ingredients used in both breakfast AND lunch recipes</li>
+                    <li><strong>EXCEPT:</strong> Show members who registered but never made a rental</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 15: Complex Query Example -->
+        <!-- Slide 21: Complex Query Example -->
         <div class="slide">
             <h1>Putting It All Together</h1>
             <p>A complex real-world query combining multiple concepts:</p>
-            
-            <div class="sql-example">
-                <span class="sql-comment">-- Find top-performing staff: manage > 2 properties AND earn above branch average</span><br>
-                <span class="sql-keyword">SELECT</span> s.staffNo, s.fName, s.lName, s.salary,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(p.propertyNo) <span class="sql-keyword">AS</span> properties_managed<br>
-                <span class="sql-keyword">FROM</span> Staff s<br>
-                <span class="sql-keyword">LEFT JOIN</span> PropertyForRent p <span class="sql-keyword">ON</span> s.staffNo = p.staffNo<br>
-                <span class="sql-keyword">WHERE</span> s.salary > (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(s2.salary)<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Staff s2<br>
-                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> s2.branchNo = s.branchNo<br>
+
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-comment">-- Find top-performing categories: >3 items AND avg price above overall average</span><br>
+                <span class="sql-keyword">SELECT</span> c.category_id, c.category_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(i.item_id) <span class="sql-keyword">AS</span> item_count,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(i.price) <span class="sql-keyword">AS</span> avg_price<br>
+                <span class="sql-keyword">FROM</span> categories c<br>
+                <span class="sql-keyword">LEFT JOIN</span> items i <span class="sql-keyword">ON</span> c.category_id = i.category_id<br>
+                <span class="sql-keyword">WHERE</span> <span class="sql-keyword">EXISTS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-number">1</span> <span class="sql-keyword">FROM</span> items i2<br>
+                &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> i2.category_id = c.category_id<br>
                 )<br>
-                <span class="sql-keyword">GROUP BY</span> s.staffNo, s.fName, s.lName, s.salary<br>
-                <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(p.propertyNo) > <span class="sql-number">2</span><br>
-                <span class="sql-keyword">ORDER BY</span> properties_managed <span class="sql-keyword">DESC</span>, s.salary <span class="sql-keyword">DESC</span>;
+                <span class="sql-keyword">GROUP BY</span> c.category_id, c.category_name<br>
+                <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(i.item_id) > <span class="sql-number">3</span><br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> <span class="sql-function">AVG</span>(i.price) > (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(price) <span class="sql-keyword">FROM</span> items)<br>
+                <span class="sql-keyword">ORDER BY</span> item_count <span class="sql-keyword">DESC</span>, avg_price <span class="sql-keyword">DESC</span>;
+            </div>
+
+            <div class="demo-box">
+                <h3>Query Breakdown:</h3>
+                <ul>
+                    <li>✅ LEFT JOIN to preserve all categories</li>
+                    <li>✅ EXISTS to filter only categories with items</li>
+                    <li>✅ Subquery to compare against overall average</li>
+                    <li>✅ GROUP BY with HAVING for aggregate filtering</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 16: Activity 2 - Subquery Challenge -->
+        <!-- Slide 22: Activity 2 - Subquery Challenge -->
         <div class="slide">
             <h1>Activity 2: Subquery Master <span class="emoji">🧩</span></h1>
             <div class="activity-box">
                 <h3>20-Minute Challenge</h3>
-                <p>Write queries using subqueries to find:</p>
+                <p>Write queries for YOUR project using subqueries to find:</p>
                 <ol>
-                    <li>Properties with rent higher than the overall average</li>
-                    <li>Staff who earn more than ALL managers</li>
-                    <li>Branches where EVERY staff member earns > $15,000</li>
-                    <li>Cities that have properties but NO branches</li>
-                    <li>The branch with the highest total staff salaries</li>
+                    <li>Items/products priced higher than the overall average</li>
+                    <li>Records in one table that exceed ALL values in a specific category</li>
+                    <li>Categories/groups where EVERY item meets a condition (e.g., price > $50)</li>
+                    <li>Find orphaned records (items without categories, events without venues, etc.)</li>
+                    <li>The category/supplier/studio with the highest aggregate value</li>
                 </ol>
-                <p style="margin-top: 20px;"><strong>Bonus:</strong> Rewrite query #4 using both EXISTS and IN approaches!</p>
+                <p style="margin-top: 20px;"><strong>Bonus:</strong> Rewrite query #4 using both EXISTS and NOT IN approaches!</p>
             </div>
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
@@ -556,52 +901,62 @@
             </div>
         </div>
 
-        <!-- Slide 19: Real-World Application -->
+        <!-- Slide 25: Real-World Application -->
         <div class="slide">
             <h1>Real-World Scenario</h1>
             <p>Let's solve a business problem using advanced SQL:</p>
-            
+
             <div class="demo-box">
                 <h3>Business Requirement:</h3>
-                <p>"Find underperforming branches: those with below-average property count 
-                   and total staff salary below $50,000"</p>
+                <p>"Find underperforming categories: those with below-average item count
+                   and average price below $25"</p>
             </div>
-            
-            <div class="sql-example">
-                <span class="sql-keyword">WITH</span> BranchStats <span class="sql-keyword">AS</span> (<br>
-                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> b.branchNo,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(<span class="sql-keyword">DISTINCT</span> p.propertyNo) <span class="sql-keyword">AS</span> prop_count,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(s.salary) <span class="sql-keyword">AS</span> total_salary<br>
-                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> Branch b<br>
-                &nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> PropertyForRent p <span class="sql-keyword">ON</span> b.city = p.city<br>
-                &nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> Staff s <span class="sql-keyword">ON</span> b.branchNo = s.branchNo<br>
-                &nbsp;&nbsp;<span class="sql-keyword">GROUP BY</span> b.branchNo<br>
+
+            <div class="sql-example" style="font-size: 0.8em;">
+                <span class="sql-keyword">WITH</span> CategoryStats <span class="sql-keyword">AS</span> (<br>
+                &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> c.category_id, c.category_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(i.item_id) <span class="sql-keyword">AS</span> item_count,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(i.price) <span class="sql-keyword">AS</span> avg_price<br>
+                &nbsp;&nbsp;<span class="sql-keyword">FROM</span> categories c<br>
+                &nbsp;&nbsp;<span class="sql-keyword">LEFT JOIN</span> items i <span class="sql-keyword">ON</span> c.category_id = i.category_id<br>
+                &nbsp;&nbsp;<span class="sql-keyword">GROUP BY</span> c.category_id, c.category_name<br>
                 )<br>
-                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> BranchStats<br>
-                <span class="sql-keyword">WHERE</span> prop_count < (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(prop_count) <span class="sql-keyword">FROM</span> BranchStats)<br>
-                &nbsp;&nbsp;<span class="sql-keyword">AND</span> total_salary < <span class="sql-number">50000</span>;
+                <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> CategoryStats<br>
+                <span class="sql-keyword">WHERE</span> item_count < (<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(item_count) <span class="sql-keyword">FROM</span> CategoryStats)<br>
+                &nbsp;&nbsp;<span class="sql-keyword">AND</span> (avg_price < <span class="sql-number">25</span> <span class="sql-keyword">OR</span> avg_price <span class="sql-keyword">IS NULL</span>);
+            </div>
+
+            <div class="bridge-box">
+                <h4>🌉 Bridge to Your Project</h4>
+                <p><strong>Adapt for YOUR data:</strong></p>
+                <ul>
+                    <li><strong>Recipe database:</strong> Categories with few recipes AND low avg rating</li>
+                    <li><strong>Movie rental:</strong> Studios with few movies AND low rental frequency</li>
+                    <li><strong>Event planner:</strong> Venues with few bookings AND low revenue</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 20: Activity 3 - Integration -->
+        <!-- Slide 26: Activity 3 - Integration Challenge -->
         <div class="slide">
             <h1>Activity 3: Integration Challenge <span class="emoji">🚀</span></h1>
             <div class="activity-box">
                 <h3>25-Minute Complex Query Exercise</h3>
-                <p><strong>Scenario:</strong> Management needs a comprehensive report!</p>
+                <p><strong>Scenario:</strong> Create a comprehensive analytics report for YOUR project!</p>
                 <p>Create a query that shows:</p>
                 <ul>
-                    <li>All branches with their city</li>
-                    <li>Count of properties in each city</li>
-                    <li>Average property rent for the city</li>
-                    <li>Number of staff at each branch</li>
-                    <li>Whether the branch is "High Performing" (>3 properties AND >2 staff)</li>
+                    <li>All categories/groups with their details</li>
+                    <li>Count of related items in each category</li>
+                    <li>Average price/value/rating for each category</li>
+                    <li>Classification based on performance metrics</li>
+                    <li>Comparison to overall averages</li>
                 </ul>
                 <p style="margin-top: 20px;"><strong>Requirements:</strong></p>
                 <ul>
                     <li>Use at least one OUTER JOIN</li>
-                    <li>Include a correlated subquery</li>
-                    <li>Use CASE statement for performance classification</li>
+                    <li>Include a subquery (correlated or scalar)</li>
+                    <li>Use CASE statement for classification (e.g., "High", "Medium", "Low")</li>
+                    <li>Include GROUP BY with HAVING</li>
                 </ul>
             </div>
             <button data-timer="25">Start 25-Minute Timer</button>
@@ -630,186 +985,185 @@
             </div>
         </div>
 
-        <!-- Slide 22: Exercise 1 -->
+        <!-- Slide 28: Exercise 1 -->
         <div class="slide">
             <h1>Exercise 1: Three-Table JOIN</h1>
             <h2>Individual Exercise (20 minutes)</h2>
 
             <div class="activity-box">
                 <h3>Your Task:</h3>
-                <p style="font-size: 1.1em;">Write an SQL query that requires a <strong>THREE-TABLE INNER JOIN</strong> and uses table aliases for readability.</p>
+                <p style="font-size: 1.1em;">Write an SQL query for YOUR project that requires a <strong>THREE-TABLE INNER JOIN</strong> and uses table aliases for readability.</p>
             </div>
 
             <div class="demo-box">
-                <h3>Query Goal:</h3>
-                <p style="font-size: 1.15em;">"Find the instructors who teach courses taken by student 'S10001', along with the course names and grades."</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Schema:</h3>
-                <div style="font-family: monospace; font-size: 0.95em;">
-                    <strong>Student</strong>(studentID, firstName, lastName, email, major, GPA)<br>
-                    <strong>Course</strong>(courseID, courseName, department, credits, instructorName)<br>
-                    <strong>Enrollment</strong>(studentID, courseID, semester, grade, enrollDate)
-                </div>
+                <h3>Query Goal Examples:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>Recipe DB:</strong> Find ingredients used in dessert recipes, showing ingredient names and quantities</li>
+                    <li><strong>Movie Rental:</strong> Show rentals for a specific member, including movie titles and rental dates</li>
+                    <li><strong>E-commerce:</strong> List order items with product names and supplier information</li>
+                    <li><strong>Event Planner:</strong> Show events with venue details and organizer names</li>
+                </ul>
             </div>
 
             <div class="tip-box">
                 <h3>Requirements:</h3>
                 <ul style="font-size: 1.05em;">
-                    <li>Join all three tables: Student, Course, and Enrollment</li>
-                    <li>Use table aliases (e.g., s, c, e) for readability</li>
-                    <li>Select: studentID, student name, course name, instructor name, grade</li>
-                    <li>Filter for student 'S10001'</li>
+                    <li>Join at least THREE of your tables using INNER JOIN</li>
+                    <li>Use table aliases (e.g., r, c, i) for readability</li>
+                    <li>Select meaningful columns from all three tables</li>
+                    <li>Include a WHERE filter to limit results</li>
                 </ul>
             </div>
 
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
 
-        <!-- Slide 23: Understanding Exercise 1 -->
+        <!-- Slide 29: Understanding Exercise 1 -->
         <div class="slide">
             <h1>Understanding: Three-Table JOINs</h1>
 
             <div class="tip-box">
-                <h3>Solution:</h3>
+                <h3>Example Solution (Recipe Database):</h3>
             </div>
 
             <div class="sql-example" style="font-size: 0.85em;">
-                <span class="sql-keyword">SELECT</span> <br>
-                &nbsp;&nbsp;&nbsp;&nbsp;s.studentID,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;s.firstName,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;s.lastName,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;c.courseName,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;c.instructorName,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;e.grade<br>
-                <span class="sql-keyword">FROM</span> Student s<br>
-                <span class="sql-keyword">INNER JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.studentID = e.studentID<br>
-                <span class="sql-keyword">INNER JOIN</span> Course c <span class="sql-keyword">ON</span> e.courseID = c.courseID<br>
-                <span class="sql-keyword">WHERE</span> s.studentID = <span class="sql-string">'S10001'</span>;
+                <span class="sql-comment">-- Find all ingredients in dessert recipes</span><br>
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;r.recipe_id,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;r.recipe_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;i.ingredient_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ri.quantity,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ri.unit<br>
+                <span class="sql-keyword">FROM</span> recipes r<br>
+                <span class="sql-keyword">INNER JOIN</span> recipe_ingredients ri <span class="sql-keyword">ON</span> r.recipe_id = ri.recipe_id<br>
+                <span class="sql-keyword">INNER JOIN</span> ingredients i <span class="sql-keyword">ON</span> ri.ingredient_id = i.ingredient_id<br>
+                <span class="sql-keyword">WHERE</span> r.category_id = (<span class="sql-keyword">SELECT</span> category_id <span class="sql-keyword">FROM</span> categories <span class="sql-keyword">WHERE</span> category_name = <span class="sql-string">'Desserts'</span>);
             </div>
 
             <div class="demo-box">
                 <h3>Key Insights:</h3>
                 <ul style="font-size: 1.05em; line-height: 1.7;">
-                    <li><strong>JOIN Order:</strong> Start with Student, join Enrollment (linking table), then Course</li>
-                    <li><strong>Table Aliases:</strong> s, e, c make the query much more readable</li>
-                    <li><strong>ON Conditions:</strong> Connect tables via foreign keys (studentID and courseID)</li>
+                    <li><strong>JOIN Order:</strong> Start with main table, join linking/junction table, then related table</li>
+                    <li><strong>Table Aliases:</strong> r, ri, i make the query much more readable</li>
+                    <li><strong>ON Conditions:</strong> Connect tables via foreign keys</li>
                     <li><strong>INNER JOIN:</strong> Only returns rows where matches exist in all three tables</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 24: Understanding Exercise 1 (continued) -->
+        <!-- Slide 30: Understanding Exercise 1 (continued) -->
         <div class="slide">
             <h1>Understanding: JOIN Execution Flow</h1>
 
             <div class="concept-box">
                 <h3>How the Database Processes This Query:</h3>
                 <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Step 1:</strong> Filter Student table WHERE studentID = 'S10001'</li>
-                    <li><strong>Step 2:</strong> JOIN with Enrollment using matching studentID values</li>
-                    <li><strong>Step 3:</strong> JOIN result with Course using matching courseID values</li>
+                    <li><strong>Step 1:</strong> Filter main table based on WHERE condition</li>
+                    <li><strong>Step 2:</strong> JOIN with linking/junction table using foreign key</li>
+                    <li><strong>Step 3:</strong> JOIN result with related table using second foreign key</li>
                     <li><strong>Step 4:</strong> Project (SELECT) the requested columns</li>
                 </ol>
             </div>
 
             <div class="sql-example" style="font-size: 0.85em;">
-                <h3>Sample Result Set:</h3>
+                <h3>Sample Result Set (Recipe Example):</h3>
                 <table class="table-result">
                     <tr>
-                        <th>studentID</th>
-                        <th>firstName</th>
-                        <th>lastName</th>
-                        <th>courseName</th>
-                        <th>instructorName</th>
-                        <th>grade</th>
+                        <th>recipe_id</th>
+                        <th>recipe_name</th>
+                        <th>ingredient_name</th>
+                        <th>quantity</th>
+                        <th>unit</th>
                     </tr>
                     <tr>
-                        <td>S10001</td>
-                        <td>John</td>
-                        <td>Smith</td>
-                        <td>Database Design</td>
-                        <td>Dr. Reed</td>
-                        <td>A</td>
+                        <td>101</td>
+                        <td>Chocolate Cake</td>
+                        <td>Flour</td>
+                        <td>2</td>
+                        <td>cups</td>
                     </tr>
                     <tr>
-                        <td>S10001</td>
-                        <td>John</td>
-                        <td>Smith</td>
-                        <td>Data Structures</td>
-                        <td>Dr. Johnson</td>
-                        <td>B+</td>
+                        <td>101</td>
+                        <td>Chocolate Cake</td>
+                        <td>Sugar</td>
+                        <td>1.5</td>
+                        <td>cups</td>
                     </tr>
                     <tr>
-                        <td>S10001</td>
-                        <td>John</td>
-                        <td>Smith</td>
-                        <td>Algorithms</td>
-                        <td>Dr. Martinez</td>
-                        <td>A-</td>
+                        <td>101</td>
+                        <td>Chocolate Cake</td>
+                        <td>Cocoa Powder</td>
+                        <td>0.75</td>
+                        <td>cups</td>
                     </tr>
                 </table>
             </div>
 
             <div class="tip-box">
-                <strong>Pro Tip:</strong> Using aliases (s, e, c) is considered best practice for multi-table queries!
+                <strong>Pro Tip:</strong> Using aliases (r, ri, i) is considered best practice for multi-table queries!
             </div>
         </div>
 
-        <!-- Slide 25: Exercise 2 -->
+        <!-- Slide 31: Exercise 2 -->
         <div class="slide">
             <h1>Exercise 2: Aggregation & Grouping</h1>
             <h2>Individual Exercise (20 minutes)</h2>
 
             <div class="activity-box">
                 <h3>Your Task:</h3>
-                <p style="font-size: 1.1em;">Write SQL queries using <strong>COUNT and AVG</strong> with GROUP BY and a HAVING clause to answer two analytical questions about department data.</p>
+                <p style="font-size: 1.1em;">Write SQL queries for YOUR project using <strong>aggregate functions</strong> with GROUP BY and HAVING clauses to analyze your data.</p>
             </div>
 
             <div class="demo-box">
-                <h3>Question 1:</h3>
-                <p>"Find each department's total number of courses and average credits per course. Only include departments offering more than 2 courses."</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Question 2:</h3>
-                <p>"Find each department's average course credits. Only include departments where the average credits is greater than or equal to 3.0."</p>
+                <h3>Query Examples (adapt to YOUR schema):</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>Recipe DB:</strong> Count recipes per category, show only categories with >5 recipes</li>
+                    <li><strong>Movie Rental:</strong> Average rental price per studio, include only studios with avg > $3</li>
+                    <li><strong>E-commerce:</strong> Total sales per supplier, show only suppliers with sales > $1000</li>
+                    <li><strong>Events:</strong> Event count per venue, include only venues hosting >3 events</li>
+                </ul>
             </div>
 
             <div class="tip-box">
-                <h3>Schema Reminder:</h3>
-                <p style="font-family: monospace;">Course(courseID, courseName, department, credits, instructorName)</p>
+                <h3>Requirements:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Write at least 2 queries with different aggregate functions</li>
+                    <li>Use GROUP BY to organize results</li>
+                    <li>Use HAVING to filter aggregated results</li>
+                    <li>Include meaningful column aliases</li>
+                </ul>
             </div>
 
             <button data-timer="20">Start 20-Minute Timer</button>
         </div>
 
-        <!-- Slide 26: Understanding Exercise 2 -->
+        <!-- Slide 32: Understanding Exercise 2 -->
         <div class="slide">
             <h1>Understanding: Aggregation Solutions</h1>
 
             <div class="tip-box">
-                <h3>Solutions:</h3>
+                <h3>Example Solutions:</h3>
             </div>
 
             <div class="sql-example" style="font-size: 0.9em;">
-                <span class="sql-comment">-- Question 1: Count and avg with HAVING for course count</span><br>
-                <span class="sql-keyword">SELECT</span> <br>
-                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_courses,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(credits) <span class="sql-keyword">AS</span> avg_credits<br>
-                <span class="sql-keyword">FROM</span> Course<br>
-                <span class="sql-keyword">GROUP BY</span> department<br>
-                <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(*) > 2;<br><br>
+                <span class="sql-comment">-- Recipe DB: Categories with many recipes</span><br>
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;category_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> recipe_count,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(prep_time_minutes) <span class="sql-keyword">AS</span> avg_prep_time<br>
+                <span class="sql-keyword">FROM</span> recipes r<br>
+                <span class="sql-keyword">JOIN</span> categories c <span class="sql-keyword">ON</span> r.category_id = c.category_id<br>
+                <span class="sql-keyword">GROUP BY</span> category_name<br>
+                <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(*) > <span class="sql-number">5</span>;<br><br>
 
-                <span class="sql-comment">-- Question 2: Avg with HAVING for credit threshold</span><br>
-                <span class="sql-keyword">SELECT</span> <br>
-                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(credits) <span class="sql-keyword">AS</span> avg_credits<br>
-                <span class="sql-keyword">FROM</span> Course<br>
-                <span class="sql-keyword">GROUP BY</span> department<br>
-                <span class="sql-keyword">HAVING</span> <span class="sql-function">AVG</span>(credits) >= 3.0;
+                <span class="sql-comment">-- E-commerce: High-value suppliers</span><br>
+                <span class="sql-keyword">SELECT</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;s.supplier_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">SUM</span>(p.price * p.quantity) <span class="sql-keyword">AS</span> total_value<br>
+                <span class="sql-keyword">FROM</span> suppliers s<br>
+                <span class="sql-keyword">JOIN</span> products p <span class="sql-keyword">ON</span> s.supplier_id = p.supplier_id<br>
+                <span class="sql-keyword">GROUP BY</span> s.supplier_name<br>
+                <span class="sql-keyword">HAVING</span> <span class="sql-function">SUM</span>(p.price * p.quantity) > <span class="sql-number">1000</span>;
             </div>
         </div>
 
@@ -848,27 +1202,27 @@
             </div>
 
             <div class="sql-example" style="font-size: 0.85em;">
-                <h3>Sample Result (Question 1):</h3>
+                <h3>Sample Result (Recipe Example):</h3>
                 <table class="table-result">
                     <tr>
-                        <th>department</th>
-                        <th>total_courses</th>
-                        <th>avg_credits</th>
+                        <th>category_name</th>
+                        <th>recipe_count</th>
+                        <th>avg_prep_time</th>
                     </tr>
                     <tr>
-                        <td>Computer Science</td>
-                        <td>5</td>
-                        <td>3.4</td>
+                        <td>Desserts</td>
+                        <td>12</td>
+                        <td>45.5</td>
                     </tr>
                     <tr>
-                        <td>Mathematics</td>
-                        <td>4</td>
-                        <td>3.25</td>
+                        <td>Main Dishes</td>
+                        <td>18</td>
+                        <td>62.3</td>
                     </tr>
                     <tr>
-                        <td>Engineering</td>
-                        <td>3</td>
-                        <td>3.67</td>
+                        <td>Appetizers</td>
+                        <td>8</td>
+                        <td>25.7</td>
                     </tr>
                 </table>
             </div>
@@ -880,227 +1234,164 @@
 
         <!-- HOMEWORK SECTION -->
 
-        <!-- Slide 28: Homework Overview -->
+        <!-- Slide 34: Homework Overview -->
         <div class="slide">
             <h1>Homework Assignment <span class="emoji">📝</span></h1>
-            <h2>Week 8: OUTER JOINs & ROLLUP</h2>
+            <h2>Week 8: Advanced SQL for YOUR Project</h2>
 
             <div class="demo-box">
                 <h3>Assignment Overview</h3>
-                <p style="font-size: 1.15em;">This week's homework extends today's exercises by exploring OUTER JOIN syntax and advanced aggregation with ROLLUP/CUBE clauses for hierarchical reporting.</p>
+                <p style="font-size: 1.15em;">Apply advanced SQL techniques to YOUR project: write complex queries, build JOIN-based APIs, and display enriched data in your frontend.</p>
             </div>
 
             <div class="tip-box">
                 <h3>Due Date: <strong>Before Class Next Week</strong></h3>
-                <p>Submit via Commit URL turned into D2L</p>
+                <p>Submit via Commit URL to D2L</p>
             </div>
 
             <div class="activity-box">
                 <h3>Components:</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>Homework Extension 1:</strong> INNER to OUTER JOIN Conversion (50 points)</li>
-                    <li><strong>Homework Extension 2:</strong> ROLLUP/CUBE Report (50 points)</li>
+                    <li><strong>Part 1:</strong> Advanced SQL Queries (40 points)</li>
+                    <li><strong>Part 2:</strong> JOIN-Based API Endpoints (40 points)</li>
+                    <li><strong>Part 3:</strong> Frontend Display (20 points)</li>
+                    <li><strong>Bonus:</strong> Nested JSON Structure (+10 points)</li>
                 </ol>
-                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total: 100 points</strong></p>
+                <p style="margin-top: 15px; font-size: 1.1em;"><strong>Total: 100 points (+10 bonus)</strong></p>
             </div>
         </div>
 
-        <!-- Slide 29: Homework Extension 1 -->
+        <!-- Slide 35: Part 1 - Advanced SQL Queries -->
         <div class="slide">
-            <h1>Homework Extension 1: OUTER JOIN Conversion</h1>
-            <h2>Building on Exercise 1</h2>
+            <h1>Part 1: Advanced SQL Queries</h1>
+            <h2>40 Points</h2>
 
             <div class="activity-box">
                 <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Rewrite the three-table JOIN query from Exercise 1 using a combination of <strong>LEFT or RIGHT OUTER JOIN</strong> syntax instead of INNER JOIN.</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>Original Query (INNER JOIN):</h3>
-                <div class="sql-example" style="font-size: 0.8em;">
-                    <span class="sql-keyword">SELECT</span> s.studentID, s.firstName, s.lastName,<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.courseName, c.instructorName, e.grade<br>
-                    <span class="sql-keyword">FROM</span> Student s<br>
-                    <span class="sql-keyword">INNER JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.studentID = e.studentID<br>
-                    <span class="sql-keyword">INNER JOIN</span> Course c <span class="sql-keyword">ON</span> e.courseID = c.courseID<br>
-                    <span class="sql-keyword">WHERE</span> s.studentID = <span class="sql-string">'S10001'</span>;
-                </div>
+                <p style="font-size: 1.15em;">Write at least <strong>5 advanced queries</strong> for YOUR project database.</p>
             </div>
 
             <div class="demo-box">
                 <h3>Requirements:</h3>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li><strong>Rewrite using LEFT/RIGHT JOIN:</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>Replace at least one INNER JOIN with LEFT or RIGHT JOIN</li>
-                            <li>Ensure the query still returns the same results for student 'S10001'</li>
-                        </ul>
-                    </li>
-                    <li><strong>Write explanation (150-200 words):</strong>
-                        <ul style="margin-top: 8px;">
-                            <li>How does the result set differ with OUTER JOIN?</li>
-                            <li>In what scenario (with incomplete data) would OUTER JOIN show different results?</li>
-                            <li>Provide a specific example of when you'd want to see NULL values</li>
-                        </ul>
-                    </li>
-                </ol>
-            </div>
-        </div>
-
-        <!-- Slide 30: OUTER JOIN Guidance -->
-        <div class="slide">
-            <h1>Understanding OUTER JOINs</h1>
-
-            <div class="concept-box">
-                <h3>Hint for Homework Extension 1:</h3>
-                <p style="font-size: 1.05em;">Consider what happens if a student is enrolled (in Student table) but has NO enrollment records yet. An INNER JOIN would exclude them, but a LEFT JOIN would include them with NULL values for course data.</p>
-            </div>
-
-            <div class="sql-example" style="font-size: 0.85em;">
-                <h3>Example Conversion:</h3>
-                <span class="sql-keyword">SELECT</span> s.studentID, s.firstName, s.lastName,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.courseName, c.instructorName, e.grade<br>
-                <span class="sql-keyword">FROM</span> Student s<br>
-                <span class="sql-keyword">LEFT JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.studentID = e.studentID<br>
-                <span class="sql-keyword">LEFT JOIN</span> Course c <span class="sql-keyword">ON</span> e.courseID = c.courseID<br>
-                <span class="sql-keyword">WHERE</span> s.studentID = <span class="sql-string">'S10001'</span>;
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>At least 2 INNER JOINs</strong> showing related data with meaningful names (not IDs)</li>
+                    <li><strong>At least 1 LEFT or RIGHT JOIN</strong> to show all records from one table, even unmatched</li>
+                    <li><strong>At least 1 subquery</strong> (scalar, IN, EXISTS, or correlated)</li>
+                    <li><strong>At least 1 query using EXISTS or IN</strong> for filtering</li>
+                    <li><strong>All queries must be relevant to YOUR project</strong></li>
+                </ul>
             </div>
 
             <div class="tip-box">
-                <h3>Difference in Results:</h3>
-                <p>If student 'S10001' exists but has zero enrollments:</p>
+                <h3>Example Queries:</h3>
                 <ul style="font-size: 1.05em;">
-                    <li><strong>INNER JOIN:</strong> Returns 0 rows</li>
-                    <li><strong>LEFT JOIN:</strong> Returns 1 row with NULLs for courseName, instructorName, grade</li>
+                    <li>Show all recipes with ingredient names (not IDs) for "Desserts" category</li>
+                    <li>List ALL categories including those with no recipes (LEFT JOIN)</li>
+                    <li>Find products priced higher than average for their category (correlated subquery)</li>
+                    <li>Show members who have made at least one rental (EXISTS)</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 31: Homework Extension 2 -->
+        <!-- Slide 36: Part 2 - JOIN-Based API Endpoints -->
         <div class="slide">
-            <h1>Homework Extension 2: ROLLUP Report</h1>
-            <h2>Building on Exercise 2</h2>
+            <h1>Part 2: JOIN-Based API Endpoints</h1>
+            <h2>40 Points</h2>
 
             <div class="activity-box">
                 <h3>Task:</h3>
-                <p style="font-size: 1.15em;">Write a single SQL query that uses the <strong>ROLLUP clause</strong> to generate a report that includes department-level aggregations PLUS the overall total.</p>
+                <p style="font-size: 1.15em;">Create <strong>3 Netlify function endpoints</strong> that use JOINs to return enriched data.</p>
             </div>
 
             <div class="demo-box">
-                <h3>Report Requirements:</h3>
-                <p>Your query should produce a result set showing:</p>
-                <ol style="font-size: 1.05em; line-height: 1.8;">
-                    <li>Each department's total course count and average credits</li>
-                    <li>A grand total row showing overall course count and average credits across ALL departments</li>
-                </ol>
-            </div>
-
-            <div class="warning-box">
-                <h3>⚠️ Database Note:</h3>
-                <p>ROLLUP syntax varies by database:</p>
-                <ul style="font-size: 0.95em;">
-                    <li><strong>MySQL/PostgreSQL:</strong> GROUP BY department WITH ROLLUP</li>
-                    <li><strong>SQL Server:</strong> GROUP BY ROLLUP(department)</li>
-                    <li><strong>Oracle:</strong> GROUP BY ROLLUP(department)</li>
+                <h3>Requirements:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Each endpoint must JOIN at least 2 tables</strong></li>
+                    <li><strong>Return enriched data</strong> (names instead of IDs)</li>
+                    <li><strong>Use flat JSON structure</strong> (easier than nested)</li>
+                    <li><strong>Deploy to Netlify</strong> and test endpoints work</li>
+                    <li><strong>Include error handling</strong> (try/catch blocks)</li>
                 </ul>
-                <p style="margin-top: 10px;">Use the syntax appropriate for your database!</p>
-            </div>
-        </div>
-
-        <!-- Slide 32: ROLLUP Example -->
-        <div class="slide">
-            <h1>Understanding ROLLUP</h1>
-
-            <div class="sql-example" style="font-size: 0.9em;">
-                <h3>ROLLUP Query Example (MySQL):</h3>
-                <span class="sql-keyword">SELECT</span> <br>
-                &nbsp;&nbsp;&nbsp;&nbsp;department,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> total_courses,<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">AVG</span>(credits) <span class="sql-keyword">AS</span> avg_credits<br>
-                <span class="sql-keyword">FROM</span> Course<br>
-                <span class="sql-keyword">GROUP BY</span> department <span class="sql-keyword">WITH ROLLUP</span>;
-            </div>
-
-            <div class="sql-example" style="font-size: 0.85em;">
-                <h3>Expected Result Set:</h3>
-                <table class="table-result">
-                    <tr>
-                        <th>department</th>
-                        <th>total_courses</th>
-                        <th>avg_credits</th>
-                    </tr>
-                    <tr>
-                        <td>Computer Science</td>
-                        <td>5</td>
-                        <td>3.40</td>
-                    </tr>
-                    <tr>
-                        <td>Mathematics</td>
-                        <td>4</td>
-                        <td>3.25</td>
-                    </tr>
-                    <tr>
-                        <td>Engineering</td>
-                        <td>3</td>
-                        <td>3.67</td>
-                    </tr>
-                    <tr style="background: #ffffcc;">
-                        <td><strong>NULL (Grand Total)</strong></td>
-                        <td><strong>12</strong></td>
-                        <td><strong>3.42</strong></td>
-                    </tr>
-                </table>
             </div>
 
             <div class="tip-box">
-                <strong>Key Point:</strong> The NULL in the department column indicates the grand total row!
-            </div>
-        </div>
-
-        <!-- Slide 33: CUBE vs ROLLUP -->
-        <div class="slide">
-            <h1>BONUS: CUBE vs ROLLUP</h1>
-
-            <div class="concept-box">
-                <h3>Optional Enhancement (5 bonus points):</h3>
-                <p style="font-size: 1.05em;">If your database supports CUBE, write a second query using CUBE instead of ROLLUP and explain the difference in output.</p>
-            </div>
-
-            <div class="demo-box">
-                <h3>ROLLUP vs CUBE:</h3>
-                <table class="table-result" style="font-size: 0.9em;">
-                    <tr>
-                        <th>Operation</th>
-                        <th>What It Does</th>
-                        <th>Use Case</th>
-                    </tr>
-                    <tr>
-                        <td><strong>ROLLUP</strong></td>
-                        <td>Creates subtotals + grand total in hierarchical order</td>
-                        <td>When grouping columns have a natural hierarchy</td>
-                    </tr>
-                    <tr>
-                        <td><strong>CUBE</strong></td>
-                        <td>Creates all possible combinations of subtotals</td>
-                        <td>When you want to analyze data from all dimensions</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="sql-example" style="font-size: 0.85em;">
-                <h3>CUBE Example (for multi-column grouping):</h3>
-                <span class="sql-keyword">GROUP BY</span> <span class="sql-keyword">CUBE</span>(department, semester)
-                <p style="margin-top: 10px;">This would produce:</p>
-                <ul style="font-size: 0.95em;">
-                    <li>Totals for each (department, semester) combination</li>
-                    <li>Totals for each department across all semesters</li>
-                    <li>Totals for each semester across all departments</li>
-                    <li>Grand total across both dimensions</li>
+                <h3>Example Endpoints:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>recipes-with-categories.js</strong> - All recipes showing category_name instead of category_id</li>
+                    <li><strong>movies-with-studios.js</strong> - Movies with studio names and details</li>
+                    <li><strong>items-by-category.js</strong> - Items grouped by category with category info</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 34: Submission Requirements -->
+        <!-- Slide 37: Part 3 - Frontend Display -->
+        <div class="slide">
+            <h1>Part 3: Frontend Display of Related Data</h1>
+            <h2>20 Points</h2>
+
+            <div class="activity-box">
+                <h3>Task:</h3>
+                <p style="font-size: 1.15em;">Update your frontend to display the enriched data beautifully.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>Requirements:</h3>
+                <ul style="font-size: 1.05em; line-height: 1.8;">
+                    <li><strong>Call at least 2 of your JOIN endpoints</strong> from the frontend</li>
+                    <li><strong>Display related data beautifully</strong> - show category names as badges/tags</li>
+                    <li><strong>Add CSS styling</strong> for category badges, cards, or tags</li>
+                    <li><strong>Include screenshots</strong> in your markdown showing the results</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <h3>Visual Examples:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Show "Electronics" badge instead of "category_id: 1"</li>
+                    <li>Display "Universal Studios" instead of "studio_id: 3"</li>
+                    <li>Show supplier names with each product</li>
+                    <li>Display venue details with each event</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 38: Bonus - Nested JSON -->
+        <div class="slide">
+            <h1>BONUS: Nested JSON Structure</h1>
+            <h2>+10 Points</h2>
+
+            <div class="concept-box">
+                <h3>Optional Enhancement:</h3>
+                <p style="font-size: 1.05em;">Modify ONE of your endpoints to return data in a nested JSON structure instead of flat.</p>
+            </div>
+
+            <div class="sql-example" style="font-size: 0.8em;">
+                <h3>Example: Nested Structure</h3>
+                <span class="sql-comment">// Transform flat results into nested objects</span><br>
+                <span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> pool.query(query);<br>
+                <span class="sql-keyword">const</span> nested = result.rows.map(row => ({<br>
+                &nbsp;&nbsp;item_id: row.item_id,<br>
+                &nbsp;&nbsp;name: row.name,<br>
+                &nbsp;&nbsp;price: row.price,<br>
+                &nbsp;&nbsp;category: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;category_id: row.category_id,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;name: row.category_name,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;description: row.category_desc<br>
+                &nbsp;&nbsp;}<br>
+                }));
+            </div>
+
+            <div class="tip-box">
+                <h3>Requirements for Bonus:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li>Return data in nested format</li>
+                    <li>Update frontend to handle nested objects</li>
+                    <li>Document the approach in your markdown</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 39: Submission Requirements -->
         <div class="slide">
             <h1>Submission Requirements <span class="emoji">✅</span></h1>
 
@@ -1119,24 +1410,37 @@
                 <h3>Markdown Document Structure:</h3>
                 <ol style="font-size: 1.1em; line-height: 1.8;">
                     <li><strong>Header:</strong> Name, date, course, "Week 8 Homework"</li>
-                    <li><strong>Section 1:</strong> Extension 1 - OUTER JOIN Conversion
+                    <li><strong>Part 1:</strong> Advanced SQL Queries
                         <ul style="margin-top: 8px;">
-                            <li>Rewritten OUTER JOIN query</li>
-                            <li>Explanation (150-200 words)</li>
+                            <li>All 5+ queries with explanations</li>
+                            <li>Include comments explaining each query</li>
                         </ul>
                     </li>
-                    <li><strong>Section 2:</strong> Extension 2 - ROLLUP Report
+                    <li><strong>Part 2:</strong> JOIN-Based API Endpoints
                         <ul style="margin-top: 8px;">
-                            <li>ROLLUP query with results</li>
-                            <li>Screenshot or table showing output</li>
-                            <li>(Optional) CUBE query for bonus points</li>
+                            <li>Code for all 3 endpoints</li>
+                            <li>Deployed URLs</li>
+                            <li>Example API responses (JSON)</li>
                         </ul>
                     </li>
+                    <li><strong>Part 3:</strong> Frontend Display
+                        <ul style="margin-top: 8px;">
+                            <li>Screenshots showing enriched data display</li>
+                            <li>CSS code for badges/styling</li>
+                            <li>Link to deployed frontend</li>
+                        </ul>
+                    </li>
+                    <li><strong>Bonus (Optional):</strong> Nested JSON implementation</li>
                 </ol>
             </div>
+        </div>
+
+        <!-- Slide 40: Grading Rubric -->
+        <div class="slide">
+            <h1>Grading Rubric</h1>
 
             <div class="demo-box">
-                <h3>Grading:</h3>
+                <h3>Point Breakdown:</h3>
                 <table class="table-result" style="font-size: 0.95em;">
                     <tr>
                         <th>Component</th>
@@ -1144,42 +1448,50 @@
                         <th>Criteria</th>
                     </tr>
                     <tr>
-                        <td><strong>OUTER JOIN</strong></td>
-                        <td>50</td>
-                        <td>Correct syntax (25), Explanation (20), Example (5)</td>
+                        <td><strong>Part 1: SQL Queries</strong></td>
+                        <td>40</td>
+                        <td>5+ queries (8 pts each): correct syntax, uses required features, relevant to project</td>
                     </tr>
                     <tr>
-                        <td><strong>ROLLUP Query</strong></td>
-                        <td>50</td>
-                        <td>Correct syntax (30), Results shown (15), Formatting (5)</td>
+                        <td><strong>Part 2: API Endpoints</strong></td>
+                        <td>40</td>
+                        <td>3 endpoints (13 pts each): correct JOINs, deployed, returns enriched data, error handling. +1 for documentation</td>
                     </tr>
                     <tr>
-                        <td><strong>CUBE (Bonus)</strong></td>
-                        <td>+5</td>
-                        <td>Correct implementation and explanation</td>
+                        <td><strong>Part 3: Frontend Display</strong></td>
+                        <td>20</td>
+                        <td>Calls endpoints (8), beautiful display with CSS (8), screenshots (4)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bonus: Nested JSON</strong></td>
+                        <td>+10</td>
+                        <td>Correct nested structure, frontend handles it, documented</td>
                     </tr>
                 </table>
             </div>
+
+            <div class="warning-box">
+                <strong>Important:</strong> All queries and endpoints must be relevant to YOUR project database!
+            </div>
         </div>
 
-        <!-- Slide 35: Summary -->
+        <!-- Slide 41: Summary -->
         <div class="slide">
             <h1>Today's Takeaways <span class="emoji">🎓</span></h1>
             <h2>You Can Now:</h2>
-            <ul>
+            <ul style="font-size: 1.2em; line-height: 1.8;">
                 <li>✅ Use LEFT, RIGHT, and FULL OUTER JOINs effectively</li>
                 <li>✅ Write scalar, row, and correlated subqueries</li>
                 <li>✅ Apply EXISTS/NOT EXISTS for efficient filtering</li>
                 <li>✅ Use ANY, ALL, and SOME with subqueries</li>
                 <li>✅ Combine queries with set operations</li>
-                <li>✅ Optimize complex queries for performance</li>
-                <li>✅ Avoid common SQL pitfalls</li>
-                <li>✅ Write multi-table INNER JOINs with aliases</li>
-                <li>✅ Use COUNT and AVG with GROUP BY and HAVING</li>
+                <li>✅ Build JOIN-based API endpoints for YOUR project</li>
+                <li>✅ Display related data beautifully in your frontend</li>
+                <li>✅ Return enriched data (names, not IDs) from APIs</li>
             </ul>
             <div class="demo-box">
                 <p><strong>Next Lecture:</strong> Database Views and Stored Procedures</p>
-                <p><strong>Homework:</strong> OUTER JOIN conversion & ROLLUP query (due next week)</p>
+                <p><strong>Homework:</strong> Advanced SQL queries + JOIN-based APIs + Frontend display (due next week)</p>
             </div>
         </div>
 
@@ -1187,7 +1499,7 @@
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">41</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
