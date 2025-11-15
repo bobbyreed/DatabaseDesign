@@ -589,6 +589,180 @@ export default async (req, context) => {
 };</pre></div>
         </div>
 
+        <!-- Slide 16a: PUT Endpoint -->
+        <div class="slide">
+            <h1>Handling PUT Requests</h1>
+            <h2>Updating Data via API</h2>
+
+            <p>Create <span class="file-path">netlify/functions/update-item.mjs</span>:</p>
+
+            <div class="code-example"><pre>import { neon } from '@neondatabase/serverless';
+
+export default async (req, context) => {
+  try {
+    // Only accept PUT requests
+    if (req.method !== 'PUT') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Get ID from query parameter
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
+
+    if (!id) {
+      return new Response(
+        JSON.stringify({ error: 'ID parameter required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Parse request body
+    const body = await req.json();
+    const { column1, column2, column3 } = body;
+
+    // Validate input
+    if (!column1 || !column2) {
+      return new Response(
+        JSON.stringify({ error: 'Required fields missing' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
+
+    // Update with parameterized query
+    const result = await sql(
+      'UPDATE your_table SET column1 = $1, column2 = $2, column3 = $3 WHERE id = $4 RETURNING *',
+      [column1, column2, column3, id]
+    );
+
+    if (result.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'Item not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    return new Response(JSON.stringify(result[0]), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};</pre></div>
+
+            <div class="tip-box">
+                <strong>Note:</strong> Replace <code>your_table</code> and column names with YOUR actual schema!
+            </div>
+        </div>
+
+        <!-- Slide 16b: DELETE Endpoint -->
+        <div class="slide">
+            <h1>Handling DELETE Requests</h1>
+            <h2>Deleting Data via API</h2>
+
+            <p>Create <span class="file-path">netlify/functions/delete-item.mjs</span>:</p>
+
+            <div class="code-example"><pre>import { neon } from '@neondatabase/serverless';
+
+export default async (req, context) => {
+  try {
+    // Only accept DELETE requests
+    if (req.method !== 'DELETE') {
+      return new Response('Method not allowed', { status: 405 });
+    }
+
+    // Get ID from query parameter
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
+
+    if (!id) {
+      return new Response(
+        JSON.stringify({ error: 'ID parameter required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
+
+    // Delete with parameterized query
+    const result = await sql(
+      'DELETE FROM your_table WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'Item not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    return new Response(JSON.stringify({
+      message: 'Deleted successfully',
+      deleted: result[0]
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+};</pre></div>
+
+            <div class="warning-box">
+                <strong>Caution:</strong> DELETE operations are permanent! Consider adding a "soft delete" flag instead of actually removing records.
+            </div>
+        </div>
+
+        <!-- Slide 16c: Testing PUT/DELETE -->
+        <div class="slide">
+            <h1>Testing PUT and DELETE</h1>
+            <h2>Using curl and fetch()</h2>
+
+            <div class="demo-box">
+                <h3>Testing PUT with curl</h3>
+                <div class="bash-example"><pre>$ curl -X PUT "http://localhost:8888/.netlify/functions/update-item?id=1" \
+  -H "Content-Type: application/json" \
+  -d '{"column1":"new_value","column2":"another_value"}'</pre></div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Testing DELETE with curl</h3>
+                <div class="bash-example"><pre>$ curl -X DELETE "http://localhost:8888/.netlify/functions/delete-item?id=1"</pre></div>
+            </div>
+
+            <div class="demo-box">
+                <h3>JavaScript fetch() Examples</h3>
+                <div class="code-example"><pre>// PUT request
+fetch('/.netlify/functions/update-item?id=1', {
+  method: 'PUT',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ column1: 'new_value', column2: 'another_value' })
+})
+  .then(response => response.json())
+  .then(data => console.log('Updated:', data));
+
+// DELETE request
+fetch('/.netlify/functions/delete-item?id=1', {
+  method: 'DELETE'
+})
+  .then(response => response.json())
+  .then(data => console.log('Deleted:', data));</pre></div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Always confirm DELETE operations in your UI with a confirmation dialog!
+            </div>
+        </div>
+
         <!-- Slide 17: Testing Locally -->
         <div class="slide">
             <h1>Testing Your Functions Locally</h1>
@@ -1099,7 +1273,7 @@ console.error('Error occurred:', error.message);</pre></div>
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">33</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

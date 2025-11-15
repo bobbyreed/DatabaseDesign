@@ -1167,68 +1167,31 @@
             </div>
         </div>
 
-        <!-- Slide 27: Understanding Exercise 2 (continued) -->
+        <!-- Slide 27: Quick Review - GROUP BY vs HAVING -->
         <div class="slide">
-            <h1>Understanding: GROUP BY vs HAVING</h1>
+            <h1>Quick Review: GROUP BY & HAVING</h1>
+            <h2>From Lecture 7</h2>
 
-            <div class="concept-box">
-                <h3>The Difference:</h3>
-                <table class="table-result" style="font-size: 0.95em;">
-                    <tr>
-                        <th>Clause</th>
-                        <th>Purpose</th>
-                        <th>When It's Applied</th>
-                        <th>Example</th>
-                    </tr>
-                    <tr>
-                        <td><strong>WHERE</strong></td>
-                        <td>Filter individual rows</td>
-                        <td>Before grouping</td>
-                        <td>WHERE credits > 3</td>
-                    </tr>
-                    <tr>
-                        <td><strong>GROUP BY</strong></td>
-                        <td>Organize rows into groups</td>
-                        <td>After WHERE filtering</td>
-                        <td>GROUP BY department</td>
-                    </tr>
-                    <tr>
-                        <td><strong>HAVING</strong></td>
-                        <td>Filter groups</td>
-                        <td>After grouping</td>
-                        <td>HAVING COUNT(*) > 2</td>
-                    </tr>
-                </table>
+            <div class="tip-box">
+                <strong>Quick Review from Lecture 7:</strong>
+                <ul style="font-size: 1.15em; line-height: 1.8;">
+                    <li><strong>GROUP BY:</strong> Groups rows by column values</li>
+                    <li><strong>HAVING:</strong> Filters groups (use after GROUP BY)</li>
+                    <li><strong>WHERE vs HAVING:</strong> WHERE filters rows BEFORE grouping, HAVING filters AFTER</li>
+                </ul>
+                <p style="margin-top: 20px; font-size: 1.1em;"><strong>Now let's use these with JOINs!</strong></p>
             </div>
 
-            <div class="sql-example" style="font-size: 0.85em;">
-                <h3>Sample Result (Recipe Example):</h3>
-                <table class="table-result">
-                    <tr>
-                        <th>category_name</th>
-                        <th>recipe_count</th>
-                        <th>avg_prep_time</th>
-                    </tr>
-                    <tr>
-                        <td>Desserts</td>
-                        <td>12</td>
-                        <td>45.5</td>
-                    </tr>
-                    <tr>
-                        <td>Main Dishes</td>
-                        <td>18</td>
-                        <td>62.3</td>
-                    </tr>
-                    <tr>
-                        <td>Appetizers</td>
-                        <td>8</td>
-                        <td>25.7</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="warning-box">
-                <strong>Important:</strong> You CANNOT use WHERE to filter on aggregated values. That's what HAVING is for!
+            <div class="demo-box">
+                <h3>Example with JOINs + Aggregation:</h3>
+                <div class="sql-example" style="font-size: 0.85em;">
+                    <span class="sql-comment">-- Count items per category, show only categories with >5 items</span><br>
+                    <span class="sql-keyword">SELECT</span> c.category_name, <span class="sql-function">COUNT</span>(i.item_id) <span class="sql-keyword">AS</span> item_count<br>
+                    <span class="sql-keyword">FROM</span> categories c<br>
+                    <span class="sql-keyword">LEFT JOIN</span> items i <span class="sql-keyword">ON</span> c.category_id = i.category_id<br>
+                    <span class="sql-keyword">GROUP BY</span> c.category_name<br>
+                    <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(i.item_id) > <span class="sql-number">5</span>;
+                </div>
             </div>
         </div>
 
