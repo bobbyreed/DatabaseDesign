@@ -950,6 +950,161 @@ http://localhost:8888/.netlify/functions/create-item</pre></div>
             </div>
         </div>
 
+        <!-- Slide 22a: Understanding Cloud Functions -->
+        <div class="slide">
+            <h1>Understanding Cloud Functions</h1>
+            <h2>Serverless Computing for Database Applications</h2>
+
+            <div class="concept-box">
+                <h3>What Are Cloud Functions?</h3>
+                <p style="font-size: 1.1em; line-height: 1.7;">Cloud functions (also called serverless functions) are small, event-driven code snippets that run in the cloud without requiring you to manage servers. When a user visits your webpage or makes an API request, the cloud function executes, processes the request, and returns a response.</p>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <h3>Traditional Server Model</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li>❌ Rent/maintain a server 24/7</li>
+                        <li>❌ Pay even when idle</li>
+                        <li>❌ Manage OS updates, security patches</li>
+                        <li>❌ Handle scaling manually</li>
+                        <li>❌ Configure firewalls, load balancers</li>
+                        <li>❌ Monitor server health</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Cloud Functions Model</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li>✅ No server to maintain</li>
+                        <li>✅ Pay only per execution</li>
+                        <li>✅ Automatic updates & security</li>
+                        <li>✅ Auto-scales to demand</li>
+                        <li>✅ Built-in infrastructure</li>
+                        <li>✅ Platform handles monitoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22b: Cloud Functions + Databases -->
+        <div class="slide">
+            <h1>Cloud Functions + Databases</h1>
+            <h2>The Perfect Match for Modern Web Apps</h2>
+
+            <div class="netlify-callout">
+                <h4>🔗 How They Work Together</h4>
+                <p style="font-size: 1.1em;">Cloud functions act as the <strong>bridge</strong> between your frontend (HTML/JavaScript) and your database (PostgreSQL). They handle authentication, execute SQL queries, and format responses—all while keeping your database credentials secure.</p>
+            </div>
+
+            <div class="demo-box">
+                <h3>The Request Flow:</h3>
+                <div style="font-size: 1.05em; line-height: 2; background: var(--bg-accent); padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>1. User Action:</strong> Click "Show Available Rooms" button<br>
+                    ↓<br>
+                    <strong>2. Frontend:</strong> JavaScript calls <code>fetch('/api/get-rooms')</code><br>
+                    ↓<br>
+                    <strong>3. Cloud Function:</strong> Receives request, connects to database<br>
+                    ↓<br>
+                    <strong>4. Database Query:</strong> <code>SELECT * FROM rooms WHERE availability_status = 'Available'</code><br>
+                    ↓<br>
+                    <strong>5. Cloud Function:</strong> Receives results, formats as JSON<br>
+                    ↓<br>
+                    <strong>6. Frontend:</strong> Displays rooms in beautiful HTML<br>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Benefit:</strong> Your database credentials (password, connection string) stay safely in the cloud function—never exposed to users' browsers!
+            </div>
+        </div>
+
+        <!-- Slide 22c: Why Netlify Functions for Our Projects -->
+        <div class="slide">
+            <h1>Why Netlify Functions for Our Projects?</h1>
+            <h2>Perfect for Database Design Course</h2>
+
+            <div class="demo-box">
+                <h3>🎯 Advantages for Your Projects:</h3>
+                <div style="font-size: 1.05em; line-height: 1.8;">
+                    <p><strong>1. Zero DevOps Knowledge Required</strong></p>
+                    <ul>
+                        <li>No need to learn Docker, Kubernetes, or server management</li>
+                        <li>Focus on database design and SQL, not infrastructure</li>
+                    </ul>
+
+                    <p><strong>2. Seamless Integration with Neon</strong></p>
+                    <ul>
+                        <li>Both are serverless—they scale together automatically</li>
+                        <li>No connection pooling headaches</li>
+                        <li>Built-in PostgreSQL support via <code>@neondatabase/serverless</code></li>
+                    </ul>
+
+                    <p><strong>3. Git-Based Deployment</strong></p>
+                    <ul>
+                        <li>Push to GitHub → Netlify automatically deploys</li>
+                        <li>No manual deployment steps</li>
+                        <li>Every commit creates a preview URL for testing</li>
+                    </ul>
+
+                    <p><strong>4. Free Tier Generosity</strong></p>
+                    <ul>
+                        <li>125,000 function invocations/month FREE</li>
+                        <li>Plenty for course projects and demonstrations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22d: Netlify Functions Enhance Your Database Projects -->
+        <div class="slide">
+            <h1>How Netlify Functions Enhance YOUR Projects</h1>
+            <h2>Real-World Applications</h2>
+
+            <div class="bridge-box">
+                <h4>🌉 Your Classmates' Examples</h4>
+
+                <p><strong>Geethika (Hotel Management):</strong></p>
+                <ul>
+                    <li><code>/api/check-availability</code> - Real-time room availability checks</li>
+                    <li><code>/api/create-booking</code> - Secure booking creation with validation</li>
+                    <li><code>/api/guest-history</code> - Retrieve guest booking history with JOINs</li>
+                </ul>
+
+                <p><strong>Suman (Retail Inventory):</strong></p>
+                <ul>
+                    <li><code>/api/low-stock-alerts</code> - Auto-calculate products below reorder level</li>
+                    <li><code>/api/sales-analytics</code> - Daily/weekly revenue aggregations</li>
+                    <li><code>/api/update-inventory</code> - Secure stock updates with validation</li>
+                </ul>
+
+                <p><strong>Doan (Bakery):</strong></p>
+                <ul>
+                    <li><code>/api/daily-orders</code> - Real-time order dashboard</li>
+                    <li><code>/api/popular-products</code> - Best-selling items analysis</li>
+                    <li><code>/api/customer-lookup</code> - Fast customer search by phone/name</li>
+                </ul>
+
+                <p><strong>Hanumantha (Club Membership):</strong></p>
+                <ul>
+                    <li><code>/api/event-attendance</code> - Track who's registered for events</li>
+                    <li><code>/api/active-members</code> - Filter members by status</li>
+                    <li><code>/api/register-for-event</code> - Handle event registrations safely</li>
+                </ul>
+
+                <p><strong>Sai Vineesh (Parking Lot):</strong></p>
+                <ul>
+                    <li><code>/api/available-slots</code> - Real-time parking availability</li>
+                    <li><code>/api/check-in</code> - Record vehicle entry with timestamp</li>
+                    <li><code>/api/calculate-fee</code> - Compute parking fees based on duration</li>
+                </ul>
+            </div>
+
+            <div class="netlify-callout">
+                <h4>💡 The Pattern</h4>
+                <p>Every database operation you need becomes a secure, scalable API endpoint. No servers to manage, no security vulnerabilities, just clean SQL queries wrapped in cloud functions!</p>
+            </div>
+        </div>
+
         <!-- Slide 23: Database-Agnostic Patterns -->
         <div class="slide">
             <h1>Database-Agnostic Patterns</h1>
