@@ -424,13 +424,14 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 30px;">
-                <h4>🌉 Apply to Your Project</h4>
-                <p><strong>Replace <code>your_table</code> with one of your actual table names:</strong></p>
+                <h4>🌉 Your Classmates' Examples</h4>
+                <p><strong>See how your classmates query their tables:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe database:</strong> <code>SELECT * FROM recipes;</code><br>
-                    <strong>Inventory database:</strong> <code>SELECT * FROM products;</code><br>
-                    <strong>Library database:</strong> <code>SELECT * FROM books;</code><br>
-                    <strong>Event database:</strong> <code>SELECT * FROM events;</code>
+                    <strong>Geethika (Hotel):</strong> <code>SELECT * FROM rooms;</code><br>
+                    <strong>Suman (Retail):</strong> <code>SELECT * FROM products;</code><br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT * FROM products;</code><br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT * FROM members;</code><br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT * FROM availability;</code>
                 </div>
             </div>
 
@@ -463,13 +464,14 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 30px;">
-                <h4>🌉 Apply to Your Project</h4>
-                <p><strong>Find unique values in YOUR data:</strong></p>
+                <h4>🌉 Your Classmates' Examples</h4>
+                <p><strong>See how each student finds unique values:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe database:</strong> <code>SELECT DISTINCT cuisine FROM recipes;</code><br>
-                    <strong>Inventory database:</strong> <code>SELECT DISTINCT category FROM products;</code><br>
-                    <strong>Library database:</strong> <code>SELECT DISTINCT author FROM books;</code><br>
-                    <strong>Event database:</strong> <code>SELECT DISTINCT venue_type FROM venues;</code>
+                    <strong>Geethika (Hotel):</strong> <code>SELECT DISTINCT room_type FROM rooms;</code><br>
+                    <strong>Suman (Retail):</strong> <code>SELECT DISTINCT category_name FROM categories;</code><br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT DISTINCT category FROM products;</code><br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT DISTINCT membership_status FROM members;</code><br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT DISTINCT status FROM availability;</code>
                 </div>
                 <p style="margin-top: 10px;"><strong>Great for:</strong> Populating dropdown filters in your Netlify frontend!</p>
             </div>
@@ -575,13 +577,14 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Apply to Your Project</h4>
-                <p><strong>Choose the sort that makes sense for YOUR data:</strong></p>
+                <h4>🌉 Your Classmates' Examples</h4>
+                <p><strong>See how each student sorts their data:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe DB:</strong> <code>ORDER BY prep_time ASC</code> (quickest first)<br>
-                    <strong>Inventory DB:</strong> <code>ORDER BY price DESC</code> (most expensive first)<br>
-                    <strong>Library DB:</strong> <code>ORDER BY publication_year DESC</code> (newest first)<br>
-                    <strong>Event DB:</strong> <code>ORDER BY event_date ASC</code> (soonest first)
+                    <strong>Geethika (Hotel):</strong> <code>SELECT * FROM rooms ORDER BY price_per_night ASC;</code><br>
+                    <strong>Suman (Retail):</strong> <code>SELECT * FROM products ORDER BY quantity_in_stock ASC;</code> (low stock first)<br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT * FROM orders ORDER BY order_date DESC;</code> (newest first)<br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT * FROM members ORDER BY join_date DESC;</code> (newest members)<br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT * FROM availability ORDER BY slot_id ASC;</code>
                 </div>
             </div>
         </div>
@@ -626,11 +629,13 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Apply to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <div class="project-example">
-                    <strong>Recipe DB:</strong> <code>AVG(prep_time), COUNT(*)</code><br>
-                    <strong>Inventory DB:</strong> <code>SUM(quantity), AVG(price)</code><br>
-                    <strong>Library DB:</strong> <code>COUNT(*), MIN(publication_year)</code>
+                    <strong>Geethika (Hotel):</strong> <code>SELECT AVG(price_per_night), COUNT(*) FROM rooms;</code><br>
+                    <strong>Suman (Retail):</strong> <code>SELECT SUM(quantity_in_stock), AVG(price) FROM products;</code><br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT COUNT(*), SUM(total_price) FROM orders;</code><br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT COUNT(*), MIN(join_date), MAX(join_date) FROM members;</code><br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT COUNT(*), AVG(EXTRACT(EPOCH FROM (exit_time - entry_time))/3600) FROM availability WHERE status = 'Occupied';</code>
                 </div>
             </div>
         </div>
@@ -666,13 +671,14 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Apply to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <p><strong>GROUP BY creates category breakdowns:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe DB:</strong> <code>SELECT cuisine, COUNT(*) FROM recipes GROUP BY cuisine;</code><br>
-                    <strong>Inventory DB:</strong> <code>SELECT category, SUM(quantity) FROM products GROUP BY category;</code><br>
-                    <strong>Library DB:</strong> <code>SELECT author, COUNT(*) FROM books GROUP BY author;</code><br>
-                    <strong>Event DB:</strong> <code>SELECT venue, COUNT(*) FROM events GROUP BY venue;</code>
+                    <strong>Geethika (Hotel):</strong> <code>SELECT room_type, COUNT(*), AVG(price_per_night) FROM rooms GROUP BY room_type;</code><br>
+                    <strong>Suman (Retail):</strong> <code>SELECT category_name, COUNT(*) FROM products p JOIN categories c ON p.category_id = c.category_id GROUP BY category_name;</code><br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category;</code><br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT membership_status, COUNT(*) FROM members GROUP BY membership_status;</code><br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT status, COUNT(*) FROM availability GROUP BY status;</code>
                 </div>
             </div>
         </div>
@@ -724,13 +730,14 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Apply to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <p><strong>Find "top" or "qualifying" categories:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe DB:</strong> Cuisines with 10+ recipes<br>
-                    <strong>Inventory DB:</strong> Categories with total value > $5000<br>
-                    <strong>Library DB:</strong> Authors with 3+ books<br>
-                    <strong>Event DB:</strong> Venues hosting 5+ events
+                    <strong>Geethika (Hotel):</strong> <code>SELECT room_type, COUNT(*) FROM rooms GROUP BY room_type HAVING COUNT(*) > 5;</code> (room types with 5+ rooms)<br>
+                    <strong>Suman (Retail):</strong> <code>SELECT category_name, SUM(quantity_in_stock * price) AS total_value FROM products p JOIN categories c ON p.category_id = c.category_id GROUP BY category_name HAVING SUM(quantity_in_stock * price) > 10000;</code><br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT category, COUNT(*) FROM products GROUP BY category HAVING AVG(price) > 15;</code><br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT event_name, COUNT(*) FROM event_registrations er JOIN events e ON er.event_id = e.event_id GROUP BY event_name HAVING COUNT(*) > 20;</code> (events with 20+ registrations)<br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT slot_id, COUNT(*) FROM availability WHERE status = 'Occupied' GROUP BY slot_id HAVING COUNT(*) > 100;</code> (high-traffic slots)
                 </div>
             </div>
         </div>
@@ -773,13 +780,14 @@ const result = await pool.query(query);
             </div>
 
             <div class="bridge-box" style="margin-top: 20px;">
-                <h4>🌉 Apply to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <p><strong>Add search to YOUR data:</strong></p>
                 <div class="project-example">
-                    <strong>Recipe DB:</strong> <code>WHERE name ILIKE '%chicken%'</code><br>
-                    <strong>Inventory DB:</strong> <code>WHERE description ILIKE '%wireless%'</code><br>
-                    <strong>Library DB:</strong> <code>WHERE title ILIKE '%python%'</code><br>
-                    <strong>Event DB:</strong> <code>WHERE venue_name ILIKE '%center%'</code>
+                    <strong>Geethika (Hotel):</strong> <code>SELECT * FROM guests WHERE name ILIKE '%smith%';</code> (search guest names)<br>
+                    <strong>Suman (Retail):</strong> <code>SELECT * FROM products WHERE product_name ILIKE '%laptop%';</code> (product search)<br>
+                    <strong>Doan (Bakery):</strong> <code>SELECT * FROM customers WHERE phone ILIKE '555%';</code> (find by area code)<br>
+                    <strong>Hanumantha (Club):</strong> <code>SELECT * FROM members WHERE email ILIKE '%@gmail.com';</code> (Gmail users)<br>
+                    <strong>Vineesh (Parking):</strong> <code>SELECT * FROM customers WHERE vehicle_number ILIKE 'ABC%';</code> (vehicles by plate prefix)
                 </div>
             </div>
         </div>
@@ -1201,22 +1209,35 @@ const result = await pool.query(query);
             </div>
 
             <div class="demo-box">
-                <h3>Example: Recipe Database</h3>
-                <p><strong>Endpoint:</strong> <code>/api/recipes-by-cuisine.js</code></p>
-                <p><strong>URL:</strong> <code>GET /api/recipes-by-cuisine?cuisine=Italian</code></p>
-                <p><strong>SQL Query:</strong></p>
-                <div class="sql-example" style="font-size: 0.9em;">
-                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> recipes<br>
-                    <span class="sql-keyword">WHERE</span> cuisine = $1<br>
-                    <span class="sql-keyword">ORDER BY</span> name <span class="sql-keyword">ASC</span>;
+                <h3>Your Classmates' Examples:</h3>
+                <div class="project-example">
+                    <strong>Geethika (Hotel):</strong><br>
+                    <code>/api/rooms-by-type?type=Deluxe</code><br>
+                    <code>SELECT * FROM rooms WHERE room_type = $1 ORDER BY price_per_night ASC;</code><br><br>
+
+                    <strong>Suman (Retail):</strong><br>
+                    <code>/api/products-by-category?category_id=1</code><br>
+                    <code>SELECT * FROM products WHERE category_id = $1 ORDER BY product_name;</code><br><br>
+
+                    <strong>Doan (Bakery):</strong><br>
+                    <code>/api/products-by-category?category=Cakes</code><br>
+                    <code>SELECT * FROM products WHERE category = $1 ORDER BY price DESC;</code><br><br>
+
+                    <strong>Hanumantha (Club):</strong><br>
+                    <code>/api/active-members</code><br>
+                    <code>SELECT * FROM members WHERE membership_status = 'Active' ORDER BY join_date DESC;</code><br><br>
+
+                    <strong>Vineesh (Parking):</strong><br>
+                    <code>/api/available-slots</code><br>
+                    <code>SELECT * FROM availability WHERE status = 'Available' ORDER BY slot_id;</code>
                 </div>
             </div>
 
             <div class="bridge-box">
                 <h4>Your Turn:</h4>
                 <ol style="font-size: 1.05em;">
-                    <li>Create new file: <code>netlify/functions/filter-by-[field].js</code></li>
-                    <li>Accept query parameter for filtering</li>
+                    <li>Create new file based on YOUR schema: <code>netlify/functions/filter-by-[field].js</code></li>
+                    <li>Accept query parameter for filtering (like your classmates above)</li>
                     <li>Use parameterized query with WHERE clause</li>
                     <li>Test with: <code>netlify dev</code></li>
                 </ol>
@@ -1273,23 +1294,33 @@ const result = await pool.query(query);
             </div>
 
             <div class="demo-box">
-                <h3>Example Stats to Calculate:</h3>
-                <ul style="font-size: 1.05em;">
-                    <li>Total count of records: <code>COUNT(*)</code></li>
-                    <li>Average of numeric field: <code>AVG(field)</code></li>
-                    <li>Min/Max values: <code>MIN(field), MAX(field)</code></li>
-                    <li>Group counts: <code>COUNT(*) ... GROUP BY category</code></li>
-                </ul>
+                <h3>Your Classmates' Examples:</h3>
+                <div class="project-example" style="font-size: 0.95em;">
+                    <strong>Geethika (Hotel):</strong><br>
+                    <code>SELECT COUNT(*) as total_rooms, AVG(price_per_night) as avg_price, MIN(price_per_night) as min_price, MAX(price_per_night) as max_price FROM rooms;</code><br><br>
+
+                    <strong>Suman (Retail):</strong><br>
+                    <code>SELECT COUNT(*) as total_products, SUM(quantity_in_stock) as total_inventory, AVG(price) as avg_price, COUNT(DISTINCT category_id) as total_categories FROM products;</code><br><br>
+
+                    <strong>Doan (Bakery):</strong><br>
+                    <code>SELECT COUNT(*) as total_orders, SUM(total_price) as total_revenue, AVG(total_price) as avg_order_value, COUNT(DISTINCT customer_id) as total_customers FROM orders;</code><br><br>
+
+                    <strong>Hanumantha (Club):</strong><br>
+                    <code>SELECT COUNT(*) as total_members, COUNT(*) FILTER (WHERE membership_status = 'Active') as active_members, MIN(join_date) as oldest_member, MAX(join_date) as newest_member FROM members;</code><br><br>
+
+                    <strong>Vineesh (Parking):</strong><br>
+                    <code>SELECT COUNT(*) as total_slots, COUNT(*) FILTER (WHERE status = 'Available') as available_slots, COUNT(*) FILTER (WHERE status = 'Occupied') as occupied_slots FROM availability;</code>
+                </div>
             </div>
 
             <div class="bridge-box">
                 <h4>Implementation Steps:</h4>
                 <ol style="font-size: 1.05em;">
-                    <li>Create <code>/api/stats.js</code> endpoint</li>
-                    <li>Write SQL query with aggregate functions</li>
+                    <li>Create <code>/api/stats.js</code> endpoint based on YOUR schema</li>
+                    <li>Write SQL query with aggregate functions (see examples above)</li>
                     <li>Return JSON with statistics</li>
                     <li>Test the endpoint</li>
-                    <li><strong>Bonus:</strong> Display stats in your frontend HTML</li>
+                    <li><strong>Bonus:</strong> Display stats in your frontend HTML as a dashboard!</li>
                 </ol>
             </div>
 
@@ -1326,12 +1357,37 @@ const result = await pool.query(query);
                 </div>
             </div>
 
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>Your Classmates' Examples:</h3>
+                <div class="project-example" style="font-size: 0.95em;">
+                    <strong>Geethika (Hotel):</strong><br>
+                    <code>SELECT * FROM guests WHERE name ILIKE $1 OR email ILIKE $1;</code><br>
+                    Endpoint: <code>/api/search-guests?q=smith</code><br><br>
+
+                    <strong>Suman (Retail):</strong><br>
+                    <code>SELECT * FROM products WHERE product_name ILIKE $1;</code><br>
+                    Endpoint: <code>/api/search-products?q=laptop</code><br><br>
+
+                    <strong>Doan (Bakery):</strong><br>
+                    <code>SELECT * FROM customers WHERE name ILIKE $1 OR phone ILIKE $1;</code><br>
+                    Endpoint: <code>/api/search-customers?q=555</code><br><br>
+
+                    <strong>Hanumantha (Club):</strong><br>
+                    <code>SELECT * FROM events WHERE event_name ILIKE $1 OR location ILIKE $1;</code><br>
+                    Endpoint: <code>/api/search-events?q=spring</code><br><br>
+
+                    <strong>Vineesh (Parking):</strong><br>
+                    <code>SELECT * FROM customers WHERE customer_name ILIKE $1 OR vehicle_number ILIKE $1;</code><br>
+                    Endpoint: <code>/api/search-parking?q=ABC</code>
+                </div>
+            </div>
+
             <div class="bridge-box">
                 <h4>Your Turn:</h4>
                 <ol style="font-size: 1.05em;">
-                    <li>Create <code>/api/search.js</code></li>
+                    <li>Create <code>/api/search.js</code> based on YOUR schema</li>
                     <li>Accept <code>q</code> query parameter</li>
-                    <li>Search 1-2 text fields in your table</li>
+                    <li>Search 1-2 text fields in your table (like your classmates above)</li>
                     <li><strong>Bonus:</strong> Add search box to your frontend!</li>
                 </ol>
             </div>

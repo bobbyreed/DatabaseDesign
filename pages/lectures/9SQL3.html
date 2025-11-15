@@ -424,29 +424,45 @@ Execution Time: 0.280 ms</pre>
             <h1>Index Strategy for YOUR Project Type</h1>
 
             <div class="bridge-box">
-                <h4>Recipe Database:</h4>
-                <div class="sql-example" style="font-size: 0.9em;">
-                    <span class="sql-keyword">CREATE INDEX</span> idx_recipes_category <span class="sql-keyword">ON</span> recipes(category_id);<br>
-                    <span class="sql-keyword">CREATE INDEX</span> idx_recipes_difficulty <span class="sql-keyword">ON</span> recipes(difficulty_level);<br>
-                    <span class="sql-keyword">CREATE INDEX</span> idx_recipe_ingredients_recipe <span class="sql-keyword">ON</span> recipe_ingredients(recipe_id);
-                </div>
-            </div>
+                <h4>🌉 Your Classmates' Index Strategies</h4>
 
-            <div class="bridge-box">
-                <h4>Movie Rental Database:</h4>
+                <p><strong>Geethika (Hotel Management):</strong></p>
                 <div class="sql-example" style="font-size: 0.9em;">
-                    <span class="sql-keyword">CREATE INDEX</span> idx_movies_studio <span class="sql-keyword">ON</span> movies(studio_id);<br>
-                    <span class="sql-keyword">CREATE INDEX</span> idx_rentals_member <span class="sql-keyword">ON</span> rentals(member_id);<br>
-                    <span class="sql-keyword">CREATE INDEX</span> idx_rentals_movie <span class="sql-keyword">ON</span> rentals(movie_id);
+                    <span class="sql-keyword">CREATE INDEX</span> idx_rooms_availability <span class="sql-keyword">ON</span> rooms(availability_status);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_rooms_type_price <span class="sql-keyword">ON</span> rooms(room_type, price_per_night);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_bookings_guest <span class="sql-keyword">ON</span> bookings(guest_id);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_bookings_dates <span class="sql-keyword">ON</span> bookings(check_in_date, check_out_date);
                 </div>
-            </div>
 
-            <div class="bridge-box">
-                <h4>Inventory/E-commerce:</h4>
+                <p><strong>Suman (Retail Inventory):</strong></p>
                 <div class="sql-example" style="font-size: 0.9em;">
-                    <span class="sql-keyword">CREATE INDEX</span> idx_products_supplier <span class="sql-keyword">ON</span> products(supplier_id);<br>
                     <span class="sql-keyword">CREATE INDEX</span> idx_products_category <span class="sql-keyword">ON</span> products(category_id);<br>
-                    <span class="sql-keyword">CREATE INDEX</span> idx_orders_customer <span class="sql-keyword">ON</span> orders(customer_id);
+                    <span class="sql-keyword">CREATE INDEX</span> idx_products_supplier <span class="sql-keyword">ON</span> products(supplier_id);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_products_stock <span class="sql-keyword">ON</span> products(quantity_in_stock);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_sales_date <span class="sql-keyword">ON</span> sales(sale_date);
+                </div>
+
+                <p><strong>Doan (Bakery):</strong></p>
+                <div class="sql-example" style="font-size: 0.9em;">
+                    <span class="sql-keyword">CREATE INDEX</span> idx_products_category <span class="sql-keyword">ON</span> products(category);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_orders_customer <span class="sql-keyword">ON</span> orders(customer_id);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_orders_date <span class="sql-keyword">ON</span> orders(order_date);
+                </div>
+
+                <p><strong>Hanumantha (Club Membership):</strong></p>
+                <div class="sql-example" style="font-size: 0.9em;">
+                    <span class="sql-keyword">CREATE INDEX</span> idx_members_status <span class="sql-keyword">ON</span> members(membership_status);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_events_date <span class="sql-keyword">ON</span> events(event_date);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_registrations_member <span class="sql-keyword">ON</span> event_registrations(member_id);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_registrations_event <span class="sql-keyword">ON</span> event_registrations(event_id);
+                </div>
+
+                <p><strong>Vineesh (Parking Lot):</strong></p>
+                <div class="sql-example" style="font-size: 0.9em;">
+                    <span class="sql-keyword">CREATE INDEX</span> idx_availability_status <span class="sql-keyword">ON</span> availability(status);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_availability_customer <span class="sql-keyword">ON</span> availability(customer_id);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_availability_employee <span class="sql-keyword">ON</span> availability(employee_id);<br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_availability_times <span class="sql-keyword">ON</span> availability(entry_time, exit_time);
                 </div>
             </div>
         </div>
@@ -531,37 +547,58 @@ Execution Time: 0.280 ms</pre>
             <h1>Creating Views for YOUR Project</h1>
 
             <div class="bridge-box">
-                <h4>Recipe Database Example:</h4>
-                <div class="sql-example" style="font-size: 0.85em;">
-                    <span class="sql-keyword">CREATE VIEW</span> recipes_with_categories <span class="sql-keyword">AS</span><br>
-                    <span class="sql-keyword">SELECT</span> r.recipe_id, r.recipe_name, r.prep_time,<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r.difficulty_level, c.category_name<br>
-                    <span class="sql-keyword">FROM</span> recipes r<br>
-                    <span class="sql-keyword">LEFT JOIN</span> categories c <span class="sql-keyword">ON</span> r.category_id = c.category_id;
-                </div>
-            </div>
+                <h4>🌉 Your Classmates' View Examples</h4>
 
-            <div class="bridge-box">
-                <h4>Movie Rental Database Example:</h4>
+                <p><strong>Geethika (Hotel Management):</strong></p>
                 <div class="sql-example" style="font-size: 0.85em;">
-                    <span class="sql-keyword">CREATE VIEW</span> movies_with_studios_and_ratings <span class="sql-keyword">AS</span><br>
-                    <span class="sql-keyword">SELECT</span> m.movie_id, m.title, m.release_year,<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.studio_name, <span class="sql-function">AVG</span>(r.rating) <span class="sql-keyword">AS</span> avg_rating<br>
-                    <span class="sql-keyword">FROM</span> movies m<br>
-                    <span class="sql-keyword">LEFT JOIN</span> studios s <span class="sql-keyword">ON</span> m.studio_id = s.studio_id<br>
-                    <span class="sql-keyword">LEFT JOIN</span> ratings r <span class="sql-keyword">ON</span> m.movie_id = r.movie_id<br>
-                    <span class="sql-keyword">GROUP BY</span> m.movie_id, m.title, m.release_year, s.studio_name;
+                    <span class="sql-keyword">CREATE VIEW</span> bookings_summary <span class="sql-keyword">AS</span><br>
+                    <span class="sql-keyword">SELECT</span> b.booking_id, g.name <span class="sql-keyword">AS</span> guest_name, r.room_type,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b.check_in_date, b.check_out_date, b.total_cost<br>
+                    <span class="sql-keyword">FROM</span> bookings b<br>
+                    <span class="sql-keyword">JOIN</span> guests g <span class="sql-keyword">ON</span> b.guest_id = g.guest_id<br>
+                    <span class="sql-keyword">JOIN</span> rooms r <span class="sql-keyword">ON</span> b.room_id = r.room_id;
                 </div>
-            </div>
 
-            <div class="bridge-box">
-                <h4>Inventory/E-commerce Example:</h4>
+                <p><strong>Suman (Retail Inventory):</strong></p>
                 <div class="sql-example" style="font-size: 0.85em;">
-                    <span class="sql-keyword">CREATE VIEW</span> products_with_supplier_and_stock <span class="sql-keyword">AS</span><br>
-                    <span class="sql-keyword">SELECT</span> p.product_id, p.name, p.price,<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s.supplier_name, p.quantity_in_stock<br>
+                    <span class="sql-keyword">CREATE VIEW</span> inventory_status <span class="sql-keyword">AS</span><br>
+                    <span class="sql-keyword">SELECT</span> p.product_name, c.category_name, s.supplier_name,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.quantity_in_stock, p.reorder_level,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">CASE WHEN</span> p.quantity_in_stock < p.reorder_level <span class="sql-keyword">THEN</span> <span class="sql-string">'Low Stock'</span> <span class="sql-keyword">ELSE</span> <span class="sql-string">'OK'</span> <span class="sql-keyword">END</span> <span class="sql-keyword">AS</span> stock_status<br>
                     <span class="sql-keyword">FROM</span> products p<br>
-                    <span class="sql-keyword">LEFT JOIN</span> suppliers s <span class="sql-keyword">ON</span> p.supplier_id = s.supplier_id;
+                    <span class="sql-keyword">JOIN</span> categories c <span class="sql-keyword">ON</span> p.category_id = c.category_id<br>
+                    <span class="sql-keyword">JOIN</span> suppliers s <span class="sql-keyword">ON</span> p.supplier_id = s.supplier_id;
+                </div>
+
+                <p><strong>Doan (Bakery):</strong></p>
+                <div class="sql-example" style="font-size: 0.85em;">
+                    <span class="sql-keyword">CREATE VIEW</span> order_details <span class="sql-keyword">AS</span><br>
+                    <span class="sql-keyword">SELECT</span> o.order_id, c.name <span class="sql-keyword">AS</span> customer_name, p.product_name,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o.quantity, o.total_price, o.order_date<br>
+                    <span class="sql-keyword">FROM</span> orders o<br>
+                    <span class="sql-keyword">JOIN</span> customers c <span class="sql-keyword">ON</span> o.customer_id = c.customer_id<br>
+                    <span class="sql-keyword">JOIN</span> products p <span class="sql-keyword">ON</span> o.product_id = p.product_id;
+                </div>
+
+                <p><strong>Hanumantha (Club Membership):</strong></p>
+                <div class="sql-example" style="font-size: 0.85em;">
+                    <span class="sql-keyword">CREATE VIEW</span> event_attendance <span class="sql-keyword">AS</span><br>
+                    <span class="sql-keyword">SELECT</span> e.event_name, e.event_date, e.location,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m.name <span class="sql-keyword">AS</span> member_name, er.registration_date<br>
+                    <span class="sql-keyword">FROM</span> event_registrations er<br>
+                    <span class="sql-keyword">JOIN</span> members m <span class="sql-keyword">ON</span> er.member_id = m.member_id<br>
+                    <span class="sql-keyword">JOIN</span> events e <span class="sql-keyword">ON</span> er.event_id = e.event_id;
+                </div>
+
+                <p><strong>Vineesh (Parking Lot):</strong></p>
+                <div class="sql-example" style="font-size: 0.85em;">
+                    <span class="sql-keyword">CREATE VIEW</span> parking_details <span class="sql-keyword">AS</span><br>
+                    <span class="sql-keyword">SELECT</span> a.slot_id, c.customer_name, c.vehicle_number,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.full_name <span class="sql-keyword">AS</span> employee_name, a.entry_time, a.exit_time,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-function">EXTRACT</span>(<span class="sql-keyword">EPOCH FROM</span> (a.exit_time - a.entry_time))/3600 <span class="sql-keyword">AS</span> hours_parked<br>
+                    <span class="sql-keyword">FROM</span> availability a<br>
+                    <span class="sql-keyword">LEFT JOIN</span> customers c <span class="sql-keyword">ON</span> a.customer_id = c.customer_id<br>
+                    <span class="sql-keyword">LEFT JOIN</span> employees e <span class="sql-keyword">ON</span> a.employee_id = e.employee_id;
                 </div>
             </div>
         </div>

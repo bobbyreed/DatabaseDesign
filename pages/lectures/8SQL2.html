@@ -179,13 +179,14 @@
             </div>
 
             <div class="bridge-box">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>Adapt this concept:</strong></p>
+                <h4>🌉 Your Classmates' Examples</h4>
+                <p><strong>See how your classmates use INNER JOIN:</strong></p>
                 <ul>
-                    <li><strong>Recipe database:</strong> JOIN recipes and categories to show "Desserts" instead of category_id: 3</li>
-                    <li><strong>Movie rental:</strong> JOIN Movies and Studios to display studio names with each movie</li>
-                    <li><strong>Library database:</strong> JOIN books and authors to show author names, not just author_id</li>
-                    <li><strong>Event planner:</strong> JOIN events and venues to display venue names and addresses</li>
+                    <li><strong>Geethika (Hotel):</strong> <code>SELECT b.*, g.name, r.room_type FROM bookings b JOIN guests g ON b.guest_id = g.guest_id JOIN rooms r ON b.room_id = r.room_id;</code></li>
+                    <li><strong>Suman (Retail):</strong> <code>SELECT p.product_name, c.category_name, s.supplier_name FROM products p JOIN categories c ON p.category_id = c.category_id JOIN suppliers s ON p.supplier_id = s.supplier_id;</code></li>
+                    <li><strong>Doan (Bakery):</strong> <code>SELECT o.*, c.name, p.product_name FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN products p ON o.product_id = p.product_id;</code></li>
+                    <li><strong>Hanumantha (Club):</strong> <code>SELECT er.*, m.name, e.event_name FROM event_registrations er JOIN members m ON er.member_id = m.member_id JOIN events e ON er.event_id = e.event_id;</code></li>
+                    <li><strong>Vineesh (Parking):</strong> <code>SELECT a.*, c.customer_name, e.full_name FROM availability a JOIN customers c ON a.customer_id = c.customer_id JOIN employees e ON a.employee_id = e.employee_id;</code></li>
                 </ul>
             </div>
         </div>
@@ -235,13 +236,14 @@
             </div>
 
             <div class="bridge-box">
-                <h4>🌉 Bridge to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <p><strong>When to use LEFT JOIN in YOUR project:</strong></p>
                 <ul>
-                    <li><strong>Recipe database:</strong> Show ALL categories, even ones with no recipes yet</li>
-                    <li><strong>Movie rental:</strong> List ALL members, even those who haven't rented anything</li>
-                    <li><strong>Inventory:</strong> Display ALL suppliers, including ones with no products in stock</li>
-                    <li><strong>Event planner:</strong> Show ALL venues, even those with no upcoming events</li>
+                    <li><strong>Geethika (Hotel):</strong> <code>SELECT g.*, COUNT(b.booking_id) FROM guests g LEFT JOIN bookings b ON g.guest_id = b.guest_id GROUP BY g.guest_id;</code> (show all guests, even those with no bookings)</li>
+                    <li><strong>Suman (Retail):</strong> <code>SELECT c.*, COUNT(p.product_id) FROM categories c LEFT JOIN products p ON c.category_id = p.category_id GROUP BY c.category_id;</code> (all categories, even empty ones)</li>
+                    <li><strong>Doan (Bakery):</strong> <code>SELECT c.*, COUNT(o.order_id) FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id;</code> (all customers, even those who haven't ordered)</li>
+                    <li><strong>Hanumantha (Club):</strong> <code>SELECT m.*, COUNT(er.registration_id) FROM members m LEFT JOIN event_registrations er ON m.member_id = er.member_id GROUP BY m.member_id;</code> (all members, even inactive)</li>
+                    <li><strong>Vineesh (Parking):</strong> <code>SELECT e.*, COUNT(a.slot_id) FROM employees e LEFT JOIN availability a ON e.employee_id = a.employee_id GROUP BY e.employee_id;</code> (all employees, even those not assigned)</li>
                 </ul>
             </div>
         </div>
@@ -311,12 +313,14 @@
             </div>
 
             <div class="bridge-box">
-                <h4>🌉 Bridge to Your Project</h4>
-                <p><strong>FULL JOIN use cases:</strong></p>
+                <h4>🌉 Your Classmates' Examples</h4>
+                <p><strong>FULL JOIN use cases - find mismatched data:</strong></p>
                 <ul>
-                    <li><strong>Auditing:</strong> Find both orphaned records AND empty categories</li>
-                    <li><strong>Data quality:</strong> Identify items without categories AND categories without items</li>
-                    <li><strong>Reporting:</strong> Show complete picture of your data relationships</li>
+                    <li><strong>Geethika (Hotel):</strong> Find rooms with no bookings AND bookings with invalid room IDs (data quality check)</li>
+                    <li><strong>Suman (Retail):</strong> Identify products without categories AND categories with no products (audit report)</li>
+                    <li><strong>Doan (Bakery):</strong> Find customers who never ordered AND orders with invalid customer IDs</li>
+                    <li><strong>Hanumantha (Club):</strong> Show members with no event registrations AND registrations with invalid member IDs</li>
+                    <li><strong>Vineesh (Parking):</strong> Find employees never assigned slots AND slots with invalid employee IDs</li>
                 </ul>
             </div>
         </div>
@@ -348,12 +352,14 @@
             </div>
 
             <div class="bridge-box">
-                <h4>🌉 Bridge to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <p><strong>Subquery use cases:</strong></p>
                 <ul>
-                    <li><strong>Recipe database:</strong> Find recipes in the most popular category</li>
-                    <li><strong>Movie rental:</strong> Show movies from the highest-rated studio</li>
-                    <li><strong>Inventory:</strong> List items from suppliers with best pricing</li>
+                    <li><strong>Geethika (Hotel):</strong> <code>SELECT * FROM rooms WHERE room_type = (SELECT room_type FROM rooms GROUP BY room_type ORDER BY COUNT(*) DESC LIMIT 1);</code> (most common room type)</li>
+                    <li><strong>Suman (Retail):</strong> <code>SELECT * FROM products WHERE category_id = (SELECT category_id FROM products GROUP BY category_id ORDER BY SUM(quantity_in_stock * price) DESC LIMIT 1);</code> (highest-value category)</li>
+                    <li><strong>Doan (Bakery):</strong> <code>SELECT * FROM products WHERE category = (SELECT category FROM orders o JOIN products p ON o.product_id = p.product_id GROUP BY category ORDER BY SUM(quantity) DESC LIMIT 1);</code> (best-selling category)</li>
+                    <li><strong>Hanumantha (Club):</strong> <code>SELECT * FROM events WHERE event_id IN (SELECT event_id FROM event_registrations GROUP BY event_id HAVING COUNT(*) > 10);</code> (popular events)</li>
+                    <li><strong>Vineesh (Parking):</strong> <code>SELECT * FROM customers WHERE customer_id IN (SELECT customer_id FROM availability GROUP BY customer_id HAVING COUNT(*) > 5);</code> (frequent parkers)</li>
                 </ul>
             </div>
         </div>
@@ -380,12 +386,14 @@
             </div>
 
             <div class="bridge-box">
-                <h4>🌉 Bridge to Your Project</h4>
+                <h4>🌉 Your Classmates' Examples</h4>
                 <p><strong>Aggregate subquery examples:</strong></p>
                 <ul>
-                    <li><strong>Recipe database:</strong> Find recipes with cook time > average for their category</li>
-                    <li><strong>Movie rental:</strong> List members who rent more than average rentals per month</li>
-                    <li><strong>E-commerce:</strong> Show orders with total > average order value</li>
+                    <li><strong>Geethika (Hotel):</strong> <code>SELECT * FROM rooms WHERE price_per_night > (SELECT AVG(price_per_night) FROM rooms);</code> (above-average priced rooms)</li>
+                    <li><strong>Suman (Retail):</strong> <code>SELECT * FROM products WHERE price > (SELECT AVG(price) FROM products WHERE category_id = products.category_id);</code> (above-average for category - correlated)</li>
+                    <li><strong>Doan (Bakery):</strong> <code>SELECT * FROM orders WHERE total_price > (SELECT AVG(total_price) FROM orders);</code> (high-value orders)</li>
+                    <li><strong>Hanumantha (Club):</strong> <code>SELECT * FROM members WHERE (SELECT COUNT(*) FROM event_registrations WHERE member_id = members.member_id) > (SELECT AVG(reg_count) FROM (SELECT COUNT(*) as reg_count FROM event_registrations GROUP BY member_id) AS avg_regs);</code> (active members)</li>
+                    <li><strong>Vineesh (Parking):</strong> <code>SELECT * FROM availability WHERE EXTRACT(EPOCH FROM (exit_time - entry_time))/3600 > (SELECT AVG(EXTRACT(EPOCH FROM (exit_time - entry_time))/3600) FROM availability WHERE exit_time IS NOT NULL);</code> (longer than average parking duration)</li>
                 </ul>
             </div>
         </div>
