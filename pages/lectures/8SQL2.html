@@ -222,6 +222,74 @@
             </div>
         </div>
 
+        <!-- Slide 4a: INNER JOIN → API with Related Data -->
+        <div class="slide">
+            <h1>INNER JOIN → API with Related Data</h1>
+            <h2>Returning Enriched Data from Your API</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;i.item_id,<br>
+                        &nbsp;&nbsp;i.name,<br>
+                        &nbsp;&nbsp;i.price,<br>
+                        &nbsp;&nbsp;c.category_name<br>
+                        <span class="sql-keyword">FROM</span> items i<br>
+                        <span class="sql-keyword">INNER JOIN</span> categories c<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">ON</span> i.category_id = c.category_id<br>
+                        <span class="sql-keyword">ORDER BY</span> i.name;
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        GET /.netlify/functions/<br>&nbsp;&nbsp;items-with-categories
+                    </div>
+                    <h4 style="margin-top: 20px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        curl https://yoursite.netlify.app<br>&nbsp;&nbsp;/.netlify/functions/<br>&nbsp;&nbsp;items-with-categories
+                    </div>
+                    <h4 style="margin-top: 15px;">Response</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        [{<br>
+                        &nbsp;&nbsp;"item_id": 101,<br>
+                        &nbsp;&nbsp;"name": "Laptop",<br>
+                        &nbsp;&nbsp;"price": 999.99,<br>
+                        &nbsp;&nbsp;"category_name": "Electronics"<br>
+                        }]
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> sql<span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT i.item_id, i.name, i.price, c.category_name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM items i<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER JOIN categories c ON i.category_id = c.category_id<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ORDER BY i.name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify(result), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="sql-string">'Error:'</span>, error);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+        </div>
+
         <!-- Slide 4: LEFT OUTER JOIN -->
         <div class="slide">
             <h1>LEFT OUTER JOIN</h1>
