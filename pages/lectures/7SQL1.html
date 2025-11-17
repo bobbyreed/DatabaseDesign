@@ -371,6 +371,9 @@
     <span class="sql-keyword">const</span> response = <span class="sql-keyword">await</span> fetch(<span class="sql-string">'/api/get-all-data'</span>);
     <span class="sql-keyword">const</span> data = <span class="sql-keyword">await</span> response.json();
 
+    <span class="sql-comment">// Debug: log the data (data is already a JS object!)</span>
+    console.log(data);
+
     <span class="sql-comment">// Display each table</span>
     displayTable(<span class="sql-string">'table1-container'</span>, data.firstTable, <span class="sql-string">'First Table Name'</span>);
     displayTable(<span class="sql-string">'table2-container'</span>, data.secondTable, <span class="sql-string">'Second Table Name'</span>);
@@ -407,6 +410,13 @@ window.addEventListener(<span class="sql-string">'DOMContentLoaded'</span>, load
 
             <div class="tip-box">
                 <strong>HTML Structure:</strong> Add three div containers with IDs: <code>&lt;div id="table1-container"&gt;&lt;/div&gt;</code>, <code>&lt;div id="table2-container"&gt;&lt;/div&gt;</code>, <code>&lt;div id="table3-container"&gt;&lt;/div&gt;</code>
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>⚠️ Common Mistake:</strong> Do NOT use <code>JSON.parse(data)</code> after <code>response.json()</code>!<br>
+                <code>response.json()</code> already parses the JSON, so <code>data</code> is a JavaScript object.<br>
+                ❌ Wrong: <code>console.log(JSON.parse(data))</code> - causes SyntaxError!<br>
+                ✅ Correct: <code>console.log(data)</code> - data is already parsed!
             </div>
         </div>
 
