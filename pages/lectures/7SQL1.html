@@ -495,6 +495,65 @@ const result = await pool.query(query);
             </div>
         </div>
 
+        <!-- Slide 8a: Basic SELECT → Simple API Endpoint -->
+        <div class="slide">
+            <h1>Basic SELECT → Simple API Endpoint</h1>
+            <h2>Your First Data Retrieval API</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.9em;">
+                        <span class="sql-keyword">SELECT</span> *<br>
+                        <span class="sql-keyword">FROM</span> items<br>
+                        <span class="sql-keyword">ORDER BY</span> item_id;
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.9em;">
+                        GET /.netlify/functions/get-items
+                    </div>
+                    <h4 style="margin-top: 20px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.75em;">
+                        curl https://yoursite.netlify.app/<br>&nbsp;&nbsp;.netlify/functions/get-items
+                    </div>
+                    <h4 style="margin-top: 15px;">Postman</h4>
+                    <div class="sql-example" style="font-size: 0.75em;">
+                        GET https://yoursite.netlify.app/<br>&nbsp;&nbsp;.netlify/functions/get-items
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.85em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Get all items</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> sql<span class="sql-string">`SELECT * FROM items ORDER BY item_id`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify(result), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="sql-string">'Database error:'</span>, error);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">500</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Pro Tip:</strong> This is your foundation! Every other API builds on this pattern.
+            </div>
+        </div>
+
         <!-- Slide 9: DISTINCT -->
         <div class="slide">
             <h1>Using DISTINCT</h1>
