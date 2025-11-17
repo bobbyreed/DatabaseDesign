@@ -392,10 +392,10 @@
   <span class="sql-keyword">const</span> tableHTML = <span class="sql-string">`
     &lt;h3&gt;${tableName}&lt;/h3&gt;
     &lt;table&gt;
-      &lt;thead&gt;&lt;tr&gt;${headers.map(h =&gt; \`&lt;th&gt;${h}&lt;/th&gt;\`).join('')}&lt;/tr&gt;&lt;/thead&gt;
-      &lt;tbody&gt;${rows.map(row =&gt; \`
-        &lt;tr&gt;${headers.map(h =&gt; \`&lt;td&gt;${row[h]}&lt;/td&gt;\`).join('')}&lt;/tr&gt;
-      \`).join('')}&lt;/tbody&gt;
+      &lt;thead&gt;&lt;tr&gt;${headers.map(h =&gt; '&lt;th&gt;' + h + '&lt;/th&gt;').join('')}&lt;/tr&gt;&lt;/thead&gt;
+      &lt;tbody&gt;${rows.map(row =&gt;
+        '&lt;tr&gt;' + headers.map(h =&gt; '&lt;td&gt;' + row[h] + '&lt;/td&gt;').join('') + '&lt;/tr&gt;'
+      ).join('')}&lt;/tbody&gt;
     &lt;/table&gt;
   `</span>;
   container.innerHTML = tableHTML;
