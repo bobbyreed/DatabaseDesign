@@ -731,6 +731,77 @@
             </div>
         </div>
 
+        <!-- Slide 9a: Subqueries → Advanced Filtering APIs -->
+        <div class="slide">
+            <h1>Subqueries → Advanced Filtering APIs</h1>
+            <h2>Complex Business Logic in Your Endpoints</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;item_id,<br>
+                        &nbsp;&nbsp;name,<br>
+                        &nbsp;&nbsp;price<br>
+                        <span class="sql-keyword">FROM</span> items<br>
+                        <span class="sql-keyword">WHERE</span> price > (<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(price)<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">FROM</span> items<br>
+                        )<br>
+                        <span class="sql-keyword">AND</span> category_id <span class="sql-keyword">IN</span> (<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> category_id<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">FROM</span> categories<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> active = <span class="sql-keyword">true</span><br>
+                        );
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        GET /.netlify/functions/<br>&nbsp;&nbsp;premium-items
+                    </div>
+                    <h4 style="margin-top: 15px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        curl https://yoursite.netlify.app<br>&nbsp;&nbsp;/.netlify/functions/<br>&nbsp;&nbsp;premium-items
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Items above average price in active categories</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> sql<span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT item_id, name, price<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM items<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE price > (SELECT AVG(price) FROM items)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND category_id IN (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT category_id FROM categories WHERE active = true<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ORDER BY price DESC<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify(result), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Use Case:</strong> "Featured Products" or "Premium Items" sections on your homepage!
+            </div>
+        </div>
+
         <!-- Slide 10: JOINs Power Your Netlify API -->
         <div class="slide">
             <h1>JOINs Power Your Netlify API</h1>
@@ -1034,6 +1105,70 @@
             </div>
         </div>
 
+        <!-- Slide 18a: EXISTS → Data Validation APIs -->
+        <div class="slide">
+            <h1>EXISTS → Data Validation APIs</h1>
+            <h2>Finding Empty or Orphaned Records</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;c.category_id,<br>
+                        &nbsp;&nbsp;c.category_name<br>
+                        <span class="sql-keyword">FROM</span> categories c<br>
+                        <span class="sql-keyword">WHERE NOT EXISTS</span> (<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> *<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">FROM</span> items i<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> i.category_id =<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;c.category_id<br>
+                        );
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        GET /.netlify/functions/<br>&nbsp;&nbsp;empty-categories
+                    </div>
+                    <h4 style="margin-top: 15px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        curl https://yoursite.netlify.app<br>&nbsp;&nbsp;/.netlify/functions/<br>&nbsp;&nbsp;empty-categories
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> sql<span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT c.category_id, c.category_name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM categories c<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE NOT EXISTS (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT * FROM items i WHERE i.category_id = c.category_id<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify(result), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Admin Use:</strong> Daily report showing categories that need content!
+            </div>
+        </div>
+
         <!-- Slide 19: Correlated Subqueries -->
         <div class="slide">
             <h1>Correlated Subqueries</h1>
@@ -1101,6 +1236,72 @@
                     <li><strong>INTERSECT:</strong> Find ingredients used in both breakfast AND lunch recipes</li>
                     <li><strong>EXCEPT:</strong> Show members who registered but never made a rental</li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- Slide 20a: UNION → Combined Data APIs -->
+        <div class="slide">
+            <h1>UNION → Combined Data APIs</h1>
+            <h2>Merging Multiple Data Sources</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;item_id,<br>
+                        &nbsp;&nbsp;name,<br>
+                        &nbsp;&nbsp;<span class="sql-string">'active'</span> <span class="sql-keyword">AS</span> status<br>
+                        <span class="sql-keyword">FROM</span> active_items<br>
+                        <span class="sql-keyword">UNION</span><br>
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;item_id,<br>
+                        &nbsp;&nbsp;name,<br>
+                        &nbsp;&nbsp;<span class="sql-string">'archived'</span> <span class="sql-keyword">AS</span> status<br>
+                        <span class="sql-keyword">FROM</span> archived_items<br>
+                        <span class="sql-keyword">ORDER BY</span> name;
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        GET /.netlify/functions/<br>&nbsp;&nbsp;all-items
+                    </div>
+                    <h4 style="margin-top: 15px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        curl https://yoursite.netlify.app<br>&nbsp;&nbsp;/.netlify/functions/<br>&nbsp;&nbsp;all-items
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Combine active and archived items</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> sql<span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT item_id, name, 'active' AS status FROM active_items<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNION<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT item_id, name, 'archived' AS status FROM archived_items<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ORDER BY name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify(result), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Use Case:</strong> Admin view showing all items regardless of status!
             </div>
         </div>
 
