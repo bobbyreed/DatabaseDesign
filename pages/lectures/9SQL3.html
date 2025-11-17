@@ -381,6 +381,74 @@ Execution Time: 0.280 ms</pre>
             </div>
         </div>
 
+        <!-- Slide 8a: EXPLAIN ANALYZE → Performance Monitoring API -->
+        <div class="slide">
+            <h1>EXPLAIN ANALYZE → Performance Monitoring API</h1>
+            <h2>Build Query Performance Dashboards</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        <span class="sql-keyword">EXPLAIN ANALYZE</span><br>
+                        <span class="sql-keyword">SELECT</span> i.*, c.category_name<br>
+                        <span class="sql-keyword">FROM</span> items i<br>
+                        <span class="sql-keyword">JOIN</span> categories c<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">ON</span> i.category_id = c.category_id<br>
+                        <span class="sql-keyword">WHERE</span> i.price > <span class="sql-number">100</span>;
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        GET /.netlify/functions/<br>&nbsp;&nbsp;query-performance?<br>&nbsp;&nbsp;query=expensive-items
+                    </div>
+                    <h4 style="margin-top: 15px;">Response</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        {<br>
+                        &nbsp;&nbsp;"execution_time": "0.280 ms",<br>
+                        &nbsp;&nbsp;"planning_time": "0.150 ms",<br>
+                        &nbsp;&nbsp;"rows_returned": 12<br>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Run EXPLAIN ANALYZE</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> explain = <span class="sql-keyword">await</span> sql<span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPLAIN ANALYZE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT i.*, c.category_name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM items i<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JOIN categories c ON i.category_id = c.category_id<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE i.price > 100<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Parse execution time from EXPLAIN output</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> executionTime = explain[explain.length - <span class="sql-number">1</span>];<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ explain }), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Admin Use:</strong> Build a performance dashboard to monitor slow queries!
+            </div>
+        </div>
+
         <!-- Slide 9: What Are Indexes? -->
         <div class="slide">
             <h1>Indexes: The Speed Boost Your DB Needs</h1>
@@ -447,6 +515,73 @@ Execution Time: 0.280 ms</pre>
 
             <div class="warning-box">
                 <strong>Don't Over-Index!</strong> Indexes speed up reads but slow down writes (INSERT/UPDATE/DELETE). Only index columns you actually query!
+            </div>
+        </div>
+
+        <!-- Slide 10a: CREATE INDEX → Admin Optimization API -->
+        <div class="slide">
+            <h1>CREATE INDEX → Admin Optimization API</h1>
+            <h2>Database Maintenance Endpoints</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>SQL Query</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        <span class="sql-keyword">CREATE INDEX</span><br>
+                        &nbsp;&nbsp;idx_items_category<br>
+                        <span class="sql-keyword">ON</span> items(category_id);<br><br>
+
+                        <span class="sql-keyword">CREATE INDEX</span><br>
+                        &nbsp;&nbsp;idx_items_price<br>
+                        <span class="sql-keyword">ON</span> items(price);
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        POST /.netlify/functions/<br>&nbsp;&nbsp;create-index<br><br>
+                        Body: {<br>
+                        &nbsp;&nbsp;"table": "items",<br>
+                        &nbsp;&nbsp;"column": "category_id"<br>
+                        }
+                    </div>
+                    <h4 style="margin-top": 15px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        curl -X POST<br>&nbsp;&nbsp;https://yoursite.netlify.app<br>&nbsp;&nbsp;/.netlify/functions/create-index<br>&nbsp;&nbsp;-d '{"table":"items",<br>&nbsp;&nbsp;&nbsp;&nbsp;"column":"category_id"}'
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code:</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">if</span> (req.method !== <span class="sql-string">'POST'</span>) <span class="sql-keyword">return</span> <span class="sql-keyword">new</span> Response(<span class="sql-string">'Method not allowed'</span>, { status: <span class="sql-number">405</span> });<br><br>
+
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> { table, column } = <span class="sql-keyword">await</span> req.json();<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Whitelist tables/columns for security</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> allowedTables = [<span class="sql-string">'items'</span>, <span class="sql-string">'categories'</span>];<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">if</span> (!allowedTables.includes(table)) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(<span class="sql-string">'Invalid table'</span>, { status: <span class="sql-number">400</span> });<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Create index (use raw SQL for DDL)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> indexName = <span class="sql-string">`idx_${table}_${column}`</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">await</span> sql.unsafe(<span class="sql-string">`CREATE INDEX IF NOT EXISTS ${indexName} ON ${table}(${column})`</span>);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ message: <span class="sql-string">'Index created'</span> }), { status: <span class="sql-number">201</span> });<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="warning-box" style="margin-top: 20px;">
+                <strong>⚠️ Security:</strong> ALWAYS whitelist tables/columns! Never allow user input directly in DDL!
             </div>
         </div>
 
@@ -631,6 +766,68 @@ Execution Time: 0.280 ms</pre>
                     <span class="sql-keyword">LEFT JOIN</span> customers c <span class="sql-keyword">ON</span> a.customer_id = c.customer_id<br>
                     <span class="sql-keyword">LEFT JOIN</span> employees e <span class="sql-keyword">ON</span> a.employee_id = e.employee_id;
                 </div>
+            </div>
+        </div>
+
+        <!-- Slide 14a: Views → Simplified API Endpoints -->
+        <div class="slide">
+            <h1>Views → Simplified API Endpoints</h1>
+            <h2>Clean Code with Database Views</h2>
+
+            <div class="two-column">
+                <div>
+                    <h3>Create View (One Time)</h3>
+                    <div class="sql-example" style="font-size: 0.8em;">
+                        <span class="sql-keyword">CREATE VIEW</span> items_full <span class="sql-keyword">AS</span><br>
+                        <span class="sql-keyword">SELECT</span><br>
+                        &nbsp;&nbsp;i.item_id, i.name, i.price,<br>
+                        &nbsp;&nbsp;c.category_name,<br>
+                        &nbsp;&nbsp;s.supplier_name<br>
+                        <span class="sql-keyword">FROM</span> items i<br>
+                        <span class="sql-keyword">LEFT JOIN</span> categories c<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">ON</span> i.category_id = c.category_id<br>
+                        <span class="sql-keyword">LEFT JOIN</span> suppliers s<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">ON</span> i.supplier_id = s.supplier_id;
+                    </div>
+                </div>
+                <div>
+                    <h3>API Call</h3>
+                    <div class="sql-example" style="font-size: 0.85em;">
+                        GET /.netlify/functions/<br>&nbsp;&nbsp;items-full
+                    </div>
+                    <h4 style="margin-top: 15px;">cURL</h4>
+                    <div class="sql-example" style="font-size: 0.7em;">
+                        curl https://yoursite.netlify.app<br>&nbsp;&nbsp;/.netlify/functions/<br>&nbsp;&nbsp;items-full
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 25px;">Netlify Function Code (Super Simple!):</h3>
+            <div class="sql-example" style="font-size: 0.75em;">
+                <span class="sql-keyword">import</span> { neon } <span class="sql-keyword">from</span> <span class="sql-string">'@neondatabase/serverless'</span>;<br><br>
+
+                <span class="sql-keyword">export default async</span> (req, context) => {<br>
+                &nbsp;&nbsp;<span class="sql-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> sql = neon(process.env.DATABASE_URL);<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-comment">// Query the view - no complex JOINs needed!</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">const</span> result = <span class="sql-keyword">await</span> sql<span class="sql-string">`<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT * FROM items_full<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ORDER BY name<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify(result), {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="sql-number">200</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: { <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span> }<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;} <span class="sql-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">return new</span> Response(JSON.stringify({ error: error.message }), { status: <span class="sql-number">500</span> });<br>
+                &nbsp;&nbsp;}<br>
+                };
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Benefits:</strong> Clean API code + Reusable complex queries + Better maintainability!
             </div>
         </div>
 
