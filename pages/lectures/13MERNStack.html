@@ -95,13 +95,16 @@
         <!-- Slide 2: Learning Objectives -->
         <div class="slide">
             <h1>Today's Learning Objectives</h1>
+            <div class="success-box" style="margin-bottom: 20px;">
+                <strong>Recap:</strong> You've already deployed a full MERN stack! Today we'll deeply understand how it all works together.
+            </div>
             <ul style="font-size: 1.4em; line-height: 2;">
-                <li>< Set up and configure MongoDB Atlas cloud database</li>
-                <li>< Deploy Express.js backend to Render with database connection</li>
-                <li>< Deploy React frontend to Netlify</li>
-                <li>< Understand full-stack data flow from UI to database</li>
-                <li>< Configure CORS and environment variables for production</li>
-                <li>< Trace database queries through the application stack</li>
+                <li>🎯 Trace complete data flow from React UI through Express to MongoDB and back</li>
+                <li>🎯 Understand CORS and why cross-origin requests need configuration</li>
+                <li>🎯 Master environment variables for secure database connections</li>
+                <li>🎯 Debug common MERN stack deployment issues</li>
+                <li>🎯 Analyze HTTP request/response cycles in a full-stack app</li>
+                <li>🎯 Identify security best practices for production deployments</li>
             </ul>
         </div>
 
@@ -177,31 +180,30 @@
             </div>
         </div>
 
-        <!-- Slide 5: Prerequisites -->
+        <!-- What You've Built -->
         <div class="slide">
-            <h1>Prerequisites & Setup <span class="emoji"></span></h1>
+            <h1>What You've Already Deployed <span class="emoji">✅</span></h1>
 
-            <div class="warning-box">
-                <h3>You Will Need (Free Accounts):</h3>
+            <div class="success-box">
+                <h3>Your Live MERN Stack (from previous lectures):</h3>
                 <ol style="font-size: 1.15em; line-height: 1.8;">
-                    <li><strong>GitHub Account</strong> - For code repositories</li>
-                    <li><strong>MongoDB Atlas Account</strong> - For cloud database</li>
-                    <li><strong>Render Account</strong> - For backend hosting</li>
-                    <li><strong>Netlify Account</strong> - For frontend hosting</li>
+                    <li><strong>MongoDB Atlas</strong> - Cloud database with connection string (Lecture 11b)</li>
+                    <li><strong>Express Backend on Render</strong> - RESTful API with Mongoose models (Lecture 12)</li>
+                    <li><strong>React Frontend on Netlify</strong> - UI connected to your API (Lecture 12)</li>
                 </ol>
             </div>
 
-            <div class="demo-box">
-                <h3>Tools Installed Locally:</h3>
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>Your Application Endpoints:</h3>
                 <ul style="font-size: 1.1em;">
-                    <li>Git (for version control)</li>
-                    <li>Node.js & npm (for local development)</li>
-                    <li>Text editor (VS Code recommended)</li>
+                    <li><strong>Frontend:</strong> https://your-app.netlify.app</li>
+                    <li><strong>Backend API:</strong> https://your-api.onrender.com/api/tasks</li>
+                    <li><strong>Database:</strong> mongodb+srv://cluster.mongodb.net/taskmanager</li>
                 </ul>
             </div>
 
             <div class="tip-box">
-                <strong>Time Required:</strong> Plan for 90-120 minutes to complete all steps carefully.
+                <strong>Today's Focus:</strong> Understanding how these three pieces communicate and work together in production.
             </div>
         </div>
 
@@ -235,30 +237,7 @@
             </div>
         </div>
 
-        <!-- PHASE 1: MongoDB Atlas Setup -->
-
-        <!-- Slide 7: Phase 1 Overview -->
-        <div class="slide">
-            <h1>Phase 1: MongoDB Atlas Setup <span class="emoji"></span></h1>
-            <h2><span class="timer-badge">20 minutes</span></h2>
-
-            <div class="activity-box">
-                <h3>What We'll Do:</h3>
-                <ol style="font-size: 1.2em; line-height: 1.8;">
-                    <li>Create a free MongoDB Atlas cluster</li>
-                    <li>Configure database user and network access</li>
-                    <li>Create the "tasks" database and collection</li>
-                    <li>Get the connection string</li>
-                    <li>Test the connection with sample data</li>
-                </ol>
-            </div>
-
-            <div class="tip-box">
-                <strong>Why Atlas?</strong> MongoDB Atlas is the official cloud database service - fully managed, free tier available, and production-ready.
-            </div>
-
-            <button data-timer="20">Start 20-Minute Timer</button>
-        </div>
+        <!-- Today's Agenda: Understanding Your Deployment -->
 
         <!-- Slide 8: Step 1 - Create Atlas Account -->
         <div class="slide">

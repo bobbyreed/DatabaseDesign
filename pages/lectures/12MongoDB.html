@@ -69,6 +69,91 @@
         .emoji {
             font-size: 1.2em;
         }
+
+        /* Deployment and hands-on activity styles */
+        .deployment-step {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--ocu-true-blue);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .deployment-step h4 {
+            color: var(--ocu-true-blue);
+            margin-top: 0;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .checkpoint {
+            background: var(--success-color, #4caf50);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .activity-box {
+            background: var(--ocu-light-blue, #e3f2fd);
+            color: var(--ocu-true-blue, #1976d2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid var(--ocu-true-blue, #1976d2);
+        }
+
+        .timer-badge {
+            background: var(--ocu-cyan, #00bcd4);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .info-box, .demo-box {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .tip-box {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
     </style>
 </head>
 <body>
@@ -78,7 +163,9 @@
 
         <!-- Timer display -->
         <div class="timer-display" id="timer-display">
-            <span id="timer-text">Time Remaining: 05:00</span>
+            <span id="timer-text">Lecture 12: MongoDB
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
         </div>
 
         <!-- Slide 1: Title -->
@@ -96,14 +183,16 @@
             <h1>Today's Agenda</h1>
             <ul style="font-size: 1.3em; line-height: 2;">
                 <li>NoSQL vs SQL Databases</li>
-                <li>MongoDB Fundamentals</li>
-                <li>Document Structure & JSON/BSON</li>
+                <li>MongoDB Fundamentals & BSON</li>
                 <li>MongoDB CRUD Operations</li>
                 <li>Aggregation Framework & $lookup</li>
-                <li>Node.js Driver & Connection</li>
-                <li>MERN Stack Overview</li>
-                <li class="highlight">Hands-on Exercises</li>
+                <li class="highlight">Hands-On: Deploy Express Backend to Render</li>
+                <li class="highlight">Hands-On: Deploy React Frontend to Netlify</li>
+                <li class="highlight">Test Full-Stack MERN Application!</li>
             </ul>
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>Prerequisites:</strong> You should have completed MongoDB Atlas setup from last lecture (connection string ready!)
+            </div>
         </div>
 
         <!-- Slide 3: Historical Context -->
@@ -521,126 +610,487 @@ const salesPipeline = [
             </div>
         </div>
 
-        <!-- Slide 21: MERN Stack Introduction -->
+        <!-- Transition to MERN Stack -->
         <div class="slide">
-            <h1 style="text-align: center; font-size: 3em; margin-top: 100px;">MERN Stack</h1>
-            <h2 style="text-align: center; font-size: 2em; color: var(--ocu-true-blue);">MongoDB + Express + React + Node.js</h2>
-        </div>
+            <h1 style="text-align: center; font-size: 3em; margin-top: 100px;">Building the MERN Stack</h1>
+            <h2 style="text-align: center; font-size: 2em; color: var(--ocu-true-blue);">From MongoDB to Full-Stack Application</h2>
 
-        <!-- Slide 22: MERN Architecture -->
-        <div class="slide">
-            <h1>MERN Stack Architecture</h1>
-            <div style="text-align: center; font-size: 1.5em; margin-top: 50px;">
-                <div class="demo-box">
-                    <p><strong>React</strong> - Frontend UI (Port 3000)</p>
-                    <p style="font-size: 2em;">↕️</p>
-                    <p><strong>Express</strong> - API Server (Port 5000)</p>
-                    <p style="font-size: 2em;">↕️</p>
-                    <p><strong>Node.js</strong> - Runtime Environment</p>
-                    <p style="font-size: 2em;">↕️</p>
-                    <p><strong>MongoDB</strong> - Database (Port 27017)</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 23: Express + MongoDB Setup -->
-        <div class="slide">
-            <h1>Express API with MongoDB</h1>
-            <div class="code-example">
-const express = require('express');
-const { MongoClient } = require('mongodb');
-const app = express();
-
-app.use(express.json());
-
-let db;
-MongoClient.connect('mongodb://localhost:27017')
-    .then(client => {
-        db = client.db('myapp');
-        console.log('Connected to MongoDB');
-    });
-
-// GET all users
-app.get('/api/users', async (req, res) => {
-    const users = await db.collection('users').find().toArray();
-    res.json(users);
-});
-
-// POST new user
-app.post('/api/users', async (req, res) => {
-    const result = await db.collection('users').insertOne(req.body);
-    res.json({ id: result.insertedId });
-});
-
-app.listen(5000, () => console.log('Server on port 5000'));
-            </div>
-        </div>
-
-        <!-- Slide 24: React Frontend Example -->
-        <div class="slide">
-            <h1>React Frontend Connection</h1>
-            <div class="code-example">
-import { useState, useEffect } from 'react';
-
-function UserList() {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        // Fetch users from Express API
-        fetch('http://localhost:5000/api/users')
-            .then(res => res.json())
-            .then(data => setUsers(data));
-    }, []);
-
-    const addUser = async (userData) => {
-        const response = await fetch('http://localhost:5000/api/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-        });
-        const newUser = await response.json();
-        setUsers([...users, newUser]);
-    };
-
-    return (
-        // JSX component rendering
-    );
-}
-            </div>
-        </div>
-
-        <!-- Slide 25: Deployment Overview -->
-        <div class="slide">
-            <h1>MERN Deployment</h1>
-            <h3>Modern Deployment Strategy</h3>
-            <div class="comparison-table">
-                <div class="comparison-card">
-                    <h3>Frontend (React)</h3>
-                    <ul>
-                        <li>Deploy to Netlify or Vercel</li>
-                        <li>Connect via GitHub</li>
-                        <li>Automatic CI/CD</li>
-                    </ul>
-                </div>
-                <div class="comparison-card">
-                    <h3>Backend (Express/Node)</h3>
-                    <ul>
-                        <li>Deploy to Render or Railway</li>
-                        <li>Environment variables for config</li>
-                        <li>Auto-deploy on git push</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-box">
-                <h3>Database (MongoDB)</h3>
+            <div class="demo-box" style="margin-top: 50px; font-size: 1.2em;">
+                <p><strong>You've learned:</strong></p>
                 <ul>
-                    <li>MongoDB Atlas (cloud hosted)</li>
-                    <li>Free tier available</li>
+                    <li>✅ MongoDB fundamentals and CRUD operations</li>
+                    <li>✅ Aggregation and $lookup for complex queries</li>
+                    <li>✅ Set up MongoDB Atlas with connection string</li>
+                </ul>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px; font-size: 1.2em;">
+                <p><strong>Now let's build:</strong> A complete full-stack application!</p>
+                <p style="margin-top: 10px;">Express Backend → React Frontend → All deployed to the cloud!</p>
+            </div>
+        </div>
+
+        <!-- Hands-On Activity: Backend & Frontend Deployment -->
+
+        <!-- Backend Deployment Overview -->
+        <div class="slide">
+            <h1>Hands-On: Backend Deployment <span class="emoji">🚀</span></h1>
+            <h2><span class="timer-badge">30 minutes</span></h2>
+
+            <div class="activity-box">
+                <h3>What We'll Do:</h3>
+                <ol style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Fork the starter Express.js repository</li>
+                    <li>Review the backend code (MongoDB queries)</li>
+                    <li>Deploy to Render</li>
+                    <li>Configure environment variables with your Atlas connection</li>
+                    <li>Test API endpoints</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Repository to Fork:</h3>
+                <div class="command-box">
+https://github.com/yourusername/taskmanager-backend
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;"><em>Note: Your instructor will provide the actual repository URL</em></p>
+            </div>
+
+            <button data-timer="30">Start 30-Minute Timer</button>
+        </div>
+
+        <!-- Backend Code Structure -->
+        <div class="slide">
+            <h1>Understanding the Backend Code</h1>
+
+            <div class="demo-box">
+                <h3>Project Structure:</h3>
+                <div class="code-example">
+taskmanager-backend/
+├── server.js          # Main server file
+├── routes/
+│   └── tasks.js       # Task routes (API endpoints)
+├── models/
+│   └── Task.js        # MongoDB schema
+├── package.json       # Dependencies
+└── .env.example       # Environment variables template
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Key Dependencies:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>express</strong> - Web framework</li>
+                    <li><strong>mongoose</strong> - MongoDB ODM (Object Data Modeling)</li>
+                    <li><strong>cors</strong> - Enable cross-origin requests</li>
+                    <li><strong>dotenv</strong> - Environment variables management</li>
                 </ul>
             </div>
         </div>
 
-        <!-- Slide 26: In-Class Exercise 1 -->
+        <!-- MongoDB Connection Code -->
+        <div class="slide">
+            <h1>MongoDB Connection (server.js)</h1>
+
+            <div class="code-example" style="background: #1e1e1e; color: #d4d4d4;">
+<span style="color: #6a9955;">// Import required packages</span>
+<span style="color: #569cd6;">const</span> express = require(<span style="color: #ce9178;">'express'</span>);
+<span style="color: #569cd6;">const</span> mongoose = require(<span style="color: #ce9178;">'mongoose'</span>);
+<span style="color: #569cd6;">const</span> cors = require(<span style="color: #ce9178;">'cors'</span>);
+require(<span style="color: #ce9178;">'dotenv'</span>).config();
+
+<span style="color: #6a9955;">// Initialize Express app</span>
+<span style="color: #569cd6;">const</span> app = express();
+
+<span style="color: #6a9955;">// Middleware</span>
+app.use(cors());
+app.use(express.json());
+
+<span style="color: #6a9955;">// Connect to MongoDB Atlas with YOUR connection string</span>
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log(<span style="color: #ce9178;">'MongoDB connected successfully'</span>))
+  .catch(err => console.error(<span style="color: #ce9178;">'MongoDB connection error:'</span>, err));
+
+<span style="color: #6a9955;">// Import routes</span>
+<span style="color: #569cd6;">const</span> taskRoutes = require(<span style="color: #ce9178;">'./routes/tasks'</span>);
+app.use(<span style="color: #ce9178;">'/api/tasks'</span>, taskRoutes);
+
+<span style="color: #6a9955;">// Start server</span>
+<span style="color: #569cd6;">const</span> PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(<span style="color: #ce9178;">`Server running on port ${PORT}`</span>));
+            </div>
+
+            <div class="tip-box">
+                <strong>Key Point:</strong> The connection string comes from <code>process.env.MONGODB_URI</code> - this will be your Atlas connection from last lecture!
+            </div>
+        </div>
+
+        <!-- MongoDB Schema Code -->
+        <div class="slide">
+            <h1>Task Schema (models/Task.js)</h1>
+
+            <div class="code-example" style="background: #1e1e1e; color: #d4d4d4;">
+<span style="color: #569cd6;">const</span> mongoose = require(<span style="color: #ce9178;">'mongoose'</span>);
+
+<span style="color: #6a9955;">// Define Task schema</span>
+<span style="color: #569cd6;">const</span> taskSchema = <span style="color: #569cd6;">new</span> mongoose.Schema({
+  title: {
+    type: String,
+    required: [<span style="color: #569cd6;">true</span>, <span style="color: #ce9178;">'Title is required'</span>],
+    trim: <span style="color: #569cd6;">true</span>,
+    maxlength: [100, <span style="color: #ce9178;">'Title cannot exceed 100 characters'</span>]
+  },
+  description: {
+    type: String,
+    trim: <span style="color: #569cd6;">true</span>
+  },
+  completed: {
+    type: Boolean,
+    <span style="color: #569cd6;">default</span>: <span style="color: #569cd6;">false</span>
+  }
+}, {
+  timestamps: <span style="color: #569cd6;">true</span> <span style="color: #6a9955;">// Adds createdAt and updatedAt automatically</span>
+});
+
+module.exports = mongoose.model(<span style="color: #ce9178;">'Task'</span>, taskSchema);
+            </div>
+
+            <div class="success-box">
+                <strong>Mongoose Magic:</strong> This schema validates data before saving to MongoDB and provides helpful methods for CRUD operations!
+            </div>
+        </div>
+
+        <!-- API Routes Code Part 1 -->
+        <div class="slide">
+            <h1>CRUD Routes (routes/tasks.js) - Part 1</h1>
+
+            <div class="code-example" style="background: #1e1e1e; color: #d4d4d4; font-size: 0.9em;">
+<span style="color: #569cd6;">const</span> express = require(<span style="color: #ce9178;">'express'</span>);
+<span style="color: #569cd6;">const</span> router = express.Router();
+<span style="color: #569cd6;">const</span> Task = require(<span style="color: #ce9178;">'../models/Task'</span>);
+
+<span style="color: #6a9955;">// GET all tasks - Uses MongoDB find()</span>
+router.get(<span style="color: #ce9178;">'/'</span>, <span style="color: #569cd6;">async</span> (req, res) => {
+  <span style="color: #569cd6;">try</span> {
+    <span style="color: #569cd6;">const</span> tasks = <span style="color: #569cd6;">await</span> Task.find().sort({ createdAt: -1 });
+    res.json(tasks);
+  } <span style="color: #569cd6;">catch</span> (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+<span style="color: #6a9955;">// POST create new task - Uses MongoDB insertOne()</span>
+router.post(<span style="color: #ce9178;">'/'</span>, <span style="color: #569cd6;">async</span> (req, res) => {
+  <span style="color: #569cd6;">const</span> task = <span style="color: #569cd6;">new</span> Task({
+    title: req.body.title,
+    description: req.body.description
+  });
+  <span style="color: #569cd6;">try</span> {
+    <span style="color: #569cd6;">const</span> newTask = <span style="color: #569cd6;">await</span> task.save();
+    res.status(201).json(newTask);
+  } <span style="color: #569cd6;">catch</span> (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+            </div>
+        </div>
+
+        <!-- API Routes Code Part 2 -->
+        <div class="slide">
+            <h1>CRUD Routes (routes/tasks.js) - Part 2</h1>
+
+            <div class="code-example" style="background: #1e1e1e; color: #d4d4d4; font-size: 0.85em;">
+<span style="color: #6a9955;">// PUT update task - Uses MongoDB updateOne()</span>
+router.put(<span style="color: #ce9178;">'/:id'</span>, <span style="color: #569cd6;">async</span> (req, res) => {
+  <span style="color: #569cd6;">try</span> {
+    <span style="color: #569cd6;">const</span> task = <span style="color: #569cd6;">await</span> Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { <span style="color: #569cd6;">new</span>: <span style="color: #569cd6;">true</span>, runValidators: <span style="color: #569cd6;">true</span> }
+    );
+    <span style="color: #569cd6;">if</span> (!task) <span style="color: #569cd6;">return</span> res.status(404).json({ message: <span style="color: #ce9178;">'Task not found'</span> });
+    res.json(task);
+  } <span style="color: #569cd6;">catch</span> (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+<span style="color: #6a9955;">// DELETE task - Uses MongoDB deleteOne()</span>
+router.delete(<span style="color: #ce9178;">'/:id'</span>, <span style="color: #569cd6;">async</span> (req, res) => {
+  <span style="color: #569cd6;">try</span> {
+    <span style="color: #569cd6;">const</span> task = <span style="color: #569cd6;">await</span> Task.findByIdAndDelete(req.params.id);
+    <span style="color: #569cd6;">if</span> (!task) <span style="color: #569cd6;">return</span> res.status(404).json({ message: <span style="color: #ce9178;">'Task not found'</span> });
+    res.json({ message: <span style="color: #ce9178;">'Task deleted successfully'</span> });
+  } <span style="color: #569cd6;">catch</span> (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+module.exports = router;
+            </div>
+
+            <div class="tip-box">
+                <strong>Database Operations:</strong> Notice <code>find()</code>, <code>save()</code>, <code>findByIdAndUpdate()</code>, and <code>findByIdAndDelete()</code> - these are Mongoose methods that interact with MongoDB!
+            </div>
+        </div>
+
+        <!-- Deploy to Render -->
+        <div class="slide">
+            <h1>Step 1: Deploy Backend to Render</h1>
+
+            <div class="deployment-step">
+                <h4>1.1 Fork and Clone Repository</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Fork the backend repository on GitHub</li>
+                    <li>Your fork: <code>https://github.com/YOUR-USERNAME/taskmanager-backend</code></li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>1.2 Create Render Account & New Web Service</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Go to <strong>https://render.com</strong> and sign up</li>
+                    <li>Click <strong>"New +"</strong> → <strong>"Web Service"</strong></li>
+                    <li>Connect your GitHub account</li>
+                    <li>Select your forked <strong>taskmanager-backend</strong> repository</li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>1.3 Configure Web Service</h4>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>Name:</strong> taskmanager-api (or your choice)</li>
+                    <li><strong>Environment:</strong> Node</li>
+                    <li><strong>Build Command:</strong> <code>npm install</code></li>
+                    <li><strong>Start Command:</strong> <code>node server.js</code></li>
+                    <li><strong>Plan:</strong> Free</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Configure Environment Variables -->
+        <div class="slide">
+            <h1>Step 2: Set Environment Variables</h1>
+
+            <div class="deployment-step">
+                <h4>2.1 Add MongoDB Connection String</h4>
+                <p>Before clicking "Create Web Service", scroll to <strong>Environment Variables</strong>:</p>
+                <ul style="font-size: 1.05em;">
+                    <li>Click <strong>"Add Environment Variable"</strong></li>
+                    <li><strong>Key:</strong> <code>MONGODB_URI</code></li>
+                    <li><strong>Value:</strong> Paste your MongoDB connection string from last lecture!</li>
+                </ul>
+                <div class="command-box" style="font-size: 0.85em; margin-top: 10px;">
+mongodb+srv://dbUser:yourpassword@cluster0.xxxxx.mongodb.net/taskmanager?retryWrites=true&w=majority
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;"><strong>Important:</strong> Add <code>/taskmanager</code> after <code>.net</code> to specify the database name!</p>
+            </div>
+
+            <div class="deployment-step">
+                <h4>2.2 Create and Deploy</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Click <strong>"Create Web Service"</strong></li>
+                    <li>Wait 5-10 minutes for initial deployment</li>
+                    <li>Watch the logs - look for "MongoDB connected successfully"</li>
+                </ul>
+            </div>
+
+            <div class="checkpoint">
+                ✓ CHECKPOINT: Your API is live! Copy the URL: https://your-api.onrender.com
+            </div>
+        </div>
+
+        <!-- Test Backend -->
+        <div class="slide">
+            <h1>Step 3: Test Your API</h1>
+
+            <div class="deployment-step">
+                <h4>3.1 Test with Browser</h4>
+                <p>Visit your Render URL + <code>/api/tasks</code>:</p>
+                <div class="command-box">
+https://your-api.onrender.com/api/tasks
+                </div>
+                <p style="margin-top: 10px;">You should see JSON array with your sample task from Atlas!</p>
+            </div>
+
+            <div class="deployment-step">
+                <h4>3.2 Test with Postman or Thunder Client</h4>
+                <p><strong>Create a Task (POST Request):</strong></p>
+                <ul style="font-size: 1.0em;">
+                    <li>URL: <code>https://your-api.onrender.com/api/tasks</code></li>
+                    <li>Method: POST</li>
+                    <li>Headers: <code>Content-Type: application/json</code></li>
+                    <li>Body (JSON):</li>
+                </ul>
+                <div class="code-example" style="margin-top: 10px;">
+{
+  "title": "Test from Postman",
+  "description": "Verifying API works!"
+}
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Success!</strong> If you get a 201 status with the new task, your backend is fully operational!
+            </div>
+        </div>
+
+        <!-- Frontend Deployment Overview -->
+        <div class="slide">
+            <h1>Hands-On: Frontend Deployment <span class="emoji">⚛️</span></h1>
+            <h2><span class="timer-badge">20 minutes</span></h2>
+
+            <div class="activity-box">
+                <h3>What We'll Do:</h3>
+                <ol style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Fork the React frontend repository</li>
+                    <li>Update API URL to point to your Render backend</li>
+                    <li>Deploy to Netlify</li>
+                    <li>Test the full-stack application</li>
+                </ol>
+            </div>
+
+            <div class="demo-box">
+                <h3>Repository to Fork:</h3>
+                <div class="command-box">
+https://github.com/yourusername/taskmanager-frontend
+                </div>
+                <p style="font-size: 0.95em; margin-top: 10px;"><em>Note: Your instructor will provide the actual repository URL</em></p>
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Frontend Code Structure -->
+        <div class="slide">
+            <h1>Understanding the Frontend Code</h1>
+
+            <div class="demo-box">
+                <h3>Project Structure:</h3>
+                <div class="code-example">
+taskmanager-frontend/
+├── src/
+│   ├── App.js         # Main component
+│   ├── components/
+│   │   ├── TaskList.js
+│   │   ├── TaskForm.js
+│   │   └── TaskItem.js
+│   ├── api/
+│   │   └── tasks.js   # API calls (YOU'LL UPDATE THIS!)
+│   └── index.js
+├── package.json
+└── public/
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h3>Key Dependencies:</h3>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>react</strong> - UI library</li>
+                    <li><strong>axios</strong> - HTTP client for API calls</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- API Configuration -->
+        <div class="slide">
+            <h1>Frontend API Configuration (src/api/tasks.js)</h1>
+
+            <div class="code-example" style="background: #1e1e1e; color: #d4d4d4;">
+<span style="color: #569cd6;">import</span> axios <span style="color: #569cd6;">from</span> <span style="color: #ce9178;">'axios'</span>;
+
+<span style="color: #6a9955;">// IMPORTANT: Change this to your Render API URL!</span>
+<span style="color: #569cd6;">const</span> API_URL = <span style="color: #ce9178;">'https://your-api.onrender.com/api/tasks'</span>;
+
+<span style="color: #6a9955;">// Get all tasks</span>
+<span style="color: #569cd6;">export const</span> getTasks = () => axios.get(API_URL);
+
+<span style="color: #6a9955;">// Create task</span>
+<span style="color: #569cd6;">export const</span> createTask = (task) => axios.post(API_URL, task);
+
+<span style="color: #6a9955;">// Update task</span>
+<span style="color: #569cd6;">export const</span> updateTask = (id, task) =>
+  axios.put(<span style="color: #ce9178;">`${API_URL}/${id}`</span>, task);
+
+<span style="color: #6a9955;">// Delete task</span>
+<span style="color: #569cd6;">export const</span> deleteTask = (id) =>
+  axios.delete(<span style="color: #ce9178;">`${API_URL}/${id}`</span>);
+            </div>
+
+            <div class="warning-box">
+                <strong>ACTION REQUIRED:</strong> You MUST update <code>API_URL</code> to your actual Render backend URL before deploying!
+            </div>
+        </div>
+
+        <!-- Deploy to Netlify -->
+        <div class="slide">
+            <h1>Step 4: Update API URL & Deploy to Netlify</h1>
+
+            <div class="deployment-step">
+                <h4>4.1 Fork Repository</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Fork the frontend repository on GitHub</li>
+                    <li>Your fork: <code>https://github.com/YOUR-USERNAME/taskmanager-frontend</code></li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>4.2 Update API URL</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Edit <code>src/api/tasks.js</code> in your forked repo (use GitHub web editor)</li>
+                    <li>Replace <code>API_URL</code> with your Render backend URL</li>
+                    <li>Commit the change: "Update API URL to Render backend"</li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>4.3 Deploy to Netlify</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Go to <strong>https://netlify.com</strong> and sign up</li>
+                    <li>Click <strong>"Add new site"</strong> → <strong>"Import an existing project"</strong></li>
+                    <li>Connect to GitHub and select <strong>taskmanager-frontend</strong></li>
+                    <li><strong>Build command:</strong> <code>npm run build</code></li>
+                    <li><strong>Publish directory:</strong> <code>build</code></li>
+                    <li>Click <strong>"Deploy site"</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Test Full Stack -->
+        <div class="slide">
+            <h1>Step 5: Test Your Full-Stack App! <span class="emoji">🎉</span></h1>
+
+            <div class="deployment-step">
+                <h4>5.1 Open Your Deployed App</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Netlify will provide a URL like: <code>https://random-name.netlify.app</code></li>
+                    <li>Open this URL in your browser</li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>5.2 Test All CRUD Operations</h4>
+                <ul style="font-size: 1.1em; line-height: 1.7;">
+                    <li>✅ <strong>CREATE:</strong> Add a new task using the form</li>
+                    <li>✅ <strong>READ:</strong> See all tasks load from MongoDB</li>
+                    <li>✅ <strong>UPDATE:</strong> Toggle task completion status</li>
+                    <li>✅ <strong>DELETE:</strong> Remove a task</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>Congratulations! Your full-stack MERN application is live!</h3>
+                <p style="font-size: 1.1em; margin-top: 10px;">React (Netlify) → Express (Render) → MongoDB (Atlas)</p>
+            </div>
+
+            <div class="checkpoint">
+                ✓ CHECKPOINT: All three services are connected and working together!
+            </div>
+        </div>
+
+        <!-- Exercises and Homework Continue Below -->
+
+        <!-- In-Class Exercise 1 -->
         <div class="slide">
             <h1>Exercise 1: MongoDB CRUD Practice</h1>
             <div class="activity-box">
@@ -826,7 +1276,7 @@ db.users.updateOne(
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">34</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">44</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

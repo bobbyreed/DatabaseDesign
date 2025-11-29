@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Views & Document Databases - CSCI 5603</title>
+    <title>Document Databases - CSCI 5603</title>
     
     <!-- Database Design Presentation Styles with Theme Support -->
     <link rel="stylesheet" href="../../styles/presentation.css">
@@ -41,6 +41,14 @@
             border-left: 4px solid var(--ocu-cyan);
             overflow-x: auto;
             font-size: 0.95em;
+        }
+
+        .sql-example pre, .json-example pre, .mongodb-example pre, .xml-example pre {
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Mono', monospace;
+            white-space: pre;
+            line-height: 1.6;
         }
         
         .sql-keyword, .json-key {
@@ -156,6 +164,56 @@
             margin: 15px 0;
             font-family: 'IBM Plex Mono', monospace;
         }
+
+        /* Deployment and hands-on activity styles */
+        .deployment-step {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--ocu-true-blue);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .deployment-step h4 {
+            color: var(--ocu-true-blue);
+            margin-top: 0;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .checkpoint {
+            background: var(--success-color, #4caf50);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .activity-box {
+            background: var(--ocu-light-blue, #e3f2fd);
+            color: var(--ocu-true-blue, #1976d2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid var(--ocu-true-blue, #1976d2);
+        }
+
+        .timer-badge {
+            background: var(--ocu-cyan, #00bcd4);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -164,232 +222,63 @@
     <div class="presentation-container">
         <!-- Timer display -->
         <div class="timer-display" id="timer-display">
-            <span id="timer-text">Lecture 11b: Views & Document Databases
-                 <button class="home"><a href="../index.html">Home</a></button>
+            <span id="timer-text">Lecture 11b: Document Databases
+                 <button class="home"><a href="../../index.html">Home</a></button>
             </span>
         </div>
 
         <!-- Slide 1: Title -->
         <div class="slide active">
-            <h1>Views & Document Databases</h1>
-            <h2>From Relational to NoSQL <span class="emoji">📄</span></h2>
+            <h1>Document Databases</h1>
+            <h2>MongoDB & the MERN Stack <span class="emoji">📄</span></h2>
             <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
-            <p style="font-size: 1.3em;">Week 8, Lecture 12</p>
-            <p style="margin-top: auto; font-style: italic;">Bridging traditional and modern database paradigms</p>
+            <p style="font-size: 1.3em;">Week 6, Lecture 11b</p>
+            <p style="margin-top: auto; font-style: italic;">Building modern web applications with NoSQL</p>
         </div>
 
         <!-- Slide 2: Learning Objectives -->
         <div class="slide">
             <h1>Today's Learning Objectives</h1>
             <ul style="font-size: 1.4em; line-height: 2;">
-                <li>🎯 Master SQL Views for security and simplification</li>
-                <li>🎯 Understand View update restrictions</li>
-                <li>🎯 Learn Document Database fundamentals</li>
-                <li>🎯 Explore JSON document structure</li>
+                <li>🎯 Understand Document Database fundamentals</li>
+                <li>🎯 Master JSON/BSON document structure</li>
                 <li>🎯 Compare Relational vs Document models</li>
+                <li>🎯 Learn MongoDB CRUD operations</li>
                 <li>🎯 Design Document schemas (Embedding vs Referencing)</li>
-                <li>🎯 Map Relational schemas to Document structures</li>
+                <li>🎯 Map Relational schemas to MongoDB collections</li>
+                <li>🎯 Explore MongoDB in the MERN stack ecosystem</li>
             </ul>
         </div>
 
-        <!-- Slide 3: Part 1 Divider -->
-        <div class="slide">
-            <h1 style="font-size: 3em; text-align: center; margin-top: 200px;">Part 1: SQL Views</h1>
-            <p style="text-align: center; font-size: 1.5em;">Virtual Tables for Security & Simplification</p>
-        </div>
-
-        <!-- Slide 4: What are Views? -->
-        <div class="slide">
-            <h1>What are SQL Views?</h1>
-            <div class="demo-box">
-                <p><strong>View Definition:</strong> A virtual table based on the result set of a SQL statement</p>
-            </div>
-            
-            <ul style="font-size: 1.2em; line-height: 1.8;">
-                <li>📊 Contains rows and columns like a real table</li>
-                <li>🔍 Fields are from one or more real tables</li>
-                <li>💾 No physical storage - computed on demand</li>
-                <li>🔐 Provides security through data abstraction</li>
-                <li>🎯 Simplifies complex queries</li>
-            </ul>
-
-            <div class="tip-box">
-                <strong>Key Point:</strong> Views are stored queries, not stored data!
-            </div>
-        </div>
-
-        <!-- Slide 5: CREATE VIEW Syntax -->
-        <div class="slide">
-            <h1>CREATE VIEW Syntax</h1>
-            
-            <div class="sql-example">
-                <span class="sql-keyword">CREATE VIEW</span> ViewName [ (newColumnName [,...]) ]<br>
-                <span class="sql-keyword">AS</span> subselect<br>
-                [<span class="sql-keyword">WITH</span> [<span class="sql-keyword">CASCADED</span> | <span class="sql-keyword">LOCAL</span>] <span class="sql-keyword">CHECK OPTION</span>]
-            </div>
-
-            <ul style="font-size: 1.1em; margin-top: 20px;">
-                <li>✅ Can assign names to columns in view</li>
-                <li>✅ Column count must match subselect</li>
-                <li>✅ If omitted, uses subselect column names</li>
-                <li>✅ CHECK OPTION ensures view updates maintain WHERE clause</li>
-            </ul>
-        </div>
-
-        <!-- Slide 6: Horizontal View Example -->
-        <div class="slide">
-            <h1>Horizontal View (Row Filtering)</h1>
-            <p>Restrict rows visible to specific users:</p>
-            
-            <div class="sql-example">
-                <span class="sql-comment">-- Manager at branch B003 sees only their staff</span><br>
-                <span class="sql-keyword">CREATE VIEW</span> Manager3Staff<br>
-                <span class="sql-keyword">AS SELECT</span> *<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span>;
-            </div>
-
-            <table class="table-schema">
-                <tr><th>staffNo</th><th>fName</th><th>lName</th><th>position</th><th>branchNo</th></tr>
-                <tr><td>SG37</td><td>Ann</td><td>Beech</td><td>Assistant</td><td>B003</td></tr>
-                <tr><td>SG14</td><td>David</td><td>Ford</td><td>Supervisor</td><td>B003</td></tr>
-                <tr><td>SG5</td><td>Susan</td><td>Brand</td><td>Manager</td><td>B003</td></tr>
-            </table>
-        </div>
-
-        <!-- Slide 7: Vertical View Example -->
-        <div class="slide">
-            <h1>Vertical View (Column Filtering)</h1>
-            <p>Hide sensitive columns like salary:</p>
-            
-            <div class="sql-example">
-                <span class="sql-comment">-- Hide salary information for security</span><br>
-                <span class="sql-keyword">CREATE VIEW</span> Staff3<br>
-                <span class="sql-keyword">AS SELECT</span> staffNo, fName, lName, position, sex<br>
-                <span class="sql-keyword">FROM</span> Staff<br>
-                <span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span>;
-            </div>
-
-            <div class="warning-box">
-                <strong>Security Benefit:</strong> Salary and DOB columns are completely hidden from users of this view
-            </div>
-        </div>
-
-        <!-- Slide 8: Complex View with JOIN -->
-        <div class="slide">
-            <h1>Grouped and Joined Views</h1>
-            <p>Views can contain complex queries with JOINs and aggregation:</p>
-            
-            <div class="sql-example">
-                <span class="sql-comment">-- Staff property management count</span><br>
-                <span class="sql-keyword">CREATE VIEW</span> StaffPropCnt (branchNo, staffNo, cnt)<br>
-                <span class="sql-keyword">AS SELECT</span> s.branchNo, s.staffNo, <span class="sql-keyword">COUNT</span>(*)<br>
-                <span class="sql-keyword">FROM</span> Staff s, PropertyForRent p<br>
-                <span class="sql-keyword">WHERE</span> s.staffNo = p.staffNo<br>
-                <span class="sql-keyword">GROUP BY</span> s.branchNo, s.staffNo;
-            </div>
-
-            <div class="tip-box">
-                <strong>Note:</strong> Views with GROUP BY cannot be updated!
-            </div>
-        </div>
-
-        <!-- Slide 9: View Benefits -->
-        <div class="slide">
-            <h1>Benefits of Using Views</h1>
-            
-            <div class="comparison-table">
-                <div class="comparison-card good">
-                    <h3>✅ Advantages</h3>
-                    <ul>
-                        <li>🔐 <strong>Security:</strong> Restrict access to sensitive data</li>
-                        <li>🎯 <strong>Simplicity:</strong> Hide complex queries</li>
-                        <li>🔄 <strong>Consistency:</strong> Standardize data access</li>
-                        <li>🛡️ <strong>Independence:</strong> Shield apps from schema changes</li>
-                        <li>📊 <strong>Customization:</strong> User-specific perspectives</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: View Update Restrictions -->
-        <div class="slide">
-            <h1>View Update Restrictions</h1>
-            <p>Not all views can be updated. Restrictions include:</p>
-            
-            <div class="demo-box" style="background: #ffebee; border-color: #f44336;">
-                <h3>❌ Non-Updatable Views</h3>
-                <ul>
-                    <li>Views with <code>GROUP BY</code> or aggregates (<code>COUNT</code>, <code>SUM</code>, etc.)</li>
-                    <li>Views with <code>DISTINCT</code> keyword</li>
-                    <li>Views with multiple table JOINs (usually)</li>
-                    <li>Views with calculated/derived columns</li>
-                    <li>Views containing subqueries in SELECT</li>
-                </ul>
-            </div>
-
-            <div class="demo-box" style="background: #e8f5e9; border-color: #4caf50; margin-top: 15px;">
-                <h3>✅ Updatable Views</h3>
-                <ul>
-                    <li>Simple single-table views</li>
-                    <li>No aggregate functions</li>
-                    <li>All NOT NULL columns included (for INSERT)</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 11: View Maintenance -->
-        <div class="slide">
-            <h1>View Maintenance</h1>
-            <p>How database systems keep views current:</p>
-            
-            <div class="sql-example">
-                <span class="sql-comment">-- Create a view with specific criteria</span><br>
-                <span class="sql-keyword">CREATE VIEW</span> StaffPropRent(staffNo) <span class="sql-keyword">AS</span><br>
-                <span class="sql-keyword">SELECT DISTINCT</span> staffNo<br>
-                <span class="sql-keyword">FROM</span> PropertyForRent<br>
-                <span class="sql-keyword">WHERE</span> branchNo = <span class="sql-string">'B003'</span> <span class="sql-keyword">AND</span> rent > 400;
-            </div>
-
-            <div class="tip-box">
-                <strong>Maintenance Strategy:</strong> Views are re-evaluated on each query, ensuring data is always current but potentially impacting performance
-            </div>
-        </div>
-
-        <!-- Slide 12: Part 2 Divider -->
-        <div class="slide">
-            <h1 style="font-size: 3em; text-align: center; margin-top: 200px;">Part 2: Document Databases</h1>
-            <p style="text-align: center; font-size: 1.5em;">NoSQL and Semi-Structured Data</p>
-        </div>
-
-        <!-- Slide 13: What is a Document Database? -->
+        <!-- Slide 3: What is a Document Database? -->
         <div class="slide">
             <h1>What is a Document Database?</h1>
-            
+
             <div class="demo-box">
                 <p><strong>Definition:</strong> A type of NoSQL database that stores and queries data as JSON-like documents</p>
+                <p style="margin-top: 10px;"><strong>Primary Example:</strong> MongoDB - the "M" in the MERN stack</p>
             </div>
 
             <ul style="font-size: 1.2em; line-height: 1.8;">
-                <li>📄 Stores semi-structured data</li>
-                <li>🔧 Flexible, evolving schemas</li>
-                <li>🌳 Hierarchical document structure</li>
-                <li>🚀 Designed for modern applications</li>
-                <li>⚡ Horizontal scaling capabilities</li>
+                <li>📄 Stores semi-structured data in BSON (Binary JSON) format</li>
+                <li>🔧 Flexible, evolving schemas - no migrations needed</li>
+                <li>🌳 Hierarchical document structure with nested objects</li>
+                <li>🚀 Designed for modern web and mobile applications</li>
+                <li>⚡ Horizontal scaling with sharding and replication</li>
             </ul>
 
-            <div class="warning-box">
-                <strong>Note:</strong> Called "NoSQL" because they don't use SQL for queries (though some now support SQL-like languages)
+            <div class="tip-box">
+                <strong>MERN Stack:</strong> MongoDB + Express.js + React + Node.js - a complete JavaScript stack for modern web development
             </div>
         </div>
 
-        <!-- Slide 14: Document vs Relational -->
+        <!-- Document vs Relational -->
         <div class="slide">
-            <h1>Document vs Relational Databases</h1>
-            
+            <h1>Relational vs Document Databases</h1>
+
             <div class="comparison-grid">
                 <div class="model-card">
-                    <h3>🗃️ Relational (RDBMS)</h3>
+                    <h3>🗃️ Relational (PostgreSQL)</h3>
                     <ul style="font-size: 0.95em;">
                         <li>Predefined schema</li>
                         <li>Tables with rows & columns</li>
@@ -401,107 +290,132 @@
                     </ul>
                 </div>
                 <div class="model-card">
-                    <h3>📄 Document (NoSQL)</h3>
+                    <h3>📄 Document (MongoDB)</h3>
                     <ul style="font-size: 0.95em;">
                         <li>Flexible schema</li>
                         <li>Collections of documents</li>
                         <li>Self-contained documents</li>
-                        <li>No JOINs needed</li>
-                        <li>Eventual consistency</li>
-                        <li>Query by example/API</li>
-                        <li>Horizontal scaling</li>
+                        <li>$lookup instead of JOINs</li>
+                        <li>Eventual consistency*</li>
+                        <li>JavaScript-like queries</li>
+                        <li>Horizontal scaling (sharding)</li>
                     </ul>
                 </div>
             </div>
+
+            <div class="tip-box" style="margin-top: 15px;">
+                <strong>Note:</strong> MongoDB now supports multi-document ACID transactions (since v4.0)
+            </div>
         </div>
 
-        <!-- Slide 15: JSON Document Structure -->
+        <!-- JSON Document Structure -->
         <div class="slide">
             <h1>JSON Document Structure</h1>
             <p>JSON represents data in three ways:</p>
-            
+
             <div class="comparison-table">
                 <div class="comparison-card">
                     <h3>1️⃣ Key-Value Pairs</h3>
                     <div class="json-example" style="font-size: 0.9em;">
-{<span class="json-key">"year"</span>: <span class="json-number">2013</span>}
+                        <pre>{
+  <span class="json-key">"year"</span>: <span class="json-number">2013</span>
+}</pre>
                     </div>
                 </div>
                 <div class="comparison-card">
                     <h3>2️⃣ Arrays</h3>
                     <div class="json-example" style="font-size: 0.9em;">
-{<span class="json-key">"genres"</span>: [<span class="json-string">"Comedy"</span>, <span class="json-string">"Drama"</span>]}
+                        <pre>{
+  <span class="json-key">"genres"</span>: [
+    <span class="json-string">"Comedy"</span>,
+    <span class="json-string">"Drama"</span>
+  ]
+}</pre>
                     </div>
                 </div>
             </div>
-            
+
             <div class="demo-box" style="margin-top: 15px;">
                 <h3>3️⃣ Nested Objects</h3>
                 <div class="json-example" style="font-size: 0.9em;">
-{<span class="json-key">"address"</span>: {
-  <span class="json-key">"country"</span>: <span class="json-string">"USA"</span>,
-  <span class="json-key">"state"</span>: <span class="json-string">"Texas"</span>
-}}
+                    <pre>{
+  <span class="json-key">"address"</span>: {
+    <span class="json-key">"country"</span>: <span class="json-string">"USA"</span>,
+    <span class="json-key">"state"</span>: <span class="json-string">"Texas"</span>
+  }
+}</pre>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 16: Movie Document Example -->
+        <!-- Movie Document Example -->
         <div class="slide">
             <h1>Complete Movie Document Example</h1>
-            
-            <div class="json-example" style="font-size: 0.85em;">
-{
+
+            <div class="json-example" style="font-size: 0.8em;">
+                <pre>{
   <span class="json-key">"year"</span>: <span class="json-number">2013</span>,
   <span class="json-key">"title"</span>: <span class="json-string">"Turn It Down, Or Else!"</span>,
+
   <span class="json-key">"info"</span>: {
-    <span class="json-key">"directors"</span>: [<span class="json-string">"Alice Smith"</span>, <span class="json-string">"Bob Jones"</span>],
+    <span class="json-key">"directors"</span>: [
+      <span class="json-string">"Alice Smith"</span>,
+      <span class="json-string">"Bob Jones"</span>
+    ],
     <span class="json-key">"release_date"</span>: <span class="json-string">"2013-01-18T00:00:00Z"</span>,
     <span class="json-key">"rating"</span>: <span class="json-number">6.2</span>,
-    <span class="json-key">"genres"</span>: [<span class="json-string">"Comedy"</span>, <span class="json-string">"Drama"</span>],
+
+    <span class="json-key">"genres"</span>: [
+      <span class="json-string">"Comedy"</span>,
+      <span class="json-string">"Drama"</span>
+    ],
     <span class="json-key">"plot"</span>: <span class="json-string">"A rock band plays their music at high volumes..."</span>,
-    <span class="json-key">"actors"</span>: [<span class="json-string">"David Matthewman"</span>, <span class="json-string">"Jonathan G. Neff"</span>]
+
+    <span class="json-key">"actors"</span>: [
+      <span class="json-string">"David Matthewman"</span>,
+      <span class="json-string">"Jonathan G. Neff"</span>
+    ]
   }
-}
+}</pre>
             </div>
 
             <div class="tip-box">
-                <strong>Flexibility:</strong> Unlimited hierarchy levels with nested objects and arrays
+                <strong>Nested Structure:</strong> The "info" object contains nested arrays (directors, genres, actors) - unlimited hierarchy levels possible!
             </div>
         </div>
 
-        <!-- Slide 17: Document vs XML -->
+        <!-- Document vs XML -->
         <div class="slide">
             <h1>Document Formats: JSON vs XML</h1>
-            
+
             <div class="comparison-grid">
                 <div class="model-card">
                     <h3>JSON Format</h3>
                     <div class="json-example" style="font-size: 0.8em;">
-{
+                        <pre>{
   <span class="json-key">"firstName"</span>: <span class="json-string">"Bob"</span>,
   <span class="json-key">"lastName"</span>: <span class="json-string">"Smith"</span>,
   <span class="json-key">"phone"</span>: {
     <span class="json-key">"type"</span>: <span class="json-string">"Cell"</span>,
     <span class="json-key">"number"</span>: <span class="json-string">"555-0123"</span>
   }
-}
+}</pre>
                     </div>
                 </div>
                 <div class="model-card">
                     <h3>XML Format</h3>
                     <div class="xml-example" style="font-size: 0.8em;">
-&lt;contact&gt;
+                        <pre>&lt;contact&gt;
   &lt;firstname&gt;Bob&lt;/firstname&gt;
   &lt;lastname&gt;Smith&lt;/lastname&gt;
   &lt;phone type="Cell"&gt;
     555-0123
   &lt;/phone&gt;
-&lt;/contact&gt;
+&lt;/contact&gt;</pre>
                     </div>
                 </div>
             </div>
-            
+
             <p style="text-align: center; margin-top: 15px;">Both formats support flexible schemas and hierarchical data</p>
         </div>
 
@@ -565,42 +479,45 @@ Database Instance
             </ul>
 
             <div class="json-example">
-<span class="json-comment">// Blog post document</span>
+                <pre><span class="json-comment">// Blog post document</span>
 {
   <span class="json-key">"title"</span>: <span class="json-string">"Database Design Tips"</span>,
   <span class="json-key">"author"</span>: <span class="json-string">"Jane Doe"</span>,
-  <span class="json-key">"tags"</span>: [<span class="json-string">"database"</span>, <span class="json-string">"nosql"</span>],
+  <span class="json-key">"tags"</span>: [
+    <span class="json-string">"database"</span>,
+    <span class="json-string">"nosql"</span>
+  ],
   <span class="json-key">"comments"</span>: [...]
-}
+}</pre>
             </div>
         </div>
 
-        <!-- Slide 21: Use Case - E-Commerce Catalogs -->
+        <!-- Use Case - E-Commerce Catalogs -->
         <div class="slide">
             <h1>Use Case: Product Catalogs</h1>
-            
+
             <div class="demo-box">
                 <p>Different products have vastly different attributes</p>
             </div>
 
             <div class="comparison-grid">
                 <div class="json-example" style="font-size: 0.8em;">
-<span class="json-comment">// Laptop product</span>
+                    <pre><span class="json-comment">// Laptop product</span>
 {
   <span class="json-key">"name"</span>: <span class="json-string">"ProBook"</span>,
   <span class="json-key">"ram"</span>: <span class="json-string">"16GB"</span>,
   <span class="json-key">"cpu"</span>: <span class="json-string">"i7"</span>,
   <span class="json-key">"screen"</span>: <span class="json-string">"15.6"</span>
-}
+}</pre>
                 </div>
                 <div class="json-example" style="font-size: 0.8em;">
-<span class="json-comment">// Clothing product</span>
+                    <pre><span class="json-comment">// Clothing product</span>
 {
   <span class="json-key">"name"</span>: <span class="json-string">"T-Shirt"</span>,
   <span class="json-key">"size"</span>: <span class="json-string">"L"</span>,
   <span class="json-key">"color"</span>: <span class="json-string">"Blue"</span>,
   <span class="json-key">"material"</span>: <span class="json-string">"Cotton"</span>
-}
+}</pre>
                 </div>
             </div>
 
@@ -626,14 +543,14 @@ Database Instance
             </ul>
 
             <div class="json-example" style="font-size: 0.9em;">
-{
+                <pre>{
   <span class="json-key">"sensor_id"</span>: <span class="json-string">"temp_001"</span>,
   <span class="json-key">"timestamp"</span>: <span class="json-string">"2024-03-15T10:30:00Z"</span>,
   <span class="json-key">"readings"</span>: {
     <span class="json-key">"temperature"</span>: <span class="json-number">72.5</span>,
     <span class="json-key">"humidity"</span>: <span class="json-number">45</span>
   }
-}
+}</pre>
             </div>
         </div>
 
@@ -656,12 +573,12 @@ Database Instance
             </div>
         </div>
 
-        <!-- Slide 24: MongoDB CRUD Examples -->
+        <!-- MongoDB CRUD Examples -->
         <div class="slide">
             <h1>MongoDB CRUD Examples</h1>
-            
+
             <div class="mongodb-example" style="font-size: 0.9em;">
-<span class="json-comment">// CREATE - Insert a movie</span>
+                <pre><span class="json-comment">// CREATE - Insert a movie</span>
 db.movies.insertOne({
   title: <span class="json-string">"Inception"</span>,
   year: <span class="json-number">2010</span>,
@@ -669,7 +586,9 @@ db.movies.insertOne({
 })
 
 <span class="json-comment">// READ - Find movies from 2010 or later</span>
-db.movies.find({year: {$gte: <span class="json-number">2010</span>}})
+db.movies.find({
+  year: {$gte: <span class="json-number">2010</span>}
+})
 
 <span class="json-comment">// UPDATE - Modify rating</span>
 db.movies.updateOne(
@@ -678,7 +597,9 @@ db.movies.updateOne(
 )
 
 <span class="json-comment">// DELETE - Remove a movie</span>
-db.movies.deleteOne({title: <span class="json-string">"Inception"</span>})
+db.movies.deleteOne({
+  title: <span class="json-string">"Inception"</span>
+})</pre>
             </div>
         </div>
 
@@ -714,15 +635,16 @@ db.movies.deleteOne({title: <span class="json-string">"Inception"</span>})
             </div>
         </div>
 
-        <!-- Slide 26: Popular Document Databases -->
+        <!-- Popular Document Databases -->
         <div class="slide">
             <h1>Popular Document Database Systems</h1>
-            
+
+            <div class="demo-box" style="background: #4db33d; color: white; padding: 15px; margin-bottom: 20px;">
+                <h3>⭐ MongoDB - Industry Leader & MERN Stack Foundation</h3>
+                <p style="margin: 5px 0;">BSON format • Aggregation Pipeline • Atlas Cloud • Mongoose ODM • Sharding & Replication</p>
+            </div>
+
             <div class="implementation-list">
-                <div class="implementation-card" style="background: #4db33d;">
-                    <strong>MongoDB</strong><br>
-                    BSON, Sharding
-                </div>
                 <div class="implementation-card" style="background: #ee4c2c;">
                     <strong>CouchDB</strong><br>
                     REST API, MapReduce
@@ -745,18 +667,18 @@ db.movies.deleteOne({title: <span class="json-string">"Inception"</span>})
                 </div>
             </div>
 
-            <p style="text-align: center; margin-top: 15px;">Each with different strengths and use cases</p>
+            <p style="text-align: center; margin-top: 15px;">We'll focus on MongoDB as it's the most widely adopted and the foundation of the MERN stack</p>
         </div>
 
-        <!-- Slide 27: MongoDB Modeling Strategies -->
+        <!-- MongoDB Modeling Strategies -->
         <div class="slide">
             <h1>MongoDB Modeling: Two Approaches</h1>
-            
+
             <div class="comparison-grid">
                 <div class="model-card embed">
                     <h3>🔗 Embedding</h3>
                     <div class="json-example" style="font-size: 0.8em;">
-{
+                        <pre>{
   <span class="json-key">"customer"</span>: <span class="json-string">"John"</span>,
   <span class="json-key">"orders"</span>: [
     {
@@ -764,22 +686,26 @@ db.movies.deleteOne({title: <span class="json-string">"Inception"</span>})
       <span class="json-key">"total"</span>: <span class="json-number">299</span>
     }
   ]
-}
+}</pre>
                     </div>
                     <div class="pro">✅ Single query</div>
                     <div class="con">❌ 16MB limit</div>
                 </div>
-                
+
                 <div class="model-card reference">
                     <h3>📍 Referencing</h3>
                     <div class="json-example" style="font-size: 0.8em;">
-<span class="json-comment">// Customers</span>
-{<span class="json-key">"_id"</span>: <span class="json-number">1</span>, 
- <span class="json-key">"name"</span>: <span class="json-string">"John"</span>}
+                        <pre><span class="json-comment">// Customers</span>
+{
+  <span class="json-key">"_id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"John"</span>
+}
 
 <span class="json-comment">// Orders</span>
-{<span class="json-key">"customer_id"</span>: <span class="json-number">1</span>,
- <span class="json-key">"total"</span>: <span class="json-number">299</span>}
+{
+  <span class="json-key">"customer_id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"total"</span>: <span class="json-number">299</span>
+}</pre>
                     </div>
                     <div class="pro">✅ No duplication</div>
                     <div class="con">❌ Multiple queries</div>
@@ -787,76 +713,7 @@ db.movies.deleteOne({title: <span class="json-string">"Inception"</span>})
             </div>
         </div>
 
-        <!-- Slide 28: In-Class Exercise 1 -->
-        <div class="slide">
-            <h1>Exercise 1: Creating a Secure View <span class="emoji">💻</span></h1>
-            
-            <div class="activity-box">
-                <h3>10-Minute Exercise</h3>
-                <p>Given this complex query, create a VIEW and explain its security benefits:</p>
-                
-                <div class="sql-example" style="font-size: 0.85em;">
-<span class="sql-keyword">SELECT</span> e.emp_id, e.first_name, e.last_name,
-       d.dept_name, p.project_name
-<span class="sql-keyword">FROM</span> Employees e
-<span class="sql-keyword">INNER JOIN</span> Departments d <span class="sql-keyword">ON</span> e.dept_id = d.dept_id
-<span class="sql-keyword">LEFT JOIN</span> Projects p <span class="sql-keyword">ON</span> e.emp_id = p.lead_id
-<span class="sql-keyword">WHERE</span> e.salary > <span class="json-number">50000</span> 
-  <span class="sql-keyword">AND</span> e.active = <span class="sql-string">'Y'</span>;
-                </div>
-                
-                <div class="exercise-instructions">
-                    <ol>
-                        <li>Write the CREATE VIEW statement</li>
-                        <li>Name it "ActiveProjectLeads"</li>
-                        <li>List 2 security benefits (50 words)</li>
-                    </ol>
-                </div>
-            </div>
-            <button data-timer="10">Start 10-Minute Timer</button>
-        </div>
-
-        <!-- Slide 29: In-Class Exercise 2 -->
-        <div class="slide">
-            <h1>Exercise 2: Relational to Document <span class="emoji">🔄</span></h1>
-            
-            <div class="activity-box">
-                <h3>15-Minute Exercise</h3>
-                <p>Convert this relational schema to MongoDB:</p>
-                
-                <table class="table-schema">
-                    <tr><th colspan="2">Customers Table</th><th colspan="2">Orders Table</th></tr>
-                    <tr>
-                        <td>customer_id (PK)</td><td>INT</td>
-                        <td>order_id (PK)</td><td>INT</td>
-                    </tr>
-                    <tr>
-                        <td>name</td><td>VARCHAR</td>
-                        <td>customer_id (FK)</td><td>INT</td>
-                    </tr>
-                    <tr>
-                        <td>email</td><td>VARCHAR</td>
-                        <td>order_date</td><td>DATE</td>
-                    </tr>
-                    <tr>
-                        <td>phone</td><td>VARCHAR</td>
-                        <td>total_amount</td><td>DECIMAL</td>
-                    </tr>
-                </table>
-                
-                <div class="exercise-instructions">
-                    <p><strong>Design TWO MongoDB approaches:</strong></p>
-                    <ol>
-                        <li>Embedding approach (nested orders)</li>
-                        <li>Referencing approach (separate collections)</li>
-                        <li>List one PRO and one CON for each</li>
-                    </ol>
-                </div>
-            </div>
-            <button data-timer="15">Start 15-Minute Timer</button>
-        </div>
-
-        <!-- Slide 30: Schema Migration Patterns -->
+        <!-- Schema Migration Patterns -->
         <div class="slide">
             <h1>Schema Migration Decision Tree</h1>
             
@@ -921,104 +778,250 @@ Need transactions → Reference
             </table>
         </div>
 
-        <!-- Slide 32: When to Use Each -->
+        <!-- When to Use Each -->
         <div class="slide">
             <h1>Choosing the Right Database</h1>
-            
+
             <div class="comparison-grid">
                 <div class="model-card">
-                    <h3>Use Relational When:</h3>
+                    <h3>Use Relational (PostgreSQL) When:</h3>
                     <ul style="font-size: 0.95em;">
                         <li>✅ ACID transactions critical</li>
-                        <li>✅ Complex relationships</li>
+                        <li>✅ Complex relationships & referential integrity</li>
                         <li>✅ Structured, stable schema</li>
                         <li>✅ Reporting & analytics</li>
-                        <li>✅ Data integrity paramount</li>
+                        <li>✅ Financial/banking systems</li>
                     </ul>
                 </div>
                 <div class="model-card">
-                    <h3>Use Document When:</h3>
+                    <h3>Use MongoDB When:</h3>
                     <ul style="font-size: 0.95em;">
-                        <li>✅ Rapid development</li>
-                        <li>✅ Evolving schemas</li>
-                        <li>✅ Hierarchical data</li>
-                        <li>✅ Content management</li>
-                        <li>✅ Real-time applications</li>
+                        <li>✅ Rapid development (MERN stack)</li>
+                        <li>✅ Evolving/flexible schemas</li>
+                        <li>✅ Hierarchical/nested data</li>
+                        <li>✅ Content management systems</li>
+                        <li>✅ Real-time web/mobile apps</li>
                     </ul>
                 </div>
-            </div>
-        </div>
-
-        <!-- Slide 33: Homework Preview -->
-        <div class="slide">
-            <h1>Homework Assignments</h1>
-            
-            <div class="demo-box">
-                <h3>📝 Assignment 1: View Update Restrictions</h3>
-                <p>Using the view from Exercise 1:</p>
-                <ul>
-                    <li>Write an UPDATE statement that will FAIL on the view</li>
-                    <li>Explain in 50 words why the DBMS rejects it</li>
-                    <li>Consider: JOINs, WHERE clause, missing columns</li>
-                </ul>
             </div>
 
             <div class="demo-box" style="margin-top: 20px;">
-                <h3>📝 Assignment 2: MongoDB Queries</h3>
-                <p>For both models from Exercise 2, write MongoDB queries to:</p>
-                <ul>
-                    <li>Get customer name + all order dates (embedded model)</li>
-                    <li>Get customer name + all order dates (referenced model with $lookup)</li>
-                    <li>Compare query complexity and performance</li>
-                </ul>
+                <h3>💡 MERN Stack = Perfect Match</h3>
+                <p>MongoDB's JSON documents map directly to JavaScript objects in Node.js and React - no ORM translation needed!</p>
             </div>
         </div>
 
-        <!-- Slide 34: Key Takeaways -->
+        <!-- Key Takeaways -->
         <div class="slide">
             <h1>Today's Key Takeaways <span class="emoji">🎓</span></h1>
-            
+
             <div class="demo-box">
-                <h3>SQL Views</h3>
+                <h3>Document Database Fundamentals</h3>
                 <ul>
-                    <li>✅ Virtual tables for security & simplification</li>
-                    <li>✅ Horizontal (row) and vertical (column) filtering</li>
-                    <li>✅ Update restrictions with aggregates/JOINs</li>
+                    <li>✅ Flexible schemas with JSON/BSON documents</li>
+                    <li>✅ No JOINs needed - data locality and denormalization</li>
+                    <li>✅ Collections store documents (like tables store rows)</li>
+                    <li>✅ Documents in same collection can have different structures</li>
                 </ul>
             </div>
 
             <div class="demo-box" style="margin-top: 15px;">
-                <h3>Document Databases</h3>
+                <h3>MongoDB Design Patterns</h3>
                 <ul>
-                    <li>✅ Flexible schemas with JSON documents</li>
-                    <li>✅ No JOINs needed - data locality</li>
-                    <li>✅ Embedding vs Referencing trade-offs</li>
-                    <li>✅ Horizontal scaling for big data</li>
+                    <li>✅ <strong>Embedding:</strong> Nest related data (1:1, 1:few) - single query, 16MB limit</li>
+                    <li>✅ <strong>Referencing:</strong> Separate collections (1:many, M:N) - no duplication, multiple queries</li>
+                    <li>✅ Choose based on query patterns and data access frequency</li>
+                    <li>✅ MongoDB CRUD operations: insertOne/Many, find, updateOne/Many, deleteOne/Many</li>
                 </ul>
             </div>
 
-            <div class="warning-box" style="margin-top: 15px;">
-                <strong>Remember:</strong> Choose the right tool for the job!
+            <div class="demo-box" style="margin-top: 15px;">
+                <h3>MERN Stack Integration</h3>
+                <ul>
+                    <li>✅ MongoDB serves as the database layer in MERN (MongoDB, Express, React, Node)</li>
+                    <li>✅ Mongoose ODM provides schema validation and easier data modeling</li>
+                    <li>✅ Horizontal scaling for modern, high-traffic applications</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Slide 35: Next Steps -->
+        <!-- Hands-On Activity: MongoDB Atlas Setup -->
+
+        <!-- Activity Overview -->
         <div class="slide">
-            <h1>Looking Ahead</h1>
-            
-            <div class="demo-box">
-                <p><strong>Next Lecture:</strong> Graph Databases and Neo4j</p>
-                <p><strong>Homework Due:</strong> View restrictions + MongoDB queries (next class)</p>
+            <h1>Hands-On: MongoDB Atlas Setup <span class="emoji">🚀</span></h1>
+            <h2><span class="timer-badge">20 minutes</span></h2>
+
+            <div class="activity-box">
+                <h3>What We'll Do:</h3>
+                <ol style="font-size: 1.2em; line-height: 1.8;">
+                    <li>Create a free MongoDB Atlas cluster</li>
+                    <li>Configure database user and network access</li>
+                    <li>Create the "taskmanager" database and "tasks" collection</li>
+                    <li>Get the connection string</li>
+                    <li>Test the connection with sample data</li>
+                </ol>
             </div>
 
-            <div class="tip-box" style="margin-top: 30px;">
-                <h3>Study Tips</h3>
-                <ul>
-                    <li>📚 Practice creating views with different restrictions</li>
-                    <li>🔧 Try MongoDB Compass for visual exploration</li>
-                    <li>💡 Think about when to embed vs reference</li>
-                    <li>🎯 Consider your application's query patterns</li>
+            <div class="tip-box">
+                <strong>Why Atlas?</strong> MongoDB Atlas is the official cloud database service - fully managed, free tier available, and production-ready. This is what you'll use in the MERN stack!
+            </div>
+
+            <button data-timer="20">Start 20-Minute Timer</button>
+        </div>
+
+        <!-- Step 1 - Create Atlas Account -->
+        <div class="slide">
+            <h1>Step 1: Create MongoDB Atlas Account</h1>
+
+            <div class="deployment-step">
+                <h4>1.1 Sign Up for MongoDB Atlas</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Go to <strong>https://www.mongodb.com/cloud/atlas/register</strong></li>
+                    <li>Sign up with email or Google account</li>
+                    <li>Complete email verification</li>
                 </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>1.2 Choose Free Tier</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Select <strong>"Shared"</strong> cluster (M0 - Free)</li>
+                    <li>Choose cloud provider: <strong>AWS</strong></li>
+                    <li>Choose region: <strong>Closest to you</strong> (e.g., us-east-1)</li>
+                    <li>Cluster name: <strong>Cluster0</strong> (default is fine)</li>
+                    <li>Click <strong>"Create Cluster"</strong></li>
+                </ul>
+            </div>
+
+            <div class="checkpoint">
+                ✓ CHECKPOINT: Cluster creation begins (takes 3-5 minutes)
+            </div>
+        </div>
+
+        <!-- Step 2 - Security Setup -->
+        <div class="slide">
+            <h1>Step 2: Configure Database Security</h1>
+
+            <div class="deployment-step">
+                <h4>2.1 Create Database User</h4>
+                <p>While cluster is deploying, set up authentication:</p>
+                <ul style="font-size: 1.05em;">
+                    <li>In "Security Quickstart", create a database user</li>
+                    <li><strong>Username:</strong> dbUser (or your choice)</li>
+                    <li><strong>Password:</strong> Generate a secure password</li>
+                    <li><strong>IMPORTANT:</strong> Copy and save this password securely!</li>
+                    <li>Click <strong>"Create User"</strong></li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>2.2 Configure Network Access</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Click <strong>"Add My Current IP Address"</strong></li>
+                    <li>For deployment later, also add <strong>0.0.0.0/0</strong> (allows all IPs)</li>
+                    <li>Description: "Allow all IPs for cloud deployment"</li>
+                    <li>Click <strong>"Add IP Address"</strong></li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>Security Note:</strong> 0.0.0.0/0 allows any IP. This is acceptable for learning, but in production, restrict to your server's IP addresses.
+            </div>
+        </div>
+
+        <!-- Step 3 - Connection String -->
+        <div class="slide">
+            <h1>Step 3: Get Connection String</h1>
+
+            <div class="deployment-step">
+                <h4>3.1 Navigate to Connect</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Wait for cluster to finish deploying (green status)</li>
+                    <li>Click <strong>"Connect"</strong> button on your cluster</li>
+                    <li>Select <strong>"Connect your application"</strong></li>
+                    <li>Driver: <strong>Node.js</strong>, Version: <strong>5.5 or later</strong></li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>3.2 Copy Connection String</h4>
+                <div class="command-box">
+mongodb+srv://dbUser:&lt;password&gt;@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+                </div>
+                <ul style="font-size: 1.05em; margin-top: 10px;">
+                    <li>Copy this connection string</li>
+                    <li>Replace <strong>&lt;password&gt;</strong> with your actual database password</li>
+                    <li>Save this modified string - you'll need it in the next lecture!</li>
+                </ul>
+            </div>
+
+            <div class="checkpoint">
+                ✓ CHECKPOINT: You have a working connection string with password filled in
+            </div>
+        </div>
+
+        <!-- Step 4 - Create Database -->
+        <div class="slide">
+            <h1>Step 4: Create Database & Collection</h1>
+
+            <div class="deployment-step">
+                <h4>4.1 Browse Collections</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>From cluster overview, click <strong>"Browse Collections"</strong></li>
+                    <li>Click <strong>"Add My Own Data"</strong></li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>4.2 Create Database and Collection</h4>
+                <ul style="font-size: 1.05em;">
+                    <li><strong>Database Name:</strong> taskmanager</li>
+                    <li><strong>Collection Name:</strong> tasks</li>
+                    <li>Click <strong>"Create"</strong></li>
+                </ul>
+            </div>
+
+            <div class="deployment-step">
+                <h4>4.3 Insert Sample Document (Optional but Recommended)</h4>
+                <ul style="font-size: 1.05em;">
+                    <li>Click on the <strong>tasks</strong> collection</li>
+                    <li>Click <strong>"Insert Document"</strong></li>
+                    <li>Paste the following:</li>
+                </ul>
+                <div class="code-example" style="margin-top: 10px;">
+{<br>
+&nbsp;&nbsp;"title": "Learn MongoDB",<br>
+&nbsp;&nbsp;"description": "Complete MERN stack deployment",<br>
+&nbsp;&nbsp;"completed": false,<br>
+&nbsp;&nbsp;"createdAt": { "$date": "2025-01-15T00:00:00.000Z" }<br>
+}
+                </div>
+            </div>
+
+            <div class="checkpoint">
+                ✓ CHECKPOINT: Your MongoDB Atlas database is ready! Next lecture, we'll connect it to an Express backend.
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="slide">
+            <h1>Today's Accomplishments & Looking Ahead</h1>
+
+            <div class="demo-box">
+                <h3>✅ What We Completed Today:</h3>
+                <ul style="font-size: 1.1em;">
+                    <li>Understood Document Database fundamentals and JSON/BSON structure</li>
+                    <li>Compared MongoDB vs PostgreSQL (embedding vs referencing)</li>
+                    <li>Set up MongoDB Atlas cloud database</li>
+                    <li>Created our first database and collection</li>
+                    <li>Obtained connection string for MERN stack development</li>
+                </ul>
+            </div>
+
+            <div class="demo-box" style="margin-top: 20px;">
+                <h3>🚀 Next Lecture: MongoDB CRUD Operations & Backend Integration</h3>
+                <p>We'll connect your Atlas database to an Express.js backend, deploy to the cloud, and build a complete REST API!</p>
             </div>
 
             <p style="text-align: center; font-size: 1.5em; margin-top: 40px;">Questions?</p>
@@ -1028,7 +1031,7 @@ Need transactions → Reference
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">27</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>

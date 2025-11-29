@@ -94,11 +94,26 @@ DatabaseDesign/
 
 ### Week 6
 - **Lecture 11a**: Data Definitions & Views
-- **Lecture 11b**: Document Databases
+- **Lecture 11b**: Document Databases & MongoDB Atlas Setup
+  - Document DB fundamentals (JSON/BSON, embedding vs referencing)
+  - MongoDB vs PostgreSQL comparison
+  - **Hands-on**: MongoDB Atlas cloud database setup
+  - Get connection string for MERN stack development
 
 ### Week 7
-- **Lecture 12**: MongoDB
-- **Lecture 13**: MERN Stack
+- **Lecture 12**: MongoDB CRUD & MERN Stack Deployment
+  - NoSQL vs SQL comparison
+  - MongoDB CRUD operations and aggregation
+  - **Hands-on**: Deploy Express.js backend to Render (30 min)
+  - **Hands-on**: Deploy React frontend to Netlify (20 min)
+  - Test full-stack MERN application
+
+- **Lecture 13**: Understanding the MERN Stack
+  - Data flow tracing: React → Express → MongoDB → back
+  - CORS configuration and security
+  - Environment variables in production
+  - Debugging deployed applications
+  - Review questions and troubleshooting
 
 ### Week 8
 - **Lecture 14**: Final Presentations
@@ -302,12 +317,97 @@ CREATE DATABASE movie_rental_db;
 - Database issues: Check Neon dashboard
 - Attendance system: Contact course admin
 
+## Long-Term Goals & Course Improvements
+
+### Goal 1: Streamline Course Flow & Increase Hands-On Practice
+
+**Current Challenge**: Too much time spent on relational calculus theory; insufficient hands-on practice with tools.
+
+**Proposed Changes for Future Semesters**:
+
+#### Week-by-Week Restructure
+- **Week 1**: Course intro + File systems vs DBMS
+  - Start `movie_rental_db` (Movies, Members, Rentals, Studios)
+  - Hands-on with DataGrip and CLI PostgreSQL
+  - **Key Change**: Less relational calculus, more tool proficiency
+
+- **Weeks 2-3**: Student Personal Database Project (Phase 1)
+  - Students design and build their own local database
+  - Focus on schema design, normalization, relationships
+  - Weekly progress check-ins
+  - **Benefit**: Earlier engagement with personal data
+
+- **Week 4**: Transition to Cloud (Neon PostgreSQL)
+  - Migrate personal database to Neon
+  - Learn REST API basics with curl and Postman
+  - Test database endpoints
+  - **Messaging**: "Your local DB goes live!"
+
+- **Week 5**: Frontend Integration
+  - Deploy Netlify frontend connected to Neon database
+  - Simple CRUD interface for their data
+  - **Student Project Phase 2**: Working web application
+
+- **Weeks 6-7**: MERN Stack (MongoDB + Full Stack)
+  - Document databases and NoSQL concepts
+  - Build second project using MERN stack
+  - **Current lectures 11b-13 serve this well**
+
+- **Week 8**: Presentations + Final Exam
+  - Students present both projects (Neon + MERN)
+  - Reflect on relational vs document databases
+
+#### Key Benefits
+- ✅ More hands-on time with DataGrip, PostgreSQL CLI, curl, Postman
+- ✅ Two complete projects instead of scattered exercises
+- ✅ Clearer progression: local → cloud → full-stack
+- ✅ Better preparation for real-world development
+- ✅ Less abstract theory, more applied learning
+
+### Goal 2: Develop Unique Visual Identity
+
+**Question**: What visual style says "database"?
+
+**Proposed Exploration**:
+- **Unit 1 (Local DB)**: Terminal/CLI aesthetic
+  - Monospace fonts (current Courier Prime works well)
+  - Dark mode with syntax highlighting
+  - Retro computing feel
+
+- **Unit 2 (Neon/Cloud)**: Modern cloud aesthetic
+  - Lighter, cleaner design
+  - Blue/cyan color palette (cloud imagery)
+  - API request/response visualizations
+
+- **Unit 3 (NoSQL/MERN)**: Document/JSON aesthetic
+  - Green accents (MongoDB branding)
+  - Tree structures for nested documents
+  - Component-based visual hierarchy
+
+**Considerations**:
+- Maintain accessibility across all styles
+- Consistent navigation/controls
+- Theme toggle for each unit style
+- Visual cues that match the database paradigm being taught
+
+## Recent Updates
+
+### January 2025 - MERN Stack Content Redistribution
+- **Lecture 11b**: Added hands-on MongoDB Atlas setup (Phase 1 from Lecture 13)
+- **Lecture 12**: Added hands-on Express backend and React frontend deployment (Phase 2 & 3 from Lecture 13)
+- **Lecture 13**: Refocused on understanding deployed applications (data flow, CORS, debugging)
+- **Benefit**: More logical progression across three lectures instead of one overwhelming session
+
+### Pending Cleanup Tasks
+- Remove duplicate deployment slides from Lecture 13 (slides 8-25 are now in Lectures 11b-12)
+- Consider adding more troubleshooting scenarios to Lecture 13
+
 ## License
 
 MIT License - See LICENSE file for details
 
 ---
 
-**Last Updated**: October 2024
+**Last Updated**: January 2025
 **Maintainer**: Course Instructor
 **Repository**: /home/bobby/repos/DatabaseDesign
