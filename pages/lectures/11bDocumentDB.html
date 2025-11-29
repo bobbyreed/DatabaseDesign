@@ -68,7 +68,12 @@
             color: #6a9955;
             font-style: italic;
         }
-        
+
+        .json-keyword {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+
         .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -269,6 +274,61 @@
 
             <div class="tip-box">
                 <strong>MERN Stack:</strong> MongoDB + Express.js + React + Node.js - a complete JavaScript stack for modern web development
+            </div>
+        </div>
+
+        <!-- BSON Explained -->
+        <div class="slide">
+            <h1>What is BSON? <span class="emoji">📦</span></h1>
+
+            <div class="demo-box">
+                <p><strong>BSON = Binary JSON</strong></p>
+                <p style="margin-top: 10px;">MongoDB stores documents in BSON format, not plain JSON. Think of BSON as "JSON with superpowers."</p>
+            </div>
+
+            <div class="comparison-grid" style="margin-top: 20px;">
+                <div class="model-card">
+                    <h3>📝 JSON (What You Know)</h3>
+                    <div class="json-example" style="font-size: 0.85em;">
+                        <pre>{
+  <span class="json-key">"name"</span>: <span class="json-string">"Alice"</span>,
+  <span class="json-key">"age"</span>: <span class="json-number">25</span>,
+  <span class="json-key">"joined"</span>: <span class="json-string">"2024-01-15"</span>,
+  <span class="json-key">"active"</span>: <span class="json-keyword">true</span>
+}</pre>
+                    </div>
+                    <p style="font-size: 0.9em; margin-top: 10px;"><strong>Limitations:</strong></p>
+                    <ul style="font-size: 0.85em;">
+                        <li>Only 6 data types (string, number, boolean, null, array, object)</li>
+                        <li>Dates stored as strings</li>
+                        <li>No native binary data support</li>
+                        <li>Text-based (larger file size)</li>
+                    </ul>
+                </div>
+
+                <div class="model-card">
+                    <h3>⚡ BSON (MongoDB's Format)</h3>
+                    <div class="json-example" style="font-size: 0.85em;">
+                        <pre>{
+  <span class="json-key">"name"</span>: <span class="json-string">"Alice"</span>,
+  <span class="json-key">"age"</span>: <span class="json-number">NumberInt(25)</span>,
+  <span class="json-key">"joined"</span>: <span class="json-keyword">ISODate("2024-01-15T00:00:00Z")</span>,
+  <span class="json-key">"active"</span>: <span class="json-keyword">true</span>,
+  <span class="json-key">"_id"</span>: <span class="json-keyword">ObjectId("507f1f77...")</span>
+}</pre>
+                    </div>
+                    <p style="font-size: 0.9em; margin-top: 10px;"><strong>Advantages:</strong></p>
+                    <ul style="font-size: 0.85em;">
+                        <li>✅ Additional types: Date, ObjectId, Binary, Int32/Int64</li>
+                        <li>✅ Dates are true date objects (not strings!)</li>
+                        <li>✅ Can store binary data (images, files)</li>
+                        <li>✅ Binary format = faster parsing & smaller size</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 20px;">
+                <strong>For You:</strong> When working with MongoDB, you'll write JSON in your code (JavaScript, React), but MongoDB automatically converts it to/from BSON for storage and retrieval. You get the benefits of BSON without writing it manually!
             </div>
         </div>
 
@@ -1031,7 +1091,7 @@ mongodb+srv://dbUser:&lt;password&gt;@cluster0.xxxxx.mongodb.net/?retryWrites=tr
         <div class="navigation">
             <button id="prevBtn">Previous</button>
             <span class="slide-counter">
-                <span id="currentSlide">1</span> / <span id="totalSlides">27</span>
+                <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
             </span>
             <button id="nextBtn">Next</button>
         </div>
