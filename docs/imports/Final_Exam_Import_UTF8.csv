@@ -99,12 +99,12 @@ Title,Relational Algebra Selection,,,
 QuestionText,Which relational algebra operation selects specific rows from a relation based on a condition?,,,
 Points,2,,,
 Difficulty,3,,,
-Option,0,Projection (π),,Projection selects specific COLUMNS (vertical subset) not rows.
-Option,100,Selection (σ),,Correct! Selection chooses specific ROWS based on a condition (horizontal subset).
+Option,0,Projection (pi),,Projection selects specific COLUMNS (vertical subset) not rows.
+Option,100,Selection (sigma),,Correct! Selection chooses specific ROWS based on a condition (horizontal subset).
 Option,0,Union (∪),,Union combines tuples from two relations not selecting rows from one.
-Option,0,Join (⋈),,Join combines tuples from TWO relations not selecting from one.
+Option,0,Join (bowtie),,Join combines tuples from TWO relations not selecting from one.
 Hint,Think about the SQL WHERE clause - what relational algebra operation does it correspond to?,,
-Feedback,Selection (σ) = WHERE clause (choose rows). Projection (π) = SELECT columns (choose columns). Selection is horizontal; Projection is vertical.,,
+Feedback,Selection (sigma) = WHERE clause (choose rows). Projection (pi) = SELECT columns (choose columns). Selection is horizontal; Projection is vertical.,,
 
 NewQuestion,MC,,,
 ID,CSCI5603-009,,,
@@ -117,7 +117,7 @@ Option,0,Theta Join only,,Theta join does this but it's not the only type.
 Option,0,Equijoin only,,Equijoin does this but it's not the only type.
 Option,100,All of the above,,Correct! Theta joins use any comparison; Equijoins use equality; Natural joins auto-match on common attributes.
 Hint,Think about the different ways to specify join conditions - equality any comparison or automatic matching.,,
-Feedback,Theta Join (θ) = any comparison condition. Equijoin = theta join using only equality (=). Natural Join = equijoin that auto-matches common attribute names and removes duplicates.,,
+Feedback,Theta Join (theta) = any comparison condition. Equijoin = theta join using only equality (=). Natural Join = equijoin that auto-matches common attribute names and removes duplicates.,,
 
 NewQuestion,MC,,,
 ID,CSCI5603-010,,,
@@ -351,7 +351,7 @@ Option,0,Only tuples that have matching values,,That describes a join not a Cart
 Option,0,The intersection of two relations,,That describes the INTERSECT operation.
 Option,0,Tuples from the first relation only,,That describes a selection or projection not Cartesian product.
 Hint,If table A has 10 rows and table B has 5 rows the Cartesian product has 50 rows.,,
-Feedback,Cartesian Product (×) produces all possible pairs of tuples. If R has m tuples and S has n tuples R × S has m × n tuples. Usually combined with selection to create joins.,,
+Feedback,Cartesian Product (×) produces all possible pairs of tuples. If R has m tuples and S has n tuples then R × S has (m × n) tuples. Usually combined with selection to create joins.,,
 
 NewQuestion,MC,,,
 ID,CSCI5603-028,,,
@@ -606,12 +606,12 @@ Title,Projection Operation,,,
 QuestionText,What does the projection operation do in relational algebra?,,,
 Points,2,,,
 Difficulty,3,,,
-Option,0,Selects specific rows based on a condition,,That describes selection (σ) not projection.
-Option,100,Selects specific columns and removes duplicates,,Correct! Projection (π) creates a vertical subset of columns.
+Option,0,Selects specific rows based on a condition,,That describes selection (sigma) not projection.
+Option,100,Selects specific columns and removes duplicates,,Correct! Projection (pi) creates a vertical subset of columns.
 Option,0,Combines two relations,,That describes join or union not projection.
 Option,0,Renames attributes in a relation,,That describes a rename operation not projection.
 Hint,Think of projecting a 3D object onto a 2D surface - you're showing only certain dimensions.,,
-Feedback,Projection (π) selects columns (vertical subset) and removes duplicates. Example: π<sub>title genre</sub>(Movies) shows only title and genre columns. Selection (σ) selects rows (horizontal subset).,,
+Feedback,Projection (pi) selects columns (vertical subset) and removes duplicates. Example: pi[title genre](Movies) shows only title and genre columns. Selection (sigma) selects rows (horizontal subset).,,
 
 NewQuestion,MC,,,
 ID,CSCI5603-048,,,
