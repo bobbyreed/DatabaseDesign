@@ -1,0 +1,653 @@
+// Database Design Final Exam - CSCI 5603
+// 50 Multiple Choice Questions covering Lectures 1-10
+// Save as CSV UTF-8 encoded
+
+NewQuestion,MC,,,
+ID,CSCI5603-001,,,
+Title,File Systems Limitation,,,
+QuestionText,Which of the following is NOT a major limitation of file-based systems?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Data separation and isolation,,File-based systems do have data separation issues where each program manages its own files.
+Option,100,Improved data security,,Correct! File-based systems actually have POOR data security. This is one of their major limitations not an advantage.
+Option,0,Data duplication and redundancy,,File-based systems suffer from data being stored multiple times across different files.
+Option,0,Application-data dependence,,File-based systems tightly couple data structure to application code making changes difficult.
+Hint,Think about what file-based systems are BAD at - the question asks for what is NOT a limitation.,,
+Feedback,The five major limitations of file-based systems are: data separation; data duplication; data dependence; incompatible file formats; and fixed queries. Improved security is not one of them!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-002,,,
+Title,Database System Components,,,
+QuestionText,What are the two main components of a database system?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,Tables and Queries,,These are database objects but not the main components of the system.
+Option,100,Database and DBMS,,Correct! A database system consists of the Database (shared collection of data) and the DBMS (software to manage it).
+Option,0,DDL and DML,,These are database languages not the main components of the system.
+Option,0,Users and Administrators,,These are roles in the database environment not system components.
+Hint,Think about the data itself and the software that manages it.,,
+Feedback,A database system has two key parts: the Database (logically related data and its description) and the DBMS (software enabling users to define create maintain and control access).,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-003,,,
+Title,DDL Purpose,,,
+QuestionText,What does DDL stand for and what is it used for?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,100,Data Definition Language - defines database structure,,Correct! DDL includes commands like CREATE TABLE ALTER TABLE and DROP TABLE to define the schema.
+Option,0,Data Display Language - shows query results,,There is no such language in database systems.
+Option,0,Data Deletion Language - removes records,,Deletion is part of DML (DELETE statement) not DDL.
+Option,0,Database Design Logic - plans schemas,,While related to design this is not what DDL stands for.
+Hint,Think about the language used to CREATE and ALTER table structures.,,
+Feedback,DDL (Data Definition Language) defines the database structure using commands like CREATE ALTER and DROP. DML (Data Manipulation Language) manipulates data using SELECT INSERT UPDATE DELETE.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-004,,,
+Title,ANSI-SPARC Architecture,,,
+QuestionText,What are the three levels of the ANSI-SPARC architecture?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,User Application Database,,These are not the three levels of the ANSI-SPARC architecture.
+Option,100,External Conceptual Internal,,Correct! These represent the view level logical level and physical level respectively.
+Option,0,Physical Logical Virtual,,While similar these are not the exact terms used in ANSI-SPARC.
+Option,0,Client Server Storage,,This describes a different type of architecture (three-tier application architecture).
+Hint,Remember: users see views; designers see the logical schema; system sees physical storage.,,
+Feedback,ANSI-SPARC has three levels: External (user views); Conceptual (complete logical structure); Internal (physical storage). This separation provides data independence.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-005,,,
+Title,Controlled Access Features,,,
+QuestionText,Which of the following is NOT one of the four controlled access features provided by a DBMS?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Security System,,Security is one of the four controlled access features protecting against unauthorized access.
+Option,0,Integrity Constraints,,Integrity constraints ensure data accuracy and consistency - this is one of the four features.
+Option,100,Query Optimization,,Correct! While important query optimization is not one of the four controlled access features.
+Option,0,Concurrency Control,,Concurrency control manages simultaneous access - this is one of the four features.
+Hint,The four features are about controlling WHO accesses data WHAT rules data must follow HOW multiple users work together and RECOVERY from failures.,,
+Feedback,The four controlled access features are: Security System; Integrity Constraints; Concurrency Control; and Recovery Services. Query optimization is separate.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-006,,,
+Title,Relational Model Tuple,,,
+QuestionText,In the relational model what is a tuple?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,A column in a table,,This describes an attribute not a tuple.
+Option,100,A row in a table,,Correct! A tuple is a row representing a single record in the relation.
+Option,0,A constraint on data,,This describes an integrity constraint not a tuple.
+Option,0,A relationship between tables,,This describes a foreign key relationship not a tuple.
+Hint,Think about the individual records in your Movies table - each movie is one...,,
+Feedback,Key terms: Relation=table; Tuple=row; Attribute=column; Domain=allowed values; Degree=number of columns; Cardinality=number of rows.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-007,,,
+Title,Primary Key Definition,,,
+QuestionText,What type of key uniquely identifies each tuple in a relation?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,Foreign Key,,A foreign key references another table's primary key but doesn't uniquely identify tuples in its own table.
+Option,0,Candidate Key,,A candidate key CAN uniquely identify tuples but may not be the chosen key.
+Option,100,Primary Key,,Correct! The primary key is the chosen candidate key that uniquely identifies each tuple.
+Option,0,Alternate Key,,An alternate key is a candidate key that was NOT chosen as primary.
+Hint,This is the ONE key you choose to uniquely identify every row in your table.,,
+Feedback,Primary Key = the chosen candidate key for unique identification. Candidate Keys = minimal superkeys. Foreign Key = references another table's primary key. Alternate Key = non-chosen candidate key.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-008,,,
+Title,Relational Algebra Selection,,,
+QuestionText,Which relational algebra operation selects specific rows from a relation based on a condition?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Projection (π),,Projection selects specific COLUMNS (vertical subset) not rows.
+Option,100,Selection (σ),,Correct! Selection chooses specific ROWS based on a condition (horizontal subset).
+Option,0,Union (∪),,Union combines tuples from two relations not selecting rows from one.
+Option,0,Join (⋈),,Join combines tuples from TWO relations not selecting from one.
+Hint,Think about the SQL WHERE clause - what relational algebra operation does it correspond to?,,
+Feedback,Selection (σ) = WHERE clause (choose rows). Projection (π) = SELECT columns (choose columns). Selection is horizontal; Projection is vertical.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-009,,,
+Title,Join Types,,,
+QuestionText,What type of join operation combines tuples from two relations based on a matching condition?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Natural Join only,,Natural join does this but it's not the only type.
+Option,0,Theta Join only,,Theta join does this but it's not the only type.
+Option,0,Equijoin only,,Equijoin does this but it's not the only type.
+Option,100,All of the above,,Correct! Theta joins use any comparison; Equijoins use equality; Natural joins auto-match on common attributes.
+Hint,Think about the different ways to specify join conditions - equality any comparison or automatic matching.,,
+Feedback,Theta Join (θ) = any comparison condition. Equijoin = theta join using only equality (=). Natural Join = equijoin that auto-matches common attribute names and removes duplicates.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-010,,,
+Title,SELECT Statement Order,,,
+QuestionText,What is the correct order of clauses in a SELECT statement?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,SELECT WHERE FROM GROUP BY HAVING ORDER BY,,FROM must come before WHERE.
+Option,100,SELECT FROM WHERE GROUP BY HAVING ORDER BY,,Correct! This is the proper order: S-F-W-G-H-O.
+Option,0,FROM SELECT WHERE GROUP BY ORDER BY HAVING,,HAVING must come after GROUP BY not after ORDER BY.
+Option,0,SELECT FROM GROUP BY WHERE HAVING ORDER BY,,WHERE must come before GROUP BY to filter rows first.
+Hint,Memory trick: Some Frogs Will Get Hungry Often.,,
+Feedback,Correct order: SELECT (columns) FROM (table) WHERE (row filter) GROUP BY (grouping) HAVING (group filter) ORDER BY (sorting). WHERE filters rows; HAVING filters groups!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-011,,,
+Title,Aggregate Function Count,,,
+QuestionText,Which aggregate function would you use to find the total number of rentals in the Rentals table?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,SUM(rental_id),,SUM adds up values not counts rows. This would sum the IDs which is meaningless.
+Option,100,COUNT(*),,Correct! COUNT(*) counts all rows including those with NULL values.
+Option,0,AVG(rental_id),,AVG calculates average not count. This would average the IDs which is meaningless.
+Option,0,MAX(rental_id),,MAX finds the maximum value not the count of rows.
+Hint,You want to know HOW MANY rentals exist - which function COUNTS?,,
+Feedback,COUNT(*) = counts all rows. COUNT(column) = counts non-NULL values in that column. SUM = adds values. AVG = calculates average. MIN/MAX = finds minimum/maximum.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-012,,,
+Title,LIKE Wildcard,,,
+QuestionText,What wildcard character is used with the LIKE operator to match any sequence of characters?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,? (question mark),,The question mark is not a SQL wildcard character.
+Option,0,* (asterisk),,Asterisk is used in file systems but not in SQL LIKE patterns.
+Option,100,% (percent sign),,Correct! The percent sign matches zero or more characters in SQL.
+Option,0,# (hash),,The hash symbol is not a SQL wildcard character.
+Hint,This character can match nothing or everything - from zero to infinite characters.,,
+Feedback,SQL wildcards: % (percent) = matches zero or more characters. _ (underscore) = matches exactly ONE character. Example: 'The%' finds titles starting with The.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-013,,,
+Title,INNER vs LEFT JOIN,,,
+QuestionText,What is the difference between INNER JOIN and LEFT OUTER JOIN?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,No difference they are the same,,These joins produce different result sets.
+Option,100,LEFT JOIN includes unmatched rows from the left table,,Correct! LEFT JOIN returns all left table rows plus matching right table rows (NULLs for non-matches).
+Option,0,INNER JOIN is faster,,Performance depends on data and indexes not the join type.
+Option,0,LEFT JOIN only works with two tables,,LEFT JOIN can be used with multiple tables just like INNER JOIN.
+Hint,Think about what happens to members who have never rented a movie in Members LEFT JOIN Rentals.,,
+Feedback,INNER JOIN = only matching rows. LEFT JOIN = all left rows + matches. RIGHT JOIN = all right rows + matches. FULL JOIN = all rows from both tables.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-014,,,
+Title,EXISTS Operator,,,
+QuestionText,What does the EXISTS operator do in a subquery?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Returns all rows from the subquery,,EXISTS doesn't return rows; it returns TRUE or FALSE.
+Option,100,Checks if the subquery returns any rows,,Correct! EXISTS returns TRUE if the subquery returns at least one row; FALSE otherwise.
+Option,0,Counts rows in the subquery,,COUNT counts rows; EXISTS only checks if any exist.
+Option,0,Joins tables together,,JOIN combines tables; EXISTS tests for existence.
+Hint,EXISTS returns a boolean value - it asks 'does this query find anything?',,
+Feedback,EXISTS = TRUE if subquery returns ≥1 row. NOT EXISTS = TRUE if subquery returns 0 rows. More efficient than COUNT(*) > 0 because it stops after finding one row!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-015,,,
+Title,UNION vs UNION ALL,,,
+QuestionText,Which set operation removes duplicate rows when combining results from two queries?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,UNION ALL,,UNION ALL keeps all duplicates for better performance.
+Option,100,UNION,,Correct! UNION combines results and automatically removes duplicate rows.
+Option,0,INTERSECT,,INTERSECT returns only rows appearing in BOTH queries not combining them.
+Option,0,EXCEPT,,EXCEPT returns rows in the first query but not in the second.
+Hint,The plain version removes duplicates; the ALL version keeps them.,,
+Feedback,UNION = combines and removes duplicates. UNION ALL = combines and keeps duplicates (faster). INTERSECT = only common rows. EXCEPT/MINUS = rows in first but not second.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-016,,,
+Title,Index Purpose,,,
+QuestionText,What database object is used to speed up query performance by providing fast data lookup?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,View,,Views simplify queries but don't improve performance themselves.
+Option,100,Index,,Correct! Indexes provide fast lookups like a book index making SELECT queries faster.
+Option,0,Trigger,,Triggers automatically execute code in response to events; they don't speed up queries.
+Option,0,Stored Procedure,,Stored procedures are precompiled code but don't directly speed up individual queries.
+Hint,Think of a book - what helps you quickly find information without reading every page?,,
+Feedback,Indexes improve SELECT performance but slow down INSERT/UPDATE/DELETE because the index must be maintained. Use EXPLAIN ANALYZE to measure performance impact!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-017,,,
+Title,View Definition,,,
+QuestionText,What is a database VIEW?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,A physical table stored on disk,,Views don't physically store data; they're virtual.
+Option,100,A virtual table based on a stored query,,Correct! Views dynamically show query results without storing the data.
+Option,0,A backup of the database,,Backups are separate from views.
+Option,0,A user's permission level,,Permissions are different from views though views can help implement security.
+Hint,Think VIRTUAL - the data appears as a table but is generated on-demand from the underlying query.,,
+Feedback,Views are virtual tables that store the query definition not the data. Benefits: simplify complex queries; provide security by hiding columns; maintain logical data independence.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-018,,,
+Title,ON DELETE CASCADE,,,
+QuestionText,What happens when you delete a parent row that has child rows with ON DELETE CASCADE?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,The delete is rejected with an error,,This happens with RESTRICT not CASCADE.
+Option,0,Only the parent row is deleted,,The child rows would become orphaned; CASCADE prevents this.
+Option,100,Both parent and child rows are deleted,,Correct! CASCADE automatically deletes dependent child rows.
+Option,0,Child rows are set to NULL,,This happens with ON DELETE SET NULL not CASCADE.
+Hint,CASCADE means the delete 'cascades' down to related records.,,
+Feedback,ON DELETE CASCADE = delete children too. ON DELETE SET NULL = set foreign key to NULL. ON DELETE RESTRICT = prevent deletion if children exist. ON UPDATE CASCADE = update foreign keys when parent changes.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-019,,,
+Title,Trigger Definition,,,
+QuestionText,What is a database TRIGGER?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,0,A query optimization tool,,Triggers don't optimize queries; they execute code in response to events.
+Option,100,Procedure that automatically executes in response to events,,Correct! Triggers fire automatically on INSERT UPDATE or DELETE events.
+Option,0,A type of constraint,,Constraints are different; triggers contain procedural code.
+Option,0,A backup mechanism,,Backups are separate from triggers.
+Hint,Think about what 'pulls the trigger' - certain database events automatically cause this to fire.,,
+Feedback,Triggers automatically execute on INSERT UPDATE or DELETE events. Uses: audit logging; enforcing business rules; maintaining derived data. Caution: they add overhead and complexity!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-020,,,
+Title,Data Independence Types,,,
+QuestionText,Which type of data independence allows you to change physical storage without affecting the logical schema?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Logical data independence,,Logical independence relates to changing the conceptual schema not physical storage.
+Option,100,Physical data independence,,Correct! Physical independence means internal/physical changes don't affect the conceptual level.
+Option,0,External data independence,,This is not a standard term in ANSI-SPARC architecture.
+Option,0,Conceptual data independence,,This is not a standard term in ANSI-SPARC architecture.
+Hint,Think about adding an index - that's a PHYSICAL change. Does it require changing your application code?,,
+Feedback,Physical Data Independence = internal changes don't affect conceptual schema. Logical Data Independence = conceptual changes don't affect external views. Goal: separation of concerns!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-021,,,
+Title,Function vs Procedure Difference,,,
+QuestionText,What is a key difference between a stored procedure and a user-defined function?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,0,Functions are faster than procedures,,Performance depends on implementation not the type.
+Option,100,Functions must return a value; procedures may not,,Correct! Functions MUST return something; procedures are optional.
+Option,0,Procedures can take parameters; functions cannot,,Both can take parameters.
+Option,0,Functions are written in SQL; procedures in other languages,,Both can be written in SQL or other languages depending on the DBMS.
+Hint,Think about the word FUNCTION - in math a function always returns a result.,,
+Feedback,Functions MUST return a value and can be used in SELECT statements. Procedures may not return values and are called with CALL/EXECUTE. Functions should be pure (no side effects); procedures can modify data.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-022,,,
+Title,Superkey vs Candidate Key,,,
+QuestionText,What is the difference between a superkey and a candidate key?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,0,Superkeys are always larger than candidate keys,,Size doesn't define the difference.
+Option,100,A candidate key is a minimal superkey with no unnecessary attributes,,Correct! Candidate keys have no redundant attributes.
+Option,0,Superkeys uniquely identify tuples; candidate keys do not,,Both uniquely identify tuples.
+Option,0,There is no difference; they are the same,,They are related but different concepts.
+Hint,A candidate key is 'minimal' - it can't lose any attributes and still be unique.,,
+Feedback,Superkey = any attribute set that uniquely identifies tuples. Candidate Key = minimal superkey (remove any attribute and it's no longer unique). Primary Key = chosen candidate key.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-023,,,
+Title,Referential Integrity,,,
+QuestionText,What does referential integrity ensure in a database?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Foreign key values must match existing primary key values or be NULL,,Correct! Referential integrity prevents orphaned records.
+Option,0,All primary keys must be integers,,Primary keys can be any data type not just integers.
+Option,0,Every table must have exactly one foreign key,,Tables can have zero one or many foreign keys.
+Option,0,Primary keys cannot be NULL,,This describes entity integrity not referential integrity.
+Hint,Think about the REFERENCE - the foreign key must point to something that exists.,,
+Feedback,Referential Integrity = foreign keys must reference existing primary keys or be NULL. Entity Integrity = primary keys cannot be NULL. Domain Integrity = values must be in valid domains.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-024,,,
+Title,GROUP BY Purpose,,,
+QuestionText,What is the purpose of the GROUP BY clause in SQL?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Groups rows with the same values so aggregate functions can be applied to each group,,Correct! GROUP BY creates groups for aggregate calculations.
+Option,0,Sorts the result set in ascending order,,ORDER BY sorts; GROUP BY groups.
+Option,0,Filters rows before they are selected,,WHERE filters rows; GROUP BY groups them.
+Option,0,Joins multiple tables together,,JOIN combines tables; GROUP BY groups rows.
+Hint,Think about calculating COUNT or SUM for each category - you need to GROUP BY that category.,,
+Feedback,GROUP BY groups rows with the same values in specified columns. Use with aggregate functions (COUNT SUM AVG MIN MAX). WHERE filters rows before grouping; HAVING filters groups after.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-025,,,
+Title,HAVING vs WHERE,,,
+QuestionText,What is the main difference between WHERE and HAVING clauses?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,WHERE filters rows before grouping; HAVING filters groups after grouping,,Correct! WHERE operates on rows; HAVING operates on groups.
+Option,0,WHERE is faster than HAVING,,Performance depends on the query not which clause is used.
+Option,0,HAVING can only be used with GROUP BY; WHERE works anywhere,,While HAVING typically appears with GROUP BY that's not the key difference.
+Option,0,WHERE uses aggregate functions; HAVING does not,,It's the opposite - HAVING can use aggregates; WHERE cannot.
+Hint,Think about the execution order: rows are filtered then grouped then groups are filtered.,,
+Feedback,WHERE filters individual rows BEFORE grouping. HAVING filters groups AFTER grouping. HAVING can use aggregate functions (COUNT SUM etc); WHERE cannot.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-026,,,
+Title,NULL Handling,,,
+QuestionText,How does COUNT(column_name) differ from COUNT(*) when dealing with NULL values?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,COUNT(column_name) excludes NULLs; COUNT(*) includes them,,Correct! COUNT(*) counts all rows regardless of NULL values.
+Option,0,COUNT(column_name) includes NULLs; COUNT(*) excludes them,,This is backwards.
+Option,0,Both treat NULL values the same way,,They treat NULLs differently.
+Option,0,Neither can handle NULL values,,Both can handle NULLs but differently.
+Hint,COUNT(*) counts rows (including rows with NULLs). COUNT(column) counts non-NULL VALUES.,,
+Feedback,COUNT(*) = counts all rows. COUNT(column) = counts only rows where column IS NOT NULL. Other aggregates (SUM AVG MIN MAX) ignore NULLs.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-027,,,
+Title,Cartesian Product,,,
+QuestionText,What does the Cartesian Product operation produce in relational algebra?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,All possible combinations of tuples from two relations,,Correct! It creates every possible pairing of rows from both tables.
+Option,0,Only tuples that have matching values,,That describes a join not a Cartesian product.
+Option,0,The intersection of two relations,,That describes the INTERSECT operation.
+Option,0,Tuples from the first relation only,,That describes a selection or projection not Cartesian product.
+Hint,If table A has 10 rows and table B has 5 rows the Cartesian product has 50 rows.,,
+Feedback,Cartesian Product (×) produces all possible pairs of tuples. If R has m tuples and S has n tuples R × S has m × n tuples. Usually combined with selection to create joins.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-028,,,
+Title,Database Roles,,,
+QuestionText,What is the primary responsibility of a Database Administrator (DBA)?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,100,Managing and maintaining the database system including performance security and backups,,Correct! DBAs handle the technical operational aspects of database systems.
+Option,0,Writing application code that uses the database,,This is the role of application developers/programmers.
+Option,0,Defining business rules and data requirements,,This is the role of the Data Architect or business analysts.
+Option,0,Running queries to generate reports,,This is the role of end users or report developers.
+Hint,The DBA is responsible for keeping the database running smoothly securely and efficiently.,,
+Feedback,DBA = manages technical operations (performance security backup recovery). Data Architect = plans data strategy. Database Designers = create schemas. Programmers = write applications. End Users = query data.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-029,,,
+Title,ACID Properties,,,
+QuestionText,In database transactions what does the 'A' in ACID stand for?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Atomicity,,Correct! Atomicity means transactions are all-or-nothing.
+Option,0,Availability,,Availability is not part of ACID (it's part of CAP theorem).
+Option,0,Authorization,,Authorization relates to security not transaction properties.
+Option,0,Aggregation,,Aggregation is a query operation not a transaction property.
+Hint,Think about atoms - they can't be divided. Transactions are similar: they happen completely or not at all.,,
+Feedback,ACID: Atomicity (all-or-nothing); Consistency (valid state to valid state); Isolation (transactions don't interfere); Durability (committed changes persist). These ensure reliable transaction processing.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-030,,,
+Title,Three-Tier Architecture,,,
+QuestionText,What are the three tiers in a three-tier database application architecture?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Presentation tier; Application/Logic tier; Data tier,,Correct! Frontend; Backend/API; Database.
+Option,0,User tier; Database tier; Network tier,,These are not the standard three tiers.
+Option,0,Input tier; Processing tier; Output tier,,These don't describe three-tier architecture.
+Option,0,External tier; Conceptual tier; Internal tier,,These describe ANSI-SPARC not three-tier application architecture.
+Hint,Think about web applications: what the user sees; the API/business logic; the database.,,
+Feedback,Three-tier: Presentation (UI/Frontend); Application (Business logic/API); Data (Database). Benefits: separation of concerns; maintainability; scalability. Different from ANSI-SPARC architecture!,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-031,,,
+Title,Subquery Types,,,
+QuestionText,What type of subquery returns a single value that can be used with comparison operators?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,Scalar subquery,,Correct! Scalar subqueries return exactly one value (one row one column).
+Option,0,Correlated subquery,,Correlated refers to how it executes (referencing outer query) not what it returns.
+Option,0,Table subquery,,Table subqueries return multiple rows and columns.
+Option,0,Row subquery,,Row subqueries return one row but multiple columns.
+Hint,SCALAR means a single value - think of scalar as 'one number'.,,
+Feedback,Scalar subquery = returns one value (1 row 1 column). Row subquery = one row multiple columns. Table subquery = multiple rows and columns. Correlated = references outer query.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-032,,,
+Title,Normalization Purpose,,,
+QuestionText,What is the primary goal of database normalization?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Eliminate redundancy and prevent update anomalies,,Correct! Normalization organizes data to reduce duplication and inconsistencies.
+Option,0,Make queries run faster,,Normalization can sometimes slow queries; performance is not the primary goal.
+Option,0,Increase the number of tables,,More tables is a result not the goal of normalization.
+Option,0,Make the database larger,,Size is not relevant to normalization goals.
+Hint,Think about the problems with storing the same information in multiple places.,,
+Feedback,Normalization eliminates redundancy and prevents: insertion anomalies; deletion anomalies; update anomalies. Process: move from lower normal forms (1NF 2NF) to higher forms (3NF BCNF) by removing dependencies.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-033,,,
+Title,Entity Integrity,,,
+QuestionText,What does entity integrity require in the relational model?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Primary key values cannot be NULL,,Correct! Entity integrity ensures each entity can be uniquely identified.
+Option,0,Foreign key values cannot be NULL,,Foreign keys CAN be NULL (optional relationships).
+Option,0,All attributes must have values,,Attributes can be NULL unless specified NOT NULL.
+Option,0,Every table must have a foreign key,,Tables don't require foreign keys.
+Hint,The PRIMARY key must identify each entity - can it do that if it's NULL?,,
+Feedback,Entity Integrity = primary keys cannot be NULL (must uniquely identify each tuple). Referential Integrity = foreign keys must match existing primary keys or be NULL. Domain Integrity = values in valid ranges.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-034,,,
+Title,DISTINCT Keyword,,,
+QuestionText,What does the DISTINCT keyword do in a SELECT statement?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,100,Removes duplicate rows from the result set,,Correct! DISTINCT eliminates duplicate tuples.
+Option,0,Sorts the results alphabetically,,ORDER BY sorts; DISTINCT removes duplicates.
+Option,0,Filters rows based on a condition,,WHERE filters; DISTINCT removes duplicates.
+Option,0,Counts the number of unique values,,COUNT(DISTINCT column) counts unique values but DISTINCT alone just removes duplicates.
+Hint,Think about what happens when multiple rows have exactly the same values in all selected columns.,,
+Feedback,SELECT DISTINCT removes duplicate rows. Useful when selecting non-key columns. Note: DISTINCT applies to the entire row not individual columns. COUNT(DISTINCT column) counts unique values.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-035,,,
+Title,Self Join,,,
+QuestionText,What is a self-join in SQL?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,Joining a table to itself using table aliases,,Correct! Self-joins compare rows within the same table.
+Option,0,A join that automatically matches on common column names,,That describes a natural join not a self-join.
+Option,0,A join that returns only matching rows,,That describes an inner join not specifically a self-join.
+Option,0,A join that references its own primary key,,All tables reference their primary key; this doesn't define self-join.
+Hint,Think about finding employees and their managers when both are in the same Employees table.,,
+Feedback,Self-join joins a table to itself using aliases. Example: finding employees and their managers or products and their categories when both are in the same table. Requires table aliases (e1 e2) to distinguish.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-036,,,
+Title,Set Difference Operation,,,
+QuestionText,What does the EXCEPT (or MINUS) set operation return?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Rows in the first query but not in the second,,Correct! EXCEPT performs set subtraction.
+Option,0,Rows that appear in both queries,,That describes INTERSECT not EXCEPT.
+Option,0,All rows from both queries,,That describes UNION not EXCEPT.
+Option,0,Rows that appear in exactly one query but not both,,That would be a symmetric difference not available in standard SQL.
+Hint,Think 'EXCEPTion' - take the first set EXCEPT remove what's in the second.,,
+Feedback,EXCEPT (or MINUS) = rows in first query but NOT in second. INTERSECT = rows in BOTH queries. UNION = rows from BOTH queries (combined). All require compatible column types.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-037,,,
+Title,Aggregate Function Rules,,,
+QuestionText,Which statement about aggregate functions is TRUE?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Aggregate functions can be used in WHERE clauses,,Aggregate functions cannot appear in WHERE (use HAVING instead).
+Option,100,Aggregate functions ignore NULL values except COUNT(*),,Correct! SUM AVG MIN MAX ignore NULLs; COUNT(*) includes rows with NULLs.
+Option,0,Multiple aggregate functions cannot be used in the same SELECT,,You can use multiple aggregates in one SELECT.
+Option,0,Aggregate functions require GROUP BY,,Aggregates can be used without GROUP BY (for entire table).
+Hint,Think about calculating AVG of values - should NULL values affect the average?,,
+Feedback,Aggregates (SUM AVG MIN MAX) ignore NULL values. COUNT(*) counts all rows; COUNT(column) ignores NULLs. Cannot use aggregates in WHERE; use HAVING instead. Can use multiple aggregates in one query.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-038,,,
+Title,Foreign Key Purpose,,,
+QuestionText,What is the primary purpose of a foreign key?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,100,Establish and enforce relationships between tables,,Correct! Foreign keys link tables and maintain referential integrity.
+Option,0,Uniquely identify each row in a table,,That is the purpose of a primary key not foreign key.
+Option,0,Speed up query performance,,That is the purpose of an index not foreign key.
+Option,0,Prevent NULL values in a column,,That is the purpose of NOT NULL constraint not foreign key.
+Hint,FOREIGN key - it references a key in a FOREIGN (other) table.,,
+Feedback,Foreign keys: establish relationships between tables; enforce referential integrity; prevent orphaned records. They reference the primary key of another table (or sometimes the same table for hierarchies).,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-039,,,
+Title,CHECK Constraint,,,
+QuestionText,What does a CHECK constraint do in SQL?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Ensures values meet a specified condition,,Correct! CHECK constraints validate data against rules.
+Option,0,Verifies that foreign keys reference existing values,,That is referential integrity not CHECK constraint.
+Option,0,Prevents NULL values,,That is the NOT NULL constraint not CHECK.
+Option,0,Ensures uniqueness of values,,That is the UNIQUE constraint not CHECK.
+Hint,CHECK constraints let you specify custom business rules like 'age must be between 0 and 120'.,,
+Feedback,CHECK constraints enforce domain integrity with custom conditions. Examples: age > 0; price >= 0; rating IN ('G' 'PG' 'R'). They validate data during INSERT/UPDATE operations.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-040,,,
+Title,ALTER TABLE Purpose,,,
+QuestionText,What is the ALTER TABLE command used for?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,100,Modify the structure of an existing table,,Correct! ALTER TABLE changes table definitions.
+Option,0,Insert new rows into a table,,That is INSERT not ALTER TABLE.
+Option,0,Update existing data in a table,,That is UPDATE not ALTER TABLE.
+Option,0,Delete a table from the database,,That is DROP TABLE not ALTER TABLE.
+Hint,ALTER means to CHANGE - you're changing the table's structure not its data.,,
+Feedback,ALTER TABLE modifies table structure: ADD COLUMN; DROP COLUMN; MODIFY COLUMN; ADD/DROP CONSTRAINT. It's DDL not DML. Use for schema changes after table creation.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-041,,,
+Title,Query Optimization Tool,,,
+QuestionText,Which PostgreSQL command shows the query execution plan and performance metrics?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,DESCRIBE,,DESCRIBE shows table structure not query plans.
+Option,0,SHOW PLAN,,This is not a valid PostgreSQL command.
+Option,100,EXPLAIN ANALYZE,,Correct! EXPLAIN ANALYZE runs the query and shows the execution plan with actual timings.
+Option,0,PROFILE,,This is a MySQL command not PostgreSQL.
+Hint,You want to EXPLAIN how the query works and ANALYZE its performance.,,
+Feedback,EXPLAIN shows the planned execution. EXPLAIN ANALYZE actually executes and shows real performance metrics (timing rows processed). Use to identify slow operations and optimize queries with indexes.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-042,,,
+Title,Correlated Subquery,,,
+QuestionText,What makes a subquery 'correlated'?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,It references columns from the outer query,,Correct! Correlated subqueries depend on the outer query.
+Option,0,It returns multiple rows,,This describes a multi-row subquery not specifically correlated.
+Option,0,It uses JOIN operations,,Subqueries can use JOINs but that doesn't make them correlated.
+Option,0,It appears in the FROM clause,,Subqueries can appear in FROM but that doesn't make them correlated.
+Hint,The inner query is CORRELATED with (depends on) values from the outer query.,,
+Feedback,Correlated subquery references outer query columns. Executes once per outer row (can be slow). Example: finding employees earning more than their department average. Non-correlated subqueries execute once independently.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-043,,,
+Title,LIKE Escape Character,,,
+QuestionText,How do you search for a literal percent sign (%) using the LIKE operator?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,Use an escape character like ESCAPE '\' and search for '\%',,Correct! Escape characters let you search for wildcard characters literally.
+Option,0,Use double percent signs (%%),,This doesn't work in SQL.
+Option,0,Use CONTAINS instead of LIKE,,CONTAINS is for full-text search not pattern matching.
+Option,0,It's not possible to search for literal wildcards,,It is possible using escape characters.
+Hint,You need to 'escape' the special meaning of % so it's treated as a regular character.,,
+Feedback,Use ESCAPE clause: WHERE description LIKE '%\%%' ESCAPE '\' searches for literal %. The backslash escapes the special meaning. Can also escape underscore: '\_' to find literal underscore.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-044,,,
+Title,Transaction Isolation,,,
+QuestionText,What does transaction isolation prevent?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,Interference between concurrent transactions,,Correct! Isolation ensures transactions don't affect each other.
+Option,0,Data from being permanently stored,,Durability ensures permanent storage not isolation.
+Option,0,Transactions from being partially completed,,Atomicity prevents partial completion not isolation.
+Option,0,Invalid data from being entered,,Consistency and constraints prevent invalid data not isolation.
+Hint,The 'I' in ACID - transactions are ISOLATED from each other.,,
+Feedback,Isolation prevents: dirty reads (reading uncommitted data); non-repeatable reads (data changes during transaction); phantom reads (new rows appear). Levels: Read Uncommitted; Read Committed; Repeatable Read; Serializable.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-045,,,
+Title,Stored Procedure Benefits,,,
+QuestionText,What is a key benefit of using stored procedures?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,Precompiled code that improves performance and reduces network traffic,,Correct! Stored procedures are compiled once and reduce client-server communication.
+Option,0,They can be used in SELECT statements like functions,,Functions can be used in SELECT; procedures cannot.
+Option,0,They always return a value,,Procedures may not return values; functions must.
+Option,0,They cannot modify data,,Procedures CAN modify data.
+Hint,Stored procedures live on the database server and execute there - think about network benefits.,,
+Feedback,Stored procedure benefits: precompiled (faster execution); reduce network traffic (send procedure name not full SQL); centralize business logic; improve security (grant EXECUTE not direct table access); support complex operations.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-046,,,
+Title,Database Schema Definition,,,
+QuestionText,What is a database schema?,,,
+Points,2,,,
+Difficulty,2,,,
+Option,100,The structure and organization of the database including tables and relationships,,Correct! Schema defines the blueprint of the database.
+Option,0,The actual data stored in the database,,Data is separate from schema; schema is the structure.
+Option,0,A backup copy of the database,,Backups are copies; schema is the structure definition.
+Option,0,The permissions assigned to users,,Permissions are security; schema is structure.
+Hint,Think of schema as the architectural blueprint - it shows the structure but not the contents.,,
+Feedback,Schema = database structure definition (tables columns data types constraints relationships). Data = actual values stored. Schema is defined by DDL (CREATE ALTER DROP). Multiple schemas can exist in one database.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-047,,,
+Title,Projection Operation,,,
+QuestionText,What does the projection operation do in relational algebra?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,0,Selects specific rows based on a condition,,That describes selection (σ) not projection.
+Option,100,Selects specific columns and removes duplicates,,Correct! Projection (π) creates a vertical subset of columns.
+Option,0,Combines two relations,,That describes join or union not projection.
+Option,0,Renames attributes in a relation,,That describes a rename operation not projection.
+Hint,Think of projecting a 3D object onto a 2D surface - you're showing only certain dimensions.,,
+Feedback,Projection (π) selects columns (vertical subset) and removes duplicates. Example: π<sub>title genre</sub>(Movies) shows only title and genre columns. Selection (σ) selects rows (horizontal subset).,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-048,,,
+Title,ANY vs ALL Operators,,,
+QuestionText,What is the difference between ANY and ALL operators in SQL subqueries?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,ANY requires condition to be true for at least one value; ALL requires it for every value,,Correct! ANY = exists one; ALL = for all.
+Option,0,ANY is faster than ALL,,Performance is not the distinguishing factor.
+Option,0,ANY returns multiple rows; ALL returns one row,,Both are comparison operators; they don't return rows.
+Option,0,There is no difference; they are synonyms,,They have opposite meanings.
+Hint,ANY = at least one match. ALL = every single one matches.,,
+Feedback,ANY (or SOME) = condition true for at least one value in subquery. ALL = condition true for every value. Example: salary > ALL (subquery) means greater than the maximum. salary > ANY (subquery) means greater than the minimum.,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-049,,,
+Title,Denormalization Purpose,,,
+QuestionText,Why might you intentionally denormalize a database?,,,
+Points,2,,,
+Difficulty,4,,,
+Option,100,To improve query performance by reducing joins,,Correct! Denormalization trades redundancy for speed.
+Option,0,To eliminate all redundancy,,Normalization eliminates redundancy; denormalization adds it back.
+Option,0,To follow best practices,,Best practice is normalization; denormalization is a strategic exception.
+Option,0,To reduce storage space,,Denormalization increases storage due to redundancy.
+Hint,Sometimes breaking normalization rules can make queries faster - but at what cost?,,
+Feedback,Denormalization intentionally adds redundancy to improve read performance. Tradeoff: faster SELECT queries but slower INSERT/UPDATE/DELETE and potential inconsistency. Use when read performance is critical (reporting data warehouses).,,
+
+NewQuestion,MC,,,
+ID,CSCI5603-050,,,
+Title,Composite Key,,,
+QuestionText,What is a composite key?,,,
+Points,2,,,
+Difficulty,3,,,
+Option,100,A primary key consisting of two or more columns,,Correct! Composite keys use multiple columns for unique identification.
+Option,0,A foreign key that references multiple tables,,Foreign keys reference one table; this doesn't define composite key.
+Option,0,A key that combines primary and foreign key constraints,,Keys are either primary or foreign not both.
+Option,0,An automatically generated numeric key,,That describes a surrogate key not composite key.
+Hint,COMPOSITE means made up of multiple parts - multiple COLUMNS together form the key.,,
+Feedback,Composite (or compound) key uses multiple columns to uniquely identify tuples. Example: Rentals table might use (member_id movie_id rental_date) as composite primary key. Common in junction/bridge tables for many-to-many relationships.,,

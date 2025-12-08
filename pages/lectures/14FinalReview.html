@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Exam Review - CSCI 5603</title>
+
+    <!-- Database Design Presentation Styles with Theme Support -->
+    <link rel="stylesheet" href="../../styles/presentation.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+
+    <!-- Import Courier Prime for analog feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lecture-Specific Styles -->
+    <style>
+        /* Override font for analog feel */
+        body, .slide, h1, h2, h3, p, li {
+            font-family: 'Courier Prime', 'IBM Plex Mono', 'Courier New', monospace !important;
+        }
+
+        .quiz-question {
+            background: var(--bg-accent);
+            border: 3px solid var(--ocu-cyan);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .option-box {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-box:hover {
+            border-color: var(--ocu-cyan);
+            transform: translateY(-2px);
+        }
+
+        .answer-reveal {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            font-size: 1.3em;
+        }
+
+        .explanation {
+            background: var(--bg-accent);
+            border-left: 5px solid var(--ocu-green);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .round-header {
+            background: var(--ocu-true-blue);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.5em;
+        }
+
+        [data-theme="dark"] .round-header {
+            background: var(--ocu-dark-blue);
+        }
+
+        .challenge-box {
+            background: #ff9800;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            border: 3px solid #f57c00;
+        }
+
+        [data-theme="dark"] .challenge-box {
+            background: #e65100;
+            border-color: #bf360c;
+        }
+
+        .code-snippet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 20px 0;
+            border-left: 4px solid var(--ocu-cyan);
+            overflow-x: auto;
+            font-size: 1.0em;
+        }
+
+        .sql-keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .sql-string {
+            color: #ce9178;
+        }
+
+        .sql-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .score-tracker {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--ocu-green);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme toggle will be automatically added by JavaScript -->
+
+    <div class="presentation-container">
+        <!-- Timer display -->
+        <div class="timer-display" id="timer-display">
+            <span id="timer-text">Final Exam Review
+                 <button class="home"><a href="../../index.html">Home</a></button>
+            </span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Final Exam Review</h1>
+            <h2>Quiz Show Challenge! </h2>
+            <p style="font-size: 1.5em; margin-top: 40px;">CSCI 5603 - Database Design</p>
+            <p style="font-size: 1.3em;">Week 8, Lecture 14</p>
+            <p style="margin-top: auto; font-style: italic;">Test your knowledge from Lectures 1-10!</p>
+        </div>
+
+        <!-- Slide 2: Instructions -->
+        <div class="slide">
+            <h1>How This Review Works</h1>
+            <div class="demo-box">
+                <h3>Quiz Show Format</h3>
+                <ul style="font-size: 1.2em; line-height: 2;">
+                    <li>6 rounds covering all major topics from Lectures 1-10</li>
+                    <li>Each question will appear on one slide</li>
+                    <li>Think about your answer before advancing</li>
+                    <li>The next slide reveals the correct answer with explanation</li>
+                    <li>Challenge yourself - no peeking!</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Pause on each question slide and discuss with classmates before revealing the answer!
+            </div>
+        </div>
+
+        <!-- ROUND 1: FILE SYSTEMS & DATABASE FUNDAMENTALS -->
+
+        <div class="slide">
+            <div class="round-header">
+                <h2>ROUND 1: Database Fundamentals</h2>
+                <p>Lectures 1-2: File Systems vs. Databases</p>
+            </div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="slide">
+            <h1>Question 1</h1>
+            <div class="quiz-question">
+                Which of the following is NOT a major limitation of file-based systems?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Data separation and isolation
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Improved data security
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Data duplication and redundancy
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Application-data dependence
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 1 -->
+        <div class="slide">
+            <h1>Answer to Question 1</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Improved data security</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Explanation:</strong> File-based systems actually have <em>poor</em> data security, not improved security. This is one of their major limitations!</p>
+                <p style="margin-top: 15px;">The five major limitations of file-based systems are:</p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Data separation and isolation</strong> - Each program has its own files</li>
+                    <li><strong>Data duplication</strong> - Same data stored multiple times</li>
+                    <li><strong>Data dependence</strong> - Structure tied to application code</li>
+                    <li><strong>Incompatible file formats</strong> - Different programs, different formats</li>
+                    <li><strong>Fixed queries</strong> - Hard-coded data access patterns</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="slide">
+            <h1>Question 2</h1>
+            <div class="quiz-question">
+                What are the two main components of a database system?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Tables and Queries
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Database and DBMS
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> DDL and DML
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Users and Administrators
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 2 -->
+        <div class="slide">
+            <h1>Answer to Question 2</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Database and DBMS</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Explanation:</strong> A database system consists of two key components:</p>
+                <ul style="margin-top: 15px; font-size: 1.1em;">
+                    <li><strong>Database:</strong> A shared collection of logically related data and its description</li>
+                    <li><strong>DBMS (Database Management System):</strong> Software that enables users to define, create, maintain, and control access to the database</li>
+                </ul>
+                <p style="margin-top: 15px;">Together, they provide controlled access, data independence, and efficient management of data!</p>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="slide">
+            <h1>Question 3</h1>
+            <div class="quiz-question">
+                What does DDL stand for, and what is it used for?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Data Definition Language - defines database structure
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Data Display Language - shows query results
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Data Deletion Language - removes records
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Database Design Logic - plans schemas
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 3 -->
+        <div class="slide">
+            <h1>Answer to Question 3</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: A. Data Definition Language</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>DDL (Data Definition Language)</strong> is used to define the database structure and schema. Key DDL commands include:</p>
+                <div class="code-snippet">
+                    <span class="sql-keyword">CREATE TABLE</span> Movies (...)<br>
+                    <span class="sql-keyword">ALTER TABLE</span> Movies <span class="sql-keyword">ADD COLUMN</span> rating<br>
+                    <span class="sql-keyword">DROP TABLE</span> OldData
+                </div>
+                <p style="margin-top: 15px;"><strong>DML (Data Manipulation Language)</strong>, on the other hand, is used to manipulate data: SELECT, INSERT, UPDATE, DELETE</p>
+            </div>
+        </div>
+
+        <!-- ROUND 2: ARCHITECTURE & RELATIONAL MODEL -->
+
+        <div class="slide">
+            <div class="round-header">
+                <h2>ROUND 2: Architecture & Relational Model</h2>
+                <p>Lectures 3-4: DBMS Structure & Relational Foundations</p>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="slide">
+            <h1>Question 4</h1>
+            <div class="quiz-question">
+                What are the three levels of the ANSI-SPARC architecture?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> User, Application, Database
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> External, Conceptual, Internal
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Physical, Logical, Virtual
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Client, Server, Storage
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 4 -->
+        <div class="slide">
+            <h1>Answer to Question 4</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. External, Conceptual, Internal</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>The ANSI-SPARC Three-Level Architecture:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>External Level (View Level):</strong> Users' individual views of the database - different perspectives for different users</li>
+                    <li><strong>Conceptual Level (Logical Level):</strong> Community view - complete logical structure of the entire database</li>
+                    <li><strong>Internal Level (Physical Level):</strong> Physical representation - how data is actually stored on disk</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Key benefit:</strong> Data independence! Changes at one level don't affect other levels.</p>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="slide">
+            <h1>Question 5</h1>
+            <div class="quiz-question">
+                Which of the following is NOT one of the four controlled access features provided by a DBMS?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Security System
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Integrity Constraints
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Query Optimization
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Concurrency Control
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 5 -->
+        <div class="slide">
+            <h1>Answer to Question 5</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: C. Query Optimization</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>The Four Controlled Access Features are:</strong></p>
+                <ol style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Security System:</strong> Protects the database from unauthorized access (authentication & authorization)</li>
+                    <li><strong>Integrity Constraints:</strong> Ensures data accuracy and consistency (PRIMARY KEY, FOREIGN KEY, CHECK constraints)</li>
+                    <li><strong>Concurrency Control:</strong> Manages simultaneous data access by multiple users (transactions & locks)</li>
+                    <li><strong>Recovery Services:</strong> Restores the database after failures (backups & transaction logs)</li>
+                </ol>
+                <p style="margin-top: 15px;">Query optimization is important, but it's not one of the four controlled access features!</p>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="slide">
+            <h1>Question 6</h1>
+            <div class="quiz-question">
+                In the relational model, what is a tuple?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> A column in a table
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> A row in a table
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> A constraint on data
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> A relationship between tables
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 6 -->
+        <div class="slide">
+            <h1>Answer to Question 6</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. A row in a table</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Key Relational Model Terminology:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Relation:</strong> A table with rows and columns</li>
+                    <li><strong>Tuple:</strong> A row in the relation (a single record)</li>
+                    <li><strong>Attribute:</strong> A column in the relation (a named property)</li>
+                    <li><strong>Domain:</strong> The set of allowable values for an attribute</li>
+                    <li><strong>Degree:</strong> The number of attributes (columns)</li>
+                    <li><strong>Cardinality:</strong> The number of tuples (rows)</li>
+                </ul>
+                <p style="margin-top: 15px;">Example: In a Movies table with 100 movies and 5 columns, the degree is 5 and the cardinality is 100!</p>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="slide">
+            <h1>Question 7</h1>
+            <div class="quiz-question">
+                What type of key uniquely identifies each tuple in a relation?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Foreign Key
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Candidate Key
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Primary Key
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Alternate Key
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 7 -->
+        <div class="slide">
+            <h1>Answer to Question 7</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: C. Primary Key</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Types of Keys in the Relational Model:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Superkey:</strong> An attribute (or set) that uniquely identifies a tuple</li>
+                    <li><strong>Candidate Key:</strong> A minimal superkey (no unnecessary attributes)</li>
+                    <li><strong>Primary Key:</strong> The chosen candidate key for unique identification</li>
+                    <li><strong>Alternate Key:</strong> A candidate key that was not chosen as primary</li>
+                    <li><strong>Foreign Key:</strong> An attribute that references the primary key of another relation</li>
+                </ul>
+                <p style="margin-top: 15px;">Example: In a Members table, both email and member_id might be candidate keys, but we choose member_id as the primary key.</p>
+            </div>
+        </div>
+
+        <!-- ROUND 3: RELATIONAL ALGEBRA -->
+
+        <div class="slide">
+            <div class="round-header">
+                <h2>ROUND 3: Relational Algebra</h2>
+                <p>Lecture 5: The Mathematical Foundation of SQL</p>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="slide">
+            <h1>Question 8</h1>
+            <div class="quiz-question">
+                Which relational algebra operation selects specific rows from a relation based on a condition?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Projection ()
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Selection ()
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Union (*)
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Join ()
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 8 -->
+        <div class="slide">
+            <h1>Answer to Question 8</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Selection ()</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>The Five Basic Relational Algebra Operations:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Selection ():</strong> Chooses specific rows based on a condition (horizontal subset)</li>
+                    <li><strong>Projection ():</strong> Chooses specific columns (vertical subset)</li>
+                    <li><strong>Union (*):</strong> Combines tuples from two compatible relations</li>
+                    <li><strong>Set Difference ():</strong> Tuples in first relation but not in second</li>
+                    <li><strong>Cartesian Product ():</strong> All possible combinations of tuples from two relations</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>SQL equivalent:</strong> <sub>rating='PG'</sub>(Movies) is like SELECT * FROM Movies WHERE rating = 'PG'</p>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="slide">
+            <h1>Question 9</h1>
+            <div class="quiz-question">
+                What type of join operation combines tuples from two relations based on a matching condition?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Natural Join
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Theta Join
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Equijoin
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> All of the above
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 9 -->
+        <div class="slide">
+            <h1>Answer to Question 9</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: D. All of the above</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Join Operations in Relational Algebra:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Theta Join ():</strong> Combines tuples based on any comparison condition (=, <, >, etc.)</li>
+                    <li><strong>Equijoin:</strong> A special theta join where the condition uses only equality (=)</li>
+                    <li><strong>Natural Join:</strong> An equijoin that automatically matches on common attribute names and removes duplicate columns</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Example:</strong> Movies  Rentals naturally joins on movie_id if both tables have that attribute!</p>
+            </div>
+        </div>
+
+        <!-- ROUND 4: SERVERLESS & SQL BASICS -->
+
+        <div class="slide">
+            <div class="round-header">
+                <h2>ROUND 4: Serverless APIs & SQL Fundamentals</h2>
+                <p>Lectures 6-7: Building APIs & Writing Queries</p>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="slide">
+            <h1>Question 10</h1>
+            <div class="quiz-question">
+                What is the correct order of clauses in a SELECT statement?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> SELECT, WHERE, FROM, GROUP BY, HAVING, ORDER BY
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> FROM, SELECT, WHERE, GROUP BY, ORDER BY, HAVING
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> SELECT, FROM, GROUP BY, WHERE, HAVING, ORDER BY
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 10 -->
+        <div class="slide">
+            <h1>Answer to Question 10</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>The Correct SQL SELECT Order:</strong></p>
+                <div class="code-snippet">
+                    <span class="sql-keyword">SELECT</span> column_list<br>
+                    <span class="sql-keyword">FROM</span> table_name<br>
+                    <span class="sql-keyword">WHERE</span> row_condition<br>
+                    <span class="sql-keyword">GROUP BY</span> grouping_columns<br>
+                    <span class="sql-keyword">HAVING</span> group_condition<br>
+                    <span class="sql-keyword">ORDER BY</span> sort_columns
+                </div>
+                <p style="margin-top: 15px;"><strong>Memory trick:</strong> "Some Frogs Will Get Hungry Often"</p>
+                <p><strong>Key difference:</strong> WHERE filters rows before grouping, HAVING filters groups after grouping!</p>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="slide">
+            <h1>Question 11</h1>
+            <div class="quiz-question">
+                Which aggregate function would you use to find the total number of rentals in the Rentals table?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> SUM(rental_id)
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> COUNT(*)
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> AVG(rental_id)
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> MAX(rental_id)
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 11 -->
+        <div class="slide">
+            <h1>Answer to Question 11</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. COUNT(*)</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>The Five Main Aggregate Functions:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>COUNT(*):</strong> Counts all rows (including NULLs)</li>
+                    <li><strong>COUNT(column):</strong> Counts non-NULL values in a column</li>
+                    <li><strong>SUM(column):</strong> Adds up numeric values</li>
+                    <li><strong>AVG(column):</strong> Calculates the average of numeric values</li>
+                    <li><strong>MIN(column) / MAX(column):</strong> Finds minimum/maximum values</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-keyword">SELECT</span> <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> total_rentals<br>
+                    <span class="sql-keyword">FROM</span> Rentals;
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="slide">
+            <h1>Question 12</h1>
+            <div class="quiz-question">
+                What wildcard character is used with the LIKE operator to match any sequence of characters?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> ? (question mark)
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> * (asterisk)
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> % (percent sign)
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> # (hash)
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 12 -->
+        <div class="slide">
+            <h1>Answer to Question 12</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: C. % (percent sign)</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>LIKE Pattern Matching Wildcards:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>% (percent):</strong> Matches zero or more characters</li>
+                    <li><strong>_ (underscore):</strong> Matches exactly one character</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Find movies starting with "The"</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Movies <span class="sql-keyword">WHERE</span> title <span class="sql-keyword">LIKE</span> <span class="sql-string">'The%'</span>;<br><br>
+                    <span class="sql-comment">-- Find emails with exactly 3 characters before @</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Members <span class="sql-keyword">WHERE</span> email <span class="sql-keyword">LIKE</span> <span class="sql-string">'___@%'</span>;
+                </div>
+            </div>
+        </div>
+
+        <!-- ROUND 5: ADVANCED SQL -->
+
+        <div class="slide">
+            <div class="round-header">
+                <h2>ROUND 5: Advanced SQL Queries</h2>
+                <p>Lecture 8: JOINs, Subqueries, and Set Operations</p>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="slide">
+            <h1>Question 13</h1>
+            <div class="quiz-question">
+                What is the difference between INNER JOIN and LEFT OUTER JOIN?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> No difference, they're the same
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> LEFT JOIN includes unmatched rows from the left table
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> INNER JOIN is faster
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> LEFT JOIN only works with two tables
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 13 -->
+        <div class="slide">
+            <h1>Answer to Question 13</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. LEFT JOIN includes unmatched rows</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Types of Joins:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>INNER JOIN:</strong> Returns only rows with matches in both tables</li>
+                    <li><strong>LEFT OUTER JOIN:</strong> Returns all rows from left table, plus matching rows from right (NULLs for non-matches)</li>
+                    <li><strong>RIGHT OUTER JOIN:</strong> Returns all rows from right table, plus matching rows from left</li>
+                    <li><strong>FULL OUTER JOIN:</strong> Returns all rows from both tables (NULLs where no match)</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Shows all members, even those with no rentals</span><br>
+                    <span class="sql-keyword">SELECT</span> m.name, <span class="sql-keyword">COUNT</span>(r.rental_id)<br>
+                    <span class="sql-keyword">FROM</span> Members m<br>
+                    <span class="sql-keyword">LEFT JOIN</span> Rentals r <span class="sql-keyword">ON</span> m.member_id = r.member_id<br>
+                    <span class="sql-keyword">GROUP BY</span> m.name;
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="slide">
+            <h1>Question 14</h1>
+            <div class="quiz-question">
+                What does the EXISTS operator do in a subquery?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Returns all rows from the subquery
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Checks if the subquery returns any rows
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Counts rows in the subquery
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Joins tables together
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 14 -->
+        <div class="slide">
+            <h1>Answer to Question 14</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Checks if the subquery returns any rows</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>EXISTS vs NOT EXISTS:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>EXISTS:</strong> Returns TRUE if the subquery returns at least one row</li>
+                    <li><strong>NOT EXISTS:</strong> Returns TRUE if the subquery returns zero rows</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Find movies that have been rented</span><br>
+                    <span class="sql-keyword">SELECT</span> title <span class="sql-keyword">FROM</span> Movies m<br>
+                    <span class="sql-keyword">WHERE EXISTS</span> (<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> 1 <span class="sql-keyword">FROM</span> Rentals r<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> r.movie_id = m.movie_id<br>
+                    );
+                </div>
+                <p style="margin-top: 15px;"><strong>Tip:</strong> EXISTS is more efficient than COUNT(*) > 0 because it stops as soon as it finds one row!</p>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="slide">
+            <h1>Question 15</h1>
+            <div class="quiz-question">
+                Which set operation removes duplicate rows when combining results from two queries?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> UNION ALL
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> UNION
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> INTERSECT
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> EXCEPT
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 15 -->
+        <div class="slide">
+            <h1>Answer to Question 15</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. UNION</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Set Operations in SQL:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>UNION:</strong> Combines results and removes duplicates</li>
+                    <li><strong>UNION ALL:</strong> Combines results and keeps duplicates (faster)</li>
+                    <li><strong>INTERSECT:</strong> Returns only rows that appear in both queries</li>
+                    <li><strong>EXCEPT (or MINUS):</strong> Returns rows in first query but not in second</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Combine action and comedy movies (no duplicates)</span><br>
+                    <span class="sql-keyword">SELECT</span> title <span class="sql-keyword">FROM</span> Movies <span class="sql-keyword">WHERE</span> genre = <span class="sql-string">'Action'</span><br>
+                    <span class="sql-keyword">UNION</span><br>
+                    <span class="sql-keyword">SELECT</span> title <span class="sql-keyword">FROM</span> Movies <span class="sql-keyword">WHERE</span> genre = <span class="sql-string">'Comedy'</span>;
+                </div>
+            </div>
+        </div>
+
+        <!-- ROUND 6: PERFORMANCE & DDL -->
+
+        <div class="slide">
+            <div class="round-header">
+                <h2>ROUND 6: Performance & Data Definition</h2>
+                <p>Lectures 9-10: Optimization & Database Structure</p>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="slide">
+            <h1>Question 16</h1>
+            <div class="quiz-question">
+                What database object is used to speed up query performance by providing fast data lookup?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> View
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Index
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Trigger
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Stored Procedure
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 16 -->
+        <div class="slide">
+            <h1>Answer to Question 16</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Index</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Indexes:</strong> Data structures that improve query performance by providing fast lookups, similar to a book index!</p>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Create an index on the email column</span><br>
+                    <span class="sql-keyword">CREATE INDEX</span> idx_member_email<br>
+                    <span class="sql-keyword">ON</span> Members(email);
+                </div>
+                <p style="margin-top: 15px;"><strong>Trade-off:</strong> Indexes speed up SELECT queries but slow down INSERT/UPDATE/DELETE operations because the index must be maintained!</p>
+                <p style="margin-top: 10px;"><strong>Use EXPLAIN ANALYZE</strong> to measure query performance before and after adding indexes!</p>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="slide">
+            <h1>Question 17</h1>
+            <div class="quiz-question">
+                What is a database VIEW?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> A physical table stored on disk
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> A virtual table based on a stored query
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> A backup of the database
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> A user's permission level
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 17 -->
+        <div class="slide">
+            <h1>Answer to Question 17</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. A virtual table based on a stored query</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Views:</strong> Virtual tables that dynamically show the result of a stored query. They don't store data themselves!</p>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Create a view for available movies</span><br>
+                    <span class="sql-keyword">CREATE VIEW</span> AvailableMovies <span class="sql-keyword">AS</span><br>
+                    <span class="sql-keyword">SELECT</span> movie_id, title, genre<br>
+                    <span class="sql-keyword">FROM</span> Movies<br>
+                    <span class="sql-keyword">WHERE</span> available = <span class="sql-keyword">TRUE</span>;<br><br>
+                    <span class="sql-comment">-- Query the view like a table</span><br>
+                    <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> AvailableMovies;
+                </div>
+                <p style="margin-top: 15px;"><strong>Benefits:</strong> Simplify complex queries, provide security (hide sensitive columns), and maintain logical data independence!</p>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="slide">
+            <h1>Question 18</h1>
+            <div class="quiz-question">
+                What happens when you try to delete a parent row that has child rows with a FOREIGN KEY constraint set to ON DELETE CASCADE?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> The delete is rejected with an error
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Only the parent row is deleted
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Both parent and child rows are deleted
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Child rows are set to NULL
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 18 -->
+        <div class="slide">
+            <h1>Answer to Question 18</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: C. Both parent and child rows are deleted</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Referential Integrity Actions:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>ON DELETE CASCADE:</strong> Automatically delete child rows when parent is deleted</li>
+                    <li><strong>ON DELETE SET NULL:</strong> Set foreign key to NULL in child rows</li>
+                    <li><strong>ON DELETE RESTRICT (default):</strong> Prevent deletion if child rows exist</li>
+                    <li><strong>ON UPDATE CASCADE:</strong> Update foreign key values when parent key changes</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-keyword">CREATE TABLE</span> Rentals (<br>
+                    &nbsp;&nbsp;rental_id <span class="sql-keyword">SERIAL PRIMARY KEY</span>,<br>
+                    &nbsp;&nbsp;movie_id <span class="sql-keyword">INTEGER REFERENCES</span> Movies(movie_id)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="sql-keyword">ON DELETE CASCADE</span><br>
+                    );
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="slide">
+            <h1>Question 19</h1>
+            <div class="quiz-question">
+                What is a database TRIGGER?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> A query optimization tool
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Procedure that automatically executes in response to events
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> A type of constraint
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> A backup mechanism
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer 19 -->
+        <div class="slide">
+            <h1>Answer to Question 19</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Procedure that automatically executes</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Triggers:</strong> Database procedures that automatically execute (fire) in response to specific events like INSERT, UPDATE, or DELETE.</p>
+                <div class="code-snippet" style="margin-top: 15px;">
+                    <span class="sql-comment">-- Trigger to log movie updates</span><br>
+                    <span class="sql-keyword">CREATE TRIGGER</span> log_movie_changes<br>
+                    <span class="sql-keyword">AFTER UPDATE ON</span> Movies<br>
+                    <span class="sql-keyword">FOR EACH ROW</span><br>
+                    <span class="sql-keyword">EXECUTE FUNCTION</span> log_change();
+                </div>
+                <p style="margin-top: 15px;"><strong>Common uses:</strong> Audit logging, enforcing complex business rules, maintaining derived data, and sending notifications.</p>
+                <p><strong>Caution:</strong> Triggers add overhead and can make debugging harder - use them wisely!</p>
+            </div>
+        </div>
+
+        <!-- BONUS ROUND: CHALLENGE QUESTIONS -->
+
+        <div class="slide">
+            <div class="challenge-box">
+                <h2>BONUS ROUND: Challenge Questions!</h2>
+                <p>These questions test your deeper understanding across multiple topics</p>
+            </div>
+        </div>
+
+        <!-- Challenge Question 1 -->
+        <div class="slide">
+            <h1>Challenge Question 1</h1>
+            <div class="quiz-question" style="font-size: 1.2em;">
+                Write a query to find members who have NEVER rented a movie. Which approach is most efficient?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box" style="font-size: 1em;">
+                    <strong>A.</strong> LEFT JOIN with NULL check
+                </div>
+                <div class="option-box" style="font-size: 1em;">
+                    <strong>B.</strong> NOT EXISTS subquery
+                </div>
+                <div class="option-box" style="font-size: 1em;">
+                    <strong>C.</strong> NOT IN subquery
+                </div>
+                <div class="option-box" style="font-size: 1em;">
+                    <strong>D.</strong> Both A and B are equally good
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge Answer 1 -->
+        <div class="slide">
+            <h1>Challenge Answer 1</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: D. Both A and B are equally good</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Method 1: LEFT JOIN with NULL check</strong></p>
+                <div class="code-snippet">
+                    <span class="sql-keyword">SELECT</span> m.name<br>
+                    <span class="sql-keyword">FROM</span> Members m<br>
+                    <span class="sql-keyword">LEFT JOIN</span> Rentals r <span class="sql-keyword">ON</span> m.member_id = r.member_id<br>
+                    <span class="sql-keyword">WHERE</span> r.rental_id <span class="sql-keyword">IS NULL</span>;
+                </div>
+                <p style="margin-top: 15px;"><strong>Method 2: NOT EXISTS subquery</strong></p>
+                <div class="code-snippet">
+                    <span class="sql-keyword">SELECT</span> name <span class="sql-keyword">FROM</span> Members m<br>
+                    <span class="sql-keyword">WHERE NOT EXISTS</span> (<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> 1 <span class="sql-keyword">FROM</span> Rentals r<br>
+                    &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> r.member_id = m.member_id<br>
+                    );
+                </div>
+                <p style="margin-top: 15px;"><strong>Both are efficient!</strong> NOT IN should be avoided if the subquery column can have NULLs.</p>
+            </div>
+        </div>
+
+        <!-- Challenge Question 2 -->
+        <div class="slide">
+            <h1>Challenge Question 2</h1>
+            <div class="quiz-question" style="font-size: 1.2em;">
+                In the ANSI-SPARC architecture, which type of data independence allows you to change the physical storage without affecting the logical schema?
+            </div>
+            <div class="quiz-options">
+                <div class="option-box">
+                    <strong>A.</strong> Logical data independence
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Physical data independence
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> External data independence
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> Conceptual data independence
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge Answer 2 -->
+        <div class="slide">
+            <h1>Challenge Answer 2</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: B. Physical data independence</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Two Types of Data Independence:</strong></p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Physical Data Independence:</strong> Changes to the internal/physical level (storage structures, file organization, indexes) don't affect the conceptual schema or application programs</li>
+                    <li><strong>Logical Data Independence:</strong> Changes to the conceptual/logical schema (adding attributes or tables) don't affect external views or application programs</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Example:</strong> Adding an index (physical change) doesn't require changing any queries - that's physical data independence!</p>
+                <p style="margin-top: 10px;"><strong>Goal:</strong> Logical independence is harder to achieve but both are crucial for maintainability!</p>
+            </div>
+        </div>
+
+        <!-- Challenge Question 3 -->
+        <div class="slide">
+            <h1>Challenge Question 3</h1>
+            <div class="quiz-question" style="font-size: 1.2em;">
+                What's the difference between a stored procedure and a user-defined function?
+            </div>
+            <div class="quiz-options" style="font-size: 0.95em;">
+                <div class="option-box">
+                    <strong>A.</strong> Functions must return a value; procedures may not
+                </div>
+                <div class="option-box">
+                    <strong>B.</strong> Functions can be used in SELECT; procedures cannot
+                </div>
+                <div class="option-box">
+                    <strong>C.</strong> Procedures can modify database state; functions (typically) cannot
+                </div>
+                <div class="option-box">
+                    <strong>D.</strong> All of the above
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge Answer 3 -->
+        <div class="slide">
+            <h1>Challenge Answer 3</h1>
+            <div class="answer-reveal">
+                <h2>Correct Answer: D. All of the above</h2>
+            </div>
+            <div class="explanation">
+                <p><strong>Key Differences:</strong></p>
+                <ul style="font-size: 1.0em; margin-top: 15px;">
+                    <li><strong>Functions MUST return a value</strong> (scalar or table); procedures may return nothing</li>
+                    <li><strong>Functions can be used in SELECT statements</strong> and WHERE clauses; procedures cannot</li>
+                    <li><strong>Functions should be deterministic</strong> and not modify database state (pure); procedures can have side effects</li>
+                    <li><strong>Functions are called as part of expressions;</strong> procedures are invoked with CALL or EXECUTE</li>
+                </ul>
+                <div class="code-snippet" style="margin-top: 15px; font-size: 0.9em;">
+                    <span class="sql-comment">-- Function: Returns a value, used in queries</span><br>
+                    <span class="sql-keyword">SELECT</span> calculate_rental_fee(movie_id) <span class="sql-keyword">FROM</span> Movies;<br><br>
+                    <span class="sql-comment">-- Procedure: Performs operations, called directly</span><br>
+                    <span class="sql-keyword">CALL</span> process_overdue_rentals();
+                </div>
+            </div>
+        </div>
+
+        <!-- FINAL SUMMARY SLIDE -->
+
+        <div class="slide">
+            <h1>Final Exam Prep Summary </h1>
+            <div class="demo-box">
+                <h3>Key Topics Covered in This Review:</h3>
+                <div class="two-column" style="grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div>
+                        <h4 style="color: var(--ocu-cyan);">Foundations (Lectures 1-3)</h4>
+                        <ul style="font-size: 1.0em;">
+                            <li>File systems vs. DBMS</li>
+                            <li>Database advantages</li>
+                            <li>ANSI-SPARC architecture</li>
+                            <li>Controlled access features</li>
+                        </ul>
+
+                        <h4 style="color: var(--ocu-cyan); margin-top: 20px;">Theory (Lectures 4-5)</h4>
+                        <ul style="font-size: 1.0em;">
+                            <li>Relational model terminology</li>
+                            <li>Keys and integrity constraints</li>
+                            <li>Relational algebra operations</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 style="color: var(--ocu-green);">SQL (Lectures 6-8)</h4>
+                        <ul style="font-size: 1.0em;">
+                            <li>SELECT statement structure</li>
+                            <li>Aggregate functions & GROUP BY</li>
+                            <li>JOIN operations (INNER, OUTER)</li>
+                            <li>Subqueries & EXISTS</li>
+                            <li>Set operations (UNION, INTERSECT)</li>
+                        </ul>
+
+                        <h4 style="color: var(--ocu-green); margin-top: 20px;">Advanced (Lectures 9-10)</h4>
+                        <ul style="font-size: 1.0em;">
+                            <li>Views, indexes, triggers</li>
+                            <li>Performance optimization</li>
+                            <li>DDL & constraints</li>
+                            <li>Referential integrity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STUDY TIPS SLIDE -->
+
+        <div class="slide">
+            <h1>Study Tips for the Final Exam </h1>
+            <div class="success-box">
+                <h3>What to Focus On:</h3>
+                <ul style="font-size: 1.2em; line-height: 1.8;">
+                    <li><strong>Understand the "Why":</strong> Don't just memorize syntax - understand why we use each concept</li>
+                    <li><strong>Practice SQL:</strong> Write queries by hand without auto-complete</li>
+                    <li><strong>Draw Diagrams:</strong> Practice drawing the ANSI-SPARC architecture and ERDs</li>
+                    <li><strong>Compare & Contrast:</strong> Know the differences between similar concepts (INNER vs LEFT JOIN, WHERE vs HAVING, Functions vs Procedures)</li>
+                    <li><strong>Review Homework:</strong> Go back through your movie_rental_db exercises</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Pro Tip:</strong> Teach these concepts to someone else - if you can explain it, you understand it!
+            </div>
+        </div>
+
+        <!-- COMMON MISTAKES TO AVOID -->
+
+        <div class="slide">
+            <h1>Common Mistakes to Avoid </h1>
+            <div class="warning-box">
+                <h3>Watch Out For These:</h3>
+                <ul style="font-size: 1.1em; line-height: 1.8;">
+                    <li><strong>Forgetting JOIN conditions:</strong> Always specify ON clause in JOINs</li>
+                    <li><strong>WHERE vs HAVING:</strong> WHERE filters rows, HAVING filters groups</li>
+                    <li><strong>COUNT(*) vs COUNT(column):</strong> COUNT(*) includes NULLs, COUNT(column) doesn't</li>
+                    <li><strong>UNION vs UNION ALL:</strong> UNION removes duplicates (slower), UNION ALL keeps them</li>
+                    <li><strong>NOT IN with NULLs:</strong> Can return unexpected results - prefer NOT EXISTS</li>
+                    <li><strong>Missing GROUP BY:</strong> If you use aggregate functions, non-aggregated columns need GROUP BY</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PRACTICE PROBLEMS SLIDE -->
+
+        <div class="slide">
+            <h1>Practice Challenge </h1>
+            <div class="activity-box">
+                <h3>Try This Before the Exam:</h3>
+                <p style="font-size: 1.1em; margin: 15px 0;">Using your movie_rental_db database, write queries to:</p>
+                <ol style="font-size: 1.1em; line-height: 2;">
+                    <li>Find the top 3 most rented movies</li>
+                    <li>List members who have rented movies from at least 3 different genres</li>
+                    <li>Calculate the average rental duration by genre</li>
+                    <li>Find movies that have never been rented</li>
+                    <li>Show monthly rental trends for the past year</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Challenge yourself:</strong> Can you write these queries using different approaches (JOINs vs subqueries)?
+            </div>
+        </div>
+
+        <!-- FINAL SLIDE -->
+
+        <div class="slide">
+            <h1>You've Got This! </h1>
+            <div class="success-box">
+                <h2 style="text-align: center; margin: 30px 0;">Good Luck on Your Final Exam!</h2>
+                <p style="font-size: 1.3em; text-align: center; margin: 20px 0;">You've learned an incredible amount this semester:</p>
+                <ul style="font-size: 1.2em; line-height: 2; margin: 20px 0;">
+                    <li>From file systems to sophisticated DBMS architectures</li>
+                    <li>From basic SELECT to complex multi-table joins</li>
+                    <li>From theory to deployed full-stack applications</li>
+                </ul>
+                <p style="font-size: 1.4em; text-align: center; margin: 30px 0; font-weight: bold;">Trust your preparation and show what you know!</p>
+            </div>
+
+            <div class="demo-box" style="text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.2em; font-style: italic;">"In databases, as in life, good design is the foundation of everything."</p>
+                <p style="margin-top: 20px;">- Your Database Design Instructor</p>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation">
+            <button id="prevBtn">Previous</button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">41</span>
+            </span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Shared Presentation JavaScript -->
+    <script src="../../js/presentation.js"></script>
+</body>
+</html>
